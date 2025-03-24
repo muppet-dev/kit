@@ -1,0 +1,10 @@
+{
+  "scopes": [
+    {
+      "value": "client",
+      "name": "client:                anything client specific"
+    }
+  ],
+  "scopesSearchValue": true,
+  "allowCustomScopes": false
+}
