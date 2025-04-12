@@ -33,31 +33,40 @@ app.post("/", validator("json", payloadSchema), async (c) => {
 
   c.set("client", client);
 
-  let response: Record<string, unknown>;
+  let prompts: string[] = [];
 
   switch (analysisType) {
-    case MCPAnalysisType.TOOL_CALL:
-      response = await handlers.toolCall();
-      break;
-
-    case MCPAnalysisType.RESOURCE_ACCESS:
-      response = await handlers.resourceAccess();
-      break;
-
-    case MCPAnalysisType.PROMPT_INJECTION:
-      response = await handlers.promptInjection();
-      break;
-
     case MCPAnalysisType.TOOL_INJECTION:
-      response = await handlers.toolInjection();
+      prompts = await handlers.toolInjection();
       break;
 
     default:
-      response = {
-        message: "Unable to find the the analysis function for this",
-      };
       break;
   }
+
+  if (prompts.length === 0) {
+    return c.json({ error: "No prompts found" }, 400);
+  }
+
+  console.log(prompts[0]);
+
+  const response = await Promise.all(
+    prompts.map((prompt) =>
+      c.env.AI.run(
+        "@cf/meta/llama-4-scout-17b-16e-instruct",
+        {
+          prompt,
+        },
+        {
+          gateway: {
+            id: "mcp-mavens",
+            skipCache: false,
+            cacheTtl: 3360,
+          },
+        },
+      ),
+    ),
+  );
 
   return c.json(response, 200);
 });
