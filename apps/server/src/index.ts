@@ -48,6 +48,10 @@ app.post("/", validator("json", payloadSchema), async (c) => {
       response = await handlers.promptInjection();
       break;
 
+    case MCPAnalysisType.TOOL_INJECTION:
+      response = await handlers.toolInjection();
+      break;
+
     default:
       response = {
         message: "Unable to find the the analysis function for this",

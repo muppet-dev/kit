@@ -4,6 +4,7 @@ export enum MCPAnalysisType {
   TOOL_CALL = "tool_call",
   RESOURCE_ACCESS = "resource_access",
   PROMPT_INJECTION = "prompt_injection",
+  TOOL_INJECTION = "tool_injection",
 }
 
 export const payloadSchema = z.object({
