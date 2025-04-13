@@ -14,3 +14,8 @@ export type ToolStruct = {
   description?: string;
   inputSchema: Record<string, unknown>;
 };
+
+export type PromptStruct = {
+  name: string;
+  description?: string;
+};
