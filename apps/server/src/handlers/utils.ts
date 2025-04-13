@@ -2,8 +2,13 @@ import { getContext } from "hono/context-storage";
 import type { InspectorEnv } from "../types";
 
 export function runner(prompt: string) {
-  return getContext<InspectorEnv>().env.AI.run(
-    "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b",
+  const c = getContext<InspectorEnv>();
+
+  // @ts-expect-error
+  const { model } = c.req.valid("json") as { model: keyof AiModels };
+
+  return c.env.AI.run(
+    model,
     {
       prompt,
       response_format: {
