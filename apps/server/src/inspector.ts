@@ -47,8 +47,9 @@ const clientHandler: MiddlewareHandler<
   await next();
 };
 
-const checkSchema = payloadSchema.omit({
-  analysisType: true,
+const checkSchema = payloadSchema.pick({
+  url: true,
+  bearer: true,
 });
 
 router.post(
