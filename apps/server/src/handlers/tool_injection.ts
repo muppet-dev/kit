@@ -1,5 +1,6 @@
 import { getContext } from "hono/context-storage";
 import type { InspectorEnv, ToolStruct } from "../types";
+import { runner } from "./utils";
 
 export async function toolInjection() {
   const responses: Record<string, unknown>[] = [];
@@ -16,26 +17,14 @@ export async function toolInjection() {
 
       responses.push({
         ...tool,
-        vulnerability_analysis: await getContext<InspectorEnv>()
-          .env.AI.run(
-            "@cf/meta/llama-4-scout-17b-16e-instruct",
-            {
-              prompt: generatePrompt(tool),
-            },
-            {
-              gateway: {
-                id: "mcp-mavens",
-                skipCache: false,
-                cacheTtl: 3360,
-              },
-            },
-          )
-          .then((res) => {
+        vulnerability_analysis: await runner(generatePrompt(tool)).then(
+          (res) => {
             if (typeof res === "object" && "response" in res)
               return res.response;
 
             return "";
-          }),
+          },
+        ),
       });
     }
   } catch (err) {
@@ -228,42 +217,5 @@ For each tool:
    
    - Tool Name: "${tool.name}"
    - Tool Description: "${tool.description}"
-   - Tool Schema: ${JSON.stringify(tool.inputSchema, null, 2)}
-   
-   Return a response in this JSON Schema - '{
-    "type": "object",
-    "properties": {
-        "score": {
-            "type": "number",
-            "description": "The score of the tool, between 0 and 10."
-        },
-        "findings": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "category": {
-                        "type": "string",
-                        "description": "The category of the finding."
-                    },
-                    "description": {
-                        "type": "string",
-                        "description": "A description of the finding."
-                    },
-                    "severity": {
-                        "type": "string",
-                        "description": "The severity of the finding.",
-                        "enum": ["low", "medium", "high"]
-                    },
-                    "evidence": {
-                        "type": "string",
-                        "description": "Evidence supporting the finding."
-                    }
-                },
-                "required": ["category", "description", "severity"]
-            },
-            "description": "A list of findings from the tool."
-        }
-    }
-}'`;
+   - Tool Schema: ${JSON.stringify(tool.inputSchema, null, 2)}. Return the response of the analysis.`;
 }

@@ -4,6 +4,15 @@
   "main": "src/index.ts",
   "compatibility_date": "2025-04-12",
   "compatibility_flags": ["nodejs_compat"],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "MCP",
+        "class_name": "MCPObject"
+      }
+    ]
+  },
+  "migrations": [{ "tag": "v1", "new_classes": ["MCPObject"] }],
   // "vars": {
   //   "MY_VAR": "my-variable"
   // },

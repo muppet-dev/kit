@@ -7,6 +7,7 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import * as handlers from "./handlers";
 import { contextStorage } from "hono/context-storage";
 import type { z } from "zod";
+import { describeTool, mValidator } from "muppet";
 
 const router = new Hono<InspectorEnv>().use(contextStorage());
 
@@ -46,38 +47,54 @@ const clientHandler: MiddlewareHandler<
   await next();
 };
 
+const checkSchema = payloadSchema.omit({
+  analysisType: true,
+});
+
 router.post(
   "/check",
-  validator(
-    "json",
-    payloadSchema.omit({
-      analysisType: true,
-    }),
-  ),
+  validator("json", checkSchema),
+  describeTool({
+    name: "check-mcp-server",
+    description: "Check if the MCP server is reachable",
+    resourceType: "text",
+  }),
+  mValidator("json", checkSchema),
   clientHandler,
   (c) => {
     return c.json({ status: "connected" }, 200);
   },
 );
 
-router.post("/", validator("json", payloadSchema), clientHandler, async (c) => {
-  const { analysisType } = c.req.valid("json");
-  let responses: Record<string, unknown>[] = [];
+router.post(
+  "/",
+  validator("json", payloadSchema),
+  describeTool({
+    name: "inspect-mcp-server",
+    description: "Inspect MCP server for vulnerabilities",
+    resourceType: "text",
+  }),
+  mValidator("json", payloadSchema),
+  clientHandler,
+  async (c) => {
+    const { analysisType } = c.req.valid("json");
+    let responses: Record<string, unknown>[] = [];
 
-  switch (analysisType) {
-    case MCPAnalysisType.TOOL_INJECTION:
-      responses = await handlers.toolInjection();
-      break;
+    switch (analysisType) {
+      case MCPAnalysisType.TOOL_INJECTION:
+        responses = await handlers.toolInjection();
+        break;
 
-    case MCPAnalysisType.PROMPT_INJECTION:
-      responses = await handlers.promptInjection();
-      break;
+      case MCPAnalysisType.PROMPT_INJECTION:
+        responses = await handlers.promptInjection();
+        break;
 
-    default:
-      break;
-  }
+      default:
+        break;
+    }
 
-  return c.json(responses, 200);
-});
+    return c.json(responses, 200);
+  },
+);
 
 export default router;

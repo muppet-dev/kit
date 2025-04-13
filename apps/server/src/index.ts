@@ -1,30 +1,44 @@
-import { Hono } from "hono";
-import { openAPISpecs } from "hono-openapi";
-import { Scalar } from "@scalar/hono-api-reference";
-import inspectorRouter from "./inspector";
+import { DurableObject } from "cloudflare:workers";
+import type { Env } from "hono";
+import { SSEHonoTransport } from "muppet/streaming";
+import app from "./app";
+import server from "./mcp";
 
-const app = new Hono();
+export class MCPObject extends DurableObject<Env> {
+  transport?: SSEHonoTransport;
 
-app.route("/inspector", inspectorRouter);
+  constructor(ctx: DurableObjectState, env: Env) {
+    super(ctx, env);
+    this.transport = new SSEHonoTransport("/messages", ctx.id.toString());
+  }
 
-app.get(
-  "/openapi.json",
-  openAPISpecs(app, {
-    documentation: {
-      info: {
-        title: "MCP Inspector",
-        version: "1.0.0",
-      },
-    },
-  }),
-);
+  async fetch(request: Request) {
+    return server.fetch(request, {
+      ...this.env,
+      transport: this.transport,
+    });
+  }
+}
 
-app.get(
-  "/docs",
-  Scalar({
-    theme: "saturn",
-    url: "/openapi.json",
-  }),
-);
+export default {
+  async fetch(
+    request: Request,
+    env: { MY_DO: DurableObjectNamespace<MCPObject> },
+    ctx: ExecutionContext,
+  ): Promise<Response> {
+    const url = new URL(request.url);
 
-export default app;
+    if (!url.pathname.startsWith("/mcp")) return app.fetch(request, env, ctx);
+
+    const sessionId = url.searchParams.get("sessionId");
+
+    const namespace = env.MY_DO;
+
+    let stub: DurableObjectStub<MCPObject>;
+
+    if (sessionId) stub = namespace.get(namespace.idFromString(sessionId));
+    else stub = namespace.get(namespace.newUniqueId());
+
+    return stub.fetch(request);
+  },
+};
