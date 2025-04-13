@@ -8,3 +8,9 @@ export type InspectorEnv = {
     client: Client;
   };
 };
+
+export type ToolStruct = {
+  name: string;
+  description?: string;
+  inputSchema: Record<string, unknown>;
+};

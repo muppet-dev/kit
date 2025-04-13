@@ -1,8 +1,8 @@
 import { getContext } from "hono/context-storage";
-import type { InspectorEnv } from "../types";
+import type { InspectorEnv, ToolStruct } from "../types";
 
 export async function toolInjection() {
-  const prompts: string[] = [];
+  const responses: Record<string, unknown>[] = [];
   console.log("🔍 Discovering and calling MCP tools...");
 
   try {
@@ -14,7 +14,39 @@ export async function toolInjection() {
     for (const tool of toolsResult.tools) {
       console.log(`🛠️ Processing tool: ${tool.name}`);
 
-      prompts.push(`# MCP SECURITY: COMPREHENSIVE VULNERABILITY ASSESSMENT PROTOCOL
+      responses.push({
+        ...tool,
+        vulnerability_analysis: await getContext<InspectorEnv>()
+          .env.AI.run(
+            "@cf/meta/llama-4-scout-17b-16e-instruct",
+            {
+              prompt: generatePrompt(tool),
+            },
+            {
+              gateway: {
+                id: "mcp-mavens",
+                skipCache: false,
+                cacheTtl: 3360,
+              },
+            },
+          )
+          .then((res) => {
+            if (typeof res === "object" && "response" in res)
+              return res.response;
+
+            return "";
+          }),
+      });
+    }
+  } catch (err) {
+    console.error("Error during tool discovery:", err);
+  }
+
+  return responses;
+}
+
+function generatePrompt(tool: ToolStruct) {
+  return `# MCP SECURITY: COMPREHENSIVE VULNERABILITY ASSESSMENT PROTOCOL
 
 ## System Instruction
 
@@ -198,11 +230,40 @@ For each tool:
    - Tool Description: "${tool.description}"
    - Tool Schema: ${JSON.stringify(tool.inputSchema, null, 2)}
    
-   Return the response in JSON format.`);
+   Return a response in this JSON Schema - '{
+    "type": "object",
+    "properties": {
+        "score": {
+            "type": "number",
+            "description": "The score of the tool, between 0 and 10."
+        },
+        "findings": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "category": {
+                        "type": "string",
+                        "description": "The category of the finding."
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "A description of the finding."
+                    },
+                    "severity": {
+                        "type": "string",
+                        "description": "The severity of the finding.",
+                        "enum": ["low", "medium", "high"]
+                    },
+                    "evidence": {
+                        "type": "string",
+                        "description": "Evidence supporting the finding."
+                    }
+                },
+                "required": ["category", "description", "severity"]
+            },
+            "description": "A list of findings from the tool."
+        }
     }
-  } catch (err) {
-    console.error("Error during tool discovery:", err);
-  }
-
-  return prompts;
+}'`;
 }
