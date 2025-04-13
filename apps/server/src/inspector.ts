@@ -46,9 +46,19 @@ const clientHandler: MiddlewareHandler<
   await next();
 };
 
-router.post("/check", validator("json", payloadSchema), clientHandler, (c) => {
-  return c.json({ status: "connected" }, 200);
-});
+router.post(
+  "/check",
+  validator(
+    "json",
+    payloadSchema.omit({
+      analysisType: true,
+    }),
+  ),
+  clientHandler,
+  (c) => {
+    return c.json({ status: "connected" }, 200);
+  },
+);
 
 router.post("/", validator("json", payloadSchema), clientHandler, async (c) => {
   const { analysisType } = c.req.valid("json");
