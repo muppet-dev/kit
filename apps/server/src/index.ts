@@ -9,7 +9,7 @@ export class MCPObject extends DurableObject<Env> {
 
   constructor(ctx: DurableObjectState, env: Env) {
     super(ctx, env);
-    this.transport = new SSEHonoTransport("/messages", ctx.id.toString());
+    this.transport = new SSEHonoTransport("/mcp/messages", ctx.id.toString());
   }
 
   async fetch(request: Request) {
@@ -23,7 +23,7 @@ export class MCPObject extends DurableObject<Env> {
 export default {
   async fetch(
     request: Request,
-    env: { MY_DO: DurableObjectNamespace<MCPObject> },
+    env: { MCP: DurableObjectNamespace<MCPObject> },
     ctx: ExecutionContext,
   ): Promise<Response> {
     const url = new URL(request.url);
@@ -32,7 +32,7 @@ export default {
 
     const sessionId = url.searchParams.get("sessionId");
 
-    const namespace = env.MY_DO;
+    const namespace = env.MCP;
 
     let stub: DurableObjectStub<MCPObject>;
 
