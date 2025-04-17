@@ -3,6 +3,10 @@
     {
       "value": "client",
       "name": "client:                anything client specific"
+    },
+    {
+      "value": "server",
+      "name": "server:                anything server specific"
     }
   ],
   "scopesSearchValue": true,
