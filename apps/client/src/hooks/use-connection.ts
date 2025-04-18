@@ -25,26 +25,11 @@ import type z from "zod";
 import { type Notification, StdErrNotificationSchema } from "@/types";
 import packageJson from "../../package.json";
 import toast from "react-hot-toast";
-import type { TransportType } from "@/constants";
+import { TransportType } from "@/constants";
 
 const params = new URLSearchParams(window.location.search);
 const DEFAULT_REQUEST_TIMEOUT_MSEC =
   Number.parseInt(params.get("timeout") ?? "") || 10000;
-
-interface UseConnectionOptions {
-  transportType: TransportType;
-  command: string;
-  args: string;
-  sseUrl: string;
-  env: Record<string, string>;
-  proxyServerUrl: string;
-  bearerToken?: string;
-  requestTimeout?: number;
-  onNotification?: (notification: Notification) => void;
-  onStdErrNotification?: (notification: Notification) => void;
-  onPendingRequest?: (request: any, resolve: any, reject: any) => void;
-  getRoots?: () => any[];
-}
 
 interface RequestOptions {
   signal?: AbortSignal;
@@ -52,23 +37,37 @@ interface RequestOptions {
   suppressToast?: boolean;
 }
 
-export function useConnection({
-  transportType,
-  command,
-  args,
-  sseUrl,
-  env,
-  proxyServerUrl,
-  bearerToken,
-  requestTimeout = DEFAULT_REQUEST_TIMEOUT_MSEC,
-  onNotification,
-  onStdErrNotification,
-  onPendingRequest,
-  getRoots,
-}: UseConnectionOptions) {
-  const [connectionStatus, setConnectionStatus] = useState<
-    "disconnected" | "connected" | "error"
-  >("disconnected");
+export type UseConnectionOptions = (
+  | {
+      transportType: TransportType.STDIO;
+      command: string;
+      args: string;
+      env: Record<string, string>;
+    }
+  | {
+      transportType: TransportType.SSE;
+      sseUrl: string;
+      bearerToken?: string;
+    }
+) & {
+  proxyServerUrl: string;
+  requestTimeout?: number;
+  onNotification?: (notification: Notification) => void;
+  onStdErrNotification?: (notification: Notification) => void;
+  onPendingRequest?: (request: any, resolve: any, reject: any) => void;
+  getRoots?: () => any[];
+};
+
+export enum ConnectionStatus {
+  DISCONNECTED = "disconnected",
+  CONNECTED = "connected",
+  ERROR = "error",
+}
+
+export function useConnection(props: UseConnectionOptions) {
+  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(
+    ConnectionStatus.DISCONNECTED,
+  );
   const [serverCapabilities, setServerCapabilities] =
     useState<ServerCapabilities | null>(null);
   const [mcpClient, setMcpClient] = useState<Client | null>(null);
@@ -98,9 +97,14 @@ export function useConnection({
 
     try {
       const abortController = new AbortController();
-      const timeoutId = setTimeout(() => {
-        abortController.abort("Request timed out");
-      }, options?.timeout ?? requestTimeout);
+      const timeoutId = setTimeout(
+        () => {
+          abortController.abort("Request timed out");
+        },
+        options?.timeout ??
+          props.requestTimeout ??
+          DEFAULT_REQUEST_TIMEOUT_MSEC,
+      );
 
       let response: z.output<T>;
       try {
@@ -206,15 +210,15 @@ export function useConnection({
         },
       );
 
-      const backendUrl = new URL(`${proxyServerUrl}/sse`);
+      const backendUrl = new URL(`${props.proxyServerUrl}/sse`);
 
-      backendUrl.searchParams.append("transportType", transportType);
-      if (transportType === "stdio") {
-        backendUrl.searchParams.append("command", command);
-        backendUrl.searchParams.append("args", args);
-        backendUrl.searchParams.append("env", JSON.stringify(env));
+      backendUrl.searchParams.append("transportType", props.transportType);
+      if (props.transportType === TransportType.STDIO) {
+        backendUrl.searchParams.append("command", props.command);
+        backendUrl.searchParams.append("args", props.args);
+        backendUrl.searchParams.append("env", JSON.stringify(props.env));
       } else {
-        backendUrl.searchParams.append("url", sseUrl);
+        backendUrl.searchParams.append("url", props.sseUrl);
       }
 
       // Inject auth manually instead of using SSEClientTransport, because we're
@@ -222,9 +226,8 @@ export function useConnection({
       const headers: HeadersInit = {};
 
       // Use manually provided bearer token if available, otherwise use OAuth tokens
-      const token = bearerToken;
-      if (token) {
-        headers.Authorization = `Bearer ${token}`;
+      if (props.transportType === TransportType.SSE && props.bearerToken) {
+        headers.Authorization = `Bearer ${props.bearerToken}`;
       }
 
       const clientTransport = new SSEClientTransport(backendUrl, {
@@ -236,27 +239,27 @@ export function useConnection({
         },
       });
 
-      if (onNotification) {
+      if (props.onNotification) {
         client.setNotificationHandler(
           ProgressNotificationSchema,
-          onNotification,
+          props.onNotification,
         );
 
         client.setNotificationHandler(
           ResourceUpdatedNotificationSchema,
-          onNotification,
+          props.onNotification,
         );
 
         client.setNotificationHandler(
           LoggingMessageNotificationSchema,
-          onNotification,
+          props.onNotification,
         );
       }
 
-      if (onStdErrNotification) {
+      if (props.onStdErrNotification) {
         client.setNotificationHandler(
           StdErrNotificationSchema,
-          onStdErrNotification,
+          props.onStdErrNotification,
         );
       }
 
@@ -276,25 +279,26 @@ export function useConnection({
       setServerCapabilities(capabilities ?? null);
       setCompletionsSupported(true); // Reset completions support on new connection
 
-      if (onPendingRequest) {
+      if (props.onPendingRequest) {
         client.setRequestHandler(CreateMessageRequestSchema, (request) => {
           return new Promise((resolve, reject) => {
-            onPendingRequest(request, resolve, reject);
+            props.onPendingRequest?.(request, resolve, reject);
           });
         });
       }
 
-      if (getRoots) {
+      if (props.getRoots) {
         client.setRequestHandler(ListRootsRequestSchema, async () => {
-          return { roots: getRoots() };
+          return { roots: props.getRoots?.() };
         });
       }
 
+      // @ts-expect-error Putting it for now
       setMcpClient(client);
-      setConnectionStatus("connected");
+      setConnectionStatus(ConnectionStatus.CONNECTED);
     } catch (e) {
       console.error(e);
-      setConnectionStatus("error");
+      setConnectionStatus(ConnectionStatus.ERROR);
     }
   };
 
