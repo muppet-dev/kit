@@ -6,7 +6,6 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import ConfigurationsDialog from "./configurationsDialog"
 
 
 export default function Wrapper({ children }: { children: React.ReactNode }) {
@@ -27,7 +26,6 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </SidebarInset>
-      <ConfigurationsDialog />
     </SidebarProvider>
   )
 }

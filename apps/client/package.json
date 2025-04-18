@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.0.1",
     "@modelcontextprotocol/sdk": "^1.10.0",
     "@radix-ui/react-alert-dialog": "^1.1.7",
     "@radix-ui/react-avatar": "^1.1.4",
@@ -35,6 +36,7 @@
     "lucide-react": "^0.488.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hook-form": "^7.55.0",
     "react-hot-toast": "^2.5.2",
     "react-resizable-panels": "^2.1.7",
     "recharts": "^2.15.2",
