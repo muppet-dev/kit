@@ -146,8 +146,4 @@ router.post("/message", async (c) => {
 
 router.get("/health", (c) => c.json({ status: "ok" }));
 
-router.get("/config", (c) => {
-  return c.text("Need to implement this!");
-});
-
 export default router;

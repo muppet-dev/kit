@@ -3,6 +3,6 @@ import proxyRouter from "./proxy";
 
 const router = new Hono();
 
-router.route("/proxy", proxyRouter);
+router.route("/", proxyRouter);
 
 export default router;
