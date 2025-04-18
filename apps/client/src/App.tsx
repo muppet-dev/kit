@@ -1,9 +1,8 @@
 import { useState } from "react";
 import Wrapper from "./components/Wrapper";
-import { ConnectionProvider } from "@/providers/connection";
+import { ConnectionProvider, ToolProvider } from "@/providers";
 import type { ConnectionInfo } from "./hooks/use-connection";
 import ConfigurationsDialog from "./components/configurationsDialog";
-import { ToolProvider } from "./providers";
 
 function App() {
   const [connectionInfo, setConnectionInfo] = useState<ConnectionInfo | null>(
