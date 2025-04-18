@@ -1,35 +1,35 @@
-"use client"
-
-import { ChevronRight, type LucideIcon } from "lucide-react"
-
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from "@/components/ui/collapsible";
 import {
   SidebarGroup,
   SidebarMenu,
   SidebarMenuButton,
+  sidebarMenuButtonVariants,
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils";
+import { ChevronRight, type LucideIcon } from "lucide-react";
+import { NavLink } from "react-router";
 
 export function NavPlayground({
   items,
 }: {
   items: {
-    title: string
-    url: string
-    icon?: LucideIcon
-    isActive?: boolean
+    title: string;
+    url: string;
+    icon?: LucideIcon;
+    isActive?: boolean;
     items?: {
-      title: string
-      url: string
-    }[]
-  }[]
+      title: string;
+      url: string;
+    }[];
+  }[];
 }) {
   return (
     <SidebarGroup>
@@ -53,11 +53,18 @@ export function NavPlayground({
                 <SidebarMenuSub>
                   {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
-                      <SidebarMenuSubButton asChild>
-                        <a href={subItem.url}>
-                          <span>{subItem.title}</span>
-                        </a>
-                      </SidebarMenuSubButton>
+                      <NavLink
+                        to={subItem.url}
+                        className={({ isActive }) =>
+                          cn(
+                            sidebarMenuButtonVariants(),
+                            isActive &&
+                              "bg-primary hover:bg-primary text-primary-foreground hover:text-primary-foreground"
+                          )
+                        }
+                      >
+                        <span>{subItem.title}</span>
+                      </NavLink>
                     </SidebarMenuSubItem>
                   ))}
                 </SidebarMenuSub>
@@ -67,5 +74,5 @@ export function NavPlayground({
         ))}
       </SidebarMenu>
     </SidebarGroup>
-  )
+  );
 }

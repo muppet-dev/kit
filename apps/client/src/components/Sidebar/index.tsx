@@ -1,27 +1,25 @@
-import * as React from "react"
-import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  PieChart,
-  Settings2,
-  SquareTerminal,
-} from "lucide-react"
-
-import { NavPlayground } from "@/components/nav-playground"
-import { NavProjects } from "@/components/nav-projects"
-import { NavUser } from "@/components/nav-user"
-import { TeamSwitcher } from "@/components/team-switcher"
+import { NavPlayground } from "@/components/nav-playground";
+import { NavProjects } from "@/components/nav-projects";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "@/components/ui/sidebar"
+  SidebarTrigger,
+  useSidebar,
+} from "@/components/ui/sidebar";
+import Logo from "@/public/logo.png";
+import {
+  AudioWaveform,
+  Command,
+  Frame,
+  GalleryVerticalEnd,
+  PieChart,
+  Settings2,
+  SquareTerminal,
+} from "lucide-react";
+import { Link } from "react-router";
 
 const data = {
   user: {
@@ -56,48 +54,50 @@ const data = {
       items: [
         {
           title: "Scanner",
-          url: "#",
+          url: "/playground/scanner",
           name: "scanner",
           isActive: true,
         },
         {
           title: "LLM Scoring",
-          url: "#",
+          url: "/playground/llm-scoring",
           name: "llm-scoring",
           icon: PieChart,
-        }
+        },
       ],
     },
   ],
   projects: [
     {
       name: "Tracing",
-      url: "#",
+      url: "/tracing",
       icon: Frame,
     },
     {
       name: "Settings",
-      url: "#",
+      url: "/settings",
       icon: Settings2,
     },
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { open } = useSidebar();
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        {/* Add logo */}
-        <TeamSwitcher teams={data.teams} />
+        <Link to="/">
+          <img src={Logo} alt="" className={open ? "size-10" : "size-8"} />
+        </Link>
       </SidebarHeader>
       <SidebarContent>
         <NavPlayground items={data.navPlayground} />
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <SidebarTrigger />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }
