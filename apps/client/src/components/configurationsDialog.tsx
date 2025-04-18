@@ -7,21 +7,28 @@ import {
   AlertDialogHeader,
   AlertDialogAction,
   AlertDialogCancel,
-} from "@/components/ui/alert-dialog";
+} from "./ui/alert-dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
+} from "./ui/select";
+import { Input } from "./ui/input";
 import { transportSchema } from "@/../../server/src/validations/transport";
 import type { ConnectionInfo } from "@/hooks/use-connection";
 import { TransportType } from "@/constants";
-import { FormProvider, useForm, useFormContext } from "react-hook-form";
+import {
+  Controller,
+  FormProvider,
+  useForm,
+  useFormContext,
+  useWatch,
+} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { z } from "zod";
+import type z from "zod";
+import { Label } from "./ui/label";
 
 export type ConfigurationsDialogProps = {
   onSubmit: (data: ConnectionInfo) => void;
@@ -37,54 +44,57 @@ export default function ConfigurationsDialog({
     },
   });
 
-  const { setValue, handleSubmit, watch, reset } = methods;
+  const { handleSubmit, reset, control } = methods;
 
-  const transportType = watch("transportType");
+  const handleResetForm = () => reset();
 
   return (
     <AlertDialog open={true}>
       <AlertDialogContent>
+        <AlertDialogHeader className="gap-0">
+          <AlertDialogTitle>Configure Transport</AlertDialogTitle>
+          <AlertDialogDescription>
+            Please configure the transport settings to continue
+          </AlertDialogDescription>
+        </AlertDialogHeader>
         <FormProvider {...methods}>
           <form
-            className="grid gap-4 py-4"
+            className="flex flex-col gap-6"
             onSubmit={handleSubmit((values: any) => onSubmit(values))}
           >
-            <AlertDialogHeader>
-              <AlertDialogTitle>Configure Transport</AlertDialogTitle>
-              <AlertDialogDescription>
-                Please configure the transport settings to continue
-              </AlertDialogDescription>
-            </AlertDialogHeader>
             <div className="grid grid-cols-4 w-full items-center gap-2">
-              <label
-                htmlFor="transportType"
-                className="text-right w-full text-sm font-medium"
-              >
-                Transport Type
-              </label>
+              <Label htmlFor="transportType">Transport Type</Label>
               <div className="col-span-3 gap-2">
-                <Select
-                  value={transportType}
-                  onValueChange={(value) =>
-                    setValue("transportType", value as TransportType)
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select transport type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value={TransportType.STDIO}>STDIO</SelectItem>
-                    <SelectItem value={TransportType.SSE}>SSE</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Controller
+                  name="transportType"
+                  control={control}
+                  render={({ field: { value, onChange } }) => (
+                    <Select
+                      value={value}
+                      onValueChange={(value) => onChange(value)}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select transport type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value={TransportType.STDIO}>
+                          STDIO
+                        </SelectItem>
+                        <SelectItem value={TransportType.SSE}>SSE</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
               </div>
               <div className="col-span-4 flex flex-col gap-2">
-                {transportType === TransportType.STDIO && <StdioForm />}
-                {transportType === TransportType.SSE && <SSEForm />}
+                <FormRender />
               </div>
             </div>
             <AlertDialogFooter>
-              <AlertDialogCancel onClick={() => reset()}>
+              <AlertDialogCancel
+                onClick={handleResetForm}
+                onKeyDown={handleResetForm}
+              >
                 Reset
               </AlertDialogCancel>
               <AlertDialogAction type="submit">Connect</AlertDialogAction>
@@ -96,18 +106,21 @@ export default function ConfigurationsDialog({
   );
 }
 
+function FormRender() {
+  const { control } = useFormContext<z.infer<typeof transportSchema>>();
+  const transportType = useWatch({ control, name: "transportType" });
+
+  if (transportType === TransportType.STDIO) return <StdioForm />;
+  return <SSEForm />;
+}
+
 function StdioForm() {
   const { register } = useFormContext<z.infer<typeof transportSchema>>();
 
   return (
     <>
       <div className="grid grid-cols-4 items-center gap-4">
-        <label
-          htmlFor="command"
-          className="text-right w-full text-sm font-medium"
-        >
-          Command
-        </label>
+        <Label htmlFor="command">Command</Label>
         <Input
           id="command"
           className="col-span-3"
@@ -116,12 +129,7 @@ function StdioForm() {
         />
       </div>
       <div className="grid grid-cols-4 items-center gap-4">
-        <label
-          htmlFor="arguments"
-          className="text-right w-full text-sm font-medium"
-        >
-          Arguments
-        </label>
+        <Label htmlFor="arguments">Arguments</Label>
         <Input
           className="col-span-3 text-md"
           placeholder="Enter arguments"
@@ -138,9 +146,7 @@ function SSEForm() {
   return (
     <>
       <div className="grid grid-cols-4 items-center gap-4">
-        <label htmlFor="url" className="text-right w-full text-sm font-medium">
-          URL
-        </label>
+        <Label htmlFor="url">URL</Label>
         <Input
           className="col-span-3"
           placeholder="Enter URL"
