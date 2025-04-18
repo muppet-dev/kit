@@ -1,4 +1,4 @@
-import { ConnectionProvider, ToolProvider } from "@/providers";
+import { ConnectionProvider, ShikiProvider, ToolProvider } from "@/providers";
 import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router";
 import ConfigurationsDialog from "./components/configurationsDialog";
@@ -8,7 +8,6 @@ import { TracingPage } from "./components/Tracing";
 import { SidebarProvider } from "./components/ui/sidebar";
 import Wrapper from "./components/Wrapper";
 import type { ConnectionInfo } from "./hooks/use-connection";
-import { ShikiProvider } from "./providers/shiki";
 import { ScannerPage } from "./components/Playground/Scanner";
 import { LLMScoringPage } from "./components/Playground/LLMScoring";
 
