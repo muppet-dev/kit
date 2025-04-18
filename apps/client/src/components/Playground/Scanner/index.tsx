@@ -6,9 +6,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FormRender } from "./FormRender";
 import { cn } from "@/lib/utils";
-import { CodeHighlighter } from "@/components/Hightlighter";
+import { useState } from "react";
+import { FormRender } from "./FormRender";
+import { JSONRender } from "./JSONRender";
 
 const CARDS: { name: string; description: string }[] = [
   {
@@ -64,9 +65,13 @@ const CARDS: { name: string; description: string }[] = [
 ];
 
 export function ScannerPage() {
+  const [current, setCurrent] = useState<number>(0);
+
+  const onClick = (index: number) => setCurrent(index);
+
   return (
-    <div className="size-full grid grid-cols-2 overflow-y-auto">
-      <div className="p-4 overflow-y-auto">
+    <div className="size-full flex overflow-y-auto">
+      <div className="overflow-y-auto w-full">
         <div className="flex flex-col">
           {CARDS.map((card, index) => (
             <Card
@@ -75,13 +80,15 @@ export function ScannerPage() {
                 index
               }`}
               className={cn(
-                index === 0
+                index === current
                   ? "bg-white"
                   : "bg-transparent hover:bg-white transition-all ease-in-out",
                 "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max"
               )}
+              onClick={() => onClick(index)}
+              onKeyDown={() => onClick(index)}
             >
-              {index === 0 && (
+              {index === current && (
                 <div className="h-full w-1 bg-primary absolute left-0 top-0" />
               )}
               <CardHeader className="px-4 -mb-1">
@@ -98,7 +105,7 @@ export function ScannerPage() {
           ))}
         </div>
       </div>
-      <div className="p-4 overflow-y-auto flex">
+      <div className="px-4 overflow-y-auto flex w-full bg-white border-l">
         <Tabs defaultValue="form" className="size-full">
           <TabsList>
             <TabsTrigger
@@ -124,12 +131,7 @@ export function ScannerPage() {
             <FormRender />
           </TabsContent>
           <TabsContent value="json">
-            <CodeHighlighter
-              content="{
-                'name':'sample',
-                'description': 'sample description'
-              }"
-            />
+            <JSONRender />
           </TabsContent>
           <TabsContent value="score">Score</TabsContent>
         </Tabs>
