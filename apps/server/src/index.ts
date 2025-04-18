@@ -1,44 +1,18 @@
-import { DurableObject } from "cloudflare:workers";
-import type { Env } from "hono";
-import { SSEHonoTransport } from "muppet/streaming";
-import app from "./app";
-import server from "./mcp";
+import { Hono } from "hono";
+import { serve } from "@hono/node-server";
+import routes from "./routes";
+import { cors } from "hono/cors";
 
-export class MCPObject extends DurableObject<Env> {
-  transport?: SSEHonoTransport;
+const app = new Hono().use(cors());
 
-  constructor(ctx: DurableObjectState, env: Env) {
-    super(ctx, env);
-    this.transport = new SSEHonoTransport("/mcp/messages", ctx.id.toString());
-  }
+app.route("/api", routes);
 
-  async fetch(request: Request) {
-    return server.fetch(request, {
-      ...this.env,
-      transport: this.transport,
-    });
-  }
-}
+app.onError((err, c) => {
+  console.error(`Error on ${c.req.path} router`, err);
+  return c.json(err, 500);
+});
 
-export default {
-  async fetch(
-    request: Request,
-    env: { MCP: DurableObjectNamespace<MCPObject> },
-    ctx: ExecutionContext,
-  ): Promise<Response> {
-    const url = new URL(request.url);
-
-    if (!url.pathname.startsWith("/mcp")) return app.fetch(request, env, ctx);
-
-    const sessionId = url.searchParams.get("sessionId");
-
-    const namespace = env.MCP;
-
-    let stub: DurableObjectStub<MCPObject>;
-
-    if (sessionId) stub = namespace.get(namespace.idFromString(sessionId));
-    else stub = namespace.get(namespace.newUniqueId());
-
-    return stub.fetch(request);
-  },
-};
+serve({
+  fetch: app.fetch,
+  port: 1976,
+});
