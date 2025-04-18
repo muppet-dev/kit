@@ -1,11 +1,14 @@
-import { SseError } from "@modelcontextprotocol/sdk/client/sse.js";
+import {
+  SSEClientTransport,
+  SseError,
+} from "@modelcontextprotocol/sdk/client/sse.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 import { type Context, type Env, Hono } from "hono";
 import mcpProxy from "./mcpProxy";
 import { findActualExecutable } from "spawn-rx";
-import { SSEHonoTransport } from "muppet/streaming";
-import { zValidator } from "@hono/zod-validator";
+import { SSEHonoTransport, streamSSE } from "muppet/streaming";
+import { sValidator } from "@hono/standard-validator";
 import { transportHeaderSchema, transportSchema } from "@/validations";
 import type { z } from "zod";
 
@@ -56,7 +59,7 @@ async function createTransport<
   }
 
   if (query.transportType === "sse") {
-    const headers: Record<string, unknown> = {
+    const headers: any = {
       Accept: "text/event-stream",
     };
 
@@ -70,7 +73,14 @@ async function createTransport<
       headers[key] = Array.isArray(value) ? value[value.length - 1] : value;
     }
 
-    const transport = new SSEHonoTransport(query.url);
+    const transport = new SSEClientTransport(new URL(query.url), {
+      eventSourceInit: {
+        fetch: (url, init) => fetch(url, { ...init, headers }),
+      },
+      requestInit: {
+        headers,
+      },
+    });
 
     await transport.start();
 
@@ -82,8 +92,8 @@ let backingServerTransport: Transport | undefined;
 
 router.get(
   "/sse",
-  zValidator("query", transportSchema),
-  zValidator("header", transportHeaderSchema),
+  sValidator("query", transportSchema),
+  sValidator("header", transportHeaderSchema),
   async (c) => {
     try {
       await backingServerTransport?.close();
@@ -102,33 +112,36 @@ router.get(
 
     console.log("Connected MCP client to backing server transport");
 
-    const webAppTransport = new SSEHonoTransport("/message");
-    console.log("Created web app transport");
+    return streamSSE(c, async (stream) => {
+      const webAppTransport = new SSEHonoTransport("/message");
+      console.log("Created web app transport");
 
-    webAppTransports.push(webAppTransport);
-    console.log("Created web app transport");
+      webAppTransports.push(webAppTransport);
+      console.log("Created web app transport");
 
-    await webAppTransport.start();
+      webAppTransport.connectWithStream(stream);
+      webAppTransport.start();
 
-    if (backingServerTransport instanceof StdioClientTransport) {
-      backingServerTransport.stderr!.on("data", (chunk) => {
-        webAppTransport.send({
-          jsonrpc: "2.0",
-          method: "notifications/stderr",
-          params: {
-            content: chunk.toString(),
-          },
+      if (backingServerTransport instanceof StdioClientTransport) {
+        backingServerTransport.stderr!.on("data", (chunk) => {
+          webAppTransport.send({
+            jsonrpc: "2.0",
+            method: "notifications/stderr",
+            params: {
+              content: chunk.toString(),
+            },
+          });
         });
+      }
+
+      if (!backingServerTransport) {
+        throw new Error("Unable to create backing server transport");
+      }
+
+      mcpProxy({
+        transportToClient: webAppTransport,
+        transportToServer: backingServerTransport,
       });
-    }
-
-    if (!backingServerTransport) {
-      throw new Error("Unable to create backing server transport");
-    }
-
-    mcpProxy({
-      transportToClient: webAppTransport,
-      transportToServer: backingServerTransport,
     });
   },
 );

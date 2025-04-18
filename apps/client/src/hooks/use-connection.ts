@@ -46,7 +46,7 @@ export type ConnectionInfo =
     }
   | {
       transportType: TransportType.SSE;
-      sseUrl: string;
+      url: string;
       bearerToken?: string;
     };
 
@@ -218,7 +218,7 @@ export function useConnection(props: UseConnectionOptions) {
         backendUrl.searchParams.append("args", props.args);
         backendUrl.searchParams.append("env", JSON.stringify(props.env));
       } else {
-        backendUrl.searchParams.append("url", props.sseUrl);
+        backendUrl.searchParams.append("url", props.url);
       }
 
       // Inject auth manually instead of using SSEClientTransport, because we're
@@ -264,7 +264,9 @@ export function useConnection(props: UseConnectionOptions) {
       }
 
       try {
+        console.log("Connecting to MCP server...");
         await client.connect(clientTransport);
+        console.log("Connected to MCP server");
       } catch (error) {
         console.error("Failed to connect to MCP server:", error);
 

@@ -1,3 +1,4 @@
+import { useConnection } from "./connection";
 import {
   type PropsWithChildren,
   createContext,
@@ -43,6 +44,9 @@ const DEFAULT_TOOLS = [
 function useToolManager() {
   const [tools, setTools] = useState(DEFAULT_TOOLS);
   const [activeTool, setActiveTool] = useState(DEFAULT_TOOLS[0]);
+
+  const { serverCapabilities } = useConnection();
+  console.log("serverCapabilities", serverCapabilities);
 
   function changeTool(tool: string) {
     const newTool = tools.find((t) => t.name === tool);

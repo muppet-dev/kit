@@ -6,9 +6,13 @@ import {
 import { useTool } from "@/providers";
 
 export function Tabs() {
-  const { tools, activeTool } = useTool();
+  const { tools, activeTool, changeTool } = useTool();
   return (
-    <TabsPrimitive defaultValue={activeTool.name} className="max-w-xs w-full">
+    <TabsPrimitive
+      defaultValue={activeTool.name}
+      onValueChange={(value) => changeTool(value)}
+      className="max-w-xs w-full"
+    >
       <TabsList className="w-full p-0 bg-background justify-start gap-4 text-md">
         {tools.map((tab) => (
           <TabsTrigger
