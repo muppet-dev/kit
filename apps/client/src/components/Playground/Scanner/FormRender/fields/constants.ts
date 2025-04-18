@@ -3,5 +3,5 @@ export enum FieldType {
   BOOLEAN = "boolean",
   NUMBER = "number",
   OBJECT = "object",
-  TEXTAREA = "textarea",
+  STRING = "string",
 }

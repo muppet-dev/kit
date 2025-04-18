@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 export type TextareaProps = {
   name?: string;
-  type: FieldType.TEXTAREA;
+  type: FieldType.STRING;
   placeholder?: string;
   defaultValue?: string;
   maxLength?: number;
@@ -22,7 +22,7 @@ export function TextareaField() {
   const autoId = useId();
   const customId = useMemo(
     () => generateId?.(schema, props),
-    [generateId, schema, props]
+    [generateId, schema, props],
   );
 
   const componentId = customId ?? autoId;

@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useFormContext } from "react-hook-form";
 import type z from "zod";
-import type { transportSchema } from "../../../../../server/src/validations/transport";
+import type { transportSchema } from "@/validations";
 
 export function SSEFields() {
   const { register } = useFormContext<z.infer<typeof transportSchema>>();

@@ -4,20 +4,21 @@ import { Blueprint, DuckField, DuckForm } from "duck-form";
 import { quackFields } from "./fields";
 import { FormProvider, useForm } from "react-hook-form";
 import { BlockWrapper } from "./fields/BlockWrapper";
-import type { FieldProps } from "./fields/types";
-import { FieldType } from "./fields/constants";
+import { Label } from "@/components/ui/label";
+import { Fragment } from "react/jsx-runtime";
 
-export function FormRender() {
+export type FormRenderProps = {
+  schema?: any;
+};
+
+export function FormRender(props: FormRenderProps) {
   const methods = useForm();
 
   const { handleSubmit } = methods;
 
-  const schema: Record<string, FieldProps> = {
-    name: {
-      type: FieldType.TEXTAREA,
-      label: "Description",
-    },
-  };
+  if (!props.schema) {
+    return <></>;
+  }
 
   return (
     <DuckForm
@@ -28,12 +29,15 @@ export function FormRender() {
         <form
           onSubmit={handleSubmit(
             (values) => console.log(values),
-            console.error
+            console.error,
           )}
         >
-          <Blueprint wrapper={BlockWrapper} schema={schema}>
-            {Object.keys(schema).map((key) => (
-              <DuckField key={key} id={key} />
+          <Blueprint wrapper={BlockWrapper} schema={props.schema}>
+            {Object.keys(props.schema).map((key) => (
+              <Fragment key={key}>
+                <Label className="mb-1">{key}</Label>
+                <DuckField id={key} />
+              </Fragment>
             ))}
           </Blueprint>
         </form>

@@ -7,88 +7,71 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormRender } from "./FormRender";
 import { JSONRender } from "./JSONRender";
-
-const CARDS: { name: string; description: string }[] = [
-  {
-    name: "Sample Card 1",
-    description:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Pariatur reprehenderit maxime expedita omnis ipsa quia, iste quae provident beatae voluptas.",
-  },
-  {
-    name: "Sample Card 2",
-    description:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Pariatur reprehenderit maxime expedita omnis ipsa quia, iste quae provident beatae voluptas.",
-  },
-  {
-    name: "Sample Card 3",
-    description:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Pariatur reprehenderit maxime expedita omnis ipsa quia, iste quae provident beatae voluptas.",
-  },
-  {
-    name: "Sample Card 4",
-    description:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Pariatur reprehenderit maxime expedita omnis ipsa quia, iste quae provident beatae voluptas.",
-  },
-  {
-    name: "Sample Card 5",
-    description:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Pariatur reprehenderit maxime expedita omnis ipsa quia, iste quae provident beatae voluptas.",
-  },
-  {
-    name: "Sample Card 6",
-    description:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Pariatur reprehenderit maxime expedita omnis ipsa quia, iste quae provident beatae voluptas.",
-  },
-  {
-    name: "Sample Card 7",
-    description:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Pariatur reprehenderit maxime expedita omnis ipsa quia, iste quae provident beatae voluptas.",
-  },
-  {
-    name: "Sample Card 8",
-    description:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Pariatur reprehenderit maxime expedita omnis ipsa quia, iste quae provident beatae voluptas.",
-  },
-  {
-    name: "Sample Card 9",
-    description:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Pariatur reprehenderit maxime expedita omnis ipsa quia, iste quae provident beatae voluptas.",
-  },
-  {
-    name: "Sample Card 10",
-    description:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Pariatur reprehenderit maxime expedita omnis ipsa quia, iste quae provident beatae voluptas.",
-  },
-];
+import { useConnection, useTool } from "@/providers";
 
 export function ScannerPage() {
-  const [current, setCurrent] = useState<number>(0);
+  const [cards, setCards] = useState<
+    { name: string; description?: string; schema?: unknown }[]
+  >([]);
+  const [current, setCurrent] = useState<string>();
 
-  const onClick = (index: number) => setCurrent(index);
+  const { activeTool } = useTool();
+  const { mcpClient } = useConnection();
+
+  useEffect(() => {
+    if (!mcpClient) return;
+
+    if (activeTool.name === "tools") {
+      mcpClient.listTools().then(({ tools }) =>
+        setCards(
+          tools.map((tool) => ({
+            name: tool.name,
+            description: tool.description,
+            schema: tool.inputSchema.properties,
+          })),
+        ),
+      );
+    } else if (activeTool.name === "prompts") {
+      mcpClient.listPrompts().then(({ prompts }) =>
+        setCards(
+          prompts.map((prompt) => ({
+            name: prompt.name,
+            description: prompt.description,
+            schema: prompt.arguments,
+          })),
+        ),
+      );
+    } else if (activeTool.name === "static-resources") {
+      mcpClient.listResources().then(({ resources }) => setCards(resources));
+    } else if (activeTool.name === "dynamic-resources") {
+      mcpClient
+        .listResourceTemplates()
+        .then(({ resourceTemplates }) => setCards(resourceTemplates));
+    }
+  }, [mcpClient, activeTool]);
+
+  const onClick = (name: string) => setCurrent(name);
 
   return (
     <div className="size-full flex overflow-y-auto">
       <div className="overflow-y-auto w-full">
         <div className="flex flex-col">
-          {CARDS.map((card, index) => (
+          {cards.map((card) => (
             <Card
-              key={`card.${
-                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-                index
-              }`}
+              key={card.name}
               className={cn(
-                index === current
+                card.name === current
                   ? "bg-white"
                   : "bg-transparent hover:bg-white transition-all ease-in-out",
-                "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max"
+                "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max",
               )}
-              onClick={() => onClick(index)}
-              onKeyDown={() => onClick(index)}
+              onClick={() => onClick(card.name)}
+              onKeyDown={() => onClick(card.name)}
             >
-              {index === current && (
+              {card.name === current && (
                 <div className="h-full w-1 bg-primary absolute left-0 top-0" />
               )}
               <CardHeader className="px-4 -mb-1">
@@ -128,7 +111,9 @@ export function ScannerPage() {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="form">
-            <FormRender />
+            <FormRender
+              schema={cards.find((card) => card.name === current)?.schema}
+            />
           </TabsContent>
           <TabsContent value="json">
             <JSONRender />

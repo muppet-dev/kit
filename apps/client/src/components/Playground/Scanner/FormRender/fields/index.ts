@@ -1,5 +1,3 @@
-import * as React from "react";
-
 import { FieldType } from "./constants";
 import { ArrayField } from "./Array";
 import { CheckboxField } from "./Checkbox";
@@ -12,5 +10,5 @@ export const quackFields: Record<FieldType, () => React.JSX.Element> = {
   [FieldType.BOOLEAN]: CheckboxField,
   [FieldType.NUMBER]: NumberField,
   [FieldType.OBJECT]: ObjectField,
-  [FieldType.TEXTAREA]: TextareaField,
+  [FieldType.STRING]: TextareaField,
 };

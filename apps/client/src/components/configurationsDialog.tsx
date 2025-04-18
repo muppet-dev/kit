@@ -1,4 +1,4 @@
-import type { transportSchema } from "@/../../server/src/validations/transport";
+import type { transportSchema } from "@/validations";
 import type { ConnectionInfo } from "@/hooks/use-connection";
 import { useFormContext } from "react-hook-form";
 import type z from "zod";
@@ -32,10 +32,7 @@ export default function ConfigurationsDialog({
         </AlertDialogHeader>
         <ConfigForm
           footer={<FormFooter />}
-          onSubmit={(values) =>
-            // @ts-expect-error: The error is because of type difference in data getting from form and arg type of onSubmit function
-            onSubmit(values)
-          }
+          onSubmit={(values) => onSubmit(values)}
         />
       </AlertDialogContent>
     </AlertDialog>

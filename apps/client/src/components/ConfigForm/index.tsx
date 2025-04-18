@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, FormProvider, useForm } from "react-hook-form";
-import { transportSchema as schema } from "../../../../server/src/validations/transport";
+import { transportSchema as schema } from "@/validations";
 import { TransportType } from "@/constants";
 import type z from "zod";
 import { Label } from "../ui/label";
@@ -13,16 +13,16 @@ import {
 } from "../ui/select";
 import { OptionalFields } from "./OptionalFields";
 import type * as React from "react";
+import type { ConnectionInfo } from "@/hooks/use-connection";
 
 export type ConfigForm = {
-  onSubmit: (values: z.infer<typeof schema>) => void;
+  onSubmit: (values: ConnectionInfo) => void;
   footer: React.JSX.Element;
-  data?: z.infer<typeof schema>;
+  data?: ConnectionInfo;
 };
 
 export function ConfigForm(props: ConfigForm) {
   const methods = useForm<z.infer<typeof schema>>({
-    // @ts-expect-error: the error is because of tranform used in validation
     resolver: zodResolver(schema),
     defaultValues: props.data ?? {
       transportType: TransportType.STDIO,
@@ -36,9 +36,8 @@ export function ConfigForm(props: ConfigForm) {
       <form
         className="flex flex-col gap-6"
         onSubmit={handleSubmit(
-          //@ts-expect-error: the error is because of tranform used in validation
           (values) => props.onSubmit(values),
-          console.error
+          console.error,
         )}
       >
         <div className="grid grid-cols-4 w-full items-center gap-2">

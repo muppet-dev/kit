@@ -26,6 +26,7 @@ import { type Notification, StdErrNotificationSchema } from "@/types";
 import packageJson from "../../package.json";
 import toast from "react-hot-toast";
 import { TransportType } from "@/constants";
+import { transportSchema } from "@/validations";
 
 const params = new URLSearchParams(window.location.search);
 const DEFAULT_REQUEST_TIMEOUT_MSEC =
@@ -37,18 +38,7 @@ interface RequestOptions {
   suppressToast?: boolean;
 }
 
-export type ConnectionInfo =
-  | {
-      transportType: TransportType.STDIO;
-      command: string;
-      args: string;
-      env: Record<string, string>;
-    }
-  | {
-      transportType: TransportType.SSE;
-      url: string;
-      bearerToken?: string;
-    };
+export type ConnectionInfo = z.infer<typeof transportSchema>;
 
 export type UseConnectionOptions = ConnectionInfo & {
   requestTimeout?: number;
