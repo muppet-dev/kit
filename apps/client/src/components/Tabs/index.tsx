@@ -1,34 +1,23 @@
-import { Tabs as TabsPrimitive, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-const tabs = [
-  {
-    name: "Prompts",
-    value: "prompts",
-    content: <div>prompts</div>,
-  },
-  {
-    name: "Tools",
-    value: "tools",
-    content: <div>tools</div>,
-  },
-  {
-    name: "Resources",
-    value: "resources",
-    content: <div>resources</div>,
-  },
-];
+import {
+  Tabs as TabsPrimitive,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
+import { useTool } from "@/providers";
 
 export function Tabs() {
+  const { tools, activeTool } = useTool();
   return (
-    <TabsPrimitive defaultValue={tabs[0].value} className="max-w-xs w-full">
+    <TabsPrimitive defaultValue={activeTool.name} className="max-w-xs w-full">
       <TabsList className="w-full p-0 bg-background justify-start gap-4 text-md">
-        {tabs.map((tab) => (
+        {tools.map((tab) => (
           <TabsTrigger
-            key={tab.value}
-            value={tab.value}
+            key={tab.name}
+            value={tab.name}
+            disabled={!tab.enabled}
             className="rounded-none bg-background h-full data-[state=active]:shadow-none border-b-2 border-transparent data-[state=active]:border-b-primary"
           >
-            {tab.name}
+            {tab.label}
           </TabsTrigger>
         ))}
       </TabsList>

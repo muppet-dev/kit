@@ -37,7 +37,7 @@ interface RequestOptions {
   suppressToast?: boolean;
 }
 
-export type ConnectionInfo = (
+export type ConnectionInfo =
   | {
       transportType: TransportType.STDIO;
       command: string;
@@ -48,10 +48,9 @@ export type ConnectionInfo = (
       transportType: TransportType.SSE;
       sseUrl: string;
       bearerToken?: string;
-    }
-) 
+    };
 
-export type UseConnectionOptions =ConnectionInfo & {
+export type UseConnectionOptions = ConnectionInfo & {
   requestTimeout?: number;
   onNotification?: (notification: Notification) => void;
   onStdErrNotification?: (notification: Notification) => void;
@@ -211,7 +210,7 @@ export function useConnection(props: UseConnectionOptions) {
         },
       );
 
-      const backendUrl = new URL("/api/sse");
+      const backendUrl = new URL("http://localhost:1976/api/sse");
 
       backendUrl.searchParams.append("transportType", props.transportType);
       if (props.transportType === TransportType.STDIO) {

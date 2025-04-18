@@ -30,7 +30,7 @@ const DEFAULT_TOOLS = [
   },
   {
     name: "static-resources",
-    label: "static-resources",
+    label: "Static Resources",
     enabled: false,
   },
   {
