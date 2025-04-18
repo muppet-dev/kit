@@ -113,7 +113,7 @@ router.get(
     console.log("Connected MCP client to backing server transport");
 
     return streamSSE(c, async (stream) => {
-      const webAppTransport = new SSEHonoTransport("/message");
+      const webAppTransport = new SSEHonoTransport("/api/message");
       console.log("Created web app transport");
 
       webAppTransports.push(webAppTransport);
@@ -155,6 +155,7 @@ router.post("/message", async (c) => {
     return c.text("Session not found", 404);
   }
   await transport.handlePostMessage(c);
+  return c.text("ok");
 });
 
 router.get("/health", (c) => c.json({ status: "ok" }));

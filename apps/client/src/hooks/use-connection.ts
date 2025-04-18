@@ -264,9 +264,7 @@ export function useConnection(props: UseConnectionOptions) {
       }
 
       try {
-        console.log("Connecting to MCP server...");
         await client.connect(clientTransport);
-        console.log("Connected to MCP server");
       } catch (error) {
         console.error("Failed to connect to MCP server:", error);
 

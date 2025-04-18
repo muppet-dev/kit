@@ -201,9 +201,9 @@ importers:
       '@hono/node-server':
         specifier: ^1.14.1
         version: 1.14.1(hono@4.7.6)
-      '@hono/zod-validator':
-        specifier: ^0.4.3
-        version: 0.4.3(hono@4.7.6)(zod@3.24.3)
+      '@hono/standard-validator':
+        specifier: ^0.1.2
+        version: 0.1.2(@standard-schema/spec@1.0.0)(hono@4.7.6)
       '@modelcontextprotocol/sdk':
         specifier: ^1.10.0
         version: 1.10.0
@@ -856,16 +856,6 @@ packages:
     dependencies:
       '@standard-schema/spec': 1.0.0
       hono: 4.7.6
-    dev: false
-
-  /@hono/zod-validator@0.4.3(hono@4.7.6)(zod@3.24.3):
-    resolution: {integrity: sha512-xIgMYXDyJ4Hj6ekm9T9Y27s080Nl9NXHcJkOvkXPhubOLj8hZkOL8pDnnXfvCf5xEE8Q4oMFenQUZZREUY2gqQ==}
-    peerDependencies:
-      hono: '>=3.9.0'
-      zod: ^3.19.1
-    dependencies:
-      hono: 4.7.6
-      zod: 3.24.3
     dev: false
 
   /@hookform/error-message@2.0.1(react-dom@19.1.0)(react-hook-form@7.55.0)(react@19.1.0):

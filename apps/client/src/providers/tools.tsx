@@ -3,6 +3,7 @@ import {
   type PropsWithChildren,
   createContext,
   useContext,
+  useEffect,
   useState,
 } from "react";
 
@@ -46,7 +47,25 @@ function useToolManager() {
   const [activeTool, setActiveTool] = useState(DEFAULT_TOOLS[0]);
 
   const { serverCapabilities } = useConnection();
-  console.log("serverCapabilities", serverCapabilities);
+
+  useEffect(() => {
+    if (serverCapabilities) {
+      const enableTools: string[] = [];
+
+      if (serverCapabilities.tools) {
+        enableTools.push("tools");
+      }
+      if (serverCapabilities.prompts) {
+        enableTools.push("prompts");
+      }
+
+      if (serverCapabilities.resources) {
+        enableTools.push("static-resources", "dynamic-resources");
+      }
+
+      toggleToolState(enableTools, true);
+    }
+  }, [serverCapabilities]);
 
   function changeTool(tool: string) {
     const newTool = tools.find((t) => t.name === tool);
@@ -55,9 +74,10 @@ function useToolManager() {
     }
   }
 
-  function toggleToolState(tool: string, enabled?: boolean) {
+  function toggleToolState(tool: string | string[], enabled?: boolean) {
+    const _tools = Array.isArray(tool) ? tool : [tool];
     const newTools = tools.map((t) => {
-      if (t.name === tool) {
+      if (_tools.includes(t.name)) {
         return { ...t, enabled: enabled ?? !t.enabled };
       }
       return t;
