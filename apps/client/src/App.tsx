@@ -1,5 +1,9 @@
+import Wrapper from "./components/Wrapper";
+
 function App() {
-  return <></>;
+  return <Wrapper>
+    <div></div>
+  </Wrapper>
 }
 
 export default App;
