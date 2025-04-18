@@ -41,40 +41,20 @@ export default function ConfigurationsDialog({
 
   const transportType = watch("transportType");
 
-  //   const handleSave = () => {
-  //     try {
-  //       const validatedData = transportSchema.parse({
-  //         transportType: connectionInfo?.transportType,
-  //         command: connectionInfo?.transportType === TransportType.STDIO ? connectionInfo?.command : undefined,
-  //         sseUrl: connectionInfo?.transportType === TransportType.SSE ? connectionInfo?.sseUrl : undefined,
-  //         bearerToken: connectionInfo?.transportType === TransportType.SSE ? connectionInfo?.bearerToken : undefined
-  //       });
-  //       setConnectionInfo(validatedData);
-  //       setError("");
-  //     } catch (err) {
-  //       setError(err instanceof Error ? err.message : "Invalid configuration");
-  //     }
-  //   };
-
-  //   const handleReset = () => {
-  //     setConnectionInfo(null);
-  //   };
-
   return (
     <AlertDialog open={true}>
       <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Configure Transport</AlertDialogTitle>
-          <AlertDialogDescription>
-            Please configure the transport settings to continue
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-
-        <form
-          className="grid gap-4 py-4"
-          onSubmit={handleSubmit((values: any) => onSubmit(values))}
-        >
-          <FormProvider {...methods}>
+        <FormProvider {...methods}>
+          <form
+            className="grid gap-4 py-4"
+            onSubmit={handleSubmit((values: any) => onSubmit(values))}
+          >
+            <AlertDialogHeader>
+              <AlertDialogTitle>Configure Transport</AlertDialogTitle>
+              <AlertDialogDescription>
+                Please configure the transport settings to continue
+              </AlertDialogDescription>
+            </AlertDialogHeader>
             <div className="grid grid-cols-4 w-full items-center gap-2">
               <label
                 htmlFor="transportType"
@@ -103,13 +83,14 @@ export default function ConfigurationsDialog({
                 {transportType === TransportType.SSE && <SSEForm />}
               </div>
             </div>
-          </FormProvider>
-        </form>
-
-        <AlertDialogFooter>
-          <AlertDialogCancel onClick={() => reset()}>Reset</AlertDialogCancel>
-          <AlertDialogAction type="submit">Connect</AlertDialogAction>
-        </AlertDialogFooter>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={() => reset()}>
+                Reset
+              </AlertDialogCancel>
+              <AlertDialogAction type="submit">Connect</AlertDialogAction>
+            </AlertDialogFooter>
+          </form>
+        </FormProvider>
       </AlertDialogContent>
     </AlertDialog>
   );
