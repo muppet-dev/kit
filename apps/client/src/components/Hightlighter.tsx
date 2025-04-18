@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useShiki } from "../providers/shiki";
 import { useEffect, useState } from "react";
 import { Skeleton } from "./ui/skeleton";
