@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 
 export type ArrayProps = {
   type: FieldType.ARRAY;
-  of: FieldProps;
+  items: FieldProps;
   defaultValue?: unknown[] | (() => unknown[]);
   options?: {
     sortable?: boolean;
@@ -71,7 +71,7 @@ export function ArrayField() {
               <ArrowDown className="size-4 stroke-2" />
             </Button>
           </div>
-          <DuckField id={`${componentId}.${index}`} {...props.of} />
+          <DuckField id={`${componentId}.${index}`} {...props.items} />
           <div className="space-y-2">
             <Button
               variant="ghost"
@@ -93,6 +93,7 @@ export function ArrayField() {
         </div>
       ))}
       <Button
+        variant="outline"
         onClick={handleAddItem}
         onKeyDown={handleAddItem}
         className="w-max"
