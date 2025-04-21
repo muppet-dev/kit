@@ -1,5 +1,3 @@
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Tool } from "@/constants";
 import { getToolName } from "@/lib/utils";
 import { useConnection, useTool } from "@/providers";
@@ -9,11 +7,10 @@ import {
   GetPromptResultSchema,
   ReadResourceResultSchema,
 } from "@modelcontextprotocol/sdk/types.js";
-import { Blueprint, DuckField, DuckForm } from "duck-form";
-import { FormProvider, useForm } from "react-hook-form";
-import { Fragment } from "react/jsx-runtime";
+import { DuckForm } from "duck-form";
+import { Form } from "./Form";
 import { quackFields } from "./fields";
-import { FieldWrapper } from "./fields/FieldWrapper";
+import { Response } from "./Response";
 
 export type FormRenderProps = {
   name: string;
@@ -23,25 +20,17 @@ export type FormRenderProps = {
 export function FormRender(props: FormRenderProps) {
   const { activeTool } = useTool();
   const { makeRequest } = useConnection();
-  const methods = useForm();
 
-  const {
-    handleSubmit,
-    formState: { isSubmitting },
-  } = methods;
-
-  if (!props.schema) {
-    return <></>;
-  }
+  if (!props.schema) return <></>;
 
   return (
-    <DuckForm
-      components={quackFields}
-      generateId={(_, props) => (props.id ? String(props.id) : undefined)}
-    >
-      <FormProvider {...methods}>
-        <form
-          onSubmit={handleSubmit(async (values) => {
+    <>
+      <DuckForm
+        components={quackFields}
+        generateId={(_, props) => (props.id ? String(props.id) : undefined)}
+      >
+        <Form
+          onSubmit={async (values) => {
             const request: ClientRequest =
               activeTool.name === Tool.TOOLS
                 ? {
@@ -77,22 +66,12 @@ export function FormRender(props: FormRenderProps) {
             await makeRequest(request, schema).catch((err) =>
               console.error(err)
             );
-          }, console.error)}
-          className="space-y-2"
-        >
-          <Blueprint wrapper={FieldWrapper} schema={props.schema}>
-            {Object.keys(props.schema).map((key) => (
-              <Fragment key={key}>
-                <Label className="mb-1">{key}</Label>
-                <DuckField id={key} />
-              </Fragment>
-            ))}
-          </Blueprint>
-          <Button type="submit" disabled={isSubmitting}>
-            Run {getToolName(activeTool.name)}
-          </Button>
-        </form>
-      </FormProvider>
-    </DuckForm>
+          }}
+          schema={props.schema}
+          toolName={getToolName(activeTool.name)}
+        />
+      </DuckForm>
+      <Response />
+    </>
   );
 }

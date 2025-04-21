@@ -1,5 +1,5 @@
 import {
-  useConnection as useConnectionManager,
+  useConnectionManager,
   type ConnectionInfo,
 } from "@/hooks/use-connection";
 import {
@@ -14,7 +14,7 @@ type ConnectionContextType = ReturnType<typeof useConnectionManager>;
 const ConnectionContext = createContext<ConnectionContextType | null>(null);
 
 export const ConnectionProvider = (
-  props: PropsWithChildren<ConnectionInfo>,
+  props: PropsWithChildren<ConnectionInfo>
 ) => {
   const values = useConnectionManager(props);
 

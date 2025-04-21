@@ -54,7 +54,7 @@ export enum ConnectionStatus {
   ERROR = "error",
 }
 
-export function useConnection(props: UseConnectionOptions) {
+export function useConnectionManager(props: UseConnectionOptions) {
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(
     ConnectionStatus.DISCONNECTED
   );

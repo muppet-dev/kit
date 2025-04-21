@@ -54,7 +54,7 @@ export function ScannerPage() {
     }
   }, [mcpClient, activeTool]);
 
-  const onClick = (name: string) => setCurrent(name);
+  const handleCardSelect = (name: string) => setCurrent(name);
 
   return (
     <div className="size-full flex overflow-y-auto">
@@ -69,8 +69,8 @@ export function ScannerPage() {
                   : "bg-transparent hover:bg-white transition-all ease-in-out",
                 "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max"
               )}
-              onClick={() => onClick(card.name)}
-              onKeyDown={() => onClick(card.name)}
+              onClick={() => handleCardSelect(card.name)}
+              onKeyDown={() => handleCardSelect(card.name)}
             >
               {card.name === current && (
                 <div className="h-full w-1 bg-primary absolute left-0 top-0" />
