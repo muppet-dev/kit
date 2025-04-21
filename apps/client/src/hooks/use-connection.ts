@@ -25,8 +25,8 @@ import type z from "zod";
 import { type Notification, StdErrNotificationSchema } from "@/types";
 import packageJson from "../../package.json";
 import toast from "react-hot-toast";
-import { TransportType } from "@/constants";
-import { transportSchema } from "@/validations";
+import { Transport } from "@/constants";
+import type { transportSchema } from "@/validations";
 
 const params = new URLSearchParams(window.location.search);
 const DEFAULT_REQUEST_TIMEOUT_MSEC =
@@ -56,7 +56,7 @@ export enum ConnectionStatus {
 
 export function useConnection(props: UseConnectionOptions) {
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(
-    ConnectionStatus.DISCONNECTED,
+    ConnectionStatus.DISCONNECTED
   );
   const [serverCapabilities, setServerCapabilities] =
     useState<ServerCapabilities | null>(null);
@@ -79,7 +79,7 @@ export function useConnection(props: UseConnectionOptions) {
   const makeRequest = async <T extends z.ZodType>(
     request: ClientRequest,
     schema: T,
-    options?: RequestOptions,
+    options?: RequestOptions
   ): Promise<z.output<T>> => {
     if (!mcpClient) {
       throw new Error("MCP client not connected");
@@ -87,14 +87,9 @@ export function useConnection(props: UseConnectionOptions) {
 
     try {
       const abortController = new AbortController();
-      const timeoutId = setTimeout(
-        () => {
-          abortController.abort("Request timed out");
-        },
-        options?.timeout ??
-          props.requestTimeout ??
-          DEFAULT_REQUEST_TIMEOUT_MSEC,
-      );
+      const timeoutId = setTimeout(() => {
+        abortController.abort("Request timed out");
+      }, options?.timeout ?? props.requestTimeout ?? DEFAULT_REQUEST_TIMEOUT_MSEC);
 
       let response: z.output<T>;
       try {
@@ -125,7 +120,7 @@ export function useConnection(props: UseConnectionOptions) {
     ref: ResourceReference | PromptReference,
     argName: string,
     value: string,
-    signal?: AbortSignal,
+    signal?: AbortSignal
   ): Promise<string[]> => {
     if (!mcpClient || !completionsSupported) {
       return [];
@@ -197,15 +192,15 @@ export function useConnection(props: UseConnectionOptions) {
               listChanged: true,
             },
           },
-        },
+        }
       );
 
       const backendUrl = new URL("http://localhost:1976/api/sse");
 
       backendUrl.searchParams.append("transportType", props.transportType);
-      if (props.transportType === TransportType.STDIO) {
+      if (props.transportType === Transport.STDIO) {
         backendUrl.searchParams.append("command", props.command);
-        backendUrl.searchParams.append("args", props.args);
+        if (props.args) backendUrl.searchParams.append("args", props.args);
         backendUrl.searchParams.append("env", JSON.stringify(props.env));
       } else {
         backendUrl.searchParams.append("url", props.url);
@@ -216,7 +211,7 @@ export function useConnection(props: UseConnectionOptions) {
       const headers: HeadersInit = {};
 
       // Use manually provided bearer token if available, otherwise use OAuth tokens
-      if (props.transportType === TransportType.SSE && props.bearerToken) {
+      if (props.transportType === Transport.SSE && props.bearerToken) {
         headers.Authorization = `Bearer ${props.bearerToken}`;
       }
 
@@ -232,24 +227,24 @@ export function useConnection(props: UseConnectionOptions) {
       if (props.onNotification) {
         client.setNotificationHandler(
           ProgressNotificationSchema,
-          props.onNotification,
+          props.onNotification
         );
 
         client.setNotificationHandler(
           ResourceUpdatedNotificationSchema,
-          props.onNotification,
+          props.onNotification
         );
 
         client.setNotificationHandler(
           LoggingMessageNotificationSchema,
-          props.onNotification,
+          props.onNotification
         );
       }
 
       if (props.onStdErrNotification) {
         client.setNotificationHandler(
           StdErrNotificationSchema,
-          props.onStdErrNotification,
+          props.onStdErrNotification
         );
       }
 

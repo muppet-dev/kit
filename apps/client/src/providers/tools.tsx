@@ -1,3 +1,4 @@
+import { Tool } from "@/constants";
 import { useConnection } from "./connection";
 import {
   type PropsWithChildren,
@@ -6,6 +7,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import type { ToolType } from "@/types";
 
 type ToolContextType = ReturnType<typeof useToolManager>;
 
@@ -19,62 +21,62 @@ export const ToolProvider = (props: PropsWithChildren) => {
   );
 };
 
-const DEFAULT_TOOLS = [
+const DEFAULT_TOOLS: ToolType[] = [
   {
-    name: "tools",
+    name: Tool.TOOLS,
     label: "Tools",
     enabled: false,
   },
   {
-    name: "prompts",
+    name: Tool.PROMPTS,
     label: "Prompts",
     enabled: false,
   },
   {
-    name: "static-resources",
+    name: Tool.STATIC_RESOURCES,
     label: "Static Resources",
     enabled: false,
   },
   {
-    name: "dynamic-resources",
+    name: Tool.DYNAMIC_RESOURCES,
     label: "Dynamic Resources",
     enabled: false,
   },
 ];
 
 function useToolManager() {
-  const [tools, setTools] = useState(DEFAULT_TOOLS);
-  const [activeTool, setActiveTool] = useState(DEFAULT_TOOLS[0]);
+  const [tools, setTools] = useState<ToolType[]>(DEFAULT_TOOLS);
+  const [activeTool, setActiveTool] = useState<ToolType>(DEFAULT_TOOLS[0]);
 
   const { serverCapabilities } = useConnection();
 
   useEffect(() => {
     if (serverCapabilities) {
-      const enableTools: string[] = [];
+      const enableTools: Tool[] = [];
 
       if (serverCapabilities.tools) {
-        enableTools.push("tools");
+        enableTools.push(Tool.TOOLS);
       }
       if (serverCapabilities.prompts) {
-        enableTools.push("prompts");
+        enableTools.push(Tool.PROMPTS);
       }
 
       if (serverCapabilities.resources) {
-        enableTools.push("static-resources", "dynamic-resources");
+        enableTools.push(Tool.STATIC_RESOURCES, Tool.DYNAMIC_RESOURCES);
       }
 
       toggleToolState(enableTools, true);
     }
   }, [serverCapabilities]);
 
-  function changeTool(tool: string) {
+  function changeTool(tool: Tool) {
     const newTool = tools.find((t) => t.name === tool);
     if (newTool) {
       setActiveTool(newTool);
     }
   }
 
-  function toggleToolState(tool: string | string[], enabled?: boolean) {
+  function toggleToolState(tool: Tool | Tool[], enabled?: boolean) {
     const _tools = Array.isArray(tool) ? tool : [tool];
     const newTools = tools.map((t) => {
       if (_tools.includes(t.name)) {

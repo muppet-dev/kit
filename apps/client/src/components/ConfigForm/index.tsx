@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { transportSchema as schema } from "@/validations";
-import { TransportType } from "@/constants";
+import { Transport } from "@/constants";
 import type z from "zod";
 import { Label } from "../ui/label";
 import {
@@ -25,7 +25,7 @@ export function ConfigForm(props: ConfigForm) {
   const methods = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: props.data ?? {
-      transportType: TransportType.STDIO,
+      transportType: Transport.STDIO,
     },
   });
 
@@ -37,7 +37,7 @@ export function ConfigForm(props: ConfigForm) {
         className="flex flex-col gap-6"
         onSubmit={handleSubmit(
           (values) => props.onSubmit(values),
-          console.error,
+          console.error
         )}
       >
         <div className="grid grid-cols-4 w-full items-center gap-2">
@@ -55,8 +55,8 @@ export function ConfigForm(props: ConfigForm) {
                     <SelectValue placeholder="Select transport type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value={TransportType.STDIO}>STDIO</SelectItem>
-                    <SelectItem value={TransportType.SSE}>SSE</SelectItem>
+                    <SelectItem value={Transport.STDIO}>STDIO</SelectItem>
+                    <SelectItem value={Transport.SSE}>SSE</SelectItem>
                   </SelectContent>
                 </Select>
               )}

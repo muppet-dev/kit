@@ -1,7 +1,7 @@
 import { useFormContext, useWatch } from "react-hook-form";
 import type { transportSchema } from "@/validations";
 import type z from "zod";
-import { TransportType } from "@/constants";
+import { Transport } from "@/constants";
 import { STDIOFields } from "./STDIO";
 import { SSEFields } from "./SSE";
 
@@ -9,6 +9,6 @@ export function OptionalFields() {
   const { control } = useFormContext<z.infer<typeof transportSchema>>();
   const transportType = useWatch({ control, name: "transportType" });
 
-  if (transportType === TransportType.SSE) return <SSEFields />;
+  if (transportType === Transport.SSE) return <SSEFields />;
   return <STDIOFields />;
 }

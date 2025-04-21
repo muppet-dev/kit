@@ -6,11 +6,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
+import { cn, getToolName } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { FormRender } from "./FormRender";
 import { JSONRender } from "./JSONRender";
 import { useConnection, useTool } from "@/providers";
+import { Tool } from "@/constants";
 
 export function ScannerPage() {
   const [cards, setCards] = useState<
@@ -24,29 +25,29 @@ export function ScannerPage() {
   useEffect(() => {
     if (!mcpClient) return;
 
-    if (activeTool.name === "tools") {
+    if (activeTool.name === Tool.TOOLS) {
       mcpClient.listTools().then(({ tools }) =>
         setCards(
           tools.map((tool) => ({
             name: tool.name,
             description: tool.description,
             schema: tool.inputSchema.properties,
-          })),
-        ),
+          }))
+        )
       );
-    } else if (activeTool.name === "prompts") {
+    } else if (activeTool.name === Tool.PROMPTS) {
       mcpClient.listPrompts().then(({ prompts }) =>
         setCards(
           prompts.map((prompt) => ({
             name: prompt.name,
             description: prompt.description,
             schema: prompt.arguments,
-          })),
-        ),
+          }))
+        )
       );
-    } else if (activeTool.name === "static-resources") {
+    } else if (activeTool.name === Tool.STATIC_RESOURCES) {
       mcpClient.listResources().then(({ resources }) => setCards(resources));
-    } else if (activeTool.name === "dynamic-resources") {
+    } else if (activeTool.name === Tool.DYNAMIC_RESOURCES) {
       mcpClient
         .listResourceTemplates()
         .then(({ resourceTemplates }) => setCards(resourceTemplates));
@@ -66,7 +67,7 @@ export function ScannerPage() {
                 card.name === current
                   ? "bg-white"
                   : "bg-transparent hover:bg-white transition-all ease-in-out",
-                "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max",
+                "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max"
               )}
               onClick={() => onClick(card.name)}
               onKeyDown={() => onClick(card.name)}
@@ -89,37 +90,43 @@ export function ScannerPage() {
         </div>
       </div>
       <div className="px-4 overflow-y-auto flex w-full bg-white border-l">
-        <Tabs defaultValue="form" className="size-full">
-          <TabsList>
-            <TabsTrigger
-              value="form"
-              className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5"
-            >
-              Form
-            </TabsTrigger>
-            <TabsTrigger
-              value="json"
-              className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5"
-            >
-              JSON
-            </TabsTrigger>
-            <TabsTrigger
-              value="score"
-              className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5"
-            >
-              Score
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="form">
-            <FormRender
-              schema={cards.find((card) => card.name === current)?.schema}
-            />
-          </TabsContent>
-          <TabsContent value="json">
-            <JSONRender />
-          </TabsContent>
-          <TabsContent value="score">Score</TabsContent>
-        </Tabs>
+        {current ? (
+          <Tabs defaultValue="form" className="size-full">
+            <TabsList>
+              <TabsTrigger
+                value="form"
+                className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5"
+              >
+                Form
+              </TabsTrigger>
+              <TabsTrigger
+                value="json"
+                className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5"
+              >
+                JSON
+              </TabsTrigger>
+              <TabsTrigger
+                value="score"
+                className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5"
+              >
+                Score
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="form">
+              <FormRender
+                schema={cards.find((card) => card.name === current)?.schema}
+              />
+            </TabsContent>
+            <TabsContent value="json">
+              <JSONRender />
+            </TabsContent>
+            <TabsContent value="score">Score</TabsContent>
+          </Tabs>
+        ) : (
+          <div className="flex items-center justify-center size-full select-none text-muted-foreground">
+            <p className="text-sm">Select a {getToolName(activeTool.name)}</p>
+          </div>
+        )}
       </div>
     </div>
   );
