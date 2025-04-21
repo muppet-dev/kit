@@ -6,12 +6,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tool } from "@/constants";
 import { cn, getToolName } from "@/lib/utils";
+import { useConnection, useTool } from "@/providers";
 import { useEffect, useState } from "react";
 import { FormRender } from "./FormRender";
 import { JSONRender } from "./JSONRender";
-import { useConnection, useTool } from "@/providers";
-import { Tool } from "@/constants";
 
 export function ScannerPage() {
   const [cards, setCards] = useState<
@@ -114,10 +114,15 @@ export function ScannerPage() {
             </TabsList>
             <TabsContent value="form">
               <FormRender
-                schema={cards.find((card) => card.name === current)?.schema}
+                schema={
+                  cards.find((card) => card.name === current)?.schema as Record<
+                    string,
+                    unknown
+                  >
+                }
               />
             </TabsContent>
-            <TabsContent value="json">
+            <TabsContent value="json" className="space-y-2">
               <JSONRender />
             </TabsContent>
             <TabsContent value="score">Score</TabsContent>
