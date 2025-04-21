@@ -16,6 +16,7 @@ import { quackFields } from "./fields";
 import { FieldWrapper } from "./fields/FieldWrapper";
 
 export type FormRenderProps = {
+  name: string;
   schema?: Record<string, unknown>;
 };
 
@@ -40,22 +41,31 @@ export function FormRender(props: FormRenderProps) {
     >
       <FormProvider {...methods}>
         <form
-          onSubmit={handleSubmit(async (value) => {
-            // @ts-expect-error: <>
-            const request: ClientRequest = {
-              method:
-                activeTool.name === Tool.TOOLS
-                  ? "tools/call"
-                  : activeTool.name === Tool.PROMPTS
-                  ? "prompts/get"
-                  : "resources/read",
-              params: {
-                argument: {
-                  name: activeTool.name,
-                  value,
-                },
-              },
-            };
+          onSubmit={handleSubmit(async (values) => {
+            const request: ClientRequest =
+              activeTool.name === Tool.TOOLS
+                ? {
+                    method: "tools/call",
+                    params: {
+                      name: props.name,
+                      arguments: values,
+                    },
+                  }
+                : activeTool.name === Tool.PROMPTS
+                ? {
+                    method: "prompts/get",
+                    params: {
+                      name: props.name,
+                      arguments: values,
+                    },
+                  }
+                : {
+                    method: "resources/read",
+                    params: {
+                      name: props.name,
+                      uri: values.enpoint,
+                    },
+                  };
 
             const schema =
               activeTool.name === Tool.TOOLS

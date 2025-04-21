@@ -18,7 +18,7 @@ import { Editor as MonacoEditor, type OnMount } from "@monaco-editor/react";
 import { AlignLeft } from "lucide-react";
 import { useState } from "react";
 
-export function JSONRender() {
+export function JSONRender(props: { name: string }) {
   const { activeTool } = useTool();
   const [editor, setEditor] = useState<string>();
   const [editorInstance, setEditorInstance] =
@@ -33,21 +33,32 @@ export function JSONRender() {
   };
 
   const onSend = async () => {
-    // @ts-expect-error: <>
-    const request: ClientRequest = {
-      method:
-        activeTool.name === Tool.TOOLS
-          ? "tools/call"
-          : activeTool.name === Tool.PROMPTS
-          ? "prompts/get"
-          : "resources/read",
-      params: {
-        argument: {
-          name: activeTool.name,
-          value: editor ? JSON.parse(editor) : undefined,
-        },
-      },
-    };
+    const values = editor ? JSON.parse(editor) : undefined;
+
+    const request: ClientRequest =
+      activeTool.name === Tool.TOOLS
+        ? {
+            method: "tools/call",
+            params: {
+              name: props.name,
+              arguments: values,
+            },
+          }
+        : activeTool.name === Tool.PROMPTS
+        ? {
+            method: "prompts/get",
+            params: {
+              name: props.name,
+              arguments: values,
+            },
+          }
+        : {
+            method: "resources/read",
+            params: {
+              name: props.name,
+              uri: values.enpoint,
+            },
+          };
 
     const schema =
       activeTool.name === Tool.TOOLS

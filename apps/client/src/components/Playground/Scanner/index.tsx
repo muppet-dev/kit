@@ -120,10 +120,11 @@ export function ScannerPage() {
                     unknown
                   >
                 }
+                name={current}
               />
             </TabsContent>
             <TabsContent value="json" className="space-y-2">
-              <JSONRender />
+              <JSONRender name={current} />
             </TabsContent>
             <TabsContent value="score">Score</TabsContent>
           </Tabs>
