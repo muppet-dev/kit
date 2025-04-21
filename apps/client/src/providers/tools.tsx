@@ -69,8 +69,8 @@ function useToolManager() {
     }
   }, [serverCapabilities]);
 
-  function changeTool(tool: Tool) {
-    const newTool = tools.find((t) => t.name === tool);
+  function changeTool(toolName: string) {
+    const newTool = tools.find((t) => t.name === toolName);
     if (newTool) {
       setActiveTool(newTool);
     }
