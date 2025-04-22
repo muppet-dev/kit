@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Tool } from "@/constants";
 import { getToolName } from "@/lib/utils";
-import { useConnection, useTool } from "@/providers";
+import { useConnection, useTheme, useTool } from "@/providers";
 import {
   type ClientRequest,
   CompatibilityCallToolResultSchema,
@@ -24,6 +24,7 @@ export function JSONRender(props: { name: string }) {
   const [editorInstance, setEditorInstance] =
     useState<Parameters<OnMount>[0]>();
   const { makeRequest } = useConnection();
+  const { resolvedTheme } = useTheme();
 
   const handleEditorMount: OnMount = (editor) => setEditorInstance(editor);
 
@@ -76,6 +77,7 @@ export function JSONRender(props: { name: string }) {
         <MonacoEditor
           language="json"
           onMount={handleEditorMount}
+          theme={resolvedTheme === "dark" ? "vs-dark" : "light"}
           className="h-full"
           value={editor}
           onChange={setEditor}

@@ -25,7 +25,10 @@ export function ThemeSelector() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="data-[state=open]:bg-accent">
+        <Button
+          variant="ghost"
+          className="p-2 h-max data-[state=open]:bg-accent"
+        >
           <ThemeTriggerIcon className="size-4 stroke-2" />
         </Button>
       </DropdownMenuTrigger>

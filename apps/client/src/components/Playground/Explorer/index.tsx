@@ -81,8 +81,8 @@ export function ExplorerPage() {
               key={card.name}
               className={cn(
                 card.name === current
-                  ? "bg-white"
-                  : "bg-transparent hover:bg-white transition-all ease-in-out",
+                  ? "bg-white dark:bg-background"
+                  : "bg-transparent hover:bg-white dark:hover:bg-background transition-all ease-in-out",
                 "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max"
               )}
               onClick={() => handleCardSelect(card.name)}
@@ -105,7 +105,7 @@ export function ExplorerPage() {
           ))}
         </div>
       </div>
-      <div className="px-4 overflow-y-auto flex w-full bg-white border-l">
+      <div className="px-4 overflow-y-auto flex w-full bg-white dark:bg-background border-l">
         {current ? (
           <Tabs defaultValue="form" className="size-full">
             <TabsList>
