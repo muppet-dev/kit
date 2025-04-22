@@ -1,15 +1,15 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useShiki } from "../providers/shiki";
-import { useEffect, useState } from "react";
-import { Skeleton } from "./ui/skeleton";
 import { useTheme } from "@/providers";
+import { useEffect, useState } from "react";
+import { useShiki } from "../providers/shiki";
+import { Skeleton } from "./ui/skeleton";
 
 export type CodeHighlighter = { content: string };
 
 export function CodeHighlighter({ content }: CodeHighlighter) {
   const highlighter = useShiki();
   const [html, setHtml] = useState("");
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
 
   if (!highlighter)
     return (
@@ -28,10 +28,12 @@ export function CodeHighlighter({ content }: CodeHighlighter) {
       .codeToHtml(content, {
         lang: "json",
         theme:
-          theme === "light" ? "github-light-default" : "github-dark-default",
+          resolvedTheme === "light"
+            ? "github-light-default"
+            : "github-dark-default",
       })
       .then((val) => setHtml(val));
-  }, []);
+  }, [content, resolvedTheme]);
 
   return (
     <div

@@ -1,20 +1,23 @@
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TabsContent } from "@radix-ui/react-tabs";
-import { SendHorizonal } from "lucide-react";
-import { FormRender } from "./FormRender";
-import { JSONRender } from "./JSONRender";
-import { useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
 import { Tool } from "@/constants";
 import { useConnection, useTool } from "@/providers";
+import { TabsContent } from "@radix-ui/react-tabs";
+import { SendHorizonal } from "lucide-react";
+import { useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { FormRender } from "./FormRender";
+import { JSONRender } from "./JSONRender";
 import { ReponseRender } from "./Reponse";
+import type { JSONSchema7 } from "json-schema";
 
 export type RequestForm = {
   cards: {
     name: string;
     description?: string;
     schema?: FormRender["schema"];
+    uri?: string;
+    uriTemplate?: string;
   }[];
   current: string;
 };
@@ -34,7 +37,7 @@ export function RequestForm({ cards, current }: RequestForm) {
 
   const formSchema = cards.find((card) => card.name === current)?.schema;
 
-  console.log("response", response);
+  const selectedResource = cards.find((card) => card.name === current);
 
   return (
     <>
@@ -57,11 +60,17 @@ export function RequestForm({ cards, current }: RequestForm) {
                 });
                 break;
               case Tool.STATIC_RESOURCES:
-                handler = mcpClient?.readResource({ uri: current });
+                handler = mcpClient?.readResource({
+                  uri: selectedResource?.uri as string,
+                });
                 break;
               case Tool.DYNAMIC_RESOURCES:
-                // TODO: place the values in the URI
-                handler = mcpClient?.readResource({ uri: current });
+                handler = mcpClient?.readResource({
+                  uri: fillTemplate(
+                    selectedResource?.uriTemplate as string,
+                    values
+                  ),
+                });
                 break;
               default:
                 throw new Error(`Invalid active tool - ${activeTool.name}`);
@@ -113,7 +122,17 @@ export function RequestForm({ cards, current }: RequestForm) {
               value="form"
               className="h-full flex flex-col gap-2 overflow-y-auto"
             >
-              <FormRender schema={formSchema} />
+              <FormRender
+                schema={
+                  formSchema ??
+                  (selectedResource?.uriTemplate
+                    ?.match(/{([^}]+)}/g)
+                    ?.map((param) => {
+                      const key = param.slice(1, -1);
+                      return key;
+                    }) as JSONSchema7[])
+                }
+              />
             </TabsContent>
             <TabsContent
               value="json"
@@ -129,3 +148,10 @@ export function RequestForm({ cards, current }: RequestForm) {
     </>
   );
 }
+
+const fillTemplate = (
+  template: string,
+  values: Record<string, string>
+): string => {
+  return template.replace(/{([^}]+)}/g, (_, key) => values[key] || `{${key}}`);
+};

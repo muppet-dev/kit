@@ -33,18 +33,20 @@ export function FieldWrapper({ children }: FieldWrapper) {
 
   return (
     <div className="relative [&>div>div]:w-full w-full space-y-1">
-      {label && (
-        <Label
-          className={cn(
-            required &&
-              "after:ml-0.5 after:text-red-500 after:content-['*'] after:dark:text-red-400",
-            "leading-snug"
-          )}
-        >
-          {label}
-        </Label>
-      )}
-      {children}
+      <div>
+        {label && (
+          <Label
+            className={cn(
+              required &&
+                "after:ml-0.5 after:text-red-500 after:content-['*'] after:dark:text-red-400",
+              "leading-snug capitalize"
+            )}
+          >
+            {label}
+          </Label>
+        )}
+        {children}
+      </div>
       <FieldErrorMessage name={componentId} />
     </div>
   );
