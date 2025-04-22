@@ -4,6 +4,7 @@ import { CheckboxField } from "./Checkbox";
 import { NumberField } from "./Number";
 import { ObjectField } from "./Object";
 import { TextareaField } from "./Textarea";
+import { CompletionField } from "./Completion";
 
 export const quackFields: Record<FieldType, () => React.JSX.Element> = {
   [FieldType.ARRAY]: ArrayField,
@@ -11,4 +12,5 @@ export const quackFields: Record<FieldType, () => React.JSX.Element> = {
   [FieldType.NUMBER]: NumberField,
   [FieldType.OBJECT]: ObjectField,
   [FieldType.STRING]: TextareaField,
+  [FieldType.DEFAULT]: CompletionField,
 };

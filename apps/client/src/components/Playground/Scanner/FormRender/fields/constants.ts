@@ -4,4 +4,5 @@ export enum FieldType {
   NUMBER = "number",
   OBJECT = "object",
   STRING = "string",
+  DEFAULT = "default",
 }

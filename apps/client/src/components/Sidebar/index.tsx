@@ -53,9 +53,9 @@ const data = {
       className: "text-sidebar-foreground",
       items: [
         {
-          title: "Scanner",
-          url: "/playground/scanner",
-          name: "scanner",
+          title: "Explorer",
+          url: "/playground/explorer",
+          name: "explorer",
           isActive: true,
         },
         {

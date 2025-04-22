@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import { FormRender } from "./FormRender";
 import { JSONRender } from "./JSONRender";
 
-export function ScannerPage() {
+export function ExplorerPage() {
   const [cards, setCards] = useState<
     { name: string; description?: string; schema?: unknown }[]
   >([]);
@@ -32,8 +32,8 @@ export function ScannerPage() {
             name: tool.name,
             description: tool.description,
             schema: tool.inputSchema.properties,
-          }))
-        )
+          })),
+        ),
       );
     } else if (activeTool.name === Tool.PROMPTS) {
       mcpClient.listPrompts().then(({ prompts }) =>
@@ -42,8 +42,8 @@ export function ScannerPage() {
             name: prompt.name,
             description: prompt.description,
             schema: prompt.arguments,
-          }))
-        )
+          })),
+        ),
       );
     } else if (activeTool.name === Tool.STATIC_RESOURCES) {
       mcpClient.listResources().then(({ resources }) => setCards(resources));
@@ -67,7 +67,7 @@ export function ScannerPage() {
                 card.name === current
                   ? "bg-white"
                   : "bg-transparent hover:bg-white transition-all ease-in-out",
-                "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max"
+                "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max",
               )}
               onClick={() => handleCardSelect(card.name)}
               onKeyDown={() => handleCardSelect(card.name)}
