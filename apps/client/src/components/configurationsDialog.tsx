@@ -13,6 +13,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "./ui/alert-dialog";
+import { CONFIG_STORAGE_KEY } from "@/providers";
 
 export type ConfigurationsDialogProps = {
   onSubmit: (data: ConnectionInfo) => void;
@@ -21,6 +22,11 @@ export type ConfigurationsDialogProps = {
 export default function ConfigurationsDialog({
   onSubmit,
 }: ConfigurationsDialogProps) {
+  const localStorageValue = localStorage.getItem(CONFIG_STORAGE_KEY);
+  const data = localStorageValue
+    ? (JSON.parse(localStorageValue) as ConnectionInfo)
+    : undefined;
+
   return (
     <AlertDialog open={true}>
       <AlertDialogContent>
@@ -33,6 +39,7 @@ export default function ConfigurationsDialog({
         <ConfigForm
           footer={<FormFooter />}
           onSubmit={(values) => onSubmit(values)}
+          data={data}
         />
       </AlertDialogContent>
     </AlertDialog>

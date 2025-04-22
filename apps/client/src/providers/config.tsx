@@ -6,7 +6,7 @@ import {
   useState,
 } from "react";
 
-const STORAGE_KEY = "muppet-config";
+export const CONFIG_STORAGE_KEY = "muppet-config";
 
 type ConfigContextType = ReturnType<typeof useConfigManager>;
 
@@ -25,16 +25,12 @@ export const ConfigProvider = (props: PropsWithChildren) => {
 function useConfigManager() {
   const [connectionInfo, setConnectionInfo] = useState<
     ConnectionInfo | undefined
-  >(() => {
-    const localStorageValue = localStorage.getItem(STORAGE_KEY);
-    if (!localStorageValue) return undefined;
-    return JSON.parse(localStorageValue) as ConnectionInfo;
-  });
+  >();
 
   return {
     connectionInfo,
     setConnectionInfo: (info: ConnectionInfo) => {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(info));
+      localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(info));
       setConnectionInfo(info);
     },
   };
