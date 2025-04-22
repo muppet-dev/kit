@@ -4,12 +4,17 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarGroup,
   SidebarHeader,
+  SidebarMenu,
   SidebarRail,
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils";
 import Logo from "@/public/logo.png";
+import MuppetDarkLogo from "@/public/logo-dark.png";
+
 import {
   AudioWaveform,
   Command,
@@ -20,6 +25,9 @@ import {
   SquareTerminal,
 } from "lucide-react";
 import { Link } from "react-router";
+import { ConnectStatus } from "../ConnectStatus";
+import { PingButton } from "../PingButton";
+import { ThemeSelector } from "../ThemeSelector";
 
 const data = {
   user: {
@@ -83,19 +91,40 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { open } = useSidebar();
+
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader>
+      <SidebarHeader
+        className={cn(open ? "flex-row justify-between" : "relative")}
+      >
         <Link to="/">
-          <img src={Logo} alt="" className={open ? "size-10" : "size-8"} />
+          <img
+            src={Logo}
+            alt="Muppet"
+            className={cn(open ? "size-10" : "size-8", "dark:hidden")}
+          />
+          <img
+            src={MuppetDarkLogo}
+            alt="Muppet"
+            className={cn(open ? "size-10" : "size-8", "dark:block hidden")}
+          />
         </Link>
+        <ConnectStatus />
       </SidebarHeader>
       <SidebarContent>
+        <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+          <SidebarMenu className="flex-row justify-between">
+            <PingButton />
+          </SidebarMenu>
+        </SidebarGroup>
         <NavPlayground items={data.navPlayground} />
         <NavProjects projects={data.projects} />
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter
+        className={cn(open && "flex-row items-center justify-between")}
+      >
         <SidebarTrigger />
+        <ThemeSelector />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
