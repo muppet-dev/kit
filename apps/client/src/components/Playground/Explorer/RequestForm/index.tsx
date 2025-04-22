@@ -3,13 +3,13 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tool } from "@/constants";
 import { useConnection, useTool } from "@/providers";
 import { TabsContent } from "@radix-ui/react-tabs";
+import type { JSONSchema7 } from "json-schema";
 import { SendHorizonal } from "lucide-react";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { FormRender } from "./FormRender";
 import { JSONRender } from "./JSONRender";
 import { ReponseRender } from "./Reponse";
-import type { JSONSchema7 } from "json-schema";
 
 export type RequestForm = {
   cards: {
@@ -35,9 +35,7 @@ export function RequestForm({ cards, current }: RequestForm) {
     formState: { isSubmitting },
   } = methods;
 
-  const formSchema = cards.find((card) => card.name === current)?.schema;
-
-  const selectedResource = cards.find((card) => card.name === current);
+  const selectedCard = cards.find((card) => card.name === current);
 
   return (
     <>
@@ -61,13 +59,13 @@ export function RequestForm({ cards, current }: RequestForm) {
                 break;
               case Tool.STATIC_RESOURCES:
                 handler = mcpClient?.readResource({
-                  uri: selectedResource?.uri as string,
+                  uri: selectedCard?.uri as string,
                 });
                 break;
               case Tool.DYNAMIC_RESOURCES:
                 handler = mcpClient?.readResource({
                   uri: fillTemplate(
-                    selectedResource?.uriTemplate as string,
+                    selectedCard?.uriTemplate as string,
                     values
                   ),
                 });
@@ -124,8 +122,8 @@ export function RequestForm({ cards, current }: RequestForm) {
             >
               <FormRender
                 schema={
-                  formSchema ??
-                  (selectedResource?.uriTemplate
+                  selectedCard?.schema ??
+                  (selectedCard?.uriTemplate
                     ?.match(/{([^}]+)}/g)
                     ?.map((param) => {
                       const key = param.slice(1, -1);
