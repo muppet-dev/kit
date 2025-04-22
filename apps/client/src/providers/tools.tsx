@@ -21,7 +21,7 @@ export const ToolProvider = (props: PropsWithChildren) => {
   );
 };
 
-const DEFAULT_TOOLS: ToolType[] = [
+export const DEFAULT_TOOLS: ToolType[] = [
   {
     name: Tool.TOOLS,
     label: "Tools",

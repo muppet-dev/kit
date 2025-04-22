@@ -25,33 +25,38 @@ export function ExplorerPage() {
   useEffect(() => {
     if (!mcpClient) return;
 
-    if (activeTool.name === Tool.TOOLS) {
-      mcpClient.listTools().then(({ tools }) =>
-        setCards(
+    let handler: Promise<typeof cards> | undefined;
+
+    switch (activeTool.name) {
+      case Tool.TOOLS:
+        handler = mcpClient.listTools().then(({ tools }) =>
           tools.map((tool) => ({
             name: tool.name,
             description: tool.description,
             schema: tool.inputSchema.properties,
           })),
-        ),
-      );
-    } else if (activeTool.name === Tool.PROMPTS) {
-      mcpClient.listPrompts().then(({ prompts }) =>
-        setCards(
+        );
+        break;
+      case Tool.PROMPTS:
+        handler = mcpClient.listPrompts().then(({ prompts }) =>
           prompts.map((prompt) => ({
             name: prompt.name,
             description: prompt.description,
             schema: prompt.arguments,
           })),
-        ),
-      );
-    } else if (activeTool.name === Tool.STATIC_RESOURCES) {
-      mcpClient.listResources().then(({ resources }) => setCards(resources));
-    } else if (activeTool.name === Tool.DYNAMIC_RESOURCES) {
-      mcpClient
-        .listResourceTemplates()
-        .then(({ resourceTemplates }) => setCards(resourceTemplates));
+        );
+        break;
+      case Tool.STATIC_RESOURCES:
+        handler = mcpClient.listResources().then(({ resources }) => resources);
+        break;
+      case Tool.DYNAMIC_RESOURCES:
+        handler = mcpClient
+          .listResourceTemplates()
+          .then(({ resourceTemplates }) => resourceTemplates);
+        break;
     }
+
+    handler.then((data) => setCards(data));
   }, [mcpClient, activeTool]);
 
   const handleCardSelect = (name: string) => setCurrent(name);

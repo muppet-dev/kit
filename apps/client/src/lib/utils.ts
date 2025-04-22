@@ -1,4 +1,5 @@
-import { Tool } from "@/constants";
+import type { Tool } from "@/constants";
+import { DEFAULT_TOOLS } from "@/providers";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -7,14 +8,5 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getToolName(name: Tool) {
-  switch (name) {
-    case Tool.TOOLS:
-      return "Tool";
-    case Tool.PROMPTS:
-      return "Prompt";
-    case Tool.STATIC_RESOURCES:
-      return "Static Resource";
-    case Tool.DYNAMIC_RESOURCES:
-      return "Dynamic Resource";
-  }
+  return DEFAULT_TOOLS.find((tool) => tool.name === name)?.label ?? name;
 }
