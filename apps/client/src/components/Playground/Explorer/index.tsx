@@ -5,22 +5,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tool } from "@/constants";
 import { cn, getToolName } from "@/lib/utils";
 import { useConnection, useTool } from "@/providers";
 import { useEffect, useState } from "react";
-import { FormRender } from "./FormRender";
-import { JSONRender } from "./JSONRender";
+import { RequestForm } from "./RequestForm";
 
 export function ExplorerPage() {
-  const [cards, setCards] = useState<
-    {
-      name: string;
-      description?: string;
-      schema?: FormRender["schema"];
-    }[]
-  >([]);
+  const [cards, setCards] = useState<RequestForm["cards"]>([]);
   const [current, setCurrent] = useState<string>();
 
   const { activeTool } = useTool();
@@ -37,7 +29,8 @@ export function ExplorerPage() {
           tools.map((tool) => ({
             name: tool.name,
             description: tool.description,
-            schema: tool.inputSchema.properties as FormRender["schema"],
+            schema: tool.inputSchema
+              .properties as RequestForm["cards"][0]["schema"],
           }))
         );
         break;
@@ -46,7 +39,7 @@ export function ExplorerPage() {
           prompts.map((prompt) => ({
             name: prompt.name,
             description: prompt.description,
-            schema: prompt.arguments as FormRender["schema"],
+            schema: prompt.arguments as RequestForm["cards"][0]["schema"],
           }))
         );
         break;
@@ -69,8 +62,6 @@ export function ExplorerPage() {
   }, [activeTool]);
 
   const handleCardSelect = (name: string) => setCurrent(name);
-
-  const formSchema = cards.find((card) => card.name === current)?.schema;
 
   return (
     <div className="size-full flex overflow-y-auto">
@@ -105,43 +96,9 @@ export function ExplorerPage() {
           ))}
         </div>
       </div>
-      <div className="px-4 overflow-y-auto flex w-full bg-white dark:bg-background border-l">
+      <div className="px-4 overflow-y-auto flex flex-col gap-2 w-full bg-white dark:bg-background border-l">
         {current ? (
-          <Tabs defaultValue="form" className="size-full overflow-y-auto">
-            <TabsList>
-              <TabsTrigger
-                value="form"
-                className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5"
-              >
-                Form
-              </TabsTrigger>
-              <TabsTrigger
-                value="json"
-                className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5"
-              >
-                JSON
-              </TabsTrigger>
-              <TabsTrigger
-                value="score"
-                className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5"
-              >
-                Score
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent
-              value="form"
-              className="h-full flex flex-col gap-2 overflow-y-auto"
-            >
-              <FormRender name={current} schema={formSchema} />
-            </TabsContent>
-            <TabsContent
-              value="json"
-              className="h-full flex flex-col gap-2 overflow-y-auto"
-            >
-              <JSONRender name={current} />
-            </TabsContent>
-            <TabsContent value="score">Score</TabsContent>
-          </Tabs>
+          <RequestForm cards={cards} current={current} />
         ) : (
           <div className="flex items-center justify-center size-full select-none text-muted-foreground">
             <p className="text-sm">Select a {getToolName(activeTool.name)}</p>
