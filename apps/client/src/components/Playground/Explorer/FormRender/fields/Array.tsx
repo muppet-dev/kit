@@ -9,14 +9,6 @@ import { Button } from "@/components/ui/button";
 export type ArrayProps = {
   type: FieldType.ARRAY;
   items: FieldProps;
-  defaultValue?: unknown[] | (() => unknown[]);
-  options?: {
-    sortable?: boolean;
-    layout?: "tags" | "grid";
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    list?: { title: string; value: any }[];
-    editModal?: "dialog" | "fullscreen" | "popover";
-  };
 };
 
 export function ArrayField() {
@@ -27,7 +19,7 @@ export function ArrayField() {
   const autoId = useId();
   const customId = useMemo(
     () => generateId?.(schema, props),
-    [generateId, schema, props]
+    [generateId, schema, props],
   );
 
   const componentId = customId ?? autoId;

@@ -8,11 +8,7 @@ export type NumberProps = {
   name?: string;
   type: FieldType.NUMBER;
   placeholder?: string;
-  inputMode?: "none" | "numeric" | "decimal";
-  min?: React.ComponentProps<"input">["min"];
-  max?: React.ComponentProps<"input">["max"];
   defaultValue?: number;
-  step?: number | "any";
 };
 
 export function NumberField() {
@@ -24,7 +20,7 @@ export function NumberField() {
   const autoId = useId();
   const customId = useMemo(
     () => generateId?.(schema, props),
-    [generateId, schema, props]
+    [generateId, schema, props],
   );
 
   const componentId = customId ?? autoId;

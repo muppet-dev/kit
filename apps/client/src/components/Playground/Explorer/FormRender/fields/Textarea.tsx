@@ -9,8 +9,6 @@ export type TextareaProps = {
   type: FieldType.STRING;
   placeholder?: string;
   defaultValue?: string;
-  maxLength?: number;
-  minLength?: number;
 };
 
 export function TextareaField() {

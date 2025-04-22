@@ -12,13 +12,7 @@ import {
 
 export type FieldWrapperProps = {
   label?: string;
-  description?: string;
-  primary?: boolean;
-  unique?: boolean;
   required?: boolean;
-  disabled?: boolean;
-  readonly?: boolean;
-  hidden?: boolean;
   onChange?: () => void;
 };
 
@@ -34,7 +28,7 @@ export function FieldWrapper({ className, children }: FieldWrapper) {
   const autoId = useId();
   const customId = useMemo(
     () => generateId?.(schema, props),
-    [generateId, schema, props]
+    [generateId, schema, props],
   );
 
   const { required, hidden, label, description, onChange } = props;
@@ -55,7 +49,7 @@ export function FieldWrapper({ className, children }: FieldWrapper) {
       className={cn(
         hidden && "hidden",
         "relative [&>div>div]:w-full w-full space-y-1",
-        className
+        className,
       )}
     >
       <div>
@@ -65,7 +59,7 @@ export function FieldWrapper({ className, children }: FieldWrapper) {
               className={cn(
                 required &&
                   "after:ml-0.5 after:text-red-500 after:content-['*'] after:dark:text-red-400",
-                "leading-snug"
+                "leading-snug",
               )}
             >
               {label}
