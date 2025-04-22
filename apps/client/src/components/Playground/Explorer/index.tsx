@@ -15,7 +15,11 @@ import { JSONRender } from "./JSONRender";
 
 export function ExplorerPage() {
   const [cards, setCards] = useState<
-    { name: string; description?: string; schema?: unknown }[]
+    {
+      name: string;
+      description?: string;
+      schema?: FormRender["schema"];
+    }[]
   >([]);
   const [current, setCurrent] = useState<string>();
 
@@ -33,8 +37,8 @@ export function ExplorerPage() {
           tools.map((tool) => ({
             name: tool.name,
             description: tool.description,
-            schema: tool.inputSchema.properties,
-          })),
+            schema: tool.inputSchema.properties as FormRender["schema"],
+          }))
         );
         break;
       case Tool.PROMPTS:
@@ -42,8 +46,8 @@ export function ExplorerPage() {
           prompts.map((prompt) => ({
             name: prompt.name,
             description: prompt.description,
-            schema: prompt.arguments,
-          })),
+            schema: prompt.arguments as FormRender["schema"],
+          }))
         );
         break;
       case Tool.STATIC_RESOURCES:
@@ -56,10 +60,17 @@ export function ExplorerPage() {
         break;
     }
 
-    handler.then((data) => setCards(data));
+    handler?.then((data) => setCards(data));
   }, [mcpClient, activeTool]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    setCurrent(undefined);
+  }, [activeTool]);
+
   const handleCardSelect = (name: string) => setCurrent(name);
+
+  const formSchema = cards.find((card) => card.name === current)?.schema;
 
   return (
     <div className="size-full flex overflow-y-auto">
@@ -72,7 +83,7 @@ export function ExplorerPage() {
                 card.name === current
                   ? "bg-white"
                   : "bg-transparent hover:bg-white transition-all ease-in-out",
-                "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max",
+                "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max"
               )}
               onClick={() => handleCardSelect(card.name)}
               onKeyDown={() => handleCardSelect(card.name)}
@@ -118,15 +129,7 @@ export function ExplorerPage() {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="form">
-              <FormRender
-                schema={
-                  cards.find((card) => card.name === current)?.schema as Record<
-                    string,
-                    unknown
-                  >
-                }
-                name={current}
-              />
+              <FormRender name={current} schema={formSchema} />
             </TabsContent>
             <TabsContent value="json" className="space-y-2">
               <JSONRender name={current} />

@@ -8,12 +8,12 @@ import { CodeHighlighter } from "@/components/Hightlighter";
 import { useState } from "react";
 import type { JSONSchema7 } from "json-schema";
 
-export type FormRenderProps = {
+export type FormRender = {
   name: string;
   schema?: JSONSchema7["properties"] | JSONSchema7[];
 };
 
-export function FormRender(props: FormRenderProps) {
+export function FormRender(props: FormRender) {
   const [response, setResponse] = useState<unknown>();
   const { activeTool } = useTool();
   const { mcpClient } = useConnection();
