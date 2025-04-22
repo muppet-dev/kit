@@ -107,7 +107,7 @@ export function ExplorerPage() {
       </div>
       <div className="px-4 overflow-y-auto flex w-full bg-white dark:bg-background border-l">
         {current ? (
-          <Tabs defaultValue="form" className="size-full">
+          <Tabs defaultValue="form" className="size-full overflow-y-auto">
             <TabsList>
               <TabsTrigger
                 value="form"
@@ -128,10 +128,16 @@ export function ExplorerPage() {
                 Score
               </TabsTrigger>
             </TabsList>
-            <TabsContent value="form">
+            <TabsContent
+              value="form"
+              className="h-full flex flex-col gap-2 overflow-y-auto"
+            >
               <FormRender name={current} schema={formSchema} />
             </TabsContent>
-            <TabsContent value="json" className="space-y-2">
+            <TabsContent
+              value="json"
+              className="h-full flex flex-col gap-2 overflow-y-auto"
+            >
               <JSONRender name={current} />
             </TabsContent>
             <TabsContent value="score">Score</TabsContent>

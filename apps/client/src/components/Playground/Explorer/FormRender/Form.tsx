@@ -36,7 +36,7 @@ export function Form(props: Form) {
     <FormProvider {...methods}>
       <form
         onSubmit={handleSubmit(props.onSubmit, console.error)}
-        className="space-y-2"
+        className="space-y-2 h-full overflow-y-auto"
       >
         <Blueprint wrapper={FieldWrapper} schema={schema}>
           {Object.entries(schema).map(([key, value]) => (
@@ -45,7 +45,7 @@ export function Form(props: Form) {
               className={cn(
                 "flex w-full gap-1",
                 // @ts-expect-error: type exists
-                value.type === "boolean" ? "flex-row-reverse" : "flex-col",
+                value.type === "boolean" ? "flex-row-reverse" : "flex-col"
               )}
             >
               <Label
@@ -54,7 +54,7 @@ export function Form(props: Form) {
                   "text-secondary-800 dark:text-secondary-200 select-none text-sm font-medium leading-snug capitalize",
                   // @ts-expect-error: required exists
                   value.required &&
-                    "after:ml-0.5 after:text-red-500 after:content-['*'] after:dark:text-red-400",
+                    "after:ml-0.5 after:text-red-500 after:content-['*'] after:dark:text-red-400"
                 )}
               >
                 {key}

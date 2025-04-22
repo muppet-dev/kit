@@ -2,12 +2,14 @@
 import { useShiki } from "../providers/shiki";
 import { useEffect, useState } from "react";
 import { Skeleton } from "./ui/skeleton";
+import { useTheme } from "@/providers";
 
 export type CodeHighlighter = { content: string };
 
 export function CodeHighlighter({ content }: CodeHighlighter) {
   const highlighter = useShiki();
   const [html, setHtml] = useState("");
+  const { theme } = useTheme();
 
   if (!highlighter)
     return (
@@ -25,7 +27,8 @@ export function CodeHighlighter({ content }: CodeHighlighter) {
     highlighter
       .codeToHtml(content, {
         lang: "json",
-        theme: "github-light-default",
+        theme:
+          theme === "light" ? "github-light-default" : "github-dark-default",
       })
       .then((val) => setHtml(val));
   }, []);
