@@ -1,18 +1,12 @@
 import { useConnection } from "@/providers";
-import { EmptyResultSchema } from "@modelcontextprotocol/sdk/types.js";
 import { Bell } from "lucide-react";
 import { SidebarMenuButton } from "./ui/sidebar";
 
 export function PingButton() {
-  const { makeRequest, connectionStatus } = useConnection();
+  const { mcpClient, connectionStatus } = useConnection();
 
-  const onPing = () =>
-    makeRequest(
-      {
-        method: "ping" as const,
-      },
-      EmptyResultSchema
-    );
+  // TODO: Add a loading state
+  const onPing = () => mcpClient?.ping();
 
   if (connectionStatus === "disconnected") return;
 
