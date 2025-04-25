@@ -3,19 +3,20 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tool } from "@/constants";
 import { useConnection, useTool } from "@/providers";
 import { TabsContent } from "@radix-ui/react-tabs";
-import type { JSONSchema7 } from "json-schema";
 import { SendHorizonal } from "lucide-react";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { DynamicResourceFieldRender } from "./DynamicResourceFieldRender";
 import { FormRender } from "./FormRender";
 import { JSONRender } from "./JSONRender";
+import { PromptFieldRender } from "./PromptFieldRender";
 import { ReponseRender } from "./Reponse";
 
 export type RequestForm = {
   cards: {
     name: string;
     description?: string;
-    schema?: FormRender["schema"];
+    schema?: FormRender["schema"] | PromptFieldRender["schema"];
     uri?: string;
     uriTemplate?: string;
     mimeType?: string;
@@ -128,17 +129,22 @@ export function RequestForm({ cards, current }: RequestForm) {
               value="form"
               className="h-full flex flex-col gap-2 overflow-y-auto"
             >
-              <FormRender
-                schema={
-                  selectedCard?.schema ??
-                  (selectedCard?.uriTemplate
-                    ?.match(/{([^}]+)}/g)
-                    ?.map((param) => {
-                      const key = param.slice(1, -1);
-                      return key;
-                    }) as JSONSchema7[])
-                }
-              />
+              {activeTool.name === Tool.TOOLS && (
+                <FormRender
+                  schema={selectedCard?.schema as FormRender["schema"]}
+                />
+              )}
+              {activeTool.name === Tool.PROMPTS && (
+                <PromptFieldRender
+                  schema={selectedCard?.schema as PromptFieldRender["schema"]}
+                  selectedPromptName={current}
+                />
+              )}
+              {activeTool.name === Tool.DYNAMIC_RESOURCES && (
+                <DynamicResourceFieldRender
+                  uriTemplate={selectedCard?.uriTemplate}
+                />
+              )}
             </TabsContent>
             <TabsContent
               value="json"

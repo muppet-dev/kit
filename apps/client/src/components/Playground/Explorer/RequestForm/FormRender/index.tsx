@@ -4,20 +4,13 @@ import { quackFields } from "./fields";
 import { FieldWrapper } from "./fields/FieldWrapper";
 
 export type FormRender = {
-  schema?: JSONSchema7["properties"] | JSONSchema7[];
+  schema?: JSONSchema7["properties"];
 };
 
 export function FormRender(props: FormRender) {
   if (!props.schema) return <></>;
 
-  const schema: Record<string, unknown> = Array.isArray(props.schema)
-    ? props.schema.reduce((prev, cur) => {
-        if (typeof cur === "object" && "name" in cur)
-          prev[cur.name] = { label: "label" in cur ? cur.label : cur.name };
-        else prev[cur] = { label: cur };
-        return prev;
-      }, {})
-    : transformSchema(props.schema);
+  const schema = transformSchema(props.schema);
 
   return (
     <DuckForm
@@ -25,9 +18,8 @@ export function FormRender(props: FormRender) {
       generateId={(_, props) => (props.id ? String(props.id) : undefined)}
     >
       <Blueprint wrapper={FieldWrapper} schema={schema}>
-        {Object.keys(schema).map((key) => (
-          <DuckField key={key} id={key} />
-        ))}
+        {schema &&
+          Object.keys(schema).map((key) => <DuckField key={key} id={key} />)}
       </Blueprint>
     </DuckForm>
   );
@@ -51,16 +43,17 @@ function transformSchema(
         required: isRequired ?? value.required,
       };
 
-      if (value.type === "object" && "properties" in value) {
+      if (value.type === "object") {
         const subRequired = "required" in value ? value.required ?? [] : [];
         field.properties = transformSchema(value.properties, subRequired);
       }
 
-      if (value.type === "array" && "items" in value) {
+      if (value.type === "array") {
         const items = value.items;
         if (
           items &&
           typeof items === "object" &&
+          // @ts-expect-error TypeScript cannot infer the type of 'items.type' as 'object' here
           items.type === "object" &&
           "properties" in items
         ) {

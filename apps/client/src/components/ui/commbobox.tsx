@@ -13,9 +13,9 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown } from "lucide-react";
-import React from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-interface ComboboxProps {
+type ComboboxProps = {
   value: string;
   onChange: (value: string) => void;
   onInputChange: (value: string) => void;
@@ -23,7 +23,7 @@ interface ComboboxProps {
   placeholder?: string;
   emptyMessage?: string;
   id?: string;
-}
+};
 
 export function Combobox({
   value,
@@ -34,9 +34,11 @@ export function Combobox({
   emptyMessage = "No results found.",
   id,
 }: ComboboxProps) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [width, setWidth] = useState(0);
+  const ref = useRef<HTMLButtonElement>(null);
 
-  const handleSelect = React.useCallback(
+  const handleSelect = useCallback(
     (option: string) => {
       onChange(option);
       setOpen(false);
@@ -44,12 +46,17 @@ export function Combobox({
     [onChange]
   );
 
-  const handleInputChange = React.useCallback(
+  const handleInputChange = useCallback(
     (value: string) => {
       onInputChange(value);
     },
     [onInputChange]
   );
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    setWidth(ref.current?.offsetWidth ?? 0);
+  }, [ref]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -61,12 +68,13 @@ export function Combobox({
           aria-expanded={open}
           aria-controls={id}
           className="w-full justify-between"
+          ref={ref}
         >
           {value || placeholder}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0" align="start">
+      <PopoverContent className="w-full p-0" style={{ width }} align="start">
         <Command shouldFilter={false} id={id}>
           <CommandInput
             placeholder={placeholder}

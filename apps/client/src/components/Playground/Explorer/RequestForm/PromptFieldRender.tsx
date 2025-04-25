@@ -1,0 +1,91 @@
+import { Combobox } from "@/components/ui/commbobox";
+import { Label } from "@/components/ui/label";
+import { useCompletionState } from "@/hooks/use-completion-state";
+import { cn } from "@/lib/utils";
+import { useConnection } from "@/providers";
+import type { JSONSchema7 } from "json-schema";
+import { useEffect } from "react";
+import { Controller, useFormContext } from "react-hook-form";
+
+export interface ExtendedJSONSchema7 extends JSONSchema7 {
+  name: string;
+}
+
+export type PromptFieldRender = {
+  schema?: ExtendedJSONSchema7[];
+  selectedPromptName: string;
+};
+
+export function PromptFieldRender({
+  schema,
+  selectedPromptName,
+}: PromptFieldRender) {
+  const { control } = useFormContext();
+  const { handleCompletion, completionsSupported } = useConnection();
+
+  const { completions, clearCompletions, requestCompletions } =
+    useCompletionState(handleCompletion, completionsSupported);
+
+  useEffect(() => {
+    clearCompletions();
+  }, [clearCompletions]);
+
+  if (!schema) return null;
+
+  const handleInputChange = async (argName: string, value: string) => {
+    if (selectedPromptName) {
+      requestCompletions(
+        {
+          type: "ref/prompt",
+          name: selectedPromptName,
+        },
+        argName,
+        value
+      );
+    }
+  };
+
+  if (Array.isArray(schema))
+    return schema.map((item) => (
+      <div key={item.name} className="space-y-1">
+        <Label
+          htmlFor={item.name}
+          className={cn(
+            item.required &&
+              "after:ml-0.5 after:text-red-500 after:content-['*'] after:dark:text-red-400",
+            "leading-snug capitalize"
+          )}
+        >
+          {item.name}
+        </Label>
+        <Controller
+          name={item.name}
+          control={control}
+          render={({ field: { name, onChange, value } }) => (
+            <Combobox
+              id={name}
+              placeholder={`Enter ${name}`}
+              value={value}
+              onChange={(value) => {
+                onChange(value);
+                handleInputChange(name, value);
+              }}
+              onInputChange={(value) => {
+                onChange(value);
+                handleInputChange(name, value);
+              }}
+              options={completions[name] ?? []}
+            />
+          )}
+        />
+        {item.description && (
+          <p className="text-xs text-gray-500 mt-1">
+            {item.description}
+            {item.required && (
+              <span className="text-xs mt-1 ml-1">(Required)</span>
+            )}
+          </p>
+        )}
+      </div>
+    ));
+}

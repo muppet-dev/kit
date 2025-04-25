@@ -23,7 +23,7 @@ export function FieldWrapper({ children }: FieldWrapper) {
     [generateId, schema, props]
   );
 
-  const { required, label, onChange } = props;
+  const { required, label, onChange, type } = props;
 
   const componentId = customId ?? autoId;
 
@@ -33,9 +33,15 @@ export function FieldWrapper({ children }: FieldWrapper) {
 
   return (
     <div className="relative [&>div>div]:w-full w-full space-y-1">
-      <div>
+      <div
+        className={cn(
+          "flex flex-col gap-1",
+          type === "boolean" && "flex-row-reverse w-max gap-2 items-center"
+        )}
+      >
         {label && (
           <Label
+            htmlFor={componentId}
             className={cn(
               required &&
                 "after:ml-0.5 after:text-red-500 after:content-['*'] after:dark:text-red-400",

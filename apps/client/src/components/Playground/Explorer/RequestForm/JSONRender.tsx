@@ -1,5 +1,6 @@
 import { CopyButton } from "@/components/CopyButton";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Tooltip,
   TooltipContent,
@@ -43,7 +44,7 @@ export function JSONRender() {
         }}
         loading={
           <div className="flex h-full w-full items-center justify-center gap-1">
-            {/* <Spinner size="sm" /> */}
+            <Spinner />
             <p className="text-sm text-secondary-500 dark:text-secondary-400">
               Loading...
             </p>

@@ -19,7 +19,7 @@ export function ArrayField() {
   const autoId = useId();
   const customId = useMemo(
     () => generateId?.(schema, props),
-    [generateId, schema, props],
+    [generateId, schema, props]
   );
 
   const componentId = customId ?? autoId;
@@ -88,6 +88,7 @@ export function ArrayField() {
         variant="outline"
         onClick={handleAddItem}
         onKeyDown={handleAddItem}
+        type="button"
         className="w-max"
       >
         Add
