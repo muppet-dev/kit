@@ -38,6 +38,7 @@
     "@tailwindcss/vite": "^4.1.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
     "duck-form": "^0.1.4",
     "lucide-react": "^0.488.0",
     "react": "^19.0.0",
