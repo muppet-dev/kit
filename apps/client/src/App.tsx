@@ -1,7 +1,6 @@
 import {
   ConnectionProvider,
   ShikiProvider,
-  ThemeProvider,
   ToolProvider,
   useConfig,
 } from "@/providers";
@@ -23,34 +22,32 @@ function App() {
   }
 
   return (
-    <ThemeProvider>
-      <ConnectionProvider {...connectionInfo}>
-        <ToolProvider>
-          <ShikiProvider>
-            <SidebarProvider>
-              <BrowserRouter>
-                <Routes>
-                  <Route path="/" element={<Wrapper />}>
-                    <Route element={<PlaygroundPage />}>
-                      <Route
-                        path="/playground/explorer"
-                        element={<ExplorerPage />}
-                      />
-                      <Route
-                        path="/playground/llm-scoring"
-                        element={<LLMScoringPage />}
-                      />
-                    </Route>
-                    <Route path="/tracing" element={<TracingPage />} />
-                    <Route path="/settings" element={<SettingsPage />} />
+    <ConnectionProvider {...connectionInfo}>
+      <ToolProvider>
+        <ShikiProvider>
+          <SidebarProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Wrapper />}>
+                  <Route element={<PlaygroundPage />}>
+                    <Route
+                      path="/playground/explorer"
+                      element={<ExplorerPage />}
+                    />
+                    <Route
+                      path="/playground/llm-scoring"
+                      element={<LLMScoringPage />}
+                    />
                   </Route>
-                </Routes>
-              </BrowserRouter>
-            </SidebarProvider>
-          </ShikiProvider>
-        </ToolProvider>
-      </ConnectionProvider>
-    </ThemeProvider>
+                  <Route path="/tracing" element={<TracingPage />} />
+                  <Route path="/settings" element={<SettingsPage />} />
+                </Route>
+              </Routes>
+            </BrowserRouter>
+          </SidebarProvider>
+        </ShikiProvider>
+      </ToolProvider>
+    </ConnectionProvider>
   );
 }
 

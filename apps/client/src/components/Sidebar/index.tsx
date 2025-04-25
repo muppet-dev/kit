@@ -15,43 +15,13 @@ import { cn } from "@/lib/utils";
 import Logo from "@/public/logo.png";
 import MuppetDarkLogo from "@/public/logo-dark.png";
 
-import {
-  AudioWaveform,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  PieChart,
-  Settings2,
-  SquareTerminal,
-} from "lucide-react";
+import { Frame, PieChart, Settings2, SquareTerminal } from "lucide-react";
 import { Link } from "react-router";
 import { ConnectStatus } from "../ConnectStatus";
 import { PingButton } from "../PingButton";
 import { ThemeSelector } from "../ThemeSelector";
 
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
   navPlayground: [
     {
       title: "Playground",
@@ -98,15 +68,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         className={cn(open ? "flex-row justify-between" : "relative")}
       >
         <Link to="/">
-          <img
-            src={Logo}
-            alt="Muppet"
-            className={cn(open ? "size-10" : "size-8", "dark:hidden")}
-          />
+          <img src={Logo} alt="Muppet" className="dark:hidden" />
           <img
             src={MuppetDarkLogo}
             alt="Muppet"
-            className={cn(open ? "size-10" : "size-8", "dark:block hidden")}
+            className="dark:block hidden"
           />
         </Link>
         <ConnectStatus />
