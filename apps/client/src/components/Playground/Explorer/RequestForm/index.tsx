@@ -18,6 +18,7 @@ export type RequestForm = {
     schema?: FormRender["schema"];
     uri?: string;
     uriTemplate?: string;
+    mimeType?: string;
   }[];
   current: string;
 };
@@ -84,18 +85,25 @@ export function RequestForm({ cards, current }: RequestForm) {
           }, console.error)}
           className="size-full overflow-y-auto"
         >
-          <Tabs defaultValue="form" className="size-full overflow-y-auto">
+          <Tabs
+            defaultValue={
+              activeTool.name === Tool.STATIC_RESOURCES ? "score" : "form"
+            }
+            className="size-full overflow-y-auto"
+          >
             <div className="flex items-center justify-between">
               <TabsList>
                 <TabsTrigger
                   value="form"
                   className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black"
+                  disabled={activeTool.name === Tool.STATIC_RESOURCES}
                 >
                   Form
                 </TabsTrigger>
                 <TabsTrigger
                   value="json"
                   className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black"
+                  disabled={activeTool.name === Tool.STATIC_RESOURCES}
                 >
                   JSON
                 </TabsTrigger>

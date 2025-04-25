@@ -83,15 +83,22 @@ export function ExplorerPage() {
                 <div className="h-full w-1 bg-primary absolute left-0 top-0" />
               )}
               <CardHeader className="px-4 -mb-1">
-                <CardTitle className="text-sm font-normal">
+                <CardTitle className="text-sm font-normal flex justify-between">
                   {card.name}
+                  {card.mimeType && (
+                    <span className="italic text-zinc-500 dark:text-zinc-400">
+                      {card.mimeType}
+                    </span>
+                  )}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="px-4">
-                <CardDescription className="line-clamp-1 leading-tight tracking-tight">
-                  {card.description}
-                </CardDescription>
-              </CardContent>
+              {card.description && (
+                <CardContent className="px-4">
+                  <CardDescription className="line-clamp-1 leading-tight tracking-tight">
+                    {card.description}
+                  </CardDescription>
+                </CardContent>
+              )}
             </Card>
           ))}
         </div>
