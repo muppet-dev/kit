@@ -74,36 +74,8 @@ const ThreadWelcome: FC = () => {
         <div className="flex w-full flex-grow flex-col items-center justify-center">
           <p className="mt-4 font-medium">How can I help you today?</p>
         </div>
-        <ThreadWelcomeSuggestions />
       </div>
     </ThreadPrimitive.Empty>
-  );
-};
-
-const ThreadWelcomeSuggestions: FC = () => {
-  return (
-    <div className="mt-3 flex w-full items-stretch justify-center gap-4">
-      <ThreadPrimitive.Suggestion
-        className="hover:bg-muted/80 flex max-w-sm grow basis-0 flex-col items-center justify-center rounded-lg border p-3 transition-colors ease-in"
-        prompt="What is the weather in Tokyo?"
-        method="replace"
-        autoSend
-      >
-        <span className="line-clamp-2 text-ellipsis text-sm font-semibold">
-          What is the weather in Tokyo?
-        </span>
-      </ThreadPrimitive.Suggestion>
-      <ThreadPrimitive.Suggestion
-        className="hover:bg-muted/80 flex max-w-sm grow basis-0 flex-col items-center justify-center rounded-lg border p-3 transition-colors ease-in"
-        prompt="What is assistant-ui?"
-        method="replace"
-        autoSend
-      >
-        <span className="line-clamp-2 text-ellipsis text-sm font-semibold">
-          What is assistant-ui?
-        </span>
-      </ThreadPrimitive.Suggestion>
-    </div>
   );
 };
 
@@ -113,7 +85,7 @@ const Composer: FC = () => {
       <ComposerPrimitive.Input
         rows={1}
         autoFocus
-        placeholder="Write a message..."
+        placeholder="Type your message..."
         className="placeholder:text-muted-foreground max-h-40 flex-grow resize-none border-none bg-transparent px-2 py-4 text-sm outline-none focus:ring-0 disabled:cursor-not-allowed"
       />
       <ComposerAction />
@@ -247,7 +219,7 @@ const BranchPicker: FC<BranchPickerPrimitive.Root.Props> = ({
       hideWhenSingleBranch
       className={cn(
         "text-muted-foreground inline-flex items-center text-xs",
-        className
+        className,
       )}
       {...rest}
     >

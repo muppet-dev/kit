@@ -56,7 +56,7 @@ export enum ConnectionStatus {
 
 export function useConnectionManager(props: UseConnectionOptions) {
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(
-    ConnectionStatus.DISCONNECTED
+    ConnectionStatus.DISCONNECTED,
   );
   const [serverCapabilities, setServerCapabilities] =
     useState<ServerCapabilities | null>(null);
@@ -79,7 +79,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
   const makeRequest = async <T extends z.ZodType>(
     request: ClientRequest,
     schema: T,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<z.output<T>> => {
     if (!mcpClient) {
       throw new Error("MCP client not connected");
@@ -87,9 +87,14 @@ export function useConnectionManager(props: UseConnectionOptions) {
 
     try {
       const abortController = new AbortController();
-      const timeoutId = setTimeout(() => {
-        abortController.abort("Request timed out");
-      }, options?.timeout ?? props.requestTimeout ?? DEFAULT_REQUEST_TIMEOUT_MSEC);
+      const timeoutId = setTimeout(
+        () => {
+          abortController.abort("Request timed out");
+        },
+        options?.timeout ??
+          props.requestTimeout ??
+          DEFAULT_REQUEST_TIMEOUT_MSEC,
+      );
 
       let response: z.output<T>;
       try {
@@ -120,7 +125,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
     ref: ResourceReference | PromptReference,
     argName: string,
     value: string,
-    signal?: AbortSignal
+    signal?: AbortSignal,
   ): Promise<string[]> => {
     if (!mcpClient || !completionsSupported) {
       return [];
@@ -192,7 +197,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
               listChanged: true,
             },
           },
-        }
+        },
       );
 
       const backendUrl = new URL("http://localhost:1976/api/sse");
@@ -201,7 +206,8 @@ export function useConnectionManager(props: UseConnectionOptions) {
       if (props.transportType === Transport.STDIO) {
         backendUrl.searchParams.append("command", props.command);
         if (props.args) backendUrl.searchParams.append("args", props.args);
-        backendUrl.searchParams.append("env", JSON.stringify(props.env));
+        if (props.env)
+          backendUrl.searchParams.append("env", JSON.stringify(props.env));
       } else {
         backendUrl.searchParams.append("url", props.url);
       }
@@ -227,24 +233,24 @@ export function useConnectionManager(props: UseConnectionOptions) {
       if (props.onNotification) {
         client.setNotificationHandler(
           ProgressNotificationSchema,
-          props.onNotification
+          props.onNotification,
         );
 
         client.setNotificationHandler(
           ResourceUpdatedNotificationSchema,
-          props.onNotification
+          props.onNotification,
         );
 
         client.setNotificationHandler(
           LoggingMessageNotificationSchema,
-          props.onNotification
+          props.onNotification,
         );
       }
 
       if (props.onStdErrNotification) {
         client.setNotificationHandler(
           StdErrNotificationSchema,
-          props.onStdErrNotification
+          props.onStdErrNotification,
         );
       }
 

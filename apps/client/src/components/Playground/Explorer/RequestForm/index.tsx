@@ -28,7 +28,10 @@ export function RequestForm({ cards, current }: RequestForm) {
   const { activeTool } = useTool();
   const { mcpClient } = useConnection();
 
-  const [response, setResponse] = useState<unknown>();
+  const [response, setResponse] = useState<{
+    duration: number;
+    content: unknown;
+  }>();
 
   const methods = useForm();
 
@@ -68,7 +71,7 @@ export function RequestForm({ cards, current }: RequestForm) {
                 handler = mcpClient?.readResource({
                   uri: fillTemplate(
                     selectedCard?.uriTemplate as string,
-                    values
+                    values,
                   ),
                 });
                 break;
@@ -80,8 +83,14 @@ export function RequestForm({ cards, current }: RequestForm) {
               throw new Error("MCP client is not available");
             }
 
+            const startTime = performance.now();
             handler
-              .then((res) => setResponse(res))
+              .then((res) =>
+                setResponse({
+                  duration: performance.now() - startTime,
+                  content: res,
+                }),
+              )
               .catch((err) => console.error(err));
           }, console.error)}
           className="size-full overflow-y-auto"
@@ -163,7 +172,7 @@ export function RequestForm({ cards, current }: RequestForm) {
 
 const fillTemplate = (
   template: string,
-  values: Record<string, string>
+  values: Record<string, string>,
 ): string => {
   return template.replace(/{([^}]+)}/g, (_, key) => values[key] || `{${key}}`);
 };
