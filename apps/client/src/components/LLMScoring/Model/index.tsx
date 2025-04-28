@@ -15,7 +15,7 @@ export function ModelRender(props: ModelRender) {
 
   return (
     <AssistantRuntimeProvider runtime={runtime}>
-      <div className="w-full flex flex-col h-full border border-zinc-300 dark:border-zinc-800 rounded-xl overflow-hidden">
+      <div className="w-full flex flex-col h-full border border-zinc-300 dark:border-zinc-800">
         <ModelHeader
           {...props}
           clearChat={() =>

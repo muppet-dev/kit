@@ -19,6 +19,9 @@ import {
   Ellipsis,
   Plus,
   RefreshCcw,
+  SlidersHorizontal,
+  SquareCode,
+  ToggleRight,
   Trash,
 } from "lucide-react";
 
@@ -39,7 +42,9 @@ export function ModelHeader(props: ModelHeader) {
         value={props.model}
         onValueChange={(value) => props.onModelChange(value as LLMModel)}
       >
-        <SelectTrigger className="w-[300px]">Select Model</SelectTrigger>
+        <SelectTrigger className="w-[300px] rounded-sm">
+          Select Model
+        </SelectTrigger>
         <SelectContent>
           {Object.values(LLMModel).map((item) => (
             <SelectItem key={item} value={item}>
@@ -49,16 +54,38 @@ export function ModelHeader(props: ModelHeader) {
         </SelectContent>
       </Select>
       <div className="flex-1" />
-      <div className="rounded-full px-3 pt-0.5 pb-1 text-sm text-zinc-500 dark:text-zinc-400 bg-accent font-medium">
+      <div className="rounded-full select-none px-3.5 pt-0.5 pb-1 text-sm text-zinc-500 dark:text-zinc-400 bg-zinc-200/70 dark:bg-zinc-800/70 font-semibold mr-2">
         Synced
       </div>
       <Button
+        title="Sync chat messages with other models"
+        variant="ghost"
+        className="has-[>svg]:px-1.5 py-1.5 h-max rounded-sm"
+      >
+        <ToggleRight className="size-[18px] stroke-zinc-600 dark:stroke-zinc-300" />
+      </Button>
+      <Button
+        title="View code to integrate this model into your project using Vercel AI SDK"
+        variant="ghost"
+        className="has-[>svg]:px-1.5 py-1.5 h-max rounded-sm"
+      >
+        <SquareCode className="size-[18px] stroke-zinc-600 dark:stroke-zinc-300" />
+      </Button>
+      <Button
+        title="Configure model"
+        variant="ghost"
+        className="has-[>svg]:px-1.5 py-1.5 h-max rounded-sm"
+      >
+        <SlidersHorizontal className="size-[18px] stroke-zinc-600 dark:stroke-zinc-300" />
+      </Button>
+      <Button
+        title="Add model for comparison"
         variant="ghost"
         className="has-[>svg]:px-1.5 py-1.5 h-max rounded-sm"
         onClick={() => props.addModel()}
         onKeyDown={() => props.addModel()}
       >
-        <Plus className="size-[18px]" />
+        <Plus className="size-[18px] stroke-zinc-600 dark:stroke-zinc-300" />
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -66,7 +93,7 @@ export function ModelHeader(props: ModelHeader) {
             variant="ghost"
             className="has-[>svg]:px-1.5 py-1.5 h-max rounded-sm data-[state=open]:bg-accent"
           >
-            <Ellipsis className="size-[18px]" />
+            <Ellipsis className="size-[18px] stroke-zinc-600 dark:stroke-zinc-300" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
