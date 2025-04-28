@@ -12,9 +12,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import Logo from "@/public/logo.png";
 import MuppetDarkLogo from "@/public/logo-dark.png";
-
+import Logo from "@/public/logo.png";
 import { Frame, PieChart, Settings2, SquareTerminal } from "lucide-react";
 import { Link } from "react-router";
 import { ConnectStatus } from "../ConnectStatus";
@@ -24,25 +23,14 @@ import { ThemeSelector } from "../ThemeSelector";
 const data = {
   navPlayground: [
     {
-      title: "Playground",
-      url: "#",
+      name: "Explorer",
+      url: "/explorer",
       icon: SquareTerminal,
-      isActive: true,
-      className: "text-sidebar-foreground",
-      items: [
-        {
-          title: "Explorer",
-          url: "/playground/explorer",
-          name: "explorer",
-          isActive: true,
-        },
-        {
-          title: "LLM Scoring",
-          url: "/playground/llm-scoring",
-          name: "llm-scoring",
-          icon: PieChart,
-        },
-      ],
+    },
+    {
+      name: "LLM Scoring",
+      url: "/llm-scoring",
+      icon: PieChart,
     },
   ],
   projects: [
@@ -64,22 +52,24 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader
-        className={cn(open ? "flex-row justify-between" : "relative")}
-      >
-        <Link to="/">
-          <img src={Logo} alt="Muppet" className="dark:hidden" />
+      <SidebarHeader>
+        <Link to="/" className="w-max">
+          <img
+            src={Logo}
+            alt="Muppet"
+            className={open ? "dark:hidden w-32" : "hidden"}
+          />
           <img
             src={MuppetDarkLogo}
             alt="Muppet"
-            className="dark:block hidden"
+            className={open ? "dark:block hidden w-32" : "hidden"}
           />
         </Link>
-        <ConnectStatus />
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarMenu className="flex-row justify-between">
+          <SidebarMenu>
+            <ConnectStatus />
             <PingButton />
           </SidebarMenu>
         </SidebarGroup>

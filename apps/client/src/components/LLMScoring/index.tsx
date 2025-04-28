@@ -8,7 +8,7 @@ export function LLMScoringPage() {
   ]);
 
   return (
-    <div className="flex gap-2 p-4 h-full">
+    <div className="flex gap-2 p-4 size-full">
       {models.map((model, index) => (
         <ModelRender
           key={`model-${index + 1}`}

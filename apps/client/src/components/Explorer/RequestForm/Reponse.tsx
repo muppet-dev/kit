@@ -17,7 +17,7 @@ export function ReponseRender(props: ReponseRender) {
         <div className="flex">
           <h2 className="text-sm font-semibold">Response</h2>
           <div className="flex-1" />
-          <span className="text-xs text-green-500">
+          <span className="text-xs text-green-600 font-medium dark:text-green-400">
             {props.data.duration.toFixed(2)} ms
           </span>
         </div>

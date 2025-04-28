@@ -19,7 +19,6 @@ export function NavProjects({
 }) {
   return (
     <SidebarGroup>
-      {/* <SidebarGroupLabel>Projects</SidebarGroupLabel> */}
       <SidebarMenu>
         {projects.map((item) => (
           <SidebarMenuItem key={item.name}>

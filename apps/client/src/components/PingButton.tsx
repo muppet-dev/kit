@@ -21,6 +21,7 @@ export function PingButton() {
       onClick={onPing}
       onKeyDown={onPing}
       disabled={connectionStatus !== ConnectionStatus.CONNECTED || isLoading}
+      tooltip="Ping Server"
     >
       <Bell />
       Ping Server
