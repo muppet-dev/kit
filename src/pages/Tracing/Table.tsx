@@ -16,6 +16,7 @@ import { useState } from "react";
 
 export type TracingTable = {
   data: {
+    timestamp: Date;
     request: string;
     response?: string;
   }[];
@@ -23,6 +24,7 @@ export type TracingTable = {
 
 export function TracingTable({ data }: TracingTable) {
   const [currentItem, setCurrentItem] = useState<{
+    timestamp: Date;
     request: Request;
     response?: any;
   }>();
@@ -34,17 +36,17 @@ export function TracingTable({ data }: TracingTable) {
       ? JSON.parse(data[index].response!)
       : undefined;
     setSelectedIndex(index);
-    setCurrentItem({ request, response });
+    setCurrentItem({ timestamp: data[index].timestamp, request, response });
   };
 
   return (
-    <div className="w-full flex gap-2 md:gap-3 lg:gap-4">
+    <div className="w-full h-full flex gap-2 md:gap-3 lg:gap-4">
       <Table className="border">
         <TableHeader>
           <TableRow className="hover:bg-accent divide-x bg-accent">
-            <TableHead>Method</TableHead>
+            <TableHead>Date</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead className="text-right">Date</TableHead>
+            <TableHead>Method</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -56,12 +58,12 @@ export function TracingTable({ data }: TracingTable) {
             const isError = Boolean(response?.error);
 
             const handleClick = () => {
-              setCurrentItem({ request, response });
+              setCurrentItem({ timestamp: item.timestamp, request, response });
               setSelectedIndex(index);
             };
-            const monthWithDay = dayjs().format("MMM DD");
-            const time = dayjs().format("hh:mm:ss");
-            const millisecond = dayjs().format("SSS");
+            const monthWithDay = dayjs(item.timestamp).format("MMM DD");
+            const time = dayjs(item.timestamp).format("hh:mm:ss");
+            const millisecond = dayjs(item.timestamp).format("SSS");
 
             return (
               <TableRow
@@ -72,13 +74,7 @@ export function TracingTable({ data }: TracingTable) {
                   selectedIndex === index && "bg-muted/50",
                 )}
               >
-                <TableCell>{request.method}</TableCell>
-                <TableCell
-                  className={isError ? "text-red-500" : "text-green-600"}
-                >
-                  {isError ? "Error" : "Success"}
-                </TableCell>
-                <TableCell className="text-right space-x-1 font-medium">
+                <TableCell className="space-x-1 font-medium uppercase">
                   <span className="text-black/50 dark:text-white/50">
                     {monthWithDay}
                   </span>
@@ -87,6 +83,12 @@ export function TracingTable({ data }: TracingTable) {
                     .{millisecond}
                   </span>
                 </TableCell>
+                <TableCell
+                  className={isError ? "text-red-500" : "text-green-600"}
+                >
+                  {isError ? "Error" : "Success"}
+                </TableCell>
+                <TableCell>{request.method}</TableCell>
               </TableRow>
             );
           })}
@@ -135,7 +137,6 @@ export function TracingTable({ data }: TracingTable) {
             >
               <ChevronDown className="size-4" />
             </Button>
-
             <div className="h-4 w-px bg-muted" />
             <Button
               size="icon"

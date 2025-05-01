@@ -61,7 +61,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
     useState<ServerCapabilities | null>(null);
   const [mcpClient, setMcpClient] = useState<Client | null>(null);
   const [requestHistory, setRequestHistory] = useState<
-    { request: string; response?: string }[]
+    { request: string; timestamp: Date; response?: string }[]
   >([]);
   const [completionsSupported, setCompletionsSupported] = useState(true);
 
@@ -69,6 +69,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
     setRequestHistory((prev) => [
       ...prev,
       {
+        timestamp: new Date(),
         request: JSON.stringify(request),
         response: response !== undefined ? JSON.stringify(response) : undefined,
       },
