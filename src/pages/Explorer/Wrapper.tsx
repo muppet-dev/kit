@@ -1,6 +1,6 @@
 import { SidebarInset } from "@/components/ui/sidebar";
-import { Tabs } from "./Tabs";
 import type { PropsWithChildren } from "react";
+import { Tabs } from "./Tabs";
 
 export function ExplorerWrapper(props: PropsWithChildren) {
   return (

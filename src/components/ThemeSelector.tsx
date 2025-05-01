@@ -38,7 +38,7 @@ export function ThemeSelector() {
               key={name}
               className={cn(
                 isSelected && "bg-secondary focus:bg-secondary",
-                "capitalize group"
+                "capitalize group",
               )}
               onClick={handler(name as Theme)}
               onKeyDown={handler(name as Theme)}
@@ -46,7 +46,7 @@ export function ThemeSelector() {
               <Icon
                 className={cn(
                   isSelected && "text-black dark:text-white",
-                  "stroke-2 size-4"
+                  "stroke-2 size-4",
                 )}
               />
               {name}

@@ -1,17 +1,17 @@
 "use client";
 
 import "@assistant-ui/react-markdown/styles/dot.css";
+import { cn } from "@/lib/utils";
 import {
   type CodeHeaderProps,
   MarkdownTextPrimitive,
   unstable_memoizeMarkdownComponents as memoizeMarkdownComponents,
   useIsMarkdownCodeBlock,
 } from "@assistant-ui/react-markdown";
-import remarkGfm from "remark-gfm";
-import { type FC, memo, useState } from "react";
 import { CheckIcon, CopyIcon } from "lucide-react";
+import { type FC, memo, useState } from "react";
+import remarkGfm from "remark-gfm";
 import { TooltipIconButton } from "./TooltipIconButton";
-import { cn } from "@/lib/utils";
 
 const MarkdownTextImpl = () => {
   return (
@@ -67,7 +67,7 @@ const defaultComponents = memoizeMarkdownComponents({
     <h1
       className={cn(
         "mb-8 scroll-m-20 text-4xl font-extrabold tracking-tight last:mb-0",
-        className
+        className,
       )}
       {...props}
     />
@@ -76,7 +76,7 @@ const defaultComponents = memoizeMarkdownComponents({
     <h2
       className={cn(
         "mb-4 mt-8 scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0 last:mb-0",
-        className
+        className,
       )}
       {...props}
     />
@@ -85,7 +85,7 @@ const defaultComponents = memoizeMarkdownComponents({
     <h3
       className={cn(
         "mb-4 mt-6 scroll-m-20 text-2xl font-semibold tracking-tight first:mt-0 last:mb-0",
-        className
+        className,
       )}
       {...props}
     />
@@ -94,7 +94,7 @@ const defaultComponents = memoizeMarkdownComponents({
     <h4
       className={cn(
         "mb-4 mt-6 scroll-m-20 text-xl font-semibold tracking-tight first:mt-0 last:mb-0",
-        className
+        className,
       )}
       {...props}
     />
@@ -103,7 +103,7 @@ const defaultComponents = memoizeMarkdownComponents({
     <h5
       className={cn(
         "my-4 text-lg font-semibold first:mt-0 last:mb-0",
-        className
+        className,
       )}
       {...props}
     />
@@ -124,7 +124,7 @@ const defaultComponents = memoizeMarkdownComponents({
     <a
       className={cn(
         "text-primary font-medium underline underline-offset-4",
-        className
+        className,
       )}
       {...props}
     />
@@ -154,7 +154,7 @@ const defaultComponents = memoizeMarkdownComponents({
     <table
       className={cn(
         "my-5 w-full border-separate border-spacing-0 overflow-y-auto",
-        className
+        className,
       )}
       {...props}
     />
@@ -163,7 +163,7 @@ const defaultComponents = memoizeMarkdownComponents({
     <th
       className={cn(
         "bg-muted px-4 py-2 text-left font-bold first:rounded-tl-lg last:rounded-tr-lg [&[align=center]]:text-center [&[align=right]]:text-right",
-        className
+        className,
       )}
       {...props}
     />
@@ -172,7 +172,7 @@ const defaultComponents = memoizeMarkdownComponents({
     <td
       className={cn(
         "border-b border-l px-4 py-2 text-left last:border-r [&[align=center]]:text-center [&[align=right]]:text-right",
-        className
+        className,
       )}
       {...props}
     />
@@ -181,7 +181,7 @@ const defaultComponents = memoizeMarkdownComponents({
     <tr
       className={cn(
         "m-0 border-b p-0 first:border-t [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg",
-        className
+        className,
       )}
       {...props}
     />
@@ -196,7 +196,7 @@ const defaultComponents = memoizeMarkdownComponents({
     <pre
       className={cn(
         "overflow-x-auto rounded-b-lg bg-black p-4 text-white",
-        className
+        className,
       )}
       {...props}
     />
@@ -207,7 +207,7 @@ const defaultComponents = memoizeMarkdownComponents({
       <code
         className={cn(
           !isCodeBlock && "bg-muted rounded border font-semibold",
-          className
+          className,
         )}
         {...props}
       />

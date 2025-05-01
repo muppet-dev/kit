@@ -1,8 +1,8 @@
 import {
   SidebarGroup,
   SidebarMenu,
-  sidebarMenuButtonVariants,
   SidebarMenuItem,
+  sidebarMenuButtonVariants,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
@@ -28,7 +28,7 @@ export function SidebarItem({ items }: SidebarItem) {
                 cn(
                   sidebarMenuButtonVariants(),
                   isActive &&
-                    "bg-primary hover:bg-primary text-primary-foreground hover:text-primary-foreground"
+                    "bg-primary hover:bg-primary text-primary-foreground hover:text-primary-foreground",
                 )
               }
             >

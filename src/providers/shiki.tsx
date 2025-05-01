@@ -6,8 +6,8 @@ import {
   useMemo,
 } from "react";
 import {
-  createdBundledHighlighter,
   createSingletonShorthands,
+  createdBundledHighlighter,
 } from "shiki/core";
 import { createJavaScriptRegexEngine } from "shiki/engine/javascript";
 
@@ -21,7 +21,7 @@ const BundledThemes = {
 };
 
 const ShikiContext = createContext<ReturnType<typeof useHighlighter> | null>(
-  null
+  null,
 );
 
 export function ShikiProvider({ children }: PropsWithChildren) {

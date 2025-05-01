@@ -1,8 +1,8 @@
+import { Checkbox } from "@/components/ui/checkbox";
 import { useBlueprint, useDuckForm, useField } from "duck-form";
 import { useId, useMemo } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import type { FieldType } from "./constants";
-import { Checkbox } from "@/components/ui/checkbox";
 
 export type CheckboxProps = {
   name?: string;
@@ -19,7 +19,7 @@ export function CheckboxField() {
   const autoId = useId();
   const customId = useMemo(
     () => generateId?.(schema, props),
-    [generateId, schema, props]
+    [generateId, schema, props],
   );
 
   const componentId = customId ?? autoId;

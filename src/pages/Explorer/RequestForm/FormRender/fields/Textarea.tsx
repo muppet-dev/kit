@@ -1,8 +1,8 @@
+import { Textarea } from "@/components/ui/textarea";
 import { useBlueprint, useDuckForm, useField } from "duck-form";
 import { useId, useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 import type { FieldType } from "./constants";
-import { Textarea } from "@/components/ui/textarea";
 
 export type TextareaProps = {
   name?: string;

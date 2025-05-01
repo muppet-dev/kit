@@ -1,5 +1,5 @@
-import { Hono } from "hono";
 import { reactRenderer } from "@hono/react-renderer";
+import { Hono } from "hono";
 
 const router = new Hono()
   .use(

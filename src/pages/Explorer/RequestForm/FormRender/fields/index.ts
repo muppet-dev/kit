@@ -1,10 +1,10 @@
-import { FieldType } from "./constants";
 import { ArrayField } from "./Array";
 import { CheckboxField } from "./Checkbox";
+import { CompletionField } from "./Completion";
 import { NumberField } from "./Number";
 import { ObjectField } from "./Object";
 import { TextareaField } from "./Textarea";
-import { CompletionField } from "./Completion";
+import { FieldType } from "./constants";
 
 export const quackFields: Record<FieldType, () => React.JSX.Element> = {
   [FieldType.ARRAY]: ArrayField,

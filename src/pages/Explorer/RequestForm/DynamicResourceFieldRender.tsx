@@ -32,7 +32,7 @@ export function DynamicResourceFieldRender({
           uri: uriTemplate,
         },
         key,
-        value
+        value,
       );
     }
   };

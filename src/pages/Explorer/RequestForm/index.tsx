@@ -72,7 +72,7 @@ export function RequestForm({ cards, current }: RequestForm) {
                 handler = mcpClient?.readResource({
                   uri: fillTemplate(
                     selectedCard?.uriTemplate as string,
-                    values
+                    values,
                   ),
                 });
                 break;
@@ -90,7 +90,7 @@ export function RequestForm({ cards, current }: RequestForm) {
                 setResponse({
                   duration: performance.now() - startTime,
                   content: res,
-                })
+                }),
               )
               .catch((err) => console.error(err));
           }, console.error)}
@@ -173,7 +173,7 @@ export function RequestForm({ cards, current }: RequestForm) {
 
 const fillTemplate = (
   template: string,
-  values: Record<string, string>
+  values: Record<string, string>,
 ): string => {
   return template.replace(/{([^}]+)}/g, (_, key) => values[key] || `{${key}}`);
 };

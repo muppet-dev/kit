@@ -43,14 +43,14 @@ export function Combobox({
       onChange(option);
       setOpen(false);
     },
-    [onChange]
+    [onChange],
   );
 
   const handleInputChange = useCallback(
     (value: string) => {
       onInputChange(value);
     },
-    [onInputChange]
+    [onInputChange],
   );
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -92,7 +92,7 @@ export function Combobox({
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    value === option ? "opacity-100" : "opacity-0"
+                    value === option ? "opacity-100" : "opacity-0",
                   )}
                 />
                 {option}

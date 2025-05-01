@@ -1,4 +1,6 @@
 import { Tool } from "@/constants";
+import { useConnection } from "@/providers";
+import type { ToolType } from "@/types";
 import {
   type PropsWithChildren,
   createContext,
@@ -6,8 +8,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import type { ToolType } from "@/types";
-import { useConnection } from "@/providers";
 
 type ToolContextType = ReturnType<typeof useToolManager>;
 

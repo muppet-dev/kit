@@ -1,5 +1,6 @@
-import type { transportSchema } from "@/validations";
+import { CONFIG_STORAGE_KEY } from "@/providers";
 import type { ConnectionInfo } from "@/providers/connection/manager";
+import type { transportSchema } from "@/validations";
 import { useFormContext } from "react-hook-form";
 import type z from "zod";
 import { ConfigForm } from "./ConfigForm";
@@ -13,7 +14,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "./ui/alert-dialog";
-import { CONFIG_STORAGE_KEY } from "@/providers";
 
 export type ConfigurationsDialogProps = {
   onSubmit: (data: ConnectionInfo) => void;

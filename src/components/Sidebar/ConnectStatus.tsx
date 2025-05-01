@@ -10,8 +10,8 @@ export function ConnectStatus() {
     connectionStatus === "connected"
       ? "Connected"
       : connectionStatus === "error"
-      ? "Connection Error"
-      : "Disconnected";
+        ? "Connection Error"
+        : "Disconnected";
 
   return (
     <SidebarMenuButton
@@ -24,8 +24,8 @@ export function ConnectStatus() {
           connectionStatus === "connected"
             ? "bg-green-500 text-green-500"
             : connectionStatus === "error"
-            ? "bg-red-500 text-red-500"
-            : "bg-gray-500 text-gray-500"
+              ? "bg-red-500 text-red-500"
+              : "bg-gray-500 text-gray-500",
         )}
       />
       <span className="text-sm">{tilte}</span>

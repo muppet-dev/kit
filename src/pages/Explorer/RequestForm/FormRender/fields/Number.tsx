@@ -1,8 +1,8 @@
+import { Input } from "@/components/ui/input";
 import { useBlueprint, useDuckForm, useField } from "duck-form";
 import { useId, useMemo } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import type { FieldType } from "./constants";
-import { Input } from "@/components/ui/input";
 
 export type NumberProps = {
   name?: string;

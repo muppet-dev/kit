@@ -1,6 +1,6 @@
 import { Hono } from "hono";
-import routes from "./apis";
 import { cors } from "hono/cors";
+import routes from "./apis";
 
 const app = new Hono().use(cors());
 

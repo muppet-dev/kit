@@ -12,7 +12,7 @@ type CompletionState = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function debounce<T extends (...args: any[]) => PromiseLike<void>>(
   func: T,
-  wait: number
+  wait: number,
 ): (...args: Parameters<T>) => void {
   let timeout: ReturnType<typeof setTimeout>;
   return (...args: Parameters<T>) => {
@@ -28,10 +28,10 @@ export function useCompletionState(
     ref: ResourceReference | PromptReference,
     argName: string,
     value: string,
-    signal?: AbortSignal
+    signal?: AbortSignal,
   ) => Promise<string[]>,
   completionsSupported = true,
-  debounceMs = 300
+  debounceMs = 300,
 ) {
   const [state, setState] = useState<CompletionState>({
     completions: {},
@@ -65,7 +65,7 @@ export function useCompletionState(
       async (
         ref: ResourceReference | PromptReference,
         argName: string,
-        value: string
+        value: string,
       ) => {
         if (!completionsSupported) {
           return;
@@ -86,7 +86,7 @@ export function useCompletionState(
             ref,
             argName,
             value,
-            abortController.signal
+            abortController.signal,
           );
 
           if (!abortController.signal.aborted) {
@@ -109,7 +109,7 @@ export function useCompletionState(
           }
         }
       },
-      debounceMs
+      debounceMs,
     );
   }, [handleCompletion, completionsSupported, cleanup, debounceMs]);
 

@@ -1,3 +1,6 @@
+import { Transport } from "@/constants";
+import { type Notification, StdErrNotificationSchema } from "@/types";
+import type { transportSchema } from "@/validations";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import {
   SSEClientTransport,
@@ -6,26 +9,23 @@ import {
 import {
   type ClientNotification,
   type ClientRequest,
+  CompleteResultSchema,
   CreateMessageRequestSchema,
+  ErrorCode,
   ListRootsRequestSchema,
-  ProgressNotificationSchema,
-  ResourceUpdatedNotificationSchema,
   LoggingMessageNotificationSchema,
+  McpError,
+  ProgressNotificationSchema,
+  type PromptReference,
   type Request,
+  type ResourceReference,
+  ResourceUpdatedNotificationSchema,
   type Result,
   type ServerCapabilities,
-  type PromptReference,
-  type ResourceReference,
-  McpError,
-  CompleteResultSchema,
-  ErrorCode,
 } from "@modelcontextprotocol/sdk/types.js";
 import { useState } from "react";
-import type z from "zod";
-import { type Notification, StdErrNotificationSchema } from "@/types";
 import toast from "react-hot-toast";
-import { Transport } from "@/constants";
-import type { transportSchema } from "@/validations";
+import type z from "zod";
 
 const params = new URLSearchParams(window.location.search);
 const DEFAULT_REQUEST_TIMEOUT_MSEC =

@@ -1,10 +1,10 @@
+import { Button } from "@/components/ui/button";
 import { DuckField, useBlueprint, useDuckForm, useField } from "duck-form";
+import { ArrowDown, ArrowUp, Plus, Trash } from "lucide-react";
 import { useId, useMemo } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import type { FieldType } from "./constants";
-import { ArrowDown, ArrowUp, Plus, Trash } from "lucide-react";
 import type { FieldProps } from "./types";
-import { Button } from "@/components/ui/button";
 
 export type ArrayProps = {
   type: FieldType.ARRAY;
@@ -19,7 +19,7 @@ export function ArrayField() {
   const autoId = useId();
   const customId = useMemo(
     () => generateId?.(schema, props),
-    [generateId, schema, props]
+    [generateId, schema, props],
   );
 
   const componentId = customId ?? autoId;

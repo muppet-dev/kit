@@ -1,7 +1,9 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, FormProvider, useForm } from "react-hook-form";
-import { transportSchema as schema } from "@/validations";
 import { Transport } from "@/constants";
+import type { ConnectionInfo } from "@/providers/connection/manager";
+import { transportSchema as schema } from "@/validations";
+import { zodResolver } from "@hookform/resolvers/zod";
+import type * as React from "react";
+import { Controller, FormProvider, useForm } from "react-hook-form";
 import type z from "zod";
 import { Label } from "../ui/label";
 import {
@@ -12,8 +14,6 @@ import {
   SelectValue,
 } from "../ui/select";
 import { OptionalFields } from "./OptionalFields";
-import type * as React from "react";
-import type { ConnectionInfo } from "@/providers/connection/manager";
 
 export type ConfigForm = {
   onSubmit: (values: ConnectionInfo) => void;
@@ -37,7 +37,7 @@ export function ConfigForm(props: ConfigForm) {
         className="flex flex-col gap-6"
         onSubmit={handleSubmit(
           (values) => props.onSubmit(values),
-          console.error
+          console.error,
         )}
       >
         <div className="grid grid-cols-4 w-full items-center gap-2">
