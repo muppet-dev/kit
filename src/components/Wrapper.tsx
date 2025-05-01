@@ -2,7 +2,7 @@ import { AppSidebar } from "@/components/Sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Outlet } from "react-router";
 
-export default function Wrapper() {
+export function AppWrapper() {
   return (
     <SidebarProvider>
       <AppSidebar />

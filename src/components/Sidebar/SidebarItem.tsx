@@ -8,15 +8,15 @@ import { cn } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
 import { NavLink } from "react-router";
 
-export function NavPlayground({
-  items,
-}: {
+export type SidebarItem = {
   items: {
     name: string;
     url: string;
     icon: LucideIcon;
   }[];
-}) {
+};
+
+export function SidebarItem({ items }: SidebarItem) {
   return (
     <SidebarGroup>
       <SidebarMenu>

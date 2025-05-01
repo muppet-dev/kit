@@ -19,9 +19,7 @@ export type ConfigurationsDialogProps = {
   onSubmit: (data: ConnectionInfo) => void;
 };
 
-export default function ConfigurationsDialog({
-  onSubmit,
-}: ConfigurationsDialogProps) {
+export function ConfigurationsDialog({ onSubmit }: ConfigurationsDialogProps) {
   const localStorageValue = localStorage.getItem(CONFIG_STORAGE_KEY);
   const data = localStorageValue
     ? (JSON.parse(localStorageValue) as ConnectionInfo)

@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { useConnection } from "@/providers";
 import { Dot } from "lucide-react";
-import { SidebarMenuButton } from "./ui/sidebar";
+import { SidebarMenuButton } from "../ui/sidebar";
 
 export function ConnectStatus() {
   const { connectionStatus } = useConnection();

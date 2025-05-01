@@ -1,6 +1,6 @@
-import { Tabs } from "@/components/Tabs";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { Outlet } from "react-router";
+import { Tabs } from "./Tabs";
 
 export function ExplorerWrapper() {
   return (

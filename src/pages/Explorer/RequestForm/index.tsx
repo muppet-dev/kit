@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tool } from "@/constants";
-import { useConnection, useTool } from "@/providers";
+import { useConnection } from "@/providers";
 import { TabsContent } from "@radix-ui/react-tabs";
 import { SendHorizonal } from "lucide-react";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { useTool } from "../tools";
 import { DynamicResourceFieldRender } from "./DynamicResourceFieldRender";
 import { FormRender } from "./FormRender";
 import { JSONRender } from "./JSONRender";
@@ -71,7 +72,7 @@ export function RequestForm({ cards, current }: RequestForm) {
                 handler = mcpClient?.readResource({
                   uri: fillTemplate(
                     selectedCard?.uriTemplate as string,
-                    values,
+                    values
                   ),
                 });
                 break;
@@ -89,7 +90,7 @@ export function RequestForm({ cards, current }: RequestForm) {
                 setResponse({
                   duration: performance.now() - startTime,
                   content: res,
-                }),
+                })
               )
               .catch((err) => console.error(err));
           }, console.error)}
@@ -172,7 +173,7 @@ export function RequestForm({ cards, current }: RequestForm) {
 
 const fillTemplate = (
   template: string,
-  values: Record<string, string>,
+  values: Record<string, string>
 ): string => {
   return template.replace(/{([^}]+)}/g, (_, key) => values[key] || `{${key}}`);
 };

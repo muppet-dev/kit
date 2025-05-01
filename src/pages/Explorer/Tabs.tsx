@@ -1,9 +1,9 @@
 import {
-  Tabs as TabsPrimitive,
   TabsList,
+  Tabs as TabsPrimitive,
   TabsTrigger,
 } from "@/components/ui/tabs";
-import { useTool } from "@/providers";
+import { useTool } from "./tools";
 
 export function Tabs() {
   const { tools, activeTool, changeTool } = useTool();
