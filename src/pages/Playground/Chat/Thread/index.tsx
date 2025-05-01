@@ -19,11 +19,11 @@ import {
   RefreshCwIcon,
   SendHorizontalIcon,
 } from "lucide-react";
-import { useEffect, type FC } from "react";
-import { MarkdownText } from "./MarkdownText";
-import { TooltipIconButton } from "./TooltipIconButton";
+import { type FC, useEffect } from "react";
 import { useModels } from "../../providers";
 import type { Chat } from "../index";
+import { MarkdownText } from "./MarkdownText";
+import { TooltipIconButton } from "./TooltipIconButton";
 
 export function Thread(props: Chat) {
   const { syncTextChange, getModel, onConfigChange } = useModels();

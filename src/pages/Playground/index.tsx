@@ -1,6 +1,6 @@
-import { ModelsProvider, useModels } from "./providers";
-import { Chat } from "./Chat";
 import { useEffect } from "react";
+import { Chat } from "./Chat";
+import { ModelsProvider, useModels } from "./providers";
 
 export default function PlaygroundPage({
   maxModels = 5,

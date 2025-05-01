@@ -23,6 +23,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useThreadRuntime } from "@assistant-ui/react";
 import { TooltipContent } from "@radix-ui/react-tooltip";
 import {
   ArrowLeft,
@@ -37,14 +38,13 @@ import {
   Trash,
 } from "lucide-react";
 import type { InputHTMLAttributes, PropsWithChildren } from "react";
+import { useModels } from "../providers";
 import {
-  PROPERTIES_CONFIG,
   MODELS_CONFIG,
+  PROPERTIES_CONFIG,
   type SupportedModels,
 } from "../supportedModels";
 import type { Chat } from "./index";
-import { useModels } from "../providers";
-import { useThreadRuntime } from "@assistant-ui/react";
 
 export function ModelHeader(props: Chat) {
   const {

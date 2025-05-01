@@ -69,7 +69,7 @@ export function TracingTable({ data }: TracingTable) {
                 onClick={handleClick}
                 className={cn(
                   "cursor-pointer divide-x",
-                  selectedIndex === index && "bg-muted/50"
+                  selectedIndex === index && "bg-muted/50",
                 )}
               >
                 <TableCell>{request.method}</TableCell>
@@ -101,7 +101,7 @@ export function TracingTable({ data }: TracingTable) {
             <p
               className={cn(
                 "text-sm font-medium",
-                currentItem.response?.error ? "text-red-500" : "text-green-600"
+                currentItem.response?.error ? "text-red-500" : "text-green-600",
               )}
             >
               {currentItem.response?.error ? "Error" : "Success"}

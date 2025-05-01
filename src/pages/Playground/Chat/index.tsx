@@ -1,7 +1,7 @@
 import { AssistantRuntimeProvider } from "@assistant-ui/react";
+import { useChatRuntime } from "@assistant-ui/react-ai-sdk";
 import { ModelHeader } from "./Header";
 import { Thread } from "./Thread";
-import { useChatRuntime } from "@assistant-ui/react-ai-sdk";
 
 export type Chat = {
   chatId: string;

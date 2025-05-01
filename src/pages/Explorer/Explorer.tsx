@@ -7,15 +7,15 @@ import {
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useConnection } from "@/providers";
-import { useEffect, useState } from "react";
-import { RequestForm } from "./RequestForm";
-import { DEFAULT_TOOLS, useTool, Tool } from "./tools";
 import {
   ListPromptsResultSchema,
-  ListResourcesResultSchema,
   ListResourceTemplatesResultSchema,
+  ListResourcesResultSchema,
   ListToolsResultSchema,
 } from "@modelcontextprotocol/sdk/types.js";
+import { useEffect, useState } from "react";
+import { RequestForm } from "./RequestForm";
+import { DEFAULT_TOOLS, Tool, useTool } from "./tools";
 
 export function Explorer() {
   const [cards, setCards] = useState<RequestForm["cards"]>([]);
