@@ -29,13 +29,13 @@ const data = {
       url: "/playground",
       icon: PieChart,
     },
-  ],
-  projects: [
     {
       name: "Tracing",
       url: "/tracing",
       icon: Frame,
     },
+  ],
+  projects: [
     {
       name: "Settings",
       url: "/settings",

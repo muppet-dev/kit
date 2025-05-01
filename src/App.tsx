@@ -1,7 +1,7 @@
-import { NotFound } from "@/components/NotFound";
-import { AppWrapper } from "@/components/Wrapper";
 import { ConfigurationsDialog } from "@/components/configurationsDialog";
+import { NotFound } from "@/components/NotFound";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppWrapper } from "@/components/Wrapper";
 import ExplorerPage from "@/pages/Explorer";
 import PlaygroundPage from "@/pages/Playground";
 import SettingsPage from "@/pages/Settings";

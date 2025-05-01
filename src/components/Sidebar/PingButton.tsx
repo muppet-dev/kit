@@ -1,10 +1,10 @@
 import { useConnection } from "@/providers";
 import { ConnectionStatus } from "@/providers/connection/manager";
+import { EmptyResultSchema } from "@modelcontextprotocol/sdk/types.js";
 import { Bell } from "lucide-react";
 import { useState } from "react";
 import { SidebarMenuButton } from "../ui/sidebar";
 import { Spinner } from "../ui/spinner";
-import { PingRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 
 export function PingButton() {
   // Show this loading state when the server is pinging
@@ -17,7 +17,7 @@ export function PingButton() {
       {
         method: "ping",
       },
-      PingRequestSchema,
+      EmptyResultSchema
     );
     setIsLoading(false);
   };
