@@ -3,8 +3,6 @@ import { NotFound } from "@/components/NotFound";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppWrapper } from "@/components/Wrapper";
 import ExplorerPage from "@/pages/Explorer";
-import { ToolProvider } from "@/pages/Explorer/tools";
-import { ExplorerWrapper } from "@/pages/Explorer/Wrapper";
 import PlaygroundPage from "@/pages/Playground";
 import SettingsPage from "@/pages/Settings";
 import TracingPage from "@/pages/Tracing";
@@ -20,25 +18,21 @@ function App() {
 
   return (
     <ConnectionProvider {...connectionInfo}>
-      <ToolProvider>
-        <ShikiProvider>
-          <SidebarProvider>
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<AppWrapper />}>
-                  <Route element={<ExplorerWrapper />}>
-                    <Route path="/explorer" element={<ExplorerPage />} />
-                  </Route>
-                  <Route path="/playground" element={<PlaygroundPage />} />
-                  <Route path="/tracing" element={<TracingPage />} />
-                  <Route path="/settings" element={<SettingsPage />} />
-                </Route>
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </BrowserRouter>
-          </SidebarProvider>
-        </ShikiProvider>
-      </ToolProvider>
+      <ShikiProvider>
+        <SidebarProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<AppWrapper />}>
+                <Route path="/explorer" element={<ExplorerPage />} />
+                <Route path="/playground" element={<PlaygroundPage />} />
+                <Route path="/tracing" element={<TracingPage />} />
+                <Route path="/settings" element={<SettingsPage />} />
+              </Route>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </SidebarProvider>
+      </ShikiProvider>
     </ConnectionProvider>
   );
 }
