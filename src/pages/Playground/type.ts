@@ -1,7 +1,7 @@
-import type { LLMModel } from "@/constants";
+import type { SupportedModels } from "./supportedModels";
 
 export type ModelProps = {
-  model?: LLMModel;
+  model?: SupportedModels;
   prompt?: string;
   maxTokens: number;
   temperature: number;

@@ -5,12 +5,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Tool } from "@/constants";
 import { cn } from "@/lib/utils";
 import { useConnection } from "@/providers";
 import { useEffect, useState } from "react";
 import { RequestForm } from "./RequestForm";
-import { DEFAULT_TOOLS, useTool } from "./tools";
+import { DEFAULT_TOOLS, useTool, Tool } from "./tools";
 import {
   ListPromptsResultSchema,
   ListResourcesResultSchema,

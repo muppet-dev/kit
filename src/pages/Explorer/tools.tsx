@@ -1,4 +1,3 @@
-import { Tool } from "@/constants";
 import { useConnection } from "@/providers";
 import type { ToolType } from "@/types";
 import {
@@ -8,6 +7,13 @@ import {
   useEffect,
   useState,
 } from "react";
+
+export enum Tool {
+  TOOLS = "tools",
+  PROMPTS = "prompts",
+  STATIC_RESOURCES = "static-resources",
+  DYNAMIC_RESOURCES = "dynamic-resources",
+}
 
 type ToolContextType = ReturnType<typeof useToolManager>;
 

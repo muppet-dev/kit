@@ -23,7 +23,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { LLMModel } from "@/constants";
 import { TooltipContent } from "@radix-ui/react-tooltip";
 import {
   ArrowLeft,
@@ -37,12 +36,9 @@ import {
   ToggleRight,
   Trash,
 } from "lucide-react";
-import {
-  type InputHTMLAttributes,
-  type PropsWithChildren,
-  useState,
-} from "react";
+import type { InputHTMLAttributes, PropsWithChildren } from "react";
 import type { ModelProps } from "../../type";
+import { SUPPORTED_MODELS, type SupportedModels } from "../../supportedModels";
 
 export type ModelHeader = {
   config: ModelProps;
@@ -64,14 +60,17 @@ export function ModelHeader(props: ModelHeader) {
       <Select
         value={props.config.model}
         onValueChange={(value) =>
-          props.onConfigChange({ ...props.config, model: value as LLMModel })
+          props.onConfigChange({
+            ...props.config,
+            model: value as SupportedModels,
+          })
         }
       >
         <SelectTrigger className="w-[300px] rounded-sm">
           {props.config.model ?? "Select Model"}
         </SelectTrigger>
         <SelectContent>
-          {Object.values(LLMModel).map((item) => (
+          {Object.keys(SUPPORTED_MODELS).map((item) => (
             <SelectItem key={item} value={item}>
               {item}
             </SelectItem>
