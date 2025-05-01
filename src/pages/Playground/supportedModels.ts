@@ -17,11 +17,14 @@ export const PROPERTIES_CONFIG = {
   },
 };
 
-// TODO: Add icons to the providers
+export const PROVIDER_ICONS = {
+  OpenAI: "",
+};
+
 export const MODELS_CONFIG: Record<
   SupportedModels,
   {
-    provider: string;
+    provider: keyof typeof PROVIDER_ICONS;
     name: string;
     description: string;
     metadata: {
