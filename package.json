@@ -47,6 +47,7 @@
     "hono": "^4.7.6",
     "lucide-react": "^0.488.0",
     "muppet": "^0.2.1",
+    "nanoid": "^5.1.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.55.0",

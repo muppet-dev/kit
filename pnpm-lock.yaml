@@ -122,6 +122,9 @@ dependencies:
   muppet:
     specifier: ^0.2.1
     version: 0.2.2(@hono/standard-validator@0.1.2)(@modelcontextprotocol/sdk@1.10.2)(@standard-community/standard-json@0.1.2)(@standard-schema/spec@1.0.0)(hono@4.7.8)
+  nanoid:
+    specifier: ^5.1.5
+    version: 5.1.5
   react:
     specifier: ^19.0.0
     version: 19.1.0

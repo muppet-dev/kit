@@ -24,6 +24,7 @@ export function Explorer() {
   const { activeTool } = useTool();
   const { makeRequest } = useConnection();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     let handler: Promise<typeof cards> | undefined;
 

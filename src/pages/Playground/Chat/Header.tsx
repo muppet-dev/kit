@@ -37,40 +37,49 @@ import {
   Trash,
 } from "lucide-react";
 import type { InputHTMLAttributes, PropsWithChildren } from "react";
-import type { ModelProps } from "../../type";
-import { SUPPORTED_MODELS, type SupportedModels } from "../../supportedModels";
+import {
+  PROPERTIES_CONFIG,
+  MODELS_CONFIG,
+  type SupportedModels,
+} from "../supportedModels";
+import type { Chat } from "./index";
+import { useModels } from "../providers";
+import { useThread, useThreadRuntime } from "@assistant-ui/react";
 
-export type ModelHeader = {
-  config: ModelProps;
-  onConfigChange: (values: ModelProps) => void;
-  addModel: () => void;
-  clearChat: () => void;
-  moveRight: () => void;
-  moveLeft: () => void;
-  deleteModel: () => void;
-  isSynced: boolean;
-  onSyncChange: () => void;
-};
+export function ModelHeader(props: Chat) {
+  const {
+    getModel,
+    addModel,
+    deleteModel,
+    moveRight,
+    moveLeft,
+    onConfigChange,
+  } = useModels();
+  const threadRuntime = useThreadRuntime();
 
-export function ModelHeader(props: ModelHeader) {
-  const SyncButtonIcon = props.isSynced ? ToggleRight : ToggleLeft;
+  const model = getModel(props.chatId);
+
+  if (!model) {
+    throw new Error(`Unable to find model with id ${props.chatId}`);
+  }
+
+  const SyncButtonIcon = model.sync ? ToggleRight : ToggleLeft;
 
   return (
     <div className="p-2 flex items-center gap-1 border-b border-zinc-300 dark:border-zinc-800 bg-background">
       <Select
-        value={props.config.model}
+        value={model.model}
         onValueChange={(value) =>
-          props.onConfigChange({
-            ...props.config,
+          onConfigChange(model.id, {
             model: value as SupportedModels,
           })
         }
       >
         <SelectTrigger className="w-[300px] rounded-sm">
-          {props.config.model ?? "Select Model"}
+          {model.model}
         </SelectTrigger>
         <SelectContent>
-          {Object.keys(SUPPORTED_MODELS).map((item) => (
+          {Object.keys(MODELS_CONFIG).map((item) => (
             <SelectItem key={item} value={item}>
               {item}
             </SelectItem>
@@ -78,7 +87,7 @@ export function ModelHeader(props: ModelHeader) {
         </SelectContent>
       </Select>
       <div className="flex-1" />
-      {props.isSynced && (
+      {model.sync && (
         <div className="rounded-full select-none px-3.5 pt-0.5 pb-1 text-sm text-zinc-500 dark:text-zinc-400 bg-zinc-200/70 dark:bg-zinc-800/70 font-semibold mr-2">
           Synced
         </div>
@@ -87,39 +96,27 @@ export function ModelHeader(props: ModelHeader) {
         title="Sync chat messages with other models"
         variant="ghost"
         className="has-[>svg]:px-1.5 py-1.5 h-max rounded-sm relative"
-        onClick={() => props.onSyncChange()}
+        onClick={() => onConfigChange(model.id, { sync: !model.sync })}
         onKeyDown={(event) => {
-          if (event.key === "Enter") props.onSyncChange();
+          if (event.key === "Enter")
+            onConfigChange(model.id, { sync: !model.sync });
         }}
       >
         <SyncButtonIcon className="size-[18px] stroke-zinc-600 dark:stroke-zinc-300" />
-        {props.isSynced && (
+        {model.sync && (
           <div className="absolute top-1.5 right-0.5 size-2 rounded-full p-0.5 bg-background">
             <div className="bg-green-500 dark:bg-green-300 size-full rounded-[inherit]" />
           </div>
         )}
       </Button>
-      <ConfigurationMenu
-        maxToken={props.config.maxTokens}
-        onMaxTokenChange={(val) =>
-          props.onConfigChange({ ...props.config, maxTokens: val })
-        }
-        temperature={props.config.temperature}
-        onTemperatureChange={(val) =>
-          props.onConfigChange({ ...props.config, temperature: val })
-        }
-        topP={props.config.topP}
-        onTopPChange={(val) =>
-          props.onConfigChange({ ...props.config, topP: val })
-        }
-      />
+      <ConfigurationMenu modelId={model.model} />
       <Button
         title="Add model for comparison"
         variant="ghost"
         className="has-[>svg]:px-1.5 py-1.5 h-max rounded-sm"
-        onClick={() => props.addModel()}
+        onClick={() => addModel()}
         onKeyDown={(event) => {
-          if (event.key === "Enter") props.addModel();
+          if (event.key === "Enter") addModel();
         }}
       >
         <Plus className="size-[18px] stroke-zinc-600 dark:stroke-zinc-300" />
@@ -135,27 +132,27 @@ export function ModelHeader(props: ModelHeader) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem
-            onClick={() => props.clearChat()}
+            onClick={() => threadRuntime.import({ messages: [] })}
             onKeyDown={(event) => {
-              if (event.key === "Enter") props.clearChat();
+              if (event.key === "Enter") threadRuntime.import({ messages: [] });
             }}
           >
             <RefreshCcw className="size-4 text-accent-foreground" />
             Clear Chat
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => props.moveRight()}
+            onClick={() => moveRight(model.id)}
             onKeyDown={(event) => {
-              if (event.key === "Enter") props.moveRight();
+              if (event.key === "Enter") moveRight(model.id);
             }}
           >
             <ArrowRight className="size-4 text-accent-foreground" />
             Move Right
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => props.moveLeft()}
+            onClick={() => moveLeft(model.id)}
             onKeyDown={(event) => {
-              if (event.key === "Enter") props.moveLeft();
+              if (event.key === "Enter") moveLeft(model.id);
             }}
           >
             <ArrowLeft className="size-4 text-accent-foreground" />
@@ -164,9 +161,9 @@ export function ModelHeader(props: ModelHeader) {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="text-destructive focus:text-destructive"
-            onClick={() => props.deleteModel()}
+            onClick={() => deleteModel(model.id)}
             onKeyDown={(event) => {
-              if (event.key === "Enter") props.deleteModel();
+              if (event.key === "Enter") deleteModel(model.id);
             }}
           >
             <Trash className="size-4 text-destructive" />
@@ -178,14 +175,15 @@ export function ModelHeader(props: ModelHeader) {
   );
 }
 
-function ConfigurationMenu(props: {
-  maxToken: number;
-  onMaxTokenChange: (value: number) => void;
-  temperature: number;
-  onTemperatureChange: (value: number) => void;
-  topP: number;
-  onTopPChange: (value: number) => void;
-}) {
+type ConfigurationMenu = {
+  modelId: SupportedModels;
+};
+
+function ConfigurationMenu(porps: ConfigurationMenu) {
+  const { onConfigChange } = useModels();
+
+  const modelConfig = MODELS_CONFIG[porps.modelId];
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -198,57 +196,33 @@ function ConfigurationMenu(props: {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="p-3 md:p-4 md:w-[300px] max-w-full space-y-4">
-        <div className="flex items-center gap-2">
-          <Label>Max Output Tokens</Label>
-          <TooltipWrapper content="The maximum number of tokens to return">
-            <Info className="size-3.5 stroke-2 stroke-muted-foreground" />
-          </TooltipWrapper>
-          <div className="flex-1" />
-          <NumberInput
-            min={50}
-            max={2048}
-            step={1}
-            value={props.maxToken}
-            onChange={(event) => {
-              const value = event.target.value;
-              if (value) props.onMaxTokenChange(Number(value));
-            }}
-          />
-        </div>
-        <div className="flex items-center gap-2">
-          <Label>Temperature</Label>
-          <TooltipWrapper content="Controls the randomness of the returned text; lower is less random">
-            <Info className="size-3.5 stroke-2 stroke-muted-foreground" />
-          </TooltipWrapper>
-          <div className="flex-1" />
-          <NumberInput
-            min={0}
-            max={2}
-            step={0.01}
-            value={props.temperature}
-            onChange={(event) => {
-              const value = event.target.value;
-              if (value) props.onTemperatureChange(Number(value));
-            }}
-          />
-        </div>
-        <div className="flex items-center gap-2">
-          <Label>Top P</Label>
-          <TooltipWrapper content="The cumulative probability of the most likely tokens to return">
-            <Info className="size-3.5 stroke-2 stroke-muted-foreground" />
-          </TooltipWrapper>
-          <div className="flex-1" />
-          <NumberInput
-            min={0}
-            max={1}
-            step={0.01}
-            value={props.topP}
-            onChange={(event) => {
-              const value = event.target.value;
-              if (value) props.onTopPChange(Number(value));
-            }}
-          />
-        </div>
+        {Object.entries(modelConfig.properties).map(([key, value]) => {
+          const propertyConfig =
+            PROPERTIES_CONFIG[key as keyof typeof PROPERTIES_CONFIG];
+
+          return (
+            <div key={key} className="flex items-center gap-2">
+              <Label>{propertyConfig.label}</Label>
+              <TooltipWrapper content={propertyConfig.description}>
+                <Info className="size-3.5 stroke-2 stroke-muted-foreground" />
+              </TooltipWrapper>
+              <div className="flex-1" />
+              <NumberInput
+                min={value?.min}
+                max={value?.max}
+                step={1}
+                value={value?.default}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  if (value)
+                    onConfigChange(porps.modelId, {
+                      [key]: Number(value),
+                    });
+                }}
+              />
+            </div>
+          );
+        })}
       </PopoverContent>
     </Popover>
   );
