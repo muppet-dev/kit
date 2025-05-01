@@ -1,6 +1,5 @@
 import { Hono } from "hono";
-import { serve } from "@hono/node-server";
-import routes from "./routes";
+import routes from "./apis";
 import { cors } from "hono/cors";
 
 const app = new Hono().use(cors());
