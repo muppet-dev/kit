@@ -3,7 +3,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build --mode client && vite build"
+    "build": "vite build --mode client && vite build",
+    "prepare": "is-ci || husky",
+    "format": "biome check --write ."
   },
   "dependencies": {
     "@assistant-ui/react": "^0.10.5",
@@ -62,6 +64,7 @@
     "zod": "^3.24.3"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
     "@hono/vite-build": "^1.6.0",
     "@hono/vite-dev-server": "^0.19.0",
     "@tailwindcss/vite": "^4.1.4",
@@ -72,6 +75,9 @@
     "@types/shell-quote": "^1.7.5",
     "@vitejs/plugin-react": "^4.3.4",
     "globals": "^16.0.0",
+    "husky": "^9.1.7",
+    "is-ci": "^4.1.0",
+    "nano-staged": "^0.8.0",
     "pkgroll": "^2.12.1",
     "tsx": "^4.19.3",
     "vite": "^6.3.1"
