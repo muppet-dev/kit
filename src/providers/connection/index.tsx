@@ -1,7 +1,7 @@
 import {
   useConnectionManager,
   type ConnectionInfo,
-} from "@/hooks/use-connection";
+} from "./manager";
 import {
   type PropsWithChildren,
   createContext,

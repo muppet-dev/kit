@@ -1,4 +1,4 @@
-import type { ConnectionInfo } from "@/hooks/use-connection";
+import type { ConnectionInfo } from "@/providers/connection/manager";
 import {
   type PropsWithChildren,
   createContext,

@@ -13,7 +13,7 @@ import {
 } from "../ui/select";
 import { OptionalFields } from "./OptionalFields";
 import type * as React from "react";
-import type { ConnectionInfo } from "@/hooks/use-connection";
+import type { ConnectionInfo } from "@/providers/connection/manager";
 
 export type ConfigForm = {
   onSubmit: (values: ConnectionInfo) => void;

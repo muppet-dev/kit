@@ -1,5 +1,5 @@
 import type { transportSchema } from "@/validations";
-import type { ConnectionInfo } from "@/hooks/use-connection";
+import type { ConnectionInfo } from "@/providers/connection/manager";
 import { useFormContext } from "react-hook-form";
 import type z from "zod";
 import { ConfigForm } from "./ConfigForm";

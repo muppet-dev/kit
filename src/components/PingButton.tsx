@@ -2,7 +2,7 @@ import { useConnection } from "@/providers";
 import { Bell } from "lucide-react";
 import { SidebarMenuButton } from "./ui/sidebar";
 import { useState } from "react";
-import { ConnectionStatus } from "@/hooks/use-connection";
+import { ConnectionStatus } from "@/providers/connection/manager";
 import { Spinner } from "./ui/spinner";
 
 export function PingButton() {
