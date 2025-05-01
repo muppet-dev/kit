@@ -253,8 +253,19 @@ export function useConnectionManager(props: UseConnectionOptions) {
         );
       }
 
+      let capabilities: ServerCapabilities | undefined;
       try {
         await client.connect(clientTransport);
+
+        capabilities = client.getServerCapabilities();
+        const initializeRequest = {
+          method: "initialize",
+        };
+        pushHistory(initializeRequest, {
+          capabilities,
+          serverInfo: client.getServerVersion(),
+          instructions: client.getInstructions(),
+        });
       } catch (error) {
         console.error("Failed to connect to MCP server:", error);
 
@@ -265,7 +276,6 @@ export function useConnectionManager(props: UseConnectionOptions) {
         throw error;
       }
 
-      const capabilities = client.getServerCapabilities();
       setServerCapabilities(capabilities ?? null);
       setCompletionsSupported(true); // Reset completions support on new connection
 

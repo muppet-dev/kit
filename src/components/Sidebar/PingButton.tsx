@@ -4,15 +4,21 @@ import { Bell } from "lucide-react";
 import { useState } from "react";
 import { SidebarMenuButton } from "../ui/sidebar";
 import { Spinner } from "../ui/spinner";
+import { PingRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 
 export function PingButton() {
   // Show this loading state when the server is pinging
   const [isLoading, setIsLoading] = useState(false);
-  const { mcpClient, connectionStatus } = useConnection();
+  const { makeRequest, connectionStatus } = useConnection();
 
   const onPing = async () => {
     setIsLoading(true);
-    await mcpClient?.ping();
+    await makeRequest(
+      {
+        method: "ping",
+      },
+      PingRequestSchema,
+    );
     setIsLoading(false);
   };
 

@@ -11,22 +11,29 @@ import { useConnection } from "@/providers";
 import { useEffect, useState } from "react";
 import { RequestForm } from "./RequestForm";
 import { DEFAULT_TOOLS, useTool } from "./tools";
+import {
+  ListPromptsResultSchema,
+  ListResourcesResultSchema,
+  ListResourceTemplatesResultSchema,
+  ListToolsResultSchema,
+} from "@modelcontextprotocol/sdk/types.js";
 
 export function Explorer() {
   const [cards, setCards] = useState<RequestForm["cards"]>([]);
   const [current, setCurrent] = useState<string>();
 
   const { activeTool } = useTool();
-  const { mcpClient } = useConnection();
+  const { makeRequest } = useConnection();
 
   useEffect(() => {
-    if (!mcpClient) return;
-
     let handler: Promise<typeof cards> | undefined;
 
     switch (activeTool.name) {
       case Tool.TOOLS:
-        handler = mcpClient.listTools().then(({ tools }) =>
+        handler = makeRequest(
+          { method: "tools/list" },
+          ListToolsResultSchema,
+        ).then(({ tools }) =>
           tools.map((tool) => ({
             name: tool.name,
             description: tool.description,
@@ -36,7 +43,12 @@ export function Explorer() {
         );
         break;
       case Tool.PROMPTS:
-        handler = mcpClient.listPrompts().then(({ prompts }) =>
+        handler = makeRequest(
+          {
+            method: "prompts/list",
+          },
+          ListPromptsResultSchema,
+        ).then(({ prompts }) =>
           prompts.map((prompt) => ({
             name: prompt.name,
             description: prompt.description,
@@ -45,17 +57,25 @@ export function Explorer() {
         );
         break;
       case Tool.STATIC_RESOURCES:
-        handler = mcpClient.listResources().then(({ resources }) => resources);
+        handler = makeRequest(
+          {
+            method: "resources/list",
+          },
+          ListResourcesResultSchema,
+        ).then(({ resources }) => resources);
         break;
       case Tool.DYNAMIC_RESOURCES:
-        handler = mcpClient
-          .listResourceTemplates()
-          .then(({ resourceTemplates }) => resourceTemplates);
+        handler = makeRequest(
+          {
+            method: "resources/templates/list",
+          },
+          ListResourceTemplatesResultSchema,
+        ).then(({ resourceTemplates }) => resourceTemplates);
         break;
     }
 
     handler?.then((data) => setCards(data));
-  }, [mcpClient, activeTool]);
+  }, [activeTool]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {

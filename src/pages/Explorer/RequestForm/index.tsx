@@ -12,6 +12,11 @@ import { FormRender } from "./FormRender";
 import { JSONRender } from "./JSONRender";
 import { PromptFieldRender } from "./PromptFieldRender";
 import { ReponseRender } from "./Reponse";
+import {
+  CallToolResultSchema,
+  GetPromptResultSchema,
+  ReadResourceResultSchema,
+} from "@modelcontextprotocol/sdk/types.js";
 
 export type RequestForm = {
   cards: {
@@ -27,7 +32,7 @@ export type RequestForm = {
 
 export function RequestForm({ cards, current }: RequestForm) {
   const { activeTool } = useTool();
-  const { mcpClient } = useConnection();
+  const { makeRequest } = useConnection();
 
   const [response, setResponse] = useState<{
     duration: number;
@@ -52,29 +57,53 @@ export function RequestForm({ cards, current }: RequestForm) {
 
             switch (activeTool.name) {
               case Tool.TOOLS:
-                handler = mcpClient?.callTool({
-                  name: current,
-                  arguments: values,
-                });
+                handler = makeRequest(
+                  {
+                    method: "tools/call",
+                    params: {
+                      name: current,
+                      arguments: values,
+                    },
+                  },
+                  CallToolResultSchema,
+                );
                 break;
               case Tool.PROMPTS:
-                handler = mcpClient?.getPrompt({
-                  name: current,
-                  arguments: values,
-                });
+                handler = makeRequest(
+                  {
+                    method: "prompts/get",
+                    params: {
+                      name: current,
+                      arguments: values,
+                    },
+                  },
+                  GetPromptResultSchema,
+                );
                 break;
               case Tool.STATIC_RESOURCES:
-                handler = mcpClient?.readResource({
-                  uri: selectedCard?.uri as string,
-                });
+                handler = makeRequest(
+                  {
+                    method: "resources/read",
+                    params: {
+                      uri: selectedCard?.uri as string,
+                    },
+                  },
+                  ReadResourceResultSchema,
+                );
                 break;
               case Tool.DYNAMIC_RESOURCES:
-                handler = mcpClient?.readResource({
-                  uri: fillTemplate(
-                    selectedCard?.uriTemplate as string,
-                    values,
-                  ),
-                });
+                handler = makeRequest(
+                  {
+                    method: "resources/read",
+                    params: {
+                      uri: fillTemplate(
+                        selectedCard?.uriTemplate as string,
+                        values,
+                      ),
+                    },
+                  },
+                  ReadResourceResultSchema,
+                );
                 break;
               default:
                 throw new Error(`Invalid active tool - ${activeTool.name}`);
