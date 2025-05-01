@@ -20,8 +20,6 @@ export function ThemeSelector() {
 
   const ThemeTriggerIcon = THEMES[theme as keyof typeof THEMES];
 
-  const handler = (name: Theme) => () => setTheme(name);
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -40,8 +38,10 @@ export function ThemeSelector() {
                 isSelected && "bg-secondary focus:bg-secondary",
                 "capitalize group",
               )}
-              onClick={handler(name as Theme)}
-              onKeyDown={handler(name as Theme)}
+              onClick={() => setTheme(name as Theme)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") setTheme(name as Theme);
+              }}
             >
               <Icon
                 className={cn(

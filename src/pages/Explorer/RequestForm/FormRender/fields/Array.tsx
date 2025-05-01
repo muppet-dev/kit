@@ -30,12 +30,6 @@ export function ArrayField() {
     name: componentId,
   });
 
-  const handleAddItem = () => append(undefined);
-  const handleGoUp = (index: number) => () => swap(index, index - 1);
-  const handleGoDown = (index: number) => () => swap(index, index + 1);
-  const handleInsertNew = (index: number) => () => insert(index + 1, undefined);
-  const handleDelete = (index: number) => () => remove(index);
-
   return (
     <>
       {fields.map((field, index) => (
@@ -45,19 +39,25 @@ export function ArrayField() {
         >
           <div className="space-y-2">
             <Button
+              title="Go Up"
               variant="ghost"
               size="icon"
-              onClick={handleGoUp(index)}
-              onKeyDown={handleGoUp(index)}
+              onClick={() => swap(index, index - 1)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") swap(index, index - 1);
+              }}
               disabled={index === 0}
             >
               <ArrowUp className="size-4 stroke-2" />
             </Button>
             <Button
+              title="Go Down"
               variant="ghost"
               size="icon"
-              onClick={handleGoDown(index)}
-              onKeyDown={handleGoDown(index)}
+              onClick={() => swap(index, index + 1)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") swap(index, index + 1);
+              }}
               disabled={index === fields.length - 1}
             >
               <ArrowDown className="size-4 stroke-2" />
@@ -68,16 +68,20 @@ export function ArrayField() {
             <Button
               variant="ghost"
               size="icon"
-              onClick={handleInsertNew(index)}
-              onKeyDown={handleInsertNew(index)}
+              onClick={() => insert(index + 1, undefined)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") insert(index + 1, undefined);
+              }}
             >
               <Plus className="size-4 stroke-2" />
             </Button>
             <Button
               variant="destructive"
               size="icon"
-              onClick={handleDelete(index)}
-              onKeyDown={handleDelete(index)}
+              onClick={() => remove(index)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") remove(index);
+              }}
             >
               <Trash className="size-4 stroke-2" />
             </Button>
@@ -86,8 +90,10 @@ export function ArrayField() {
       ))}
       <Button
         variant="outline"
-        onClick={handleAddItem}
-        onKeyDown={handleAddItem}
+        onClick={() => append(undefined)}
+        onKeyDown={(event) => {
+          if (event.key === "Enter") append(undefined);
+        }}
         type="button"
         className="w-max"
       >

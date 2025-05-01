@@ -82,8 +82,6 @@ export function Explorer() {
     setCurrent(undefined);
   }, [activeTool]);
 
-  const handleCardSelect = (name: string) => setCurrent(name);
-
   return (
     <div className="size-full flex overflow-y-auto">
       <div className="overflow-y-auto w-full">
@@ -97,8 +95,10 @@ export function Explorer() {
                   : "bg-transparent hover:bg-white dark:hover:bg-background transition-all ease-in-out",
                 "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max",
               )}
-              onClick={() => handleCardSelect(card.name)}
-              onKeyDown={() => handleCardSelect(card.name)}
+              onClick={() => setCurrent(card.name)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") setCurrent(card.name);
+              }}
             >
               {card.name === current && (
                 <div className="h-full w-1 bg-primary absolute left-0 top-0" />

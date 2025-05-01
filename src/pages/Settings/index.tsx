@@ -24,15 +24,15 @@ function FormFooter() {
   const { connectionInfo } = useConfig();
   const { reset } = useFormContext<z.infer<typeof transportSchema>>();
 
-  const handleResetForm = () => reset(connectionInfo);
-
   return (
     <div className="flex items-center justify-between">
       <Button
         type="button"
         variant="outline"
-        onClick={handleResetForm}
-        onKeyDown={handleResetForm}
+        onClick={() => reset(connectionInfo)}
+        onKeyDown={(event) => {
+          if (event.key === "Enter") reset(connectionInfo);
+        }}
       >
         Reset
       </Button>

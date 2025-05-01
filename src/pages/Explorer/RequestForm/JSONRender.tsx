@@ -23,11 +23,6 @@ export function JSONRender() {
 
   const handleEditorMount: OnMount = (editor) => setEditorInstance(editor);
 
-  const handleFormat = () => {
-    if (editorInstance)
-      editorInstance.getAction("editor.action.formatDocument")?.run();
-  };
-
   const value = formData ? JSON.stringify(formData, null, 2) : undefined;
 
   return (
@@ -64,8 +59,18 @@ export function JSONRender() {
               size="icon"
               variant="ghost"
               disabled={!value}
-              onClick={handleFormat}
-              onKeyDown={handleFormat}
+              onClick={() => {
+                if (editorInstance)
+                  editorInstance
+                    .getAction("editor.action.formatDocument")
+                    ?.run();
+              }}
+              onKeyDown={(event) => {
+                if (editorInstance && event.key === "Enter")
+                  editorInstance
+                    .getAction("editor.action.formatDocument")
+                    ?.run();
+              }}
             >
               <AlignLeft className="size-4 stroke-2" />
             </Button>

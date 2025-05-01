@@ -11,21 +11,30 @@ export function PingButton() {
   const [isLoading, setIsLoading] = useState(false);
   const { makeRequest, connectionStatus } = useConnection();
 
-  const onPing = async () => {
-    setIsLoading(true);
-    await makeRequest(
-      {
-        method: "ping",
-      },
-      EmptyResultSchema
-    );
-    setIsLoading(false);
-  };
-
   return (
     <SidebarMenuButton
-      onClick={onPing}
-      onKeyDown={onPing}
+      onClick={async () => {
+        setIsLoading(true);
+        await makeRequest(
+          {
+            method: "ping",
+          },
+          EmptyResultSchema
+        );
+        setIsLoading(false);
+      }}
+      onKeyDown={async (event) => {
+        if (event.key === "Enter") {
+          setIsLoading(true);
+          await makeRequest(
+            {
+              method: "ping",
+            },
+            EmptyResultSchema
+          );
+          setIsLoading(false);
+        }
+      }}
       disabled={connectionStatus !== ConnectionStatus.CONNECTED || isLoading}
       tooltip="Ping Server"
     >

@@ -3,27 +3,23 @@ import {
   ExportedMessageRepository,
 } from "@assistant-ui/react";
 import { useChatRuntime } from "@assistant-ui/react-ai-sdk";
-import { ModelHeader } from "./Header";
-import { Thread } from "./Thread";
+import { ModelRender } from "./Render";
 
-export type ModelRender = Omit<ModelHeader, "clearChat">;
+export type Model = Omit<ModelRender, "onChatClear">;
 
-export function ModelRender(props: ModelRender) {
+export function Model(props: Model) {
   const runtime = useChatRuntime({
     api: "/api/chat",
   });
 
   return (
     <AssistantRuntimeProvider runtime={runtime}>
-      <div className="w-full flex flex-col h-full border border-zinc-300 dark:border-zinc-800">
-        <ModelHeader
-          {...props}
-          clearChat={() =>
-            runtime.threads.main.import(ExportedMessageRepository.fromArray([]))
-          }
-        />
-        <Thread />
-      </div>
+      <ModelRender
+        {...props}
+        onChatClear={() =>
+          runtime.threads.main.import(ExportedMessageRepository.fromArray([]))
+        }
+      />
     </AssistantRuntimeProvider>
   );
 }

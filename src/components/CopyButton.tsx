@@ -23,13 +23,6 @@ export function CopyButton({ data, className, tooltipContent }: CopyButton) {
     return () => clearTimeout(timeoutId);
   }, [isCopied]);
 
-  const handleCopy = () => {
-    if (data) {
-      navigator.clipboard.writeText(data);
-      setIsCopied(true);
-    }
-  };
-
   const Icon = isCopied ? Check : Copy;
 
   return (
@@ -41,8 +34,18 @@ export function CopyButton({ data, className, tooltipContent }: CopyButton) {
           variant="ghost"
           disabled={!data}
           className={className}
-          onClick={handleCopy}
-          onKeyDown={handleCopy}
+          onClick={() => {
+            if (data) {
+              navigator.clipboard.writeText(data);
+              setIsCopied(true);
+            }
+          }}
+          onKeyDown={(event) => {
+            if (data && event.key === "Enter") {
+              navigator.clipboard.writeText(data);
+              setIsCopied(true);
+            }
+          }}
         >
           <Icon
             className={cn(

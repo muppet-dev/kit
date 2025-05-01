@@ -47,11 +47,14 @@ export function ConfigurationsDialog({ onSubmit }: ConfigurationsDialogProps) {
 function FormFooter() {
   const { reset } = useFormContext<z.infer<typeof transportSchema>>();
 
-  const handleResetForm = () => reset();
-
   return (
     <AlertDialogFooter>
-      <AlertDialogCancel onClick={handleResetForm} onKeyDown={handleResetForm}>
+      <AlertDialogCancel
+        onClick={() => reset()}
+        onKeyDown={(event) => {
+          if (event.key === "Enter") reset();
+        }}
+      >
         Reset
       </AlertDialogCancel>
       <AlertDialogAction type="submit">Connect</AlertDialogAction>
