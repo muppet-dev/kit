@@ -44,7 +44,7 @@ import {
 } from "../supportedModels";
 import type { Chat } from "./index";
 import { useModels } from "../providers";
-import { useThread, useThreadRuntime } from "@assistant-ui/react";
+import { useThreadRuntime } from "@assistant-ui/react";
 
 export function ModelHeader(props: Chat) {
   const {
@@ -65,6 +65,8 @@ export function ModelHeader(props: Chat) {
 
   const SyncButtonIcon = model.sync ? ToggleRight : ToggleLeft;
 
+  const selectedModelConfig = MODELS_CONFIG[model.model];
+
   return (
     <div className="p-2 flex items-center gap-1 border-b border-zinc-300 dark:border-zinc-800 bg-background">
       <Select
@@ -76,12 +78,12 @@ export function ModelHeader(props: Chat) {
         }
       >
         <SelectTrigger className="w-[300px] rounded-sm">
-          {model.model}
+          {selectedModelConfig.provider} {selectedModelConfig.name}
         </SelectTrigger>
         <SelectContent>
-          {Object.keys(MODELS_CONFIG).map((item) => (
-            <SelectItem key={item} value={item}>
-              {item}
+          {Object.entries(MODELS_CONFIG).map(([key, value]) => (
+            <SelectItem key={key} value={key}>
+              {value.provider} {value.name}
             </SelectItem>
           ))}
         </SelectContent>

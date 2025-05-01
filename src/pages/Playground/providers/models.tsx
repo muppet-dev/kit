@@ -6,7 +6,6 @@ import {
 } from "react";
 import type { ModelProps } from "../type";
 import { nanoid } from "nanoid";
-import { useThreadRuntime } from "@assistant-ui/react";
 
 type ModelsContextType = ReturnType<typeof useModelsManager>;
 
@@ -42,9 +41,7 @@ function useModelsManager() {
         prev[index] = { ...prev[index], ...values };
 
         if ("sync" in values) {
-          prev[index].runtime?.thread.composer.setText(
-            values.sync ? syncText : "",
-          );
+          prev[index].composer?.setText(values.sync ? syncText : "");
         }
 
         return [...prev];
@@ -97,12 +94,12 @@ function useModelsManager() {
     });
   }
 
-  function syncTextChange(text: string) {
+  function syncTextChange(chatId: string, text: string) {
     setSyncText(text);
 
     for (const model of models) {
-      if (model.sync && model.runtime) {
-        model.runtime.thread.composer.setText(text);
+      if (model.sync && model.composer && model.id !== chatId) {
+        model.composer?.setText(text);
       }
     }
   }

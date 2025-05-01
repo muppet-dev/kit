@@ -6,6 +6,8 @@ import {
   ComposerPrimitive,
   MessagePrimitive,
   ThreadPrimitive,
+  useThreadComposer,
+  useThreadRuntime,
 } from "@assistant-ui/react";
 import {
   ArrowDownIcon,
@@ -17,11 +19,33 @@ import {
   RefreshCwIcon,
   SendHorizontalIcon,
 } from "lucide-react";
-import type { FC } from "react";
+import { useEffect, type FC } from "react";
 import { MarkdownText } from "./MarkdownText";
 import { TooltipIconButton } from "./TooltipIconButton";
+import { useModels } from "../../providers";
+import type { Chat } from "../index";
 
-export const Thread: FC = () => {
+export function Thread(props: Chat) {
+  const { syncTextChange, getModel, onConfigChange } = useModels();
+  const thread = useThreadRuntime();
+  const composer = useThreadComposer();
+
+  const chat = getModel(props.chatId);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Only need to run once
+  useEffect(() => {
+    onConfigChange(props.chatId, {
+      composer: thread.composer,
+    });
+  }, [props.chatId]);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Only need to run when text changes
+  useEffect(() => {
+    if (chat?.sync) {
+      syncTextChange(props.chatId, composer.text);
+    }
+  }, [composer.text]);
+
   return (
     <ThreadPrimitive.Root
       className="bg-background box-border flex h-full flex-col overflow-hidden"
@@ -48,7 +72,7 @@ export const Thread: FC = () => {
       </ThreadPrimitive.Viewport>
     </ThreadPrimitive.Root>
   );
-};
+}
 
 const ThreadScrollToBottom: FC = () => {
   return (

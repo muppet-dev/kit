@@ -1,4 +1,4 @@
-import type { AssistantRuntime } from "@assistant-ui/react";
+import type { ThreadComposerRuntime } from "@assistant-ui/react";
 import type { SupportedModels } from "./supportedModels";
 
 export type ModelProps = {
@@ -7,5 +7,5 @@ export type ModelProps = {
   // Internal
   sync?: boolean;
   activePrompt?: string;
-  runtime?: AssistantRuntime;
+  composer?: ThreadComposerRuntime;
 } & Record<string, unknown>;

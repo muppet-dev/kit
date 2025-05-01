@@ -1,5 +1,6 @@
 import { ModelsProvider, useModels } from "./providers";
 import { Chat } from "./Chat";
+import { useEffect } from "react";
 
 export default function PlaygroundPage({
   maxModels = 5,
@@ -16,7 +17,14 @@ export default function PlaygroundPage({
 }
 
 function ChatRenderer() {
-  const { models } = useModels();
+  const { models, addModel } = useModels();
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Adding a model
+  useEffect(() => {
+    if (models.length === 0) {
+      addModel();
+    }
+  }, []);
 
   return models.map(({ id }) => <Chat key={id} chatId={id} />);
 }
