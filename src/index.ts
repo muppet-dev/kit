@@ -5,14 +5,11 @@ import { cors } from "hono/cors";
 
 const app = new Hono().use(cors());
 
-app.route("/api", routes);
+app.route("/", routes);
 
 app.onError((err, c) => {
   console.error(`Error on ${c.req.path} router`, err);
   return c.json(err, 500);
 });
 
-serve({
-  fetch: app.fetch,
-  port: 1976,
-});
+export default app;

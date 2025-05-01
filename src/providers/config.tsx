@@ -12,20 +12,23 @@ type ConfigContextType = ReturnType<typeof useConfigManager>;
 
 const ConfigContext = createContext<ConfigContextType | null>(null);
 
-export const ConfigProvider = (props: PropsWithChildren) => {
-  const values = useConfigManager();
+export type ConfigProvider = {
+  connection?: ConnectionInfo;
+};
+
+export const ConfigProvider = ({
+  children,
+  ...props
+}: PropsWithChildren<ConfigProvider>) => {
+  const values = useConfigManager(props);
 
   return (
-    <ConfigContext.Provider value={values}>
-      {props.children}
-    </ConfigContext.Provider>
+    <ConfigContext.Provider value={values}>{children}</ConfigContext.Provider>
   );
 };
 
-function useConfigManager() {
-  const [connectionInfo, setConnectionInfo] = useState<
-    ConnectionInfo | undefined
-  >();
+function useConfigManager(props: ConfigProvider) {
+  const [connectionInfo, setConnectionInfo] = useState(props.connection);
 
   return {
     connectionInfo,

@@ -9,8 +9,31 @@ import mcpProxy from "./mcpProxy";
 import { findActualExecutable } from "spawn-rx";
 import { SSEHonoTransport, streamSSE } from "muppet/streaming";
 import { sValidator } from "@hono/standard-validator";
-import { transportHeaderSchema, transportSchema } from "@/validations";
-import type { z } from "zod";
+import z from "zod";
+import { parse as shellParseArgs } from "shell-quote";
+
+export const transportSchema = z.union([
+  z.object({
+    transportType: z.literal("stdio"),
+    command: z.string(),
+    args: z
+      .string()
+      .optional()
+      .transform((val) => shellParseArgs(val ?? "")),
+    env: z
+      .string()
+      .optional()
+      .transform((val) => (val ? JSON.parse(val) : {})),
+  }),
+  z.object({
+    transportType: z.literal("sse"),
+    url: z.string().url(),
+  }),
+]);
+
+export const transportHeaderSchema = z.object({
+  authorization: z.string().optional(),
+});
 
 const router = new Hono();
 
@@ -59,7 +82,7 @@ async function createTransport<
   }
 
   if (query.transportType === "sse") {
-    const headers: any = {
+    const headers: HeadersInit = {
       Accept: "text/event-stream",
     };
 
