@@ -52,12 +52,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <Link to="/" className="w-max">
           <img
-            src={open ? "/logo.png" : "/small-logo.png"}
+            src={open ? "/logo.png" : "/logo-small.png"}
             alt="Muppet"
             className={cn("dark:hidden", open ? "w-32" : "size-8")}
           />
           <img
-            src={open ? "/logo-dark.png" : "/small-dark-logo.png"}
+            src={open ? "/logo-dark.png" : "/logo-small-dark.png"}
             alt="Muppet"
             className={cn("dark:block hidden", open ? "w-32" : "size-8")}
           />
