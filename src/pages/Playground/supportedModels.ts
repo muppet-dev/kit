@@ -1,3 +1,5 @@
+import { OpenAIIcon } from "@/components/icons/OpenAI";
+
 export type SupportedModels = "openai:gpt-4.1" | "openai:gpt-4.1-mini";
 
 export const PROPERTIES_CONFIG = {
@@ -17,37 +19,36 @@ export const PROPERTIES_CONFIG = {
   },
 };
 
-export const PROVIDER_ICONS = {
-  OpenAI: "",
+export type ModelConfig = {
+  provider: keyof typeof PROVIDER_ICONS;
+  name: string;
+  description: string;
+  metadata: {
+    context: number;
+    input_pricing: number;
+    output_pricing: number;
+    links: {
+      model: string;
+      pricing: string;
+      website: string;
+    };
+  };
+  properties: Record<
+    keyof typeof PROPERTIES_CONFIG,
+    | {
+        default: number;
+        min: number;
+        max: number;
+      }
+    | undefined
+  >;
 };
 
-export const MODELS_CONFIG: Record<
-  SupportedModels,
-  {
-    provider: keyof typeof PROVIDER_ICONS;
-    name: string;
-    description: string;
-    metadata: {
-      context: number;
-      input_pricing: number;
-      output_pricing: number;
-      links: {
-        model: string;
-        pricing: string;
-        website: string;
-      };
-    };
-    properties: Record<
-      keyof typeof PROPERTIES_CONFIG,
-      | {
-          default: number;
-          min: number;
-          max: number;
-        }
-      | undefined
-    >;
-  }
-> = {
+export const PROVIDER_ICONS = {
+  OpenAI: OpenAIIcon,
+};
+
+export const MODELS_CONFIG: Record<SupportedModels, ModelConfig> = {
   "openai:gpt-4.1": {
     provider: "OpenAI",
     name: "GPT-4.1",

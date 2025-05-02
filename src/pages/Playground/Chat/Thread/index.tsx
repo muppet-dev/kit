@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn, numberFormatter } from "@/lib/utils";
 import {
   ActionBarPrimitive,
   BranchPickerPrimitive,
@@ -18,14 +18,21 @@ import {
   PencilIcon,
   RefreshCwIcon,
   SendHorizontalIcon,
+  SquareArrowOutUpRight,
 } from "lucide-react";
 import { type FC, useEffect } from "react";
 import { useModels } from "../../providers";
 import type { Chat } from "../index";
 import { MarkdownText } from "./MarkdownText";
 import { TooltipIconButton } from "./TooltipIconButton";
+import {
+  type ModelConfig,
+  MODELS_CONFIG,
+  PROVIDER_ICONS,
+} from "../../supportedModels";
+import { Link } from "react-router";
 
-export function Thread(props: Chat) {
+export function Thread(props: Chat & ThreadWelcome) {
   const { syncTextChange, getModel, onConfigChange } = useModels();
   const thread = useThreadRuntime();
   const composer = useThreadComposer();
@@ -54,7 +61,7 @@ export function Thread(props: Chat) {
       }}
     >
       <ThreadPrimitive.Viewport className="flex h-full flex-col items-center overflow-y-scroll scroll-smooth bg-inherit px-4 pt-8">
-        <ThreadWelcome />
+        <ThreadWelcome selectedModel={props.selectedModel} />
         <ThreadPrimitive.Messages
           components={{
             UserMessage: UserMessage,
@@ -88,14 +95,97 @@ const ThreadScrollToBottom: FC = () => {
   );
 };
 
-const ThreadWelcome: FC = () => {
+type ThreadWelcome = { selectedModel: ModelConfig };
+
+const ThreadWelcome = (props: ThreadWelcome) => {
+  const Icon = PROVIDER_ICONS[props.selectedModel.provider];
+
   return (
     <ThreadPrimitive.Empty>
-      <div className="flex w-full flex-grow flex-col">
-        <div className="flex w-full flex-grow flex-col items-center justify-center">
-          <p className="mt-4 font-medium text-sm text-muted-foreground select-none">
-            How can I help you today?
-          </p>
+      <div className="w-full h-full flex items-center justify-center">
+        <div className="w-full max-w-2xl border rounded-lg shadow-xs">
+          <div className="px-6 pt-5 text-sm bg-background rounded-t-lg">
+            <div className="flex items-center">
+              <div className="size-4 mr-2">
+                <Icon />
+              </div>
+              <div className="space-x-1 text-muted-foreground">
+                <span>{props.selectedModel.provider}</span>
+                <span>/</span>
+                <span className="font-medium text-foreground">
+                  {props.selectedModel.name}
+                </span>
+              </div>
+            </div>
+            <div className="mt-4 text-xs text-muted-foreground">
+              {props.selectedModel.description}
+            </div>
+          </div>
+          <div className="px-6 py-5 text-xs bg-background divide-y">
+            <div className="flex items-start py-3">
+              <div className="font-medium w-28">Context</div>
+              <div className="flex-1 text-muted-foreground">
+                {numberFormatter(
+                  props.selectedModel.metadata.context,
+                  "decimal"
+                )}{" "}
+                tokens
+              </div>
+            </div>
+            <div className="flex items-start py-3">
+              <div className="font-medium w-28">Input Pricing</div>
+              <div className="flex-1 text-muted-foreground">
+                {numberFormatter(
+                  props.selectedModel.metadata.input_pricing,
+                  "currency"
+                )}{" "}
+                / million tokens
+              </div>
+            </div>
+            <div className="flex items-start py-3">
+              <div className="font-medium w-28">Output Pricing</div>
+              <div className="flex-1 text-muted-foreground">
+                {numberFormatter(
+                  props.selectedModel.metadata.output_pricing,
+                  "currency"
+                )}{" "}
+                / million tokens
+              </div>
+            </div>
+          </div>
+          <div className="px-6 py-5 text-xs font-medium border-t rounded-b-lg bg-zinc-100/75 dark:bg-zinc-900/75">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between space-x-4">
+                <Link
+                  to={props.selectedModel.metadata.links.model}
+                  target="_blank"
+                  rel="noopener"
+                  className="inline-flex items-center text-muted-foreground hover:text-foreground transition-all ease-in-out duration-300"
+                >
+                  <span>Model Page</span>
+                  <SquareArrowOutUpRight className="size-3 ml-1 stroke-[2.5]" />
+                </Link>
+                <Link
+                  to={props.selectedModel.metadata.links.pricing}
+                  target="_blank"
+                  rel="noopener"
+                  className="inline-flex items-center text-muted-foreground hover:text-foreground transition-all ease-in-out duration-300"
+                >
+                  <span>Pricing</span>
+                  <SquareArrowOutUpRight className="size-3 ml-1 stroke-[2.5]" />
+                </Link>
+              </div>
+              <Link
+                to={props.selectedModel.metadata.links.website}
+                target="_blank"
+                rel="noopener"
+                className="inline-flex items-center text-muted-foreground hover:text-foreground transition-all ease-in-out duration-300"
+              >
+                <span>Website</span>
+                <SquareArrowOutUpRight className="size-3 ml-1 stroke-[2.5]" />
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </ThreadPrimitive.Empty>

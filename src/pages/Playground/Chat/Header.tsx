@@ -42,6 +42,7 @@ import { useModels } from "../providers";
 import {
   MODELS_CONFIG,
   PROPERTIES_CONFIG,
+  PROVIDER_ICONS,
   type SupportedModels,
 } from "../supportedModels";
 import type { Chat } from "./index";
@@ -66,6 +67,7 @@ export function ModelHeader(props: Chat) {
   const SyncButtonIcon = model.sync ? ToggleRight : ToggleLeft;
 
   const selectedModelConfig = MODELS_CONFIG[model.model];
+  const SelectedModelIcon = PROVIDER_ICONS[selectedModelConfig.provider];
 
   return (
     <div className="p-2 flex items-center gap-1 border-b border-zinc-300 dark:border-zinc-800 bg-background">
@@ -77,15 +79,24 @@ export function ModelHeader(props: Chat) {
           })
         }
       >
-        <SelectTrigger className="w-[300px] rounded-sm">
-          {selectedModelConfig.provider} {selectedModelConfig.name}
+        <SelectTrigger className="w-[300px] rounded-sm justify-start">
+          <SelectedModelIcon className="size-4" />
+          <p>
+            {selectedModelConfig.provider} {selectedModelConfig.name}
+          </p>
+          <div className="flex-1" />
         </SelectTrigger>
         <SelectContent>
-          {Object.entries(MODELS_CONFIG).map(([key, value]) => (
-            <SelectItem key={key} value={key}>
-              {value.provider} {value.name}
-            </SelectItem>
-          ))}
+          {Object.entries(MODELS_CONFIG).map(([key, value]) => {
+            const Icon = PROVIDER_ICONS[value.provider];
+
+            return (
+              <SelectItem key={key} value={key}>
+                <Icon />
+                {value.provider} {value.name}
+              </SelectItem>
+            );
+          })}
         </SelectContent>
       </Select>
       <div className="flex-1" />
