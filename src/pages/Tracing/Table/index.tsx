@@ -7,42 +7,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import type { Request } from "@modelcontextprotocol/sdk/types.js";
 import dayjs from "dayjs";
-import { useEffect, useState } from "react";
-import { FILTER_OPTIONS, FilterMethod } from "./FilterMethod";
+import { useTracing } from "../providers";
+import { FilterMethod } from "./FilterMethod";
 import { TableDrawer } from "./TableDrawer";
 
-export type TracingTable = {
-  data: {
-    timestamp: Date;
-    request: string;
-    response?: string;
-  }[];
-};
-
-export function TracingTable({ data }: TracingTable) {
-  const [selectedFilters, setSelectedFilters] = useState<Set<string>>(
-    new Set(FILTER_OPTIONS)
-  );
-  const [filterData, setFilterData] = useState(data);
-  const [currentItem, setCurrentItem] = useState<{
-    timestamp: Date;
-    request: Request;
-    response?: any;
-  }>();
-  const [selectedIndex, setSelectedIndex] = useState<number | undefined>();
-
-  useEffect(() => {
-    if (selectedFilters.size > 0)
-      setFilterData(
-        data.filter((item) =>
-          selectedFilters.has(JSON.parse(item.request).method)
-        )
-      );
-    else if (selectedFilters.size === 0) setFilterData([]);
-    else setFilterData(data);
-  }, [data, selectedFilters]);
+export function TracingTable() {
+  const { traces, selected, setSelected } = useTracing();
 
   return (
     <div className="w-full h-full flex gap-2 md:gap-3 lg:gap-4">
@@ -54,33 +25,21 @@ export function TracingTable({ data }: TracingTable) {
             <TableHead>Latency</TableHead>
             <TableHead className="flex items-center justify-between">
               Method
-              <FilterMethod
-                selectedFilters={selectedFilters}
-                setSelectedFilters={setSelectedFilters}
-              />
+              <FilterMethod />
             </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filterData.length > 0 ? (
-            filterData.map((item, index) => {
-              const request = JSON.parse(item.request);
-              const response = item.response
-                ? JSON.parse(item.response)
-                : undefined;
-              const isError = Boolean(response?.error);
+          {traces.length > 0 ? (
+            traces.map((trace, index) => {
+              const isError = Boolean(trace.response?.error);
 
-              const handleClick = () => {
-                setCurrentItem({
-                  timestamp: item.timestamp,
-                  request,
-                  response,
-                });
-                setSelectedIndex(index);
-              };
-              const monthWithDay = dayjs(item.timestamp).format("MMM DD");
-              const time = dayjs(item.timestamp).format("hh:mm:ss");
-              const millisecond = dayjs(item.timestamp).format("SSS");
+              const handleClick = () => setSelected(index);
+
+              const requestWasSentOn = trace.timestamp.start;
+              const monthWithDay = dayjs(requestWasSentOn).format("MMM DD");
+              const time = dayjs(requestWasSentOn).format("hh:mm:ss");
+              const millisecond = dayjs(requestWasSentOn).format("SSS");
 
               return (
                 <TableRow
@@ -88,7 +47,7 @@ export function TracingTable({ data }: TracingTable) {
                   onClick={handleClick}
                   className={cn(
                     "cursor-pointer divide-x",
-                    selectedIndex === index && "bg-muted/50"
+                    selected === index && "bg-muted/50",
                   )}
                 >
                   <TableCell className="space-x-1 font-medium uppercase">
@@ -105,8 +64,8 @@ export function TracingTable({ data }: TracingTable) {
                   >
                     {isError ? "Error" : "Success"}
                   </TableCell>
-                  <TableCell>Latency</TableCell>
-                  <TableCell>{request.method}</TableCell>
+                  <TableCell>{trace.timestamp.latency.toFixed(2)} ms</TableCell>
+                  <TableCell>{trace.request.method}</TableCell>
                 </TableRow>
               );
             })
@@ -122,13 +81,7 @@ export function TracingTable({ data }: TracingTable) {
           )}
         </TableBody>
       </Table>
-      <TableDrawer
-        currentItem={currentItem}
-        data={data}
-        selectedIndex={selectedIndex}
-        setCurrentItem={setCurrentItem}
-        setSelectedIndex={setSelectedIndex}
-      />
+      <TableDrawer />
     </div>
   );
 }

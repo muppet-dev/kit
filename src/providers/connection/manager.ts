@@ -53,6 +53,15 @@ export enum ConnectionStatus {
   ERROR = "error",
 }
 
+export type RequestHistory = {
+  timestamp: {
+    start: number;
+    latency: number;
+  };
+  request: string;
+  response?: string;
+};
+
 export function useConnectionManager(props: UseConnectionOptions) {
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(
     ConnectionStatus.DISCONNECTED,
@@ -60,16 +69,21 @@ export function useConnectionManager(props: UseConnectionOptions) {
   const [serverCapabilities, setServerCapabilities] =
     useState<ServerCapabilities | null>(null);
   const [mcpClient, setMcpClient] = useState<Client | null>(null);
-  const [requestHistory, setRequestHistory] = useState<
-    { request: string; timestamp: Date; response?: string }[]
-  >([]);
+  const [requestHistory, setRequestHistory] = useState<RequestHistory[]>([]);
   const [completionsSupported, setCompletionsSupported] = useState(true);
 
-  const pushHistory = (request: object, response?: object) => {
+  const pushHistory = (
+    timestamp: number,
+    request: object,
+    response?: object,
+  ) => {
     setRequestHistory((prev) => [
       ...prev,
       {
-        timestamp: new Date(),
+        timestamp: {
+          start: timestamp,
+          latency: performance.now() - timestamp,
+        },
         request: JSON.stringify(request),
         response: response !== undefined ? JSON.stringify(response) : undefined,
       },
@@ -97,15 +111,16 @@ export function useConnectionManager(props: UseConnectionOptions) {
       );
 
       let response: z.output<T>;
+      const timestamp = performance.now();
       try {
         response = await mcpClient.request(request, schema, {
           signal: options?.signal ?? abortController.signal,
         });
-        pushHistory(request, response);
+        pushHistory(timestamp, request, response);
       } catch (error) {
         const errorMessage =
           error instanceof Error ? error.message : String(error);
-        pushHistory(request, { error: errorMessage });
+        pushHistory(timestamp, request, { error: errorMessage });
         throw error;
       } finally {
         clearTimeout(timeoutId);
@@ -169,14 +184,15 @@ export function useConnectionManager(props: UseConnectionOptions) {
       throw error;
     }
 
+    const timestamp = performance.now();
     try {
       await mcpClient.notification(notification);
       // Log successful notifications
-      pushHistory(notification);
+      pushHistory(timestamp, notification);
     } catch (e: unknown) {
       if (e instanceof McpError) {
         // Log MCP protocol errors
-        pushHistory(notification, { error: e.message });
+        pushHistory(timestamp, notification, { error: e.message });
       }
       toast.error(e instanceof Error ? e.message : String(e));
       throw e;
@@ -255,6 +271,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
       }
 
       let capabilities: ServerCapabilities | undefined;
+      const timestamp = performance.now();
       try {
         await client.connect(clientTransport);
 
@@ -262,7 +279,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
         const initializeRequest = {
           method: "initialize",
         };
-        pushHistory(initializeRequest, {
+        pushHistory(timestamp, initializeRequest, {
           capabilities,
           serverInfo: client.getServerVersion(),
           instructions: client.getInstructions(),
