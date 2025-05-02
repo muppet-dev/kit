@@ -5,6 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useConnection } from "@/providers";
 import {
@@ -13,14 +14,23 @@ import {
   ListResourcesResultSchema,
   ListToolsResultSchema,
 } from "@modelcontextprotocol/sdk/types.js";
-import { useEffect, useState } from "react";
+import Fuse, { type RangeTuple } from "fuse.js";
+import { useEffect, useMemo, useState } from "react";
 import { RequestForm } from "./RequestForm";
 import { DEFAULT_TOOLS, Tool, useTool } from "./tools";
+import { highlightMatches } from "@/components/highlightMatches";
+
+type Cards = RequestForm["cards"][0];
+
+interface CardType extends Cards {
+  matches?: RangeTuple[];
+}
 
 export function Explorer() {
   const [loading, setLoading] = useState(true);
-  const [cards, setCards] = useState<RequestForm["cards"]>([]);
+  const [cards, setCards] = useState<CardType[]>([]);
   const [current, setCurrent] = useState<string>();
+  const [search, setSearch] = useState<string>("");
 
   const { activeTool } = useTool();
   const { makeRequest, mcpClient } = useConnection();
@@ -36,14 +46,14 @@ export function Explorer() {
       case Tool.TOOLS:
         handler = makeRequest(
           { method: "tools/list" },
-          ListToolsResultSchema,
+          ListToolsResultSchema
         ).then(({ tools }) =>
           tools.map((tool) => ({
             name: tool.name,
             description: tool.description,
             schema: tool.inputSchema
               .properties as RequestForm["cards"][0]["schema"],
-          })),
+          }))
         );
         break;
       case Tool.PROMPTS:
@@ -51,13 +61,13 @@ export function Explorer() {
           {
             method: "prompts/list",
           },
-          ListPromptsResultSchema,
+          ListPromptsResultSchema
         ).then(({ prompts }) =>
           prompts.map((prompt) => ({
             name: prompt.name,
             description: prompt.description,
             schema: prompt.arguments as RequestForm["cards"][0]["schema"],
-          })),
+          }))
         );
         break;
       case Tool.STATIC_RESOURCES:
@@ -65,7 +75,7 @@ export function Explorer() {
           {
             method: "resources/list",
           },
-          ListResourcesResultSchema,
+          ListResourcesResultSchema
         ).then(({ resources }) => resources);
         break;
       case Tool.DYNAMIC_RESOURCES:
@@ -73,7 +83,7 @@ export function Explorer() {
           {
             method: "resources/templates/list",
           },
-          ListResourceTemplatesResultSchema,
+          ListResourceTemplatesResultSchema
         ).then(({ resourceTemplates }) => resourceTemplates);
         break;
     }
@@ -89,6 +99,33 @@ export function Explorer() {
     setCurrent(undefined);
   }, [activeTool]);
 
+  const fuse = useMemo(
+    () =>
+      new Fuse(cards ?? [], {
+        keys: ["name"],
+        includeMatches: true,
+      }),
+    [cards]
+  );
+
+  let searchResults: CardType[] | undefined = cards;
+
+  if (search) {
+    const results = fuse.search(search);
+
+    searchResults = results.reduce<typeof searchResults>(
+      (prev, { item, matches }) => {
+        prev?.push({
+          ...item,
+          matches: matches?.flatMap((match) => match.indices),
+        });
+
+        return prev;
+      },
+      []
+    );
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center size-full select-none text-muted-foreground">
@@ -100,15 +137,24 @@ export function Explorer() {
   return (
     <div className="size-full flex overflow-y-auto">
       <div className="overflow-y-auto w-full">
+        {cards.length >= 5 && (
+          <Input
+            type="search"
+            value={search}
+            placeholder={`Search ${getToolName(activeTool.name)}...`}
+            className="mb-2"
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        )}
         <div className="flex flex-col">
-          {cards.map((card) => (
+          {searchResults.map((card) => (
             <Card
               key={card.name}
               className={cn(
                 card.name === current
                   ? "bg-white dark:bg-background"
                   : "bg-transparent hover:bg-white dark:hover:bg-background transition-all ease-in-out",
-                "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max",
+                "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max"
               )}
               onClick={() => setCurrent(card.name)}
               onKeyDown={(event) => {
@@ -120,7 +166,11 @@ export function Explorer() {
               )}
               <CardHeader className="px-4 -mb-1">
                 <CardTitle className="text-sm font-normal flex justify-between">
-                  {card.name}
+                  <p>
+                    {card.matches
+                      ? highlightMatches(card.name, card.matches)
+                      : card.name}
+                  </p>
                   {card.mimeType && (
                     <span className="italic text-zinc-500 dark:text-zinc-400">
                       {card.mimeType}
