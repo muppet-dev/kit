@@ -187,7 +187,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
     try {
       const client = new Client<Request, Notification, Result>(
         {
-          name: "mcp-inspector",
+          name: "muppet-inspector",
           version: "0.1.0",
         },
         {

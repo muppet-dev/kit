@@ -10,19 +10,20 @@ type ConnectionContextType = ReturnType<typeof useConnectionManager>;
 
 const ConnectionContext = createContext<ConnectionContextType | null>(null);
 
-export const ConnectionProvider = (
-  props: PropsWithChildren<ConnectionInfo>,
-) => {
+export const ConnectionProvider = ({
+  children,
+  ...props
+}: PropsWithChildren<ConnectionInfo>) => {
   const values = useConnectionManager(props);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     values.connect();
-  }, [props]);
+  }, []);
 
   return (
     <ConnectionContext.Provider value={values}>
-      {props.children}
+      {children}
     </ConnectionContext.Provider>
   );
 };
