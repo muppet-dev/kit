@@ -137,10 +137,10 @@ router.get(
 
     return streamSSE(c, async (stream) => {
       const webAppTransport = new SSEHonoTransport("/api/message");
-      console.log("Created web app transport");
-
+      console.log(
+        `Creating web app transport for sessionId ${webAppTransport.sessionId}`,
+      );
       webAppTransports.push(webAppTransport);
-      console.log("Created web app transport");
 
       webAppTransport.connectWithStream(stream);
       webAppTransport.start();

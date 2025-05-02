@@ -18,16 +18,20 @@ import { RequestForm } from "./RequestForm";
 import { DEFAULT_TOOLS, Tool, useTool } from "./tools";
 
 export function Explorer() {
+  const [loading, setLoading] = useState(true);
   const [cards, setCards] = useState<RequestForm["cards"]>([]);
   const [current, setCurrent] = useState<string>();
 
   const { activeTool } = useTool();
-  const { makeRequest } = useConnection();
+  const { makeRequest, mcpClient } = useConnection();
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
+    if (!mcpClient) return;
+
     let handler: Promise<typeof cards> | undefined;
 
+    setLoading(true);
     switch (activeTool.name) {
       case Tool.TOOLS:
         handler = makeRequest(
@@ -74,13 +78,24 @@ export function Explorer() {
         break;
     }
 
-    handler?.then((data) => setCards(data));
-  }, [activeTool]);
+    handler?.then((data) => {
+      setCards(data);
+      setLoading(false);
+    });
+  }, [activeTool, mcpClient]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     setCurrent(undefined);
   }, [activeTool]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center size-full select-none text-muted-foreground">
+        <p className="text-sm">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="size-full flex overflow-y-auto">
