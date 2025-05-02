@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import type { Request } from "@modelcontextprotocol/sdk/types.js";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { FilterMethod } from "./FilterMethod";
+import { FILTER_OPTIONS, FilterMethod } from "./FilterMethod";
 import { TableDrawer } from "./TableDrawer";
 
 export type TracingTable = {
@@ -23,7 +23,7 @@ export type TracingTable = {
 
 export function TracingTable({ data }: TracingTable) {
   const [selectedFilters, setSelectedFilters] = useState<Set<string>>(
-    new Set()
+    new Set(FILTER_OPTIONS)
   );
   const [filterData, setFilterData] = useState(data);
   const [currentItem, setCurrentItem] = useState<{
@@ -40,6 +40,7 @@ export function TracingTable({ data }: TracingTable) {
           selectedFilters.has(JSON.parse(item.request).method)
         )
       );
+    else if (selectedFilters.size === 0) setFilterData([]);
     else setFilterData(data);
   }, [data, selectedFilters]);
 
@@ -48,8 +49,9 @@ export function TracingTable({ data }: TracingTable) {
       <Table className="border">
         <TableHeader>
           <TableRow className="hover:bg-accent divide-x bg-accent">
-            <TableHead>Date</TableHead>
+            <TableHead className="w-64">Date</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead>Latency</TableHead>
             <TableHead className="flex items-center justify-between">
               Method
               <FilterMethod
@@ -60,48 +62,64 @@ export function TracingTable({ data }: TracingTable) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filterData.map((item, index) => {
-            const request = JSON.parse(item.request);
-            const response = item.response
-              ? JSON.parse(item.response)
-              : undefined;
-            const isError = Boolean(response?.error);
+          {filterData.length > 0 ? (
+            filterData.map((item, index) => {
+              const request = JSON.parse(item.request);
+              const response = item.response
+                ? JSON.parse(item.response)
+                : undefined;
+              const isError = Boolean(response?.error);
 
-            const handleClick = () => {
-              setCurrentItem({ timestamp: item.timestamp, request, response });
-              setSelectedIndex(index);
-            };
-            const monthWithDay = dayjs(item.timestamp).format("MMM DD");
-            const time = dayjs(item.timestamp).format("hh:mm:ss");
-            const millisecond = dayjs(item.timestamp).format("SSS");
+              const handleClick = () => {
+                setCurrentItem({
+                  timestamp: item.timestamp,
+                  request,
+                  response,
+                });
+                setSelectedIndex(index);
+              };
+              const monthWithDay = dayjs(item.timestamp).format("MMM DD");
+              const time = dayjs(item.timestamp).format("hh:mm:ss");
+              const millisecond = dayjs(item.timestamp).format("SSS");
 
-            return (
-              <TableRow
-                key={`row.${index + 1}`}
-                onClick={handleClick}
-                className={cn(
-                  "cursor-pointer divide-x",
-                  selectedIndex === index && "bg-muted/50"
-                )}
-              >
-                <TableCell className="space-x-1 font-medium uppercase">
-                  <span className="text-black/50 dark:text-white/50">
-                    {monthWithDay}
-                  </span>
-                  {time}
-                  <span className="text-black/50 dark:text-white/50">
-                    .{millisecond}
-                  </span>
-                </TableCell>
-                <TableCell
-                  className={isError ? "text-red-500" : "text-green-600"}
+              return (
+                <TableRow
+                  key={`row.${index + 1}`}
+                  onClick={handleClick}
+                  className={cn(
+                    "cursor-pointer divide-x",
+                    selectedIndex === index && "bg-muted/50"
+                  )}
                 >
-                  {isError ? "Error" : "Success"}
-                </TableCell>
-                <TableCell>{request.method}</TableCell>
-              </TableRow>
-            );
-          })}
+                  <TableCell className="space-x-1 font-medium uppercase">
+                    <span className="text-black/50 dark:text-white/50">
+                      {monthWithDay}
+                    </span>
+                    {time}
+                    <span className="text-black/50 dark:text-white/50">
+                      .{millisecond}
+                    </span>
+                  </TableCell>
+                  <TableCell
+                    className={isError ? "text-red-500" : "text-green-600"}
+                  >
+                    {isError ? "Error" : "Success"}
+                  </TableCell>
+                  <TableCell>Latency</TableCell>
+                  <TableCell>{request.method}</TableCell>
+                </TableRow>
+              );
+            })
+          ) : (
+            <TableRow className="hover:bg-transparent">
+              <TableCell
+                className="h-[500px] text-center select-none text-muted-foreground"
+                colSpan={3}
+              >
+                No data available
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
       <TableDrawer

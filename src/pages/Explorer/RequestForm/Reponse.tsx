@@ -21,11 +21,9 @@ export function ReponseRender(props: ReponseRender) {
             {props.data.duration.toFixed(2)} ms
           </span>
         </div>
-        <div className="[&>div>pre]:rounded-lg [&>div>pre]:border [&>div>pre]:px-3 [&>div>pre]:py-2 [&>div>pre]:size-full [&>div]:flex [&>div]:size-full h-full overflow-y-auto [&>div]:overflow-y-auto [&>div>pre]:text-sm">
-          <CodeHighlighter
-            content={JSON.stringify(props.data.content, null, 2)}
-          />
-        </div>
+        <CodeHighlighter
+          content={JSON.stringify(props.data.content, null, 2)}
+        />
       </div>
     </>
   );

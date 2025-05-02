@@ -2,12 +2,12 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { FilterIcon } from "lucide-react";
-import type { TracingTable } from ".";
 
-const FILTER_OPTIONS = [
+export const FILTER_OPTIONS = [
   "initialize",
   "ping",
   "tools/list",
@@ -40,7 +40,11 @@ export function FilterMethod({
       return updated;
     });
 
-  const methodsCount: number[] = [];
+  const selectAllToggle = () => {
+    if (selectedFilters.size === FILTER_OPTIONS.length)
+      setSelectedFilters(new Set());
+    else setSelectedFilters(new Set(FILTER_OPTIONS));
+  };
 
   return (
     <DropdownMenu>
@@ -48,6 +52,13 @@ export function FilterMethod({
         <FilterIcon className="size-4" />
       </DropdownMenuTrigger>
       <DropdownMenuContent side="left" align="start">
+        <DropdownMenuCheckboxItem
+          checked={selectedFilters.size === FILTER_OPTIONS.length}
+          onCheckedChange={selectAllToggle}
+        >
+          Select All
+        </DropdownMenuCheckboxItem>
+        <DropdownMenuSeparator />
         {FILTER_OPTIONS.map((method, index) => (
           <DropdownMenuCheckboxItem
             checked={selectedFilters.has(method)}

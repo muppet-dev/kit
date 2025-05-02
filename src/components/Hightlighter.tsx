@@ -3,10 +3,12 @@ import { useTheme } from "@/providers";
 import { useEffect, useState } from "react";
 import { useShiki } from "../providers/shiki";
 import { Skeleton } from "./ui/skeleton";
+import { cn } from "@/lib/utils";
+import { CopyButton } from "./CopyButton";
 
-export type CodeHighlighter = { content: string };
+export type CodeHighlighter = { content: string; className?: string };
 
-export function CodeHighlighter({ content }: CodeHighlighter) {
+export function CodeHighlighter({ content, className }: CodeHighlighter) {
   const highlighter = useShiki();
   const [html, setHtml] = useState("");
   const { resolvedTheme } = useTheme();
@@ -37,9 +39,20 @@ export function CodeHighlighter({ content }: CodeHighlighter) {
 
   return (
     <div
-      className="h-max min-h-full w-max min-w-full"
-      // biome-ignore lint/security/noDangerouslySetInnerHtml: Need this to show the highlighting
-      dangerouslySetInnerHTML={{ __html: html }}
-    />
+      className={cn(
+        "p-2 bg-white border relative max-h-96 h-full overflow-y-auto dark:bg-[#0d1117]",
+        className
+      )}
+    >
+      <div
+        className="h-max min-h-full w-max min-w-full"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: Need this to show the highlighting
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
+      <CopyButton
+        data={content ? content : undefined}
+        className="absolute right-1 top-1"
+      />
+    </div>
   );
 }
