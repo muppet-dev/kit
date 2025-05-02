@@ -37,7 +37,7 @@ export function ConfigForm(props: ConfigForm) {
         className="flex flex-col gap-6"
         onSubmit={handleSubmit(
           (values) => props.onSubmit(values),
-          console.error,
+          console.error
         )}
       >
         <div className="grid grid-cols-4 w-full items-center gap-2">
@@ -51,7 +51,7 @@ export function ConfigForm(props: ConfigForm) {
                   value={value}
                   onValueChange={(value) => onChange(value)}
                 >
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger className="w-full data-[state=closed]:hover:[&>svg]:opacity-100 data-[state=open]:[&>svg]:opacity-100 transition-all ease-in-out [&>svg]:transition-all [&>svg]:ease-in-out">
                     <SelectValue placeholder="Select transport type" />
                   </SelectTrigger>
                   <SelectContent>

@@ -21,18 +21,13 @@ import {
   SquareArrowOutUpRight,
 } from "lucide-react";
 import { type FC, useEffect } from "react";
+import { Link } from "react-router";
 import { useModels } from "../../providers";
-import type { Chat } from "../index";
+import { type ModelConfig, PROVIDER_ICONS } from "../../supportedModels";
 import { MarkdownText } from "./MarkdownText";
 import { TooltipIconButton } from "./TooltipIconButton";
-import {
-  type ModelConfig,
-  MODELS_CONFIG,
-  PROVIDER_ICONS,
-} from "../../supportedModels";
-import { Link } from "react-router";
 
-export function Thread(props: Chat & ThreadWelcome) {
+export function Thread(props: { chatId: string } & ThreadWelcome) {
   const { syncTextChange, getModel, onConfigChange } = useModels();
   const thread = useThreadRuntime();
   const composer = useThreadComposer();

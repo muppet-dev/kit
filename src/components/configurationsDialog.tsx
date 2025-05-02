@@ -1,19 +1,19 @@
+import { Transport } from "@/constants";
 import { CONFIG_STORAGE_KEY } from "@/providers";
 import type { ConnectionInfo } from "@/providers/connection/manager";
 import type { transportSchema } from "@/validations";
 import { useFormContext } from "react-hook-form";
 import type z from "zod";
 import { ConfigForm } from "./ConfigForm";
+import { Button } from "./ui/button";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "./ui/alert-dialog";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "./ui/dialog";
 
 export type ConfigurationsDialogProps = {
   onSubmit: (data: ConnectionInfo) => void;
@@ -26,21 +26,21 @@ export function ConfigurationsDialog({ onSubmit }: ConfigurationsDialogProps) {
     : undefined;
 
   return (
-    <AlertDialog open={true}>
-      <AlertDialogContent>
-        <AlertDialogHeader className="gap-0">
-          <AlertDialogTitle>Configure Transport</AlertDialogTitle>
-          <AlertDialogDescription>
+    <Dialog open={true}>
+      <DialogContent>
+        <DialogHeader className="gap-0">
+          <DialogTitle>Configure Transport</DialogTitle>
+          <DialogDescription>
             Please configure the transport settings to continue
-          </AlertDialogDescription>
-        </AlertDialogHeader>
+          </DialogDescription>
+        </DialogHeader>
         <ConfigForm
           footer={<FormFooter />}
           onSubmit={(values) => onSubmit(values)}
           data={data}
         />
-      </AlertDialogContent>
-    </AlertDialog>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -48,16 +48,25 @@ function FormFooter() {
   const { reset } = useFormContext<z.infer<typeof transportSchema>>();
 
   return (
-    <AlertDialogFooter>
-      <AlertDialogCancel
-        onClick={() => reset()}
+    <DialogFooter className="sm:justify-between">
+      <Button
+        type="button"
+        variant="outline"
+        onClick={() => {
+          reset({
+            transportType: Transport.STDIO,
+          });
+        }}
         onKeyDown={(event) => {
-          if (event.key === "Enter") reset();
+          if (event.key === "Enter")
+            reset({
+              transportType: Transport.STDIO,
+            });
         }}
       >
         Reset
-      </AlertDialogCancel>
-      <AlertDialogAction type="submit">Connect</AlertDialogAction>
-    </AlertDialogFooter>
+      </Button>
+      <Button type="submit">Connect</Button>
+    </DialogFooter>
   );
 }

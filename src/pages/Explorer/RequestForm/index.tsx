@@ -1,12 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useConnection } from "@/providers";
 import {
   CallToolResultSchema,
   GetPromptResultSchema,
   ReadResourceResultSchema,
 } from "@modelcontextprotocol/sdk/types.js";
-import { TabsContent } from "@radix-ui/react-tabs";
 import { SendHorizonal } from "lucide-react";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -64,7 +63,7 @@ export function RequestForm({ cards, current }: RequestForm) {
                       arguments: values,
                     },
                   },
-                  CallToolResultSchema,
+                  CallToolResultSchema
                 );
                 break;
               case Tool.PROMPTS:
@@ -76,7 +75,7 @@ export function RequestForm({ cards, current }: RequestForm) {
                       arguments: values,
                     },
                   },
-                  GetPromptResultSchema,
+                  GetPromptResultSchema
                 );
                 break;
               case Tool.STATIC_RESOURCES:
@@ -87,7 +86,7 @@ export function RequestForm({ cards, current }: RequestForm) {
                       uri: selectedCard?.uri as string,
                     },
                   },
-                  ReadResourceResultSchema,
+                  ReadResourceResultSchema
                 );
                 break;
               case Tool.DYNAMIC_RESOURCES:
@@ -97,11 +96,11 @@ export function RequestForm({ cards, current }: RequestForm) {
                     params: {
                       uri: fillTemplate(
                         selectedCard?.uriTemplate as string,
-                        values,
+                        values
                       ),
                     },
                   },
-                  ReadResourceResultSchema,
+                  ReadResourceResultSchema
                 );
                 break;
               default:
@@ -118,7 +117,7 @@ export function RequestForm({ cards, current }: RequestForm) {
                 setResponse({
                   duration: performance.now() - startTime,
                   content: res,
-                }),
+                })
               )
               .catch((err) => console.error(err));
           }, console.error)}
@@ -201,7 +200,7 @@ export function RequestForm({ cards, current }: RequestForm) {
 
 const fillTemplate = (
   template: string,
-  values: Record<string, string>,
+  values: Record<string, string>
 ): string => {
   return template.replace(/{([^}]+)}/g, (_, key) => values[key] || `{${key}}`);
 };

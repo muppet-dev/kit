@@ -19,6 +19,7 @@ import { useEffect, useMemo, useState } from "react";
 import { RequestForm } from "./RequestForm";
 import { DEFAULT_TOOLS, Tool, useTool } from "./tools";
 import { highlightMatches } from "@/components/highlightMatches";
+import { Spinner } from "@/components/ui/spinner";
 
 type Cards = RequestForm["cards"][0];
 
@@ -27,7 +28,7 @@ interface CardType extends Cards {
 }
 
 export function Explorer() {
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [cards, setCards] = useState<CardType[]>([]);
   const [current, setCurrent] = useState<string>();
   const [search, setSearch] = useState<string>("");
@@ -41,7 +42,7 @@ export function Explorer() {
 
     let handler: Promise<typeof cards> | undefined;
 
-    setLoading(true);
+    setIsLoading(true);
     switch (activeTool.name) {
       case Tool.TOOLS:
         handler = makeRequest(
@@ -90,7 +91,7 @@ export function Explorer() {
 
     handler?.then((data) => {
       setCards(data);
-      setLoading(false);
+      setIsLoading(false);
     });
   }, [activeTool, mcpClient]);
 
@@ -126,13 +127,13 @@ export function Explorer() {
     );
   }
 
-  if (loading) {
+  if (isLoading)
     return (
-      <div className="flex items-center justify-center size-full select-none text-muted-foreground">
+      <div className="flex items-center justify-center gap-1.5 size-full select-none text-muted-foreground">
+        <Spinner className="size-5 min-w-5 min-h-5" />
         <p className="text-sm">Loading...</p>
       </div>
     );
-  }
 
   return (
     <div className="size-full flex overflow-y-auto">
