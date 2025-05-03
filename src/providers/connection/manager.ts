@@ -55,6 +55,7 @@ export type UseConnectionOptions = ConnectionInfo & {
 export enum ConnectionStatus {
   DISCONNECTED = "disconnected",
   CONNECTED = "connected",
+  CONNECTING = "connecting",
   ERROR = "error",
   ERROR_CONNECTING_TO_PROXY = "error-connecting-to-proxy",
 }
@@ -252,6 +253,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
   };
 
   const connect = async (_e?: unknown, retryCount = 0) => {
+    setConnectionStatus(ConnectionStatus.CONNECTING);
     const client = new Client<Request, Notification, Result>(
       {
         name: "mcp-inspector",
