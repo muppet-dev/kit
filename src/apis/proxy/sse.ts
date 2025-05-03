@@ -29,8 +29,7 @@ const router = new Hono<ProxyEnv>()
             "Received 401 Unauthorized from MCP server:",
             error.message,
           );
-          c.json(error, 401);
-          return;
+          return c.json(error, 401);
         }
 
         throw error;
@@ -39,7 +38,7 @@ const router = new Hono<ProxyEnv>()
       console.log("Connected MCP client to backing server transport");
 
       return streamSSE(c, async (stream) => {
-        const webAppTransport = new SSEHonoTransport("/message");
+        const webAppTransport = new SSEHonoTransport("/api/message");
         c.get("transports").set(webAppTransport.sessionId, webAppTransport);
 
         console.log("Created web app transport");

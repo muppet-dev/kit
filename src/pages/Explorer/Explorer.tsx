@@ -28,7 +28,7 @@ interface CardType extends Cards {
 }
 
 export function Explorer() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [cards, setCards] = useState<CardType[]>([]);
   const [current, setCurrent] = useState<string>();
   const [search, setSearch] = useState<string>("");
@@ -47,14 +47,14 @@ export function Explorer() {
       case Tool.TOOLS:
         handler = makeRequest(
           { method: "tools/list" },
-          ListToolsResultSchema
+          ListToolsResultSchema,
         ).then(({ tools }) =>
           tools.map((tool) => ({
             name: tool.name,
             description: tool.description,
             schema: tool.inputSchema
               .properties as RequestForm["cards"][0]["schema"],
-          }))
+          })),
         );
         break;
       case Tool.PROMPTS:
@@ -62,13 +62,13 @@ export function Explorer() {
           {
             method: "prompts/list",
           },
-          ListPromptsResultSchema
+          ListPromptsResultSchema,
         ).then(({ prompts }) =>
           prompts.map((prompt) => ({
             name: prompt.name,
             description: prompt.description,
             schema: prompt.arguments as RequestForm["cards"][0]["schema"],
-          }))
+          })),
         );
         break;
       case Tool.STATIC_RESOURCES:
@@ -76,7 +76,7 @@ export function Explorer() {
           {
             method: "resources/list",
           },
-          ListResourcesResultSchema
+          ListResourcesResultSchema,
         ).then(({ resources }) => resources);
         break;
       case Tool.DYNAMIC_RESOURCES:
@@ -84,7 +84,7 @@ export function Explorer() {
           {
             method: "resources/templates/list",
           },
-          ListResourceTemplatesResultSchema
+          ListResourceTemplatesResultSchema,
         ).then(({ resourceTemplates }) => resourceTemplates);
         break;
     }
@@ -106,7 +106,7 @@ export function Explorer() {
         keys: ["name"],
         includeMatches: true,
       }),
-    [cards]
+    [cards],
   );
 
   let searchResults: CardType[] | undefined = cards;
@@ -123,7 +123,7 @@ export function Explorer() {
 
         return prev;
       },
-      []
+      [],
     );
   }
 
@@ -155,7 +155,7 @@ export function Explorer() {
                 card.name === current
                   ? "bg-white dark:bg-background"
                   : "bg-transparent hover:bg-white dark:hover:bg-background transition-all ease-in-out",
-                "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max"
+                "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max",
               )}
               onClick={() => setCurrent(card.name)}
               onKeyDown={(event) => {

@@ -104,9 +104,6 @@ export async function createTransport<
     );
 
     const transport = new SSEClientTransport(new URL(query.url), {
-      eventSourceInit: {
-        fetch: (url, init) => fetch(url, { ...init, headers }),
-      },
       requestInit: {
         headers,
       },
@@ -133,16 +130,18 @@ export async function createTransport<
       headers[key] = Array.isArray(value) ? value[value.length - 1] : value;
     }
 
-    const transport = new StreamableHTTPClientTransport(
-      new URL(query.url as string),
-      {
-        requestInit: {
-          headers,
-        },
-      },
+    console.log(
+      `HTTP Streaming transport: url=${query.url}, headers=${Object.keys(headers)}`,
     );
 
+    const transport = new StreamableHTTPClientTransport(new URL(query.url), {
+      requestInit: {
+        headers,
+      },
+    });
+
     await transport.start();
+
     console.log("Connected to Streamable HTTP transport");
     return transport;
   }
