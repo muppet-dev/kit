@@ -3,10 +3,13 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   sidebarMenuButtonVariants,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
 import { NavLink } from "react-router";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import type { PropsWithChildren } from "react";
 
 export type SidebarItem = {
   items: {
@@ -17,25 +20,41 @@ export type SidebarItem = {
 };
 
 export function SidebarItem({ items }: SidebarItem) {
+  const { state } = useSidebar();
+
+  const ToolTipWrapper = (props: PropsWithChildren<{ name: string }>) => {
+    if (state === "collapsed")
+      return (
+        <Tooltip>
+          <TooltipTrigger>{props.children}</TooltipTrigger>
+          <TooltipContent side="right">{props.name}</TooltipContent>
+        </Tooltip>
+      );
+
+    return <>{props.children}</>;
+  };
+
   return (
     <SidebarGroup>
       <SidebarMenu>
         {items.map((item) => (
-          <SidebarMenuItem key={item.name}>
-            <NavLink
-              to={item.url}
-              className={({ isActive }) =>
-                cn(
-                  sidebarMenuButtonVariants(),
-                  isActive &&
-                    "bg-primary hover:bg-primary text-primary-foreground hover:text-primary-foreground",
-                )
-              }
-            >
-              <item.icon />
-              <span>{item.name}</span>
-            </NavLink>
-          </SidebarMenuItem>
+          <ToolTipWrapper key={item.name} name={item.name}>
+            <SidebarMenuItem>
+              <NavLink
+                to={item.url}
+                className={({ isActive }) =>
+                  cn(
+                    sidebarMenuButtonVariants(),
+                    isActive &&
+                      "bg-primary hover:bg-primary text-primary-foreground hover:text-primary-foreground"
+                  )
+                }
+              >
+                <item.icon />
+                <span>{item.name}</span>
+              </NavLink>
+            </SidebarMenuItem>
+          </ToolTipWrapper>
         ))}
       </SidebarMenu>
     </SidebarGroup>

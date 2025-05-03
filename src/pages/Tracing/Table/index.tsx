@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
+import { cn, numberFormatter } from "@/lib/utils";
 import dayjs from "dayjs";
 import { useTracing } from "../providers";
 import { FilterMethod } from "./FilterMethod";
@@ -47,7 +47,7 @@ export function TracingTable() {
                   onClick={handleClick}
                   className={cn(
                     "cursor-pointer divide-x",
-                    selected === index && "bg-muted/50",
+                    selected === index && "bg-muted/50"
                   )}
                 >
                   <TableCell className="space-x-1 font-medium uppercase">
@@ -64,7 +64,17 @@ export function TracingTable() {
                   >
                     {isError ? "Error" : "Success"}
                   </TableCell>
-                  <TableCell>{trace.timestamp.latency.toFixed(2)} ms</TableCell>
+                  <TableCell>
+                    {trace.timestamp.latency > 1000
+                      ? `${numberFormatter(
+                          Number((trace.timestamp.latency / 1000).toFixed(2)),
+                          "decimal"
+                        )} s`
+                      : `${numberFormatter(
+                          trace.timestamp.latency,
+                          "decimal"
+                        )} ms`}
+                  </TableCell>
                   <TableCell>{trace.request.method}</TableCell>
                 </TableRow>
               );

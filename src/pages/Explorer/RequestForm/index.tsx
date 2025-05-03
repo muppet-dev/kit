@@ -15,6 +15,7 @@ import { FormRender } from "./FormRender";
 import { JSONRender } from "./JSONRender";
 import { PromptFieldRender } from "./PromptFieldRender";
 import { ReponseRender } from "./Reponse";
+import { Spinner } from "@/components/ui/spinner";
 
 export type RequestForm = {
   cards: {
@@ -112,7 +113,7 @@ export function RequestForm({ cards, current }: RequestForm) {
             }
 
             const startTime = performance.now();
-            handler
+            await handler
               .then((res) =>
                 setResponse({
                   duration: performance.now() - startTime,
@@ -158,7 +159,8 @@ export function RequestForm({ cards, current }: RequestForm) {
                 disabled={isSubmitting}
                 className="px-3 py-1.5"
               >
-                Send
+                {isSubmitting && <Spinner className="size-4 min-w-4 min-h-4" />}
+                {isSubmitting ? "Sending" : "Send"}
                 <SendHorizonal />
               </Button>
             </div>

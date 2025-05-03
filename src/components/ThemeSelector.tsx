@@ -8,6 +8,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { useSidebar } from "./ui/sidebar";
 
 const THEMES = {
   light: SunIcon,
@@ -17,16 +19,29 @@ const THEMES = {
 
 export function ThemeSelector() {
   const { theme, setTheme } = useTheme();
+  const { state } = useSidebar();
 
   const ThemeTriggerIcon = THEMES[theme as keyof typeof THEMES];
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="size-8 data-[state=open]:bg-accent">
-          <ThemeTriggerIcon className="size-4 stroke-2" />
-        </Button>
-      </DropdownMenuTrigger>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                className="size-8 data-[state=open]:bg-accent"
+              >
+                <ThemeTriggerIcon className="size-4 stroke-2" />
+              </Button>
+            </DropdownMenuTrigger>
+          </div>
+        </TooltipTrigger>
+        <TooltipContent side={state === "collapsed" ? "right" : "top"}>
+          Change Theme
+        </TooltipContent>
+      </Tooltip>
       <DropdownMenuContent align="end" side="right" className="space-y-1 z-10">
         {Object.entries(THEMES).map(([name, Icon]) => {
           const isSelected = theme === name;
@@ -36,7 +51,7 @@ export function ThemeSelector() {
               key={name}
               className={cn(
                 isSelected && "bg-secondary focus:bg-secondary",
-                "capitalize group",
+                "capitalize group"
               )}
               onClick={() => setTheme(name as Theme)}
               onKeyDown={(event) => {
@@ -46,7 +61,7 @@ export function ThemeSelector() {
               <Icon
                 className={cn(
                   isSelected && "text-black dark:text-white",
-                  "stroke-2 size-4",
+                  "stroke-2 size-4"
                 )}
               />
               {name}

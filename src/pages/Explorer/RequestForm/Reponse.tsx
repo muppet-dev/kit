@@ -1,4 +1,5 @@
 import { CodeHighlighter } from "@/components/Hightlighter";
+import { numberFormatter } from "@/lib/utils";
 
 export type ReponseRender = {
   data?: {
@@ -18,7 +19,12 @@ export function ReponseRender(props: ReponseRender) {
           <h2 className="text-sm font-semibold">Response</h2>
           <div className="flex-1" />
           <span className="text-xs text-green-600 font-medium dark:text-green-400">
-            {props.data.duration.toFixed(2)} ms
+            {props.data.duration > 1000
+              ? `${numberFormatter(
+                  Number((props.data.duration / 1000).toFixed(2)),
+                  "decimal"
+                )} s`
+              : `${numberFormatter(props.data.duration, "decimal")} ms`}
           </span>
         </div>
         <CodeHighlighter

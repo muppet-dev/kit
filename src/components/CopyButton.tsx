@@ -7,10 +7,16 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 export type CopyButton = {
   data?: string;
   tooltipContent?: string;
+  tooltipSide?: "top" | "right" | "bottom" | "left";
   className?: HTMLDivElement["className"];
 };
 
-export function CopyButton({ data, className, tooltipContent }: CopyButton) {
+export function CopyButton({
+  data,
+  className,
+  tooltipContent,
+  tooltipSide,
+}: CopyButton) {
   const [isCopied, setIsCopied] = useState(false);
 
   useEffect(() => {
@@ -33,7 +39,7 @@ export function CopyButton({ data, className, tooltipContent }: CopyButton) {
           aria-label="copy"
           variant="ghost"
           disabled={!data}
-          className={className}
+          className={cn("size-max has-[>svg]:px-1.5 py-1.5", className)}
           onClick={() => {
             if (data) {
               navigator.clipboard.writeText(data);
@@ -50,13 +56,13 @@ export function CopyButton({ data, className, tooltipContent }: CopyButton) {
           <Icon
             className={cn(
               "size-4 stroke-2",
-              isCopied && "stroke-green-500 dark:stroke-green-300",
+              isCopied && "stroke-green-500 dark:stroke-green-300"
             )}
           />
         </Button>
       </TooltipTrigger>
-      <TooltipContent hidden={!data}>
-        {isCopied ? "Copied" : (tooltipContent ?? "Copy Code")}
+      <TooltipContent hidden={!data} side={tooltipSide}>
+        {isCopied ? "Copied" : tooltipContent ?? "Copy Code"}
       </TooltipContent>
     </Tooltip>
   );

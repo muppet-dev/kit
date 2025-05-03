@@ -38,17 +38,19 @@ export function CodeHighlighter({ content, className }: CodeHighlighter) {
   }, [content, resolvedTheme]);
 
   return (
-    <div
-      className={cn(
-        "p-2 bg-white border relative max-h-96 h-full overflow-y-auto dark:bg-[#0d1117]",
-        className
-      )}
-    >
+    <div className="relative size-full">
       <div
-        className="h-max min-h-full w-max min-w-full"
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: Need this to show the highlighting
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
+        className={cn(
+          "p-2 bg-white border relative max-h-96 h-full overflow-y-auto dark:bg-[#0d1117]",
+          className
+        )}
+      >
+        <div
+          className="h-max min-h-full w-max min-w-full"
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: Need this to show the highlighting
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+      </div>
       <CopyButton
         data={content ? content : undefined}
         className="absolute right-1 top-1"
