@@ -6,7 +6,25 @@ export const transportSchema = z.union([
     transportType: z.literal(Transport.STDIO),
     command: z.string(),
     args: z.string().optional(),
-    env: z.string().optional(),
+    env: z
+      .array(
+        z.object({
+          key: z.string(),
+          value: z.string(),
+        }),
+      )
+      .optional()
+      .transform((val) => {
+        if (!val) return undefined;
+
+        const env: Record<string, string> = {};
+
+        for (const { key, value } of val) {
+          env[key] = value;
+        }
+
+        return JSON.stringify(env);
+      }),
   }),
   z.object({
     transportType: z.union([
