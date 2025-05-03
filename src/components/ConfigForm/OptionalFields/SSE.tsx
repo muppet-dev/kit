@@ -15,6 +15,12 @@ export function SSEFields() {
         placeholder="Enter URL"
         {...register("url")}
       />
+      <Label htmlFor="bearerToken">Bearer Token</Label>
+      <Input
+        className="col-span-3"
+        placeholder="Enter Bearer Token"
+        {...register("bearerToken")}
+      />
     </div>
   );
 }
