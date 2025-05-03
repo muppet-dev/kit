@@ -1,10 +1,8 @@
 import { useConnection } from "@/providers";
-import { RequestHistory } from "@/providers/connection/manager";
 import {
   type PropsWithChildren,
   createContext,
   useContext,
-  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -46,25 +44,24 @@ function useTracingManager() {
   const [selected, setSelected] = useState<number | null>(null);
   const [methodFilters, setMethodFilters] =
     useState<string[]>(AVAILABLE_METHODS);
-  const [timestampSort, setTimestampSort] = useState<SortingEnum>(
-    SortingEnum.ASCENDING,
-  );
+  const [timestampSort, setTimestampSort] = useState<SortingEnum | null>(null);
 
   const traces = useMemo(() => {
-    const filteredHistory = requestHistory.filter((item) =>
+    let results = requestHistory.filter((item) =>
       methodFilters.includes(JSON.parse(item.request).method),
     );
 
-    const sortedHistory = filteredHistory.sort((a, b) => {
-      const aTimestamp = a.timestamp.start;
-      const bTimestamp = b.timestamp.start;
+    if (timestampSort)
+      results = results.sort((a, b) => {
+        const aTimestamp = a.timestamp.start;
+        const bTimestamp = b.timestamp.start;
 
-      return timestampSort === SortingEnum.ASCENDING
-        ? aTimestamp - bTimestamp
-        : bTimestamp - aTimestamp;
-    });
+        return timestampSort === SortingEnum.ASCENDING
+          ? aTimestamp - bTimestamp
+          : bTimestamp - aTimestamp;
+      });
 
-    return sortedHistory.map((item) => ({
+    return results.map((item) => ({
       timestamp: item.timestamp,
       request: JSON.parse(item.request),
       response: item.response ? JSON.parse(item.response) : undefined,
@@ -106,6 +103,7 @@ function useTracingManager() {
     setSelected,
     methodFilters,
     changeMethodFilters,
+    timestampSort,
     toggleTimestampSort,
   };
 }
