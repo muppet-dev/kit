@@ -37,7 +37,7 @@ export function ConfigForm(props: ConfigForm) {
         className="flex flex-col gap-6"
         onSubmit={handleSubmit(
           (values) => props.onSubmit(values),
-          console.error
+          console.error,
         )}
       >
         <div className="grid grid-cols-4 w-full items-center gap-2">
@@ -57,6 +57,9 @@ export function ConfigForm(props: ConfigForm) {
                   <SelectContent>
                     <SelectItem value={Transport.STDIO}>STDIO</SelectItem>
                     <SelectItem value={Transport.SSE}>SSE</SelectItem>
+                    <SelectItem value={Transport.HTTP}>
+                      HTTP Streaming
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               )}

@@ -9,8 +9,12 @@ export const transportSchema = z.union([
     env: z.string().optional(),
   }),
   z.object({
-    transportType: z.literal(Transport.SSE),
+    transportType: z.union([
+      z.literal(Transport.SSE),
+      z.literal(Transport.HTTP),
+    ]),
     url: z.string().url(),
+    headerName: z.string().optional(),
     bearerToken: z.string().optional(),
   }),
 ]);

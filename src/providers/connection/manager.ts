@@ -1,12 +1,16 @@
 import { Transport } from "@/constants";
 import { type Notification, StdErrNotificationSchema } from "@/types";
 import type { transportSchema } from "@/validations";
+import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
+import { auth } from "@modelcontextprotocol/sdk/client/auth.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import {
   SSEClientTransport,
   SseError,
 } from "@modelcontextprotocol/sdk/client/sse.js";
+import type { RequestOptions } from "@modelcontextprotocol/sdk/shared/protocol.js";
 import {
+  CancelledNotificationSchema,
   type ClientNotification,
   type ClientRequest,
   CompleteResultSchema,
@@ -15,35 +19,36 @@ import {
   ListRootsRequestSchema,
   LoggingMessageNotificationSchema,
   McpError,
-  ProgressNotificationSchema,
+  type Progress,
+  PromptListChangedNotificationSchema,
   type PromptReference,
   type Request,
+  ResourceListChangedNotificationSchema,
   type ResourceReference,
   ResourceUpdatedNotificationSchema,
   type Result,
   type ServerCapabilities,
+  ToolListChangedNotificationSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import type z from "zod";
-
-const params = new URLSearchParams(window.location.search);
-const DEFAULT_REQUEST_TIMEOUT_MSEC =
-  Number.parseInt(params.get("timeout") ?? "") || 10000;
-
-interface RequestOptions {
-  signal?: AbortSignal;
-  timeout?: number;
-  suppressToast?: boolean;
-}
+import { InspectorOAuthClientProvider } from "./auth";
 
 export type ConnectionInfo = z.infer<typeof transportSchema>;
 
 export type UseConnectionOptions = ConnectionInfo & {
-  requestTimeout?: number;
+  requestConfig?: {
+    timeout?: number;
+    timeoutResetOnProgress?: boolean;
+    maxTotalTimeout?: number;
+    proxy?: string;
+  };
   onNotification?: (notification: Notification) => void;
   onStdErrNotification?: (notification: Notification) => void;
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   onPendingRequest?: (request: any, resolve: any, reject: any) => void;
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   getRoots?: () => any[];
 };
 
@@ -51,6 +56,7 @@ export enum ConnectionStatus {
   DISCONNECTED = "disconnected",
   CONNECTED = "connected",
   ERROR = "error",
+  ERROR_CONNECTING_TO_PROXY = "error-connecting-to-proxy",
 }
 
 export type RequestHistory = {
@@ -93,7 +99,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
   const makeRequest = async <T extends z.ZodType>(
     request: ClientRequest,
     schema: T,
-    options?: RequestOptions,
+    options?: RequestOptions & { suppressToast?: boolean },
   ): Promise<z.output<T>> => {
     if (!mcpClient) {
       throw new Error("MCP client not connected");
@@ -101,29 +107,41 @@ export function useConnectionManager(props: UseConnectionOptions) {
 
     try {
       const abortController = new AbortController();
-      const timeoutId = setTimeout(
-        () => {
-          abortController.abort("Request timed out");
-        },
-        options?.timeout ??
-          props.requestTimeout ??
-          DEFAULT_REQUEST_TIMEOUT_MSEC,
-      );
+      // prepare MCP Client request options
+      const mcpRequestOptions: RequestOptions = {
+        signal: options?.signal ?? abortController.signal,
+        resetTimeoutOnProgress:
+          options?.resetTimeoutOnProgress ??
+          props.requestConfig?.timeoutResetOnProgress,
+        timeout: options?.timeout ?? props.requestConfig?.timeout,
+        maxTotalTimeout:
+          options?.maxTotalTimeout ?? props.requestConfig?.maxTotalTimeout,
+      };
+
+      if (mcpRequestOptions.resetTimeoutOnProgress) {
+        // If progress notifications are enabled, add an onprogress hook to the MCP Client request options
+        // This is required by SDK to reset the timeout on progress notifications
+        mcpRequestOptions.onprogress = (params: Progress) => {
+          // Add progress notification to `Server Notification` window in the UI
+          if (props.onNotification) {
+            props.onNotification({
+              method: "notification/progress",
+              params,
+            });
+          }
+        };
+      }
 
       let response: z.output<T>;
       const timestamp = performance.now();
       try {
-        response = await mcpClient.request(request, schema, {
-          signal: options?.signal ?? abortController.signal,
-        });
+        response = await mcpClient.request(request, schema, mcpRequestOptions);
         pushHistory(timestamp, request, response);
       } catch (error) {
         const errorMessage =
           error instanceof Error ? error.message : String(error);
         pushHistory(timestamp, request, { error: errorMessage });
         throw error;
-      } finally {
-        clearTimeout(timeoutId);
       }
 
       return response;
@@ -199,68 +217,156 @@ export function useConnectionManager(props: UseConnectionOptions) {
     }
   };
 
-  const connect = async () => {
+  const checkProxyHealth = async () => {
     try {
-      const client = new Client<Request, Notification, Result>(
-        {
-          name: "muppet-inspector",
-          version: "0.1.0",
-        },
-        {
-          capabilities: {
-            sampling: {},
-            roots: {
-              listChanged: true,
-            },
-          },
-        },
+      const proxyHealthUrl = new URL(
+        `${getMCPProxyAddress(props.requestConfig?.proxy)}/health`,
       );
+      const proxyHealthResponse = await fetch(proxyHealthUrl);
+      const proxyHealth = await proxyHealthResponse.json();
+      if (proxyHealth?.status !== "ok") {
+        throw new Error("MCP Proxy Server is not healthy");
+      }
+    } catch (e) {
+      console.error("Couldn't connect to MCP Proxy Server", e);
+      throw e;
+    }
+  };
 
-      const backendUrl = new URL(`${window.location.origin}/api/sse`);
+  const handleAuthError = async (error: unknown) => {
+    if (error instanceof SseError && error.code === 401) {
+      const sseUrl = props.transportType !== Transport.STDIO ? props.url : null;
 
-      backendUrl.searchParams.append("transportType", props.transportType);
-      if (props.transportType === Transport.STDIO) {
-        backendUrl.searchParams.append("command", props.command);
-        if (props.args) backendUrl.searchParams.append("args", props.args);
-        if (props.env)
-          backendUrl.searchParams.append("env", JSON.stringify(props.env));
-      } else {
-        backendUrl.searchParams.append("url", props.url);
+      if (!sseUrl) {
+        throw new Error("No SSE URL provided for authentication");
       }
 
+      // Create a new auth provider with the current server URL
+      const serverAuthProvider = new InspectorOAuthClientProvider(sseUrl);
+
+      const result = await auth(serverAuthProvider, { serverUrl: sseUrl });
+      return result === "AUTHORIZED";
+    }
+
+    return false;
+  };
+
+  const connect = async (_e?: unknown, retryCount = 0) => {
+    const client = new Client<Request, Notification, Result>(
+      {
+        name: "mcp-inspector",
+        version: "0.1.0",
+      },
+      {
+        capabilities: {
+          sampling: {},
+          roots: {
+            listChanged: true,
+          },
+        },
+      },
+    );
+
+    try {
+      await checkProxyHealth();
+    } catch {
+      setConnectionStatus(ConnectionStatus.ERROR_CONNECTING_TO_PROXY);
+      return;
+    }
+    let mcpProxyServerUrl: URL;
+    switch (props.transportType) {
+      case Transport.STDIO:
+        mcpProxyServerUrl = new URL(
+          `${getMCPProxyAddress(props.requestConfig?.proxy)}/stdio`,
+        );
+        mcpProxyServerUrl.searchParams.append("command", props.command);
+
+        if (props.args)
+          mcpProxyServerUrl.searchParams.append("args", props.args);
+
+        if (props.env)
+          mcpProxyServerUrl.searchParams.append(
+            "env",
+            JSON.stringify(props.env),
+          );
+        break;
+
+      case Transport.SSE:
+        mcpProxyServerUrl = new URL(
+          `${getMCPProxyAddress(props.requestConfig?.proxy)}/sse`,
+        );
+        mcpProxyServerUrl.searchParams.append("url", props.url);
+        break;
+
+      case Transport.HTTP:
+        mcpProxyServerUrl = new URL(
+          `${getMCPProxyAddress(props.requestConfig?.proxy)}/mcp`,
+        );
+        mcpProxyServerUrl.searchParams.append("url", props.url);
+        break;
+    }
+    (mcpProxyServerUrl as URL).searchParams.append(
+      "transportType",
+      props.transportType,
+    );
+
+    try {
       // Inject auth manually instead of using SSEClientTransport, because we're
       // proxying through the inspector server first.
       const headers: HeadersInit = {};
 
-      // Use manually provided bearer token if available, otherwise use OAuth tokens
-      if (props.transportType === Transport.SSE && props.bearerToken) {
-        headers.Authorization = `Bearer ${props.bearerToken}`;
+      if (props.transportType !== Transport.STDIO) {
+        // Create an auth provider with the current server URL
+        const serverAuthProvider = new InspectorOAuthClientProvider(props.url);
+
+        // Use manually provided bearer token if available, otherwise use OAuth tokens
+        const token =
+          props.bearerToken ||
+          (await serverAuthProvider.tokens())?.access_token;
+        if (token) {
+          const authHeaderName = props.headerName || "Authorization";
+          headers[authHeaderName] = `Bearer ${token}`;
+        }
       }
 
-      const clientTransport = new SSEClientTransport(backendUrl, {
+      // Create appropriate transport
+      const transportOptions = {
         eventSourceInit: {
-          fetch: (url, init) => fetch(url, { ...init, headers }),
+          fetch: (
+            url: string | URL | globalThis.Request,
+            init: RequestInit | undefined,
+          ) => fetch(url, { ...init, headers }),
         },
         requestInit: {
           headers,
         },
-      });
+      };
+      const clientTransport =
+        props.transportType === Transport.HTTP
+          ? new StreamableHTTPClientTransport(mcpProxyServerUrl as URL, {
+              sessionId: undefined,
+            })
+          : new SSEClientTransport(mcpProxyServerUrl as URL, transportOptions);
 
       if (props.onNotification) {
-        client.setNotificationHandler(
-          ProgressNotificationSchema,
-          props.onNotification,
-        );
-
-        client.setNotificationHandler(
-          ResourceUpdatedNotificationSchema,
-          props.onNotification,
-        );
-
-        client.setNotificationHandler(
+        for (const notificationSchema of [
+          CancelledNotificationSchema,
           LoggingMessageNotificationSchema,
-          props.onNotification,
-        );
+          ResourceUpdatedNotificationSchema,
+          ResourceListChangedNotificationSchema,
+          ToolListChangedNotificationSchema,
+          PromptListChangedNotificationSchema,
+        ]) {
+          client.setNotificationHandler(
+            notificationSchema,
+            props.onNotification,
+          );
+        }
+
+        client.fallbackNotificationHandler = (notification): Promise<void> => {
+          props.onNotification?.(notification);
+          return Promise.resolve();
+        };
       }
 
       if (props.onStdErrNotification) {
@@ -285,7 +391,14 @@ export function useConnectionManager(props: UseConnectionOptions) {
           instructions: client.getInstructions(),
         });
       } catch (error) {
-        console.error("Failed to connect to MCP server:", error);
+        console.error(
+          `Failed to connect to MCP Server via the MCP Inspector Proxy: ${mcpProxyServerUrl}:`,
+          error,
+        );
+        const shouldRetry = await handleAuthError(error);
+        if (shouldRetry) {
+          return connect(undefined, retryCount + 1);
+        }
 
         if (error instanceof SseError && error.code === 401) {
           // Don't set error state if we're about to redirect for auth
@@ -293,7 +406,6 @@ export function useConnectionManager(props: UseConnectionOptions) {
         }
         throw error;
       }
-
       setServerCapabilities(capabilities ?? null);
       setCompletionsSupported(true); // Reset completions support on new connection
 
@@ -311,13 +423,26 @@ export function useConnectionManager(props: UseConnectionOptions) {
         });
       }
 
-      // @ts-expect-error Putting it for now
       setMcpClient(client);
       setConnectionStatus(ConnectionStatus.CONNECTED);
     } catch (e) {
       console.error(e);
       setConnectionStatus(ConnectionStatus.ERROR);
     }
+  };
+
+  const disconnect = async () => {
+    await mcpClient?.close();
+
+    if (props.transportType !== Transport.STDIO) {
+      const authProvider = new InspectorOAuthClientProvider(props.url);
+      authProvider.clear();
+    }
+
+    setMcpClient(null);
+    setConnectionStatus(ConnectionStatus.DISCONNECTED);
+    setCompletionsSupported(false);
+    setServerCapabilities(null);
   };
 
   return {
@@ -330,5 +455,12 @@ export function useConnectionManager(props: UseConnectionOptions) {
     handleCompletion,
     completionsSupported,
     connect,
+    disconnect,
   };
+}
+
+function getMCPProxyAddress(proxy?: string) {
+  if (proxy) return proxy;
+
+  return `${window.location.protocol}//${window.location.hostname}:${window.location.port}/api`;
 }

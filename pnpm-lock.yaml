@@ -113,6 +113,9 @@ dependencies:
   duck-form:
     specifier: ^0.1.4
     version: 0.1.4(react@19.1.0)
+  fetch-to-node:
+    specifier: ^2.1.0
+    version: 2.1.0
   fuse.js:
     specifier: ^7.1.0
     version: 7.1.0
@@ -3280,6 +3283,10 @@ packages:
     dependencies:
       picomatch: 4.0.2
     dev: true
+
+  /fetch-to-node@2.1.0:
+    resolution: {integrity: sha512-Wq05j6LE1GrWpT2t1YbCkyFY6xKRJq3hx/oRJdWEJpZlik3g25MmdJS6RFm49iiMJw6zpZuBOrgihOgy2jGyAA==}
+    dev: false
 
   /fill-range@7.1.1:
     resolution: {integrity: sha512-YsGpe3WHLK8ZYi4tWDg2Jy3ebRz2rXowDxnld4bkQB00cc/1Zw9AWnC0i9ztDJitivtQvaI9KaLyKrc+hBW0yg==}

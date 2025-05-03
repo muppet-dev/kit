@@ -9,6 +9,6 @@ export function OptionalFields() {
   const { control } = useFormContext<z.infer<typeof transportSchema>>();
   const transportType = useWatch({ control, name: "transportType" });
 
-  if (transportType === Transport.SSE) return <SSEFields />;
-  return <STDIOFields />;
+  if (transportType === Transport.STDIO) return <STDIOFields />;
+  return <SSEFields />;
 }
