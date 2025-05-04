@@ -1,0 +1,26 @@
+{
+  "name": "muppet-kit",
+  "version": "0.1.0",
+  "license": "MIT",
+  "type": "module",
+  "bin": "./dist/cli.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "pkgroll --minify"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "c12": "^3.0.3",
+    "chalk": "^5.4.1",
+    "commander": "^13.1.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.3",
+    "pkgroll": "^2.12.2",
+    "tsx": "^4.19.4"
+  }
+}
