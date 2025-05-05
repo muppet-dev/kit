@@ -6,11 +6,19 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { eventHandler } from "@/lib/eventHandler";
+import { cn } from "@/lib/utils";
 import { useConnection } from "@/providers";
 import { EmptyResultSchema } from "@modelcontextprotocol/sdk/types.js";
 import { ChevronDown, ChevronUp, RefreshCcw, XIcon } from "lucide-react";
-import { cn } from "../../../lib/utils";
-import { useTracing } from "../providers";
+import { useTracing } from "../../providers";
+import { EditRequestDialog } from "./EditRequestDialog";
+
+const EDIT_METHODS = [
+  "tools/call",
+  "resources/read",
+  "prompts/get",
+  "completion/complete",
+];
 
 export function TableDrawer() {
   const { makeRequest } = useConnection();
@@ -47,27 +55,6 @@ export function TableDrawer() {
           {selectedHistory.response?.error ? "Error" : "Success"}
         </p>
         <div className="flex-1" />
-        {selectedHistory.request.method !== "initialize" ? (
-          <>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="p-1 size-max"
-                  onClick={handleSendRequest}
-                  onKeyDown={handleSendRequest}
-                >
-                  <RefreshCcw className="size-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Resend current request</TooltipContent>
-            </Tooltip>
-            <div className="h-4 w-px bg-muted" />
-          </>
-        ) : (
-          <></>
-        )}
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -128,6 +115,30 @@ export function TableDrawer() {
           <TooltipContent>Close the drawer</TooltipContent>
         </Tooltip>
       </div>
+      {selectedHistory.request.method !== "initialize" && (
+        <div className="flex items-center justify-end gap-2">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="icon"
+                variant="ghost"
+                className="p-1 size-max"
+                onClick={handleSendRequest}
+                onKeyDown={handleSendRequest}
+              >
+                <RefreshCcw className="size-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Resend current request</TooltipContent>
+          </Tooltip>
+          {EDIT_METHODS.includes(selectedHistory.request.method) && (
+            <>
+              <div className="h-4 w-px bg-muted" />
+              <EditRequestDialog request={selectedHistory.request} />
+            </>
+          )}
+        </div>
+      )}
       <TracingDetails
         label="Request"
         content={JSON.stringify(selectedHistory.request, null, 2)}
