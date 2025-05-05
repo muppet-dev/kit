@@ -8,19 +8,36 @@ import {
 } from "@/components/ui/table";
 import { cn, numberFormatter } from "../../../lib/utils";
 import dayjs from "dayjs";
-import { useTracing } from "../providers";
+import { SortingEnum, useTracing } from "../providers";
 import { FilterMethod } from "./FilterMethod";
 import { TableDrawer } from "./TableDrawer";
+import { MoveDown, MoveUp } from "lucide-react";
+import { eventHandler } from "@/lib/eventHandler";
 
 export function TracingTable() {
-  const { traces, selected, setSelected } = useTracing();
+  const { traces, selected, setSelected, timestampSort, toggleTimestampSort } =
+    useTracing();
+
+  const handleDateClick = eventHandler(() => toggleTimestampSort());
 
   return (
     <div className="w-full h-full flex gap-2 md:gap-3 lg:gap-4">
       <Table className="border">
         <TableHeader>
           <TableRow className="hover:bg-accent divide-x bg-accent">
-            <TableHead className="w-64">Date</TableHead>
+            <TableHead
+              className="w-64 flex gap-1 items-center cursor-pointer"
+              onClick={handleDateClick}
+              onKeyDown={handleDateClick}
+            >
+              Date
+              {timestampSort === SortingEnum.ASCENDING && (
+                <MoveUp className="size-3.5" />
+              )}
+              {timestampSort === SortingEnum.DESCENDING && (
+                <MoveDown className="size-3.5" />
+              )}
+            </TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Latency</TableHead>
             <TableHead className="flex items-center justify-between">
@@ -47,7 +64,7 @@ export function TracingTable() {
                   onClick={handleClick}
                   className={cn(
                     "cursor-pointer divide-x",
-                    selected === index && "bg-muted/50",
+                    selected === index && "bg-muted/50"
                   )}
                 >
                   <TableCell className="space-x-1 font-medium uppercase">
@@ -68,11 +85,11 @@ export function TracingTable() {
                     {trace.timestamp.latency > 1000
                       ? `${numberFormatter(
                           Number((trace.timestamp.latency / 1000).toFixed(2)),
-                          "decimal",
+                          "decimal"
                         )} s`
                       : `${numberFormatter(
                           trace.timestamp.latency,
-                          "decimal",
+                          "decimal"
                         )} ms`}
                   </TableCell>
                   <TableCell>{trace.request.method}</TableCell>
