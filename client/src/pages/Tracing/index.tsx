@@ -1,7 +1,16 @@
 import { CopyButton } from "@/components/CopyButton";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { eventHandler } from "@/lib/eventHandler";
 import { useConnection } from "@/providers";
-import { ArchiveX } from "lucide-react";
+import { ArchiveX, RefreshCcw } from "lucide-react";
+import { useState } from "react";
 import { TracingTable } from "./Table";
 import { TracingProvider } from "./providers";
 
@@ -36,10 +45,44 @@ function PageHeader() {
 }
 
 function CopyUrl(props: { url: string }) {
+  const [isLoading, setLoading] = useState<boolean>(false);
+
+  const handleRefetch = eventHandler(async () => {
+    setLoading(true);
+
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        console.log("Refetching");
+        resolve(null);
+      }, 1000);
+    });
+
+    setLoading(false);
+  });
+
   return (
     <>
-      <Input readOnly value={props.url} className="max-w-[300px] h-max" />
+      {isLoading ? (
+        <Skeleton className="h-[30px] w-[300px]" />
+      ) : (
+        <Input readOnly value={props.url} className="max-w-[300px] h-max" />
+      )}
       <CopyButton data={props.url} tooltipContent="Copy URL" />
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            size="icon"
+            aria-label="copy"
+            variant="ghost"
+            className="size-max has-[>svg]:px-1.5 py-1.5"
+            onClick={handleRefetch}
+            onKeyDown={handleRefetch}
+          >
+            <RefreshCcw className="size-4 stroke-2" />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>Refetch</TooltipContent>
+      </Tooltip>
     </>
   );
 }
