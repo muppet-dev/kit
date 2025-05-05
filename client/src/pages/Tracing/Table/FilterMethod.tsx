@@ -31,9 +31,11 @@ export function FilterMethod() {
         <DropdownMenuSeparator />
         {AVAILABLE_METHODS.map((method) => (
           <DropdownMenuCheckboxItem
-            checked={filters.has(method)}
+            checked={!isAllSelected && filters.has(method)}
             key={method}
-            onCheckedChange={() => changeMethodFilters(method)}
+            onCheckedChange={() =>
+              changeMethodFilters(isAllSelected ? [method] : method)
+            }
           >
             {method}
           </DropdownMenuCheckboxItem>
