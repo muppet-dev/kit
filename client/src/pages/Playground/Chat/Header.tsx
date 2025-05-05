@@ -44,6 +44,7 @@ import {
   Trash,
 } from "lucide-react";
 import {
+  type BaseSyntheticEvent,
   type InputHTMLAttributes,
   type PropsWithChildren,
   useEffect,
@@ -305,14 +306,26 @@ function NumberInput(props: InputHTMLAttributes<HTMLInputElement>) {
 
 function OptionsMenu(props: { model: ModelProps }) {
   const threadRuntime = useThreadRuntime();
-  const { moveRight, moveLeft, deleteModel } = useModels();
+  const { moveRight, moveLeft, deleteModel, models } = useModels();
 
-  const onClearChat = eventHandler(() =>
-    threadRuntime.import({ messages: [] })
-  );
-  const onMoveRight = eventHandler(() => moveRight(props.model.id));
-  const onMoveLeft = eventHandler(() => moveLeft(props.model.id));
-  const onDeleteModel = eventHandler(() => deleteModel(props.model.id));
+  const index = models.findIndex((item) => item.id === props.model.id);
+
+  const handleClearChat = (event: BaseSyntheticEvent) => {
+    if ("key" in event && event.key !== "Enter") return;
+    threadRuntime.import({ messages: [] });
+  };
+  const handleMoveRight = (event: BaseSyntheticEvent) => {
+    if ("key" in event && event.key !== "Enter") return;
+    moveRight(props.model.id);
+  };
+  const handleMoveLeft = (event: BaseSyntheticEvent) => {
+    if ("key" in event && event.key !== "Enter") return;
+    moveLeft(props.model.id);
+  };
+  const handleDeleteModel = (event: BaseSyntheticEvent) => {
+    if ("key" in event && event.key !== "Enter") return;
+    deleteModel(props.model.id);
+  };
 
   return (
     <DropdownMenu>
@@ -325,23 +338,32 @@ function OptionsMenu(props: { model: ModelProps }) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={onClearChat} onKeyDown={onClearChat}>
+        <DropdownMenuItem onClick={handleClearChat} onKeyDown={handleClearChat}>
           <RefreshCcw className="size-4 text-accent-foreground" />
           Clear Chat
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={onMoveRight} onKeyDown={onMoveRight}>
+        <DropdownMenuItem
+          onClick={handleMoveRight}
+          onKeyDown={handleMoveRight}
+          disabled={models.length === 1 || index === models.length - 1}
+        >
           <ArrowRight className="size-4 text-accent-foreground" />
           Move Right
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={onMoveLeft} onKeyDown={onMoveLeft}>
+        <DropdownMenuItem
+          onClick={handleMoveLeft}
+          onKeyDown={handleMoveLeft}
+          disabled={models.length === 1 || index === 0}
+        >
           <ArrowLeft className="size-4 text-accent-foreground" />
           Move Left
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="text-destructive focus:text-destructive"
-          onClick={onDeleteModel}
-          onKeyDown={onDeleteModel}
+          onClick={handleDeleteModel}
+          onKeyDown={handleDeleteModel}
+          disabled={models.length === 1}
         >
           <Trash className="size-4 text-destructive" />
           Delete Chat

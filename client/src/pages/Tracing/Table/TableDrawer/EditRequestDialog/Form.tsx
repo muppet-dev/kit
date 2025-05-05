@@ -16,12 +16,12 @@ import { Editor as MonacoEditor, type OnMount } from "@monaco-editor/react";
 import { AlignLeft } from "lucide-react";
 import { useState } from "react";
 
-export type Editor = {
+export type UpdateRequestForm = {
   request: Request;
-  closeDialog: (value: boolean) => void;
+  closeDialog: () => void;
 };
 
-export function Editor({ request, closeDialog }: Editor) {
+export function UpdateRequestForm({ request, closeDialog }: UpdateRequestForm) {
   const [editorInstance, setEditorInstance] =
     useState<Parameters<OnMount>[0]>();
   const [value, setValue] = useState<string>(
@@ -32,7 +32,7 @@ export function Editor({ request, closeDialog }: Editor) {
 
   const handleEditorMount: OnMount = (editor) => setEditorInstance(editor);
 
-  const onFormat = eventHandler(() => {
+  const handleFormatCode = eventHandler(() => {
     if (editorInstance)
       editorInstance.getAction("editor.action.formatDocument")?.run();
   });
@@ -46,7 +46,7 @@ export function Editor({ request, closeDialog }: Editor) {
       EmptyResultSchema.passthrough()
     );
 
-    closeDialog?.(false);
+    closeDialog();
   });
 
   return (
@@ -85,8 +85,8 @@ export function Editor({ request, closeDialog }: Editor) {
                 size="icon"
                 variant="ghost"
                 disabled={!value}
-                onClick={onFormat}
-                onKeyDown={onFormat}
+                onClick={handleFormatCode}
+                onKeyDown={handleFormatCode}
               >
                 <AlignLeft className="size-4 stroke-2" />
               </Button>
@@ -100,7 +100,7 @@ export function Editor({ request, closeDialog }: Editor) {
         onClick={handleUpdateRequest}
         onKeyDown={handleUpdateRequest}
       >
-        Update
+        Update and send request
       </Button>
     </>
   );

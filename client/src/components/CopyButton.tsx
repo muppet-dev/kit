@@ -30,7 +30,7 @@ export function CopyButton({
     return () => clearTimeout(timeoutId);
   }, [isCopied]);
 
-  const onCopy = eventHandler(() => {
+  const handleCopyData = eventHandler(() => {
     if (data) {
       navigator.clipboard.writeText(data);
       setIsCopied(true);
@@ -48,8 +48,8 @@ export function CopyButton({
           variant="ghost"
           disabled={!data}
           className={cn("size-max has-[>svg]:px-1.5 py-1.5", className)}
-          onClick={onCopy}
-          onKeyDown={onCopy}
+          onClick={handleCopyData}
+          onKeyDown={handleCopyData}
         >
           <Icon
             className={cn(

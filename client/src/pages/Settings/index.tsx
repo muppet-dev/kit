@@ -32,22 +32,22 @@ function FormFooter() {
   const { reset, control } = useFormContext<z.infer<typeof transportSchema>>();
 
   const formValues = useWatch({ control });
-  const isSame = _.isEqual(formValues, connectionInfo);
+  const isSameValues = _.isEqual(formValues, connectionInfo);
 
-  const onReset = eventHandler(() => reset(connectionInfo));
+  const handleResetForm = eventHandler(() => reset(connectionInfo));
 
   return (
     <div className="flex items-center justify-between">
       <Button
         type="button"
         variant="outline"
-        disabled={isSame}
-        onClick={onReset}
-        onKeyDown={onReset}
+        disabled={isSameValues}
+        onClick={handleResetForm}
+        onKeyDown={handleResetForm}
       >
         Reset
       </Button>
-      <Button type="submit" disabled={isSame}>
+      <Button type="submit" disabled={isSameValues}>
         Save & connect
       </Button>
     </div>

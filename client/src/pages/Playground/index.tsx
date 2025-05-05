@@ -4,7 +4,7 @@ import { ModelsProvider, useModels } from "./providers";
 
 export default function PlaygroundPage() {
   return (
-    <div className="flex gap-2 p-4 size-full">
+    <div className="flex gap-2 p-4 w-full overflow-x-auto">
       <ModelsProvider>
         <ChatRenderer />
       </ModelsProvider>

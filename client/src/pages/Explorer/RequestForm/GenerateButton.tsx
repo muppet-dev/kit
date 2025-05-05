@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { eventHandler } from "@/lib/eventHandler";
-import { SparkleIcon } from "lucide-react";
+import { SparklesIcon } from "lucide-react";
 import type { RequestForm } from ".";
 
 export type GenerateButton = {
@@ -25,7 +25,7 @@ export function GenerateButton({ selected }: GenerateButton) {
       onClick={handleGenerate}
       onKeyDown={handleGenerate}
     >
-      <SparkleIcon className="size-4" />
+      <SparklesIcon className="size-4" />
       Generate
     </Button>
   );

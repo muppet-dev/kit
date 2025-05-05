@@ -63,7 +63,7 @@ export function ConfigurationsDialog({ onSubmit }: ConfigurationsDialogProps) {
 function FormFooter() {
   const { reset } = useFormContext<z.infer<typeof transportSchema>>();
 
-  const onReset = eventHandler(() =>
+  const handleResetForm = eventHandler(() =>
     reset({
       transportType: Transport.STDIO,
     })
@@ -74,8 +74,8 @@ function FormFooter() {
       <Button
         type="button"
         variant="outline"
-        onClick={onReset}
-        onKeyDown={onReset}
+        onClick={handleResetForm}
+        onKeyDown={handleResetForm}
       >
         Reset
       </Button>

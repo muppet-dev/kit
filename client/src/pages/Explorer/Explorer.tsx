@@ -128,7 +128,7 @@ export function Explorer() {
     );
   }
 
-  const addCurrentCardName = (name: string) =>
+  const handleSelectItem = (name: string) =>
     eventHandler(() => setCurrent(name));
 
   if (isLoading)
@@ -161,8 +161,8 @@ export function Explorer() {
                   : "bg-transparent hover:bg-white dark:hover:bg-background transition-all ease-in-out",
                 "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max"
               )}
-              onClick={addCurrentCardName(card.name)}
-              onKeyDown={addCurrentCardName(card.name)}
+              onClick={handleSelectItem(card.name)}
+              onKeyDown={handleSelectItem(card.name)}
             >
               {card.name === current && (
                 <div className="h-full w-1 bg-primary absolute left-0 top-0" />

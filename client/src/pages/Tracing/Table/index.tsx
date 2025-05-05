@@ -18,7 +18,10 @@ export function TracingTable() {
   const { traces, selected, setSelected, timestampSort, toggleTimestampSort } =
     useTracing();
 
-  const handleDateClick = eventHandler(() => toggleTimestampSort());
+  const handleSortDate = eventHandler(() => toggleTimestampSort());
+
+  const handleSelectData = (index: number) =>
+    eventHandler(() => setSelected(index));
 
   return (
     <div className="w-full h-full flex gap-2 md:gap-3 lg:gap-4">
@@ -26,23 +29,27 @@ export function TracingTable() {
         <TableHeader>
           <TableRow className="hover:bg-accent divide-x bg-accent">
             <TableHead
-              className="w-64 flex gap-1 items-center cursor-pointer"
-              onClick={handleDateClick}
-              onKeyDown={handleDateClick}
+              onClick={handleSortDate}
+              onKeyDown={handleSortDate}
+              className="w-64 cursor-pointer"
             >
-              Date
-              {timestampSort === SortingEnum.ASCENDING && (
-                <MoveUp className="size-3.5" />
-              )}
-              {timestampSort === SortingEnum.DESCENDING && (
-                <MoveDown className="size-3.5" />
-              )}
+              <div className="flex items-center justify-between">
+                Date
+                {timestampSort === SortingEnum.ASCENDING && (
+                  <MoveUp className="size-3.5" />
+                )}
+                {timestampSort === SortingEnum.DESCENDING && (
+                  <MoveDown className="size-3.5" />
+                )}
+              </div>
             </TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Latency</TableHead>
-            <TableHead className="flex items-center justify-between">
-              Method
-              <FilterMethod />
+            <TableHead>
+              <div className="flex items-center justify-between">
+                Method
+                <FilterMethod />
+              </div>
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -50,9 +57,6 @@ export function TracingTable() {
           {traces.length > 0 ? (
             traces.map((trace, index) => {
               const isError = Boolean(trace.response?.error);
-
-              const handleClick = () => setSelected(index);
-
               const requestWasSentOn = trace.timestamp.start;
               const monthWithDay = dayjs(requestWasSentOn).format("MMM DD");
               const time = dayjs(requestWasSentOn).format("hh:mm:ss");
@@ -61,11 +65,12 @@ export function TracingTable() {
               return (
                 <TableRow
                   key={`row.${index + 1}`}
-                  onClick={handleClick}
                   className={cn(
                     "cursor-pointer divide-x",
                     selected === index && "bg-muted/50"
                   )}
+                  onClick={handleSelectData(index)}
+                  onKeyDown={handleSelectData(index)}
                 >
                   <TableCell className="space-x-1 font-medium uppercase">
                     <span className="text-black/50 dark:text-white/50">
@@ -77,7 +82,11 @@ export function TracingTable() {
                     </span>
                   </TableCell>
                   <TableCell
-                    className={isError ? "text-red-500" : "text-green-600"}
+                    className={
+                      isError
+                        ? "text-red-500 dark:text-red-300"
+                        : "text-green-600 dark:text-green-300"
+                    }
                   >
                     {isError ? "Error" : "Success"}
                   </TableCell>
@@ -100,7 +109,7 @@ export function TracingTable() {
             <TableRow className="hover:bg-transparent">
               <TableCell
                 className="h-[500px] text-center select-none text-muted-foreground"
-                colSpan={3}
+                colSpan={4}
               >
                 No data available
               </TableCell>

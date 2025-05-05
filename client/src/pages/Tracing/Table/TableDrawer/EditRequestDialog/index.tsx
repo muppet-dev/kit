@@ -9,14 +9,14 @@ import {
 } from "@/components/ui/dialog";
 import { PencilIcon } from "lucide-react";
 import { useState } from "react";
-import { Editor } from "./Editor";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { UpdateRequestForm } from "./Form";
 
-export type EditRequestDialog = Pick<Editor, "request">;
+export type EditRequestDialog = Pick<UpdateRequestForm, "request">;
 
 export function EditRequestDialog({ request }: EditRequestDialog) {
   const [isOpen, setOpen] = useState<boolean>();
@@ -27,20 +27,23 @@ export function EditRequestDialog({ request }: EditRequestDialog) {
         <TooltipTrigger asChild>
           <div>
             <DialogTrigger asChild>
-              <Button size="icon" variant="ghost" className="p-1 size-max">
-                <PencilIcon className="size-4" />
+              <Button size="icon" variant="ghost" className="p-1.5 size-max">
+                <PencilIcon />
               </Button>
             </DialogTrigger>
           </div>
         </TooltipTrigger>
-        <TooltipContent>Edit Request</TooltipContent>
+        <TooltipContent>Update Request</TooltipContent>
       </Tooltip>
       <DialogContent className="!max-w-2xl">
         <DialogHeader className="gap-0">
-          <DialogTitle>Edit Request</DialogTitle>
+          <DialogTitle>Update & Send Request</DialogTitle>
           <DialogDescription className="hidden" />
         </DialogHeader>
-        <Editor request={request} closeDialog={setOpen} />
+        <UpdateRequestForm
+          request={request}
+          closeDialog={() => setOpen(false)}
+        />
       </DialogContent>
     </Dialog>
   );

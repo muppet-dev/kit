@@ -24,7 +24,7 @@ export function JSONRender() {
 
   const handleEditorMount: OnMount = (editor) => setEditorInstance(editor);
 
-  const onFormat = eventHandler(() => {
+  const handleFormatCode = eventHandler(() => {
     if (editorInstance)
       editorInstance.getAction("editor.action.formatDocument")?.run();
   });
@@ -65,8 +65,8 @@ export function JSONRender() {
               size="icon"
               variant="ghost"
               disabled={!value}
-              onClick={onFormat}
-              onKeyDown={onFormat}
+              onClick={handleFormatCode}
+              onKeyDown={handleFormatCode}
             >
               <AlignLeft className="size-4 stroke-2" />
             </Button>

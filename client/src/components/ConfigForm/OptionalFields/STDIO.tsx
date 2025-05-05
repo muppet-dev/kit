@@ -37,10 +37,10 @@ export function STDIOFields() {
       </div>
       <Accordion type="single" collapsible>
         <AccordionItem value="1" className="border-b-0">
-          <AccordionTrigger className="bg-accent py-2 px-1 hover:no-underline">
+          <AccordionTrigger className="hover:no-underline cursor-pointer hover:bg-accent/80 data-[state=open]:bg-accent/80 py-1.5">
             Environmental Variables
           </AccordionTrigger>
-          <AccordionContent className="pb-0 max-h-[300px] h-full overflow-y-auto">
+          <AccordionContent className="pt-2 pb-0">
             <EnvField />
           </AccordionContent>
         </AccordionItem>
@@ -49,7 +49,7 @@ export function STDIOFields() {
   );
 }
 
-const defaultEnvFieldValue = {
+const ENV_FIELD_DEFAULT_VALUE = {
   key: "",
   value: "",
 };
@@ -63,24 +63,24 @@ function EnvField() {
     control,
   });
 
-  const hanldeAppendItem = eventHandler(() => append(defaultEnvFieldValue));
+  const handleAddItem = eventHandler(() => append(ENV_FIELD_DEFAULT_VALUE));
+  const handleMoveUp = (index: number) =>
+    eventHandler(() => move(index, index - 1));
+  const handleMoveDown = (index: number) =>
+    eventHandler(() => move(index, index + 1));
+  const handleInsertItem = (index: number) =>
+    eventHandler(() => insert(index + 1, ENV_FIELD_DEFAULT_VALUE));
+  const handleDeleteItem = (index: number) => eventHandler(() => remove(index));
 
   return (
-    <div className="col-span-3 space-y-2">
+    <div className="space-y-2">
       {fields.length === 0 ? (
-        <div className="h-[134px] w-full flex items-center justify-center border">
+        <div className="h-[78px] w-full flex items-center justify-center border">
           <p className="text-sm select-none">No variables added</p>
         </div>
       ) : (
-        fields.map((item, index, arr) => {
-          const handleMoveUp = eventHandler(() => move(index, index - 1));
-          const handleMoveDown = eventHandler(() => move(index, index + 1));
-          const handleInsertItem = eventHandler(() =>
-            insert(index + 1, defaultEnvFieldValue)
-          );
-          const handleRemove = eventHandler(() => remove(index));
-
-          return (
+        <div className="max-h-[370px] h-full overflow-y-auto space-y-2">
+          {fields.map((item, index, arr) => (
             <div
               key={item.id}
               className="flex w-full items-center border p-2 gap-2"
@@ -92,8 +92,8 @@ function EnvField() {
                   className="h-max has-[>svg]:px-1.5 py-1.5"
                   variant="ghost"
                   disabled={index === 0}
-                  onClick={handleMoveUp}
-                  onKeyDown={handleMoveUp}
+                  onClick={handleMoveUp(index)}
+                  onKeyDown={handleMoveUp(index)}
                 >
                   <ArrowUp />
                 </Button>
@@ -103,20 +103,26 @@ function EnvField() {
                   className="h-max has-[>svg]:px-1.5 py-1.5"
                   variant="ghost"
                   disabled={index === arr.length - 1}
-                  onClick={handleMoveDown}
-                  onKeyDown={handleMoveDown}
+                  onClick={handleMoveDown(index)}
+                  onKeyDown={handleMoveDown(index)}
                 >
                   <ArrowDown />
                 </Button>
               </div>
-              <div className="flex flex-col gap-2 w-full">
-                <div className="space-y-1">
-                  <Label htmlFor={`env.${index}.key`}>key</Label>
-                  <Input {...register(`env.${index}.key`)} />
+              <div className="flex gap-2 w-full">
+                <div className="space-y-1 w-full">
+                  <Label htmlFor={`env.${index}.key`}>Key</Label>
+                  <Input
+                    {...register(`env.${index}.key`)}
+                    placeholder="Enter Key"
+                  />
                 </div>
-                <div className="space-y-1">
+                <div className="space-y-1 w-full">
                   <Label htmlFor={`env.${index}.value`}>Value</Label>
-                  <Input {...register(`env.${index}.value`)} />
+                  <Input
+                    {...register(`env.${index}.value`)}
+                    placeholder="Enter Value"
+                  />
                 </div>
               </div>
               <div className="flex flex-col gap-1">
@@ -125,8 +131,8 @@ function EnvField() {
                   type="button"
                   className="h-max has-[>svg]:px-1.5 py-1.5"
                   variant="ghost"
-                  onClick={handleInsertItem}
-                  onKeyDown={handleInsertItem}
+                  onClick={handleInsertItem(index)}
+                  onKeyDown={handleInsertItem(index)}
                 >
                   <Plus />
                 </Button>
@@ -135,21 +141,21 @@ function EnvField() {
                   type="button"
                   className="h-max has-[>svg]:px-1.5 py-1.5 text-red-500 dark:text-red-300"
                   variant="ghost"
-                  onClick={handleRemove}
-                  onKeyDown={handleRemove}
+                  onClick={handleDeleteItem(index)}
+                  onKeyDown={handleDeleteItem(index)}
                 >
                   <Trash />
                 </Button>
               </div>
             </div>
-          );
-        })
+          ))}
+        </div>
       )}
       <Button
         type="button"
         variant="secondary"
-        onClick={hanldeAppendItem}
-        onKeyDown={hanldeAppendItem}
+        onClick={handleAddItem}
+        onKeyDown={handleAddItem}
       >
         Add variable
       </Button>

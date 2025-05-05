@@ -13,8 +13,8 @@ export function ConnectStatus() {
 
   const connectionTitle = getConnectionStatusTitle(connectionStatus);
 
-  const onConnect = eventHandler(() => connect());
-  const onDisconnect = eventHandler(() => disconnect());
+  const handleConnect = eventHandler(() => connect());
+  const handleDisconnect = eventHandler(() => disconnect());
 
   return (
     <div className="py-2 pl-2 flex gap-2 w-full items-center text-sm h-8">
@@ -54,8 +54,8 @@ export function ConnectStatus() {
                 <Button
                   variant="ghost"
                   className="h-max has-[>svg]:px-1.5 px-1.5 py-1.5"
-                  onClick={onDisconnect}
-                  onKeyDown={onDisconnect}
+                  onClick={handleDisconnect}
+                  onKeyDown={handleDisconnect}
                 >
                   <Unplug />
                 </Button>
@@ -75,8 +75,8 @@ export function ConnectStatus() {
                 <Button
                   variant="ghost"
                   className="h-max has-[>svg]:px-1.5 px-1.5 py-1.5"
-                  onClick={onConnect}
-                  onKeyDown={onConnect}
+                  onClick={handleConnect}
+                  onKeyDown={handleConnect}
                 >
                   <RotateCcw />
                 </Button>

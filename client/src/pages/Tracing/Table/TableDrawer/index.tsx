@@ -28,6 +28,24 @@ export function TableDrawer() {
 
   if (!selectedHistory) return <></>;
 
+  const handleGoToPreviosRequest = eventHandler(() =>
+    setSelected((prev) => {
+      if (prev != null && prev > 0) {
+        return prev - 1;
+      }
+
+      return prev;
+    })
+  );
+  const handleGoToNextRequest = eventHandler(() =>
+    setSelected((prev) => {
+      if (prev != null && prev < traces.length - 1) {
+        return prev + 1;
+      }
+
+      return prev;
+    })
+  );
   const handleSendRequest = eventHandler(() => {
     if (selectedHistory.request.method !== "initialize")
       makeRequest(
@@ -38,7 +56,7 @@ export function TableDrawer() {
         EmptyResultSchema.passthrough()
       );
   });
-  const closeDrawer = eventHandler(() => setSelected(null));
+  const handleCloseDrawer = eventHandler(() => setSelected(null));
 
   return (
     <div className="p-4 w-[550px] border space-y-3 h-full overflow-y-auto">
@@ -62,17 +80,10 @@ export function TableDrawer() {
               variant="ghost"
               className="p-1 size-max"
               disabled={selected != null && selected === 0}
-              onClick={() =>
-                setSelected((prev) => {
-                  if (prev != null && prev > 0) {
-                    return prev - 1;
-                  }
-
-                  return prev;
-                })
-              }
+              onClick={handleGoToPreviosRequest}
+              onKeyDown={handleGoToPreviosRequest}
             >
-              <ChevronUp className="size-4" />
+              <ChevronUp />
             </Button>
           </TooltipTrigger>
           <TooltipContent>Go to previous request</TooltipContent>
@@ -84,17 +95,10 @@ export function TableDrawer() {
               variant="ghost"
               className="p-1 size-max"
               disabled={selected != null && selected === traces.length - 1}
-              onClick={() =>
-                setSelected((prev) => {
-                  if (prev != null && prev < traces.length - 1) {
-                    return prev + 1;
-                  }
-
-                  return prev;
-                })
-              }
+              onClick={handleGoToNextRequest}
+              onKeyDown={handleGoToNextRequest}
             >
-              <ChevronDown className="size-4" />
+              <ChevronDown />
             </Button>
           </TooltipTrigger>
           <TooltipContent>Go to next request</TooltipContent>
@@ -106,10 +110,10 @@ export function TableDrawer() {
               size="icon"
               variant="ghost"
               className="p-1 size-max"
-              onClick={closeDrawer}
-              onKeyDown={closeDrawer}
+              onClick={handleCloseDrawer}
+              onKeyDown={handleCloseDrawer}
             >
-              <XIcon className="size-4" />
+              <XIcon />
             </Button>
           </TooltipTrigger>
           <TooltipContent>Close the drawer</TooltipContent>
@@ -122,20 +126,17 @@ export function TableDrawer() {
               <Button
                 size="icon"
                 variant="ghost"
-                className="p-1 size-max"
+                className="p-1.5 size-max"
                 onClick={handleSendRequest}
                 onKeyDown={handleSendRequest}
               >
-                <RefreshCcw className="size-4" />
+                <RefreshCcw />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Resend current request</TooltipContent>
           </Tooltip>
           {EDIT_METHODS.includes(selectedHistory.request.method) && (
-            <>
-              <div className="h-4 w-px bg-muted" />
-              <EditRequestDialog request={selectedHistory.request} />
-            </>
+            <EditRequestDialog request={selectedHistory.request} />
           )}
         </div>
       )}
