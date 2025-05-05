@@ -17,6 +17,7 @@ import { GenerateButton } from "./GenerateButton";
 import { JSONRender } from "./JSONRender";
 import { PromptFieldRender } from "./PromptFieldRender";
 import { ReponseRender } from "./Reponse";
+import { ScoreRender } from "./ScoreRender";
 
 export type RequestForm = {
   cards: {
@@ -195,7 +196,12 @@ export function RequestForm({ cards, current }: RequestForm) {
             >
               <JSONRender />
             </TabsContent>
-            <TabsContent value="score">Score</TabsContent>
+            <TabsContent
+              value="score"
+              className="flex flex-col gap-1.5 overflow-y-auto"
+            >
+              <ScoreRender />
+            </TabsContent>
           </Tabs>
         </form>
       </FormProvider>
