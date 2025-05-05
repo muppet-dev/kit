@@ -44,22 +44,23 @@ function useTracingManager() {
   const [selected, setSelected] = useState<number | null>(null);
   const [methodFilters, setMethodFilters] =
     useState<string[]>(AVAILABLE_METHODS);
-  const [timestampSort, setTimestampSort] = useState<SortingEnum | null>(null);
+  const [timestampSort, setTimestampSort] = useState<SortingEnum>(
+    SortingEnum.ASCENDING,
+  );
 
   const traces = useMemo(() => {
     let results = requestHistory.filter((item) =>
       methodFilters.includes(JSON.parse(item.request).method),
     );
 
-    if (timestampSort)
-      results = results.sort((a, b) => {
-        const aTimestamp = a.timestamp.start;
-        const bTimestamp = b.timestamp.start;
+    results = results.sort((a, b) => {
+      const aTimestamp = a.timestamp.start;
+      const bTimestamp = b.timestamp.start;
 
-        return timestampSort === SortingEnum.ASCENDING
-          ? aTimestamp - bTimestamp
-          : bTimestamp - aTimestamp;
-      });
+      return timestampSort === SortingEnum.ASCENDING
+        ? aTimestamp - bTimestamp
+        : bTimestamp - aTimestamp;
+    });
 
     return results.map((item) => ({
       timestamp: item.timestamp,
