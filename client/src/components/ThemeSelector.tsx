@@ -1,6 +1,7 @@
-import { cn } from "../lib/utils";
+import { eventHandler } from "@/lib/eventHandler";
 import { type Theme, useTheme } from "@/providers";
 import { MoonIcon, SunIcon, TvIcon } from "lucide-react";
+import { cn } from "../lib/utils";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -8,8 +9,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { useSidebar } from "./ui/sidebar";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 const THEMES = {
   light: SunIcon,
@@ -22,6 +23,8 @@ export function ThemeSelector() {
   const { state } = useSidebar();
 
   const ThemeTriggerIcon = THEMES[theme as keyof typeof THEMES];
+
+  const onChangeTheme = (name: Theme) => eventHandler(() => setTheme(name));
 
   return (
     <DropdownMenu>
@@ -51,17 +54,15 @@ export function ThemeSelector() {
               key={name}
               className={cn(
                 isSelected && "bg-secondary focus:bg-secondary",
-                "capitalize group",
+                "capitalize group"
               )}
-              onClick={() => setTheme(name as Theme)}
-              onKeyDown={(event) => {
-                if (event.key === "Enter") setTheme(name as Theme);
-              }}
+              onClick={onChangeTheme(name as Theme)}
+              onKeyDown={onChangeTheme(name as Theme)}
             >
               <Icon
                 className={cn(
                   isSelected && "text-black dark:text-white",
-                  "stroke-2 size-4",
+                  "stroke-2 size-4"
                 )}
               />
               {name}

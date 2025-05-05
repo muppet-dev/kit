@@ -1,6 +1,7 @@
 import { ConfigForm } from "@/components/ConfigForm";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { eventHandler } from "@/lib/eventHandler";
 import { useConfig } from "@/providers";
 import type { transportSchema } from "@/validations";
 import _ from "lodash";
@@ -33,16 +34,16 @@ function FormFooter() {
   const formValues = useWatch({ control });
   const isSame = _.isEqual(formValues, connectionInfo);
 
+  const onReset = eventHandler(() => reset(connectionInfo));
+
   return (
     <div className="flex items-center justify-between">
       <Button
         type="button"
         variant="outline"
         disabled={isSame}
-        onClick={() => reset(connectionInfo)}
-        onKeyDown={(event) => {
-          if (event.key === "Enter") reset(connectionInfo);
-        }}
+        onClick={onReset}
+        onKeyDown={onReset}
       >
         Reset
       </Button>

@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { eventHandler } from "@/lib/eventHandler";
 import { DuckField, useBlueprint, useDuckForm, useField } from "duck-form";
 import { ArrowDown, ArrowUp, Plus, Trash } from "lucide-react";
 import { useId, useMemo } from "react";
@@ -19,7 +20,7 @@ export function ArrayField() {
   const autoId = useId();
   const customId = useMemo(
     () => generateId?.(schema, props),
-    [generateId, schema, props],
+    [generateId, schema, props]
   );
 
   const componentId = customId ?? autoId;
@@ -30,70 +31,71 @@ export function ArrayField() {
     name: componentId,
   });
 
+  const handleAddItem = eventHandler(() => append(undefined));
+
   return (
     <>
-      {fields.map((field, index) => (
-        <div
-          key={field.id}
-          className="flex mb-2 min-h-[120px] items-center gap-2 rounded-lg border border-secondary-200 p-2 dark:border-secondary-800"
-        >
-          <div className="space-y-2">
-            <Button
-              title="Go Up"
-              variant="ghost"
-              size="icon"
-              onClick={() => swap(index, index - 1)}
-              onKeyDown={(event) => {
-                if (event.key === "Enter") swap(index, index - 1);
-              }}
-              disabled={index === 0}
-            >
-              <ArrowUp className="size-4 stroke-2" />
-            </Button>
-            <Button
-              title="Go Down"
-              variant="ghost"
-              size="icon"
-              onClick={() => swap(index, index + 1)}
-              onKeyDown={(event) => {
-                if (event.key === "Enter") swap(index, index + 1);
-              }}
-              disabled={index === fields.length - 1}
-            >
-              <ArrowDown className="size-4 stroke-2" />
-            </Button>
+      {fields.map((field, index) => {
+        const handleGoUp = eventHandler(() => swap(index, index - 1));
+        const handleGoDown = eventHandler(() => swap(index, index + 1));
+        const handleInsertNew = eventHandler(() =>
+          insert(index + 1, undefined)
+        );
+        const handleDelete = eventHandler(() => remove(index));
+
+        return (
+          <div
+            key={field.id}
+            className="flex mb-2 min-h-[120px] items-center gap-2 rounded-lg border border-secondary-200 p-2 dark:border-secondary-800"
+          >
+            <div className="space-y-2">
+              <Button
+                title="Go Up"
+                variant="ghost"
+                size="icon"
+                onClick={handleGoUp}
+                onKeyDown={handleGoUp}
+                disabled={index === 0}
+              >
+                <ArrowUp className="size-4 stroke-2" />
+              </Button>
+              <Button
+                title="Go Down"
+                variant="ghost"
+                size="icon"
+                onClick={handleGoDown}
+                onKeyDown={handleGoDown}
+                disabled={index === fields.length - 1}
+              >
+                <ArrowDown className="size-4 stroke-2" />
+              </Button>
+            </div>
+            <DuckField id={`${componentId}.${index}`} {...props.items} />
+            <div className="space-y-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleInsertNew}
+                onKeyDown={handleInsertNew}
+              >
+                <Plus className="size-4 stroke-2" />
+              </Button>
+              <Button
+                variant="destructive"
+                size="icon"
+                onClick={handleDelete}
+                onKeyDown={handleDelete}
+              >
+                <Trash className="size-4 stroke-2" />
+              </Button>
+            </div>
           </div>
-          <DuckField id={`${componentId}.${index}`} {...props.items} />
-          <div className="space-y-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => insert(index + 1, undefined)}
-              onKeyDown={(event) => {
-                if (event.key === "Enter") insert(index + 1, undefined);
-              }}
-            >
-              <Plus className="size-4 stroke-2" />
-            </Button>
-            <Button
-              variant="destructive"
-              size="icon"
-              onClick={() => remove(index)}
-              onKeyDown={(event) => {
-                if (event.key === "Enter") remove(index);
-              }}
-            >
-              <Trash className="size-4 stroke-2" />
-            </Button>
-          </div>
-        </div>
-      ))}
+        );
+      })}
       <Button
         variant="outline"
-        onClick={() => append(undefined)}
-        onKeyDown={(event) => {
-          if (event.key === "Enter") append(undefined);
-        }}
+        onClick={handleAddItem}
+        onKeyDown={handleAddItem}
         type="button"
         className="w-max"
       >

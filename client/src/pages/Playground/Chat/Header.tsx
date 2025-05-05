@@ -26,6 +26,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { eventHandler } from "@/lib/eventHandler";
 import { useThreadRuntime } from "@assistant-ui/react";
 import Fuse from "fuse.js";
 import {
@@ -71,6 +72,11 @@ export function ModelHeader(props: { chatId: string }) {
 
   const SyncButtonIcon = model.sync ? ToggleRight : ToggleLeft;
 
+  const handleConfigChange = (id: string, sync?: boolean) =>
+    eventHandler(() => onConfigChange(id, { sync }));
+
+  const handleAddModel = eventHandler(() => addModel());
+
   return (
     <div className="p-2 flex items-center gap-1 border-b border-zinc-300 dark:border-zinc-800 bg-background">
       <ModelSelect model={model} />
@@ -84,11 +90,8 @@ export function ModelHeader(props: { chatId: string }) {
         title="Sync chat messages with other models"
         variant="ghost"
         className="has-[>svg]:px-1.5 py-1.5 h-max rounded-sm relative"
-        onClick={() => onConfigChange(model.id, { sync: !model.sync })}
-        onKeyDown={(event) => {
-          if (event.key === "Enter")
-            onConfigChange(model.id, { sync: !model.sync });
-        }}
+        onClick={handleConfigChange(model.id, !model.sync)}
+        onKeyDown={handleConfigChange(model.id, !model.sync)}
       >
         <SyncButtonIcon className="size-[18px] stroke-zinc-600 dark:stroke-zinc-300" />
         {model.sync && (
@@ -102,10 +105,8 @@ export function ModelHeader(props: { chatId: string }) {
         title="Add model for comparison"
         variant="ghost"
         className="has-[>svg]:px-1.5 py-1.5 h-max rounded-sm"
-        onClick={() => addModel()}
-        onKeyDown={(event) => {
-          if (event.key === "Enter") addModel();
-        }}
+        onClick={handleAddModel}
+        onKeyDown={handleAddModel}
       >
         <Plus className="size-[18px] stroke-zinc-600 dark:stroke-zinc-300" />
       </Button>
@@ -136,7 +137,7 @@ function ModelSelect(props: { model: ModelProps }) {
         keys: ["name", "provider"],
         includeMatches: true,
       }),
-    [models],
+    [models]
   );
 
   let searchResults = models;
@@ -212,7 +213,7 @@ function ModelSelect(props: { model: ModelProps }) {
                         "size-4",
                         item.key === props.model.model
                           ? "opacity-100"
-                          : "opacity-0",
+                          : "opacity-0"
                       )}
                     />
                   </CommandItem>
@@ -306,6 +307,13 @@ function OptionsMenu(props: { model: ModelProps }) {
   const threadRuntime = useThreadRuntime();
   const { moveRight, moveLeft, deleteModel } = useModels();
 
+  const onClearChat = eventHandler(() =>
+    threadRuntime.import({ messages: [] })
+  );
+  const onMoveRight = eventHandler(() => moveRight(props.model.id));
+  const onMoveLeft = eventHandler(() => moveLeft(props.model.id));
+  const onDeleteModel = eventHandler(() => deleteModel(props.model.id));
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -317,40 +325,23 @@ function OptionsMenu(props: { model: ModelProps }) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem
-          onClick={() => threadRuntime.import({ messages: [] })}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") threadRuntime.import({ messages: [] });
-          }}
-        >
+        <DropdownMenuItem onClick={onClearChat} onKeyDown={onClearChat}>
           <RefreshCcw className="size-4 text-accent-foreground" />
           Clear Chat
         </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => moveRight(props.model.id)}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") moveRight(props.model.id);
-          }}
-        >
+        <DropdownMenuItem onClick={onMoveRight} onKeyDown={onMoveRight}>
           <ArrowRight className="size-4 text-accent-foreground" />
           Move Right
         </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => moveLeft(props.model.id)}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") moveLeft(props.model.id);
-          }}
-        >
+        <DropdownMenuItem onClick={onMoveLeft} onKeyDown={onMoveLeft}>
           <ArrowLeft className="size-4 text-accent-foreground" />
           Move Left
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="text-destructive focus:text-destructive"
-          onClick={() => deleteModel(props.model.id)}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") deleteModel(props.model.id);
-          }}
+          onClick={onDeleteModel}
+          onKeyDown={onDeleteModel}
         >
           <Trash className="size-4 text-destructive" />
           Delete Chat

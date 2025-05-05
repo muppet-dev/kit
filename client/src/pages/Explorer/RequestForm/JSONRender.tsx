@@ -6,6 +6,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { eventHandler } from "@/lib/eventHandler";
 import { useTheme } from "@/providers";
 import { Editor as MonacoEditor, type OnMount } from "@monaco-editor/react";
 import { AlignLeft } from "lucide-react";
@@ -22,6 +23,11 @@ export function JSONRender() {
   const { resolvedTheme } = useTheme();
 
   const handleEditorMount: OnMount = (editor) => setEditorInstance(editor);
+
+  const onFormat = eventHandler(() => {
+    if (editorInstance)
+      editorInstance.getAction("editor.action.formatDocument")?.run();
+  });
 
   const value = formData ? JSON.stringify(formData, null, 2) : undefined;
 
@@ -59,18 +65,8 @@ export function JSONRender() {
               size="icon"
               variant="ghost"
               disabled={!value}
-              onClick={() => {
-                if (editorInstance)
-                  editorInstance
-                    .getAction("editor.action.formatDocument")
-                    ?.run();
-              }}
-              onKeyDown={(event) => {
-                if (editorInstance && event.key === "Enter")
-                  editorInstance
-                    .getAction("editor.action.formatDocument")
-                    ?.run();
-              }}
+              onClick={onFormat}
+              onKeyDown={onFormat}
             >
               <AlignLeft className="size-4 stroke-2" />
             </Button>

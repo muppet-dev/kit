@@ -1,3 +1,4 @@
+import { highlightMatches } from "@/components/highlightMatches";
 import {
   Card,
   CardContent,
@@ -6,7 +7,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { cn } from "../../lib/utils";
+import { Spinner } from "@/components/ui/spinner";
+import { eventHandler } from "@/lib/eventHandler";
 import { useConnection } from "@/providers";
 import {
   ListPromptsResultSchema,
@@ -16,10 +18,9 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import Fuse, { type RangeTuple } from "fuse.js";
 import { useEffect, useMemo, useState } from "react";
+import { cn } from "../../lib/utils";
 import { RequestForm } from "./RequestForm";
 import { DEFAULT_TOOLS, Tool, useTool } from "./tools";
-import { highlightMatches } from "@/components/highlightMatches";
-import { Spinner } from "@/components/ui/spinner";
 
 type Cards = RequestForm["cards"][0];
 
@@ -47,14 +48,14 @@ export function Explorer() {
       case Tool.TOOLS:
         handler = makeRequest(
           { method: "tools/list" },
-          ListToolsResultSchema,
+          ListToolsResultSchema
         ).then(({ tools }) =>
           tools.map((tool) => ({
             name: tool.name,
             description: tool.description,
             schema: tool.inputSchema
               .properties as RequestForm["cards"][0]["schema"],
-          })),
+          }))
         );
         break;
       case Tool.PROMPTS:
@@ -62,13 +63,13 @@ export function Explorer() {
           {
             method: "prompts/list",
           },
-          ListPromptsResultSchema,
+          ListPromptsResultSchema
         ).then(({ prompts }) =>
           prompts.map((prompt) => ({
             name: prompt.name,
             description: prompt.description,
             schema: prompt.arguments as RequestForm["cards"][0]["schema"],
-          })),
+          }))
         );
         break;
       case Tool.STATIC_RESOURCES:
@@ -76,7 +77,7 @@ export function Explorer() {
           {
             method: "resources/list",
           },
-          ListResourcesResultSchema,
+          ListResourcesResultSchema
         ).then(({ resources }) => resources);
         break;
       case Tool.DYNAMIC_RESOURCES:
@@ -84,7 +85,7 @@ export function Explorer() {
           {
             method: "resources/templates/list",
           },
-          ListResourceTemplatesResultSchema,
+          ListResourceTemplatesResultSchema
         ).then(({ resourceTemplates }) => resourceTemplates);
         break;
     }
@@ -106,7 +107,7 @@ export function Explorer() {
         keys: ["name"],
         includeMatches: true,
       }),
-    [cards],
+    [cards]
   );
 
   let searchResults: CardType[] | undefined = cards;
@@ -123,9 +124,12 @@ export function Explorer() {
 
         return prev;
       },
-      [],
+      []
     );
   }
+
+  const addCurrentCardName = (name: string) =>
+    eventHandler(() => setCurrent(name));
 
   if (isLoading)
     return (
@@ -155,12 +159,10 @@ export function Explorer() {
                 card.name === current
                   ? "bg-white dark:bg-background"
                   : "bg-transparent hover:bg-white dark:hover:bg-background transition-all ease-in-out",
-                "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max",
+                "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max"
               )}
-              onClick={() => setCurrent(card.name)}
-              onKeyDown={(event) => {
-                if (event.key === "Enter") setCurrent(card.name);
-              }}
+              onClick={addCurrentCardName(card.name)}
+              onKeyDown={addCurrentCardName(card.name)}
             >
               {card.name === current && (
                 <div className="h-full w-1 bg-primary absolute left-0 top-0" />

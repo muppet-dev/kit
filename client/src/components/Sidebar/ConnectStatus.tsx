@@ -1,9 +1,10 @@
-import { cn } from "../../lib/utils";
+import { eventHandler } from "@/lib/eventHandler";
 import { useConnection } from "@/providers";
-import { useSidebar } from "../ui/sidebar";
 import { ConnectionStatus } from "@/providers/connection/manager";
-import { Button } from "../ui/button";
 import { RotateCcw, Unplug } from "lucide-react";
+import { cn } from "../../lib/utils";
+import { Button } from "../ui/button";
+import { useSidebar } from "../ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 export function ConnectStatus() {
@@ -11,6 +12,9 @@ export function ConnectStatus() {
   const { state } = useSidebar();
 
   const connectionTitle = getConnectionStatusTitle(connectionStatus);
+
+  const onConnect = eventHandler(() => connect());
+  const onDisconnect = eventHandler(() => disconnect());
 
   return (
     <div className="py-2 pl-2 flex gap-2 w-full items-center text-sm h-8">
@@ -23,12 +27,12 @@ export function ConnectStatus() {
               connectionStatus === ConnectionStatus.CONNECTED
                 ? "bg-green-500 dark:bg-green-300"
                 : connectionStatus === ConnectionStatus.ERROR ||
-                    connectionStatus ===
-                      ConnectionStatus.ERROR_CONNECTING_TO_PROXY
-                  ? "bg-red-500 dark:bg-red-300"
-                  : connectionStatus === ConnectionStatus.CONNECTING
-                    ? "bg-yellow-500 dark:bg-yellow-300"
-                    : "bg-gray-500 dark:bg-gray-300",
+                  connectionStatus ===
+                    ConnectionStatus.ERROR_CONNECTING_TO_PROXY
+                ? "bg-red-500 dark:bg-red-300"
+                : connectionStatus === ConnectionStatus.CONNECTING
+                ? "bg-yellow-500 dark:bg-yellow-300"
+                : "bg-gray-500 dark:bg-gray-300"
             )}
           />
         </TooltipTrigger>
@@ -50,10 +54,8 @@ export function ConnectStatus() {
                 <Button
                   variant="ghost"
                   className="h-max has-[>svg]:px-1.5 px-1.5 py-1.5"
-                  onClick={() => disconnect()}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter") disconnect();
-                  }}
+                  onClick={onDisconnect}
+                  onKeyDown={onDisconnect}
                 >
                   <Unplug />
                 </Button>
@@ -73,10 +75,8 @@ export function ConnectStatus() {
                 <Button
                   variant="ghost"
                   className="h-max has-[>svg]:px-1.5 px-1.5 py-1.5"
-                  onClick={() => connect()}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter") connect();
-                  }}
+                  onClick={onConnect}
+                  onKeyDown={onConnect}
                 >
                   <RotateCcw />
                 </Button>

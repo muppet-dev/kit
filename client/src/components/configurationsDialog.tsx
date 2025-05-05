@@ -1,4 +1,5 @@
 import { Transport } from "@/constants";
+import { eventHandler } from "@/lib/eventHandler";
 import { CONFIG_STORAGE_KEY } from "@/providers";
 import type { ConnectionInfo } from "@/providers/connection/manager";
 import type { transportSchema } from "@/validations";
@@ -47,22 +48,19 @@ export function ConfigurationsDialog({ onSubmit }: ConfigurationsDialogProps) {
 function FormFooter() {
   const { reset } = useFormContext<z.infer<typeof transportSchema>>();
 
+  const onReset = eventHandler(() =>
+    reset({
+      transportType: Transport.STDIO,
+    })
+  );
+
   return (
     <DialogFooter className="sm:justify-between">
       <Button
         type="button"
         variant="outline"
-        onClick={() => {
-          reset({
-            transportType: Transport.STDIO,
-          });
-        }}
-        onKeyDown={(event) => {
-          if (event.key === "Enter")
-            reset({
-              transportType: Transport.STDIO,
-            });
-        }}
+        onClick={onReset}
+        onKeyDown={onReset}
       >
         Reset
       </Button>

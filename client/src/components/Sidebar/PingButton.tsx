@@ -1,3 +1,4 @@
+import { eventHandler } from "@/lib/eventHandler";
 import { useConnection } from "@/providers";
 import { ConnectionStatus } from "@/providers/connection/manager";
 import { EmptyResultSchema } from "@modelcontextprotocol/sdk/types.js";
@@ -11,30 +12,21 @@ export function PingButton() {
   const [isLoading, setIsLoading] = useState(false);
   const { makeRequest, connectionStatus } = useConnection();
 
+  const onPing = eventHandler(async () => {
+    setIsLoading(true);
+    await makeRequest(
+      {
+        method: "ping",
+      },
+      EmptyResultSchema
+    );
+    setIsLoading(false);
+  });
+
   return (
     <SidebarMenuButton
-      onClick={async () => {
-        setIsLoading(true);
-        await makeRequest(
-          {
-            method: "ping",
-          },
-          EmptyResultSchema,
-        );
-        setIsLoading(false);
-      }}
-      onKeyDown={async (event) => {
-        if (event.key === "Enter") {
-          setIsLoading(true);
-          await makeRequest(
-            {
-              method: "ping",
-            },
-            EmptyResultSchema,
-          );
-          setIsLoading(false);
-        }
-      }}
+      onClick={onPing}
+      onKeyDown={onPing}
       disabled={connectionStatus !== ConnectionStatus.CONNECTED || isLoading}
       tooltip="Ping Server"
     >

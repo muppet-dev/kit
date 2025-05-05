@@ -5,10 +5,11 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { cn } from "../../../lib/utils";
+import { eventHandler } from "@/lib/eventHandler";
 import { useConnection } from "@/providers";
 import { EmptyResultSchema } from "@modelcontextprotocol/sdk/types.js";
 import { ChevronDown, ChevronUp, RefreshCcw, XIcon } from "lucide-react";
+import { cn } from "../../../lib/utils";
 import { useTracing } from "../providers";
 
 export function TableDrawer() {
@@ -19,16 +20,17 @@ export function TableDrawer() {
 
   if (!selectedHistory) return <></>;
 
-  const handleSendRequest = () => {
+  const handleSendRequest = eventHandler(() => {
     if (selectedHistory.request.method !== "initialize")
       makeRequest(
         {
-          method: selectedHistory.request.method as any,
+          method: selectedHistory.request.method,
           params: selectedHistory.request.params,
         },
-        EmptyResultSchema.passthrough(),
+        EmptyResultSchema.passthrough()
       );
-  };
+  });
+  const closeDrawer = eventHandler(() => setSelected(null));
 
   return (
     <div className="p-4 w-[550px] border space-y-3 h-full overflow-y-auto">
@@ -39,7 +41,7 @@ export function TableDrawer() {
         <p
           className={cn(
             "text-sm font-medium",
-            selectedHistory.response?.error ? "text-red-500" : "text-green-600",
+            selectedHistory.response?.error ? "text-red-500" : "text-green-600"
           )}
         >
           {selectedHistory.response?.error ? "Error" : "Success"}
@@ -110,7 +112,6 @@ export function TableDrawer() {
           </TooltipTrigger>
           <TooltipContent>Go to next request</TooltipContent>
         </Tooltip>
-
         <div className="h-4 w-px bg-muted" />
         <Tooltip>
           <TooltipTrigger asChild>
@@ -118,8 +119,8 @@ export function TableDrawer() {
               size="icon"
               variant="ghost"
               className="p-1 size-max"
-              onClick={() => setSelected(null)}
-              onKeyDown={() => setSelected(null)}
+              onClick={closeDrawer}
+              onKeyDown={closeDrawer}
             >
               <XIcon className="size-4" />
             </Button>
