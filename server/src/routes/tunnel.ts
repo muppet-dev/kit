@@ -4,11 +4,14 @@ import { Hono } from "hono";
 const router = new Hono();
 
 router.get("/", async (c) => {
-  const listener = await ngrok.forward({ addr: 1972, authtoken: "" });
+  const listener = await ngrok.forward({
+    addr: 3000,
+    authtoken: process.env.NGROK_API_KEY,
+  });
 
   return c.json({
-    id: listener.id,
-    url: listener.url,
+    id: listener.id(),
+    url: listener.url(),
   });
 });
 

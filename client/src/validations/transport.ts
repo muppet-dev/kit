@@ -13,18 +13,7 @@ export const transportSchema = z.union([
           value: z.string(),
         }),
       )
-      .optional()
-      .transform((val) => {
-        if (!val) return undefined;
-
-        const env: Record<string, string> = {};
-
-        for (const { key, value } of val) {
-          env[key] = value;
-        }
-
-        return JSON.stringify(env);
-      }),
+      .optional(),
   }),
   z.object({
     transportType: z.union([

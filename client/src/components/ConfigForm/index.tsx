@@ -23,7 +23,6 @@ export type ConfigForm = {
 
 export function ConfigForm(props: ConfigForm) {
   const methods = useForm<z.output<typeof schema>>({
-    // @ts-expect-error TODO: Fix this
     resolver: zodResolver(schema),
     defaultValues: props.data ?? {
       transportType: Transport.STDIO,
@@ -36,11 +35,19 @@ export function ConfigForm(props: ConfigForm) {
     <FormProvider {...methods}>
       <form
         className="flex flex-col gap-6"
-        onSubmit={handleSubmit(
-          // @ts-expect-error TODO: Fix this
-          (values) => props.onSubmit(values),
-          console.error,
-        )}
+        onSubmit={handleSubmit((values) => {
+          const _values = values;
+
+          if (_values.transportType === Transport.STDIO && _values.env) {
+            _values.env = JSON.stringify(
+              Object.fromEntries(
+                _values.env.map((item) => [item.key, item.value]),
+              ),
+            ) as any;
+          }
+
+          props.onSubmit(_values);
+        }, console.error)}
       >
         <div className="grid grid-cols-4 w-full items-center gap-2">
           <Label htmlFor="transportType">Transport Type</Label>

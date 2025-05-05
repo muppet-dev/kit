@@ -30,18 +30,22 @@ export function STDIOFields() {
       </div>
       <div className="grid grid-cols-4 items-start gap-4">
         <Label htmlFor="env">Environmental Variables</Label>
-        <ENVField />
+        <EnvField />
       </div>
     </>
   );
 }
 
-function ENVField() {
+const defaultEnvFieldValue = {
+  key: "",
+  value: "",
+};
+
+function EnvField() {
   const { control, register } =
     useFormContext<z.infer<typeof transportSchema>>();
 
   const { fields, append, insert, move, remove } = useFieldArray({
-    // @ts-expect-error
     name: "env",
     control,
   });
@@ -89,12 +93,10 @@ function ENVField() {
             <div className="flex flex-col gap-2 w-full">
               <div className="space-y-1">
                 <Label htmlFor={`env.${index}.key`}>key</Label>
-                {/* @ts-expect-error */}
                 <Input {...register(`env.${index}.key`)} />
               </div>
               <div className="space-y-1">
                 <Label htmlFor={`env.${index}.value`}>Value</Label>
-                {/* @ts-expect-error */}
                 <Input {...register(`env.${index}.value`)} />
               </div>
             </div>
@@ -104,9 +106,10 @@ function ENVField() {
                 type="button"
                 className="h-max has-[>svg]:px-1.5 py-1.5"
                 variant="ghost"
-                onClick={() => insert(index + 1, {})}
+                onClick={() => insert(index + 1, defaultEnvFieldValue)}
                 onKeyDown={(event) => {
-                  if (event.key === "Enter") insert(index + 1, {});
+                  if (event.key === "Enter")
+                    insert(index + 1, defaultEnvFieldValue);
                 }}
               >
                 <Plus />
@@ -130,9 +133,9 @@ function ENVField() {
       <Button
         type="button"
         variant="secondary"
-        onClick={() => append({})}
+        onClick={() => append(defaultEnvFieldValue)}
         onKeyDown={(event) => {
-          if (event.key === "Enter") append({});
+          if (event.key === "Enter") append(defaultEnvFieldValue);
         }}
       >
         Add variable

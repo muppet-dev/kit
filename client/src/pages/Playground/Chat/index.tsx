@@ -10,13 +10,13 @@ export type Chat = {
 };
 
 export function Chat(props: Chat) {
-  const runtime = useChatRuntime({
-    api: "http://localhost:8787/api/chat",
-    credentials: "include",
-  });
   const { getModel } = useModels();
 
   const model = getModel(props.chatId);
+
+  const runtime = useChatRuntime({
+    api: `http://localhost:3000/api/${model?.model ?? "default"}/chat`,
+  });
 
   if (!model) {
     throw new Error(`Unable to find model with id ${props.chatId}`);
