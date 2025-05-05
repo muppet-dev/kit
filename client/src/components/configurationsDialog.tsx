@@ -26,6 +26,20 @@ export function ConfigurationsDialog({ onSubmit }: ConfigurationsDialogProps) {
     ? (JSON.parse(localStorageValue) as ConnectionInfo)
     : undefined;
 
+  const formattedData =
+    data?.transportType === Transport.STDIO
+      ? {
+          ...data,
+          env: data.env
+            ? // @ts-expect-error: formatting env data
+              Object.entries(JSON.parse(data.env)).map(([key, value]) => ({
+                key,
+                value,
+              }))
+            : undefined,
+        }
+      : data;
+
   return (
     <Dialog open={true}>
       <DialogContent>
@@ -38,7 +52,8 @@ export function ConfigurationsDialog({ onSubmit }: ConfigurationsDialogProps) {
         <ConfigForm
           footer={<FormFooter />}
           onSubmit={(values) => onSubmit(values)}
-          data={data}
+          // @ts-expect-error: formatted data
+          data={formattedData}
         />
       </DialogContent>
     </Dialog>

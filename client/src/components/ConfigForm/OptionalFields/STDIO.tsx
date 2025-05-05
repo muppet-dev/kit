@@ -1,3 +1,9 @@
+import {
+  Accordion,
+  AccordionTrigger,
+  AccordionItem,
+  AccordionContent,
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -29,10 +35,16 @@ export function STDIOFields() {
           {...register("args")}
         />
       </div>
-      <div className="grid grid-cols-4 items-start gap-4">
-        <Label htmlFor="env">Environmental Variables</Label>
-        <EnvField />
-      </div>
+      <Accordion type="single" collapsible>
+        <AccordionItem value="1" className="border-b-0">
+          <AccordionTrigger className="bg-accent py-2 px-1 hover:no-underline">
+            Environmental Variables
+          </AccordionTrigger>
+          <AccordionContent className="pb-0 max-h-[300px] h-full overflow-y-auto">
+            <EnvField />
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </>
   );
 }

@@ -39,11 +39,15 @@ export function ConfigForm(props: ConfigForm) {
           const _values = values;
 
           if (_values.transportType === Transport.STDIO && _values.env) {
-            _values.env = JSON.stringify(
-              Object.fromEntries(
-                _values.env.map((item) => [item.key, item.value]),
-              ),
-            ) as any;
+            // @ts-expect-error: converting data from array of object to string in order to store it in local storage
+            _values.env =
+              _values.env.length > 0
+                ? JSON.stringify(
+                    Object.fromEntries(
+                      _values.env.map((item) => [item.key, item.value])
+                    )
+                  )
+                : undefined;
           }
 
           props.onSubmit(_values);
