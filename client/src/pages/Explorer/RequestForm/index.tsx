@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Spinner } from "@/components/ui/spinner";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useConnection } from "@/providers";
 import {
   CallToolResultSchema,
@@ -12,10 +13,10 @@ import { FormProvider, useForm } from "react-hook-form";
 import { Tool, useTool } from "../tools";
 import { DynamicResourceFieldRender } from "./DynamicResourceFieldRender";
 import { FormRender } from "./FormRender";
+import { GenerateButton } from "./GenerateButton";
 import { JSONRender } from "./JSONRender";
 import { PromptFieldRender } from "./PromptFieldRender";
 import { ReponseRender } from "./Reponse";
-import { Spinner } from "@/components/ui/spinner";
 
 export type RequestForm = {
   cards: {
@@ -130,7 +131,7 @@ export function RequestForm({ cards, current }: RequestForm) {
             }
             className="size-full overflow-y-auto"
           >
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-2">
               <TabsList>
                 <TabsTrigger
                   value="form"
@@ -154,6 +155,9 @@ export function RequestForm({ cards, current }: RequestForm) {
                 </TabsTrigger>
               </TabsList>
               <div className="flex-1" />
+              {activeTool.name === Tool.TOOLS && (
+                <GenerateButton selected={selectedCard} />
+              )}
               <Button
                 type="submit"
                 disabled={isSubmitting}
