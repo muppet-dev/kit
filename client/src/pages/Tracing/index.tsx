@@ -67,7 +67,10 @@ function CopyUrl(props: { url: string }) {
       ) : (
         <Input readOnly value={props.url} className="max-w-[300px] h-max" />
       )}
-      <CopyButton data={props.url} tooltipContent="Copy URL" />
+      <CopyButton
+        data={isLoading ? undefined : props.url}
+        tooltipContent="Copy URL"
+      />
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
@@ -75,6 +78,7 @@ function CopyUrl(props: { url: string }) {
             aria-label="copy"
             variant="ghost"
             className="size-max has-[>svg]:px-1.5 py-1.5"
+            disabled={isLoading}
             onClick={handleRefetch}
             onKeyDown={handleRefetch}
           >
