@@ -88,7 +88,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
       ...prev,
       {
         timestamp: {
-          start: new Date(),
+          start: Date.now(),
           latency: performance.now() - timestamp,
         },
         request: JSON.stringify(request),
