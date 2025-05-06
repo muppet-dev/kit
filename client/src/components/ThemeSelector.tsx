@@ -1,4 +1,3 @@
-import { eventHandler } from "@/lib/eventHandler";
 import { type Theme, useTheme } from "@/providers";
 import { MoonIcon, SunIcon, TvIcon } from "lucide-react";
 import { cn } from "../lib/utils";
@@ -23,8 +22,6 @@ export function ThemeSelector() {
   const { state } = useSidebar();
 
   const ThemeTriggerIcon = THEMES[theme as keyof typeof THEMES];
-
-  const handleChangeTheme = (name: Theme) => eventHandler(() => setTheme(name));
 
   return (
     <DropdownMenu>
@@ -56,8 +53,8 @@ export function ThemeSelector() {
                 isSelected && "bg-secondary focus:bg-secondary",
                 "capitalize group"
               )}
-              onClick={handleChangeTheme(name as Theme)}
-              onKeyDown={handleChangeTheme(name as Theme)}
+              onClick={() => setTheme(name as Theme)}
+              onKeyDown={() => setTheme(name as Theme)}
             >
               <Icon
                 className={cn(
