@@ -129,6 +129,7 @@ export function RequestForm({ cards, current }: RequestForm) {
             (values) => mutation.mutate(values),
             console.error
           )}
+          className="h-full flex"
         >
           <Tabs
             defaultValue={
