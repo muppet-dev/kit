@@ -36,7 +36,7 @@ export function Explorer() {
   const { makeRequest, mcpClient } = useConnection();
 
   const { data: cards = [], isLoading } = useQuery<CardType[]>({
-    queryKey: ["cards", activeTool.name],
+    queryKey: ["explorer", activeTool.name],
     queryFn: async (): Promise<CardType[]> => {
       let handler: Promise<typeof cards> | undefined;
 
@@ -44,14 +44,14 @@ export function Explorer() {
         case Tool.TOOLS:
           handler = makeRequest(
             { method: "tools/list" },
-            ListToolsResultSchema
+            ListToolsResultSchema,
           ).then(({ tools }) =>
             tools.map((tool) => ({
               name: tool.name,
               description: tool.description,
               schema: tool.inputSchema
                 .properties as RequestForm["cards"][0]["schema"],
-            }))
+            })),
           );
           break;
         case Tool.PROMPTS:
@@ -59,13 +59,13 @@ export function Explorer() {
             {
               method: "prompts/list",
             },
-            ListPromptsResultSchema
+            ListPromptsResultSchema,
           ).then(({ prompts }) =>
             prompts.map((prompt) => ({
               name: prompt.name,
               description: prompt.description,
               schema: prompt.arguments as RequestForm["cards"][0]["schema"],
-            }))
+            })),
           );
           break;
         case Tool.STATIC_RESOURCES:
@@ -73,7 +73,7 @@ export function Explorer() {
             {
               method: "resources/list",
             },
-            ListResourcesResultSchema
+            ListResourcesResultSchema,
           ).then(({ resources }) => resources);
           break;
         case Tool.DYNAMIC_RESOURCES:
@@ -81,7 +81,7 @@ export function Explorer() {
             {
               method: "resources/templates/list",
             },
-            ListResourceTemplatesResultSchema
+            ListResourceTemplatesResultSchema,
           ).then(({ resourceTemplates }) => resourceTemplates);
           break;
       }
@@ -102,7 +102,7 @@ export function Explorer() {
         keys: ["name"],
         includeMatches: true,
       }),
-    [cards]
+    [cards],
   );
 
   let searchResults: CardType[] | undefined = cards;
@@ -119,7 +119,7 @@ export function Explorer() {
 
         return prev;
       },
-      []
+      [],
     );
   }
 
@@ -154,7 +154,7 @@ export function Explorer() {
                 card.name === current
                   ? "bg-white dark:bg-background"
                   : "bg-transparent hover:bg-white dark:hover:bg-background transition-all ease-in-out",
-                "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max"
+                "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max",
               )}
               onClick={handleSelectItem(card.name)}
               onKeyDown={handleSelectItem(card.name)}
