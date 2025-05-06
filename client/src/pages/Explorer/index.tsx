@@ -6,14 +6,12 @@ import { Tabs } from "./Tabs";
 export default function ExplorerPage() {
   return (
     <ToolProvider>
-      <SidebarInset>
+      <SidebarInset className="w-full h-full overflow-hidden flex flex-col">
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
           <Tabs />
         </header>
-        <div className="flex h-full w-full flex-col gap-4 p-4 pt-0">
-          <div className="min-h-[100vh] h-full w-full bg-muted/50 md:min-h-min flex">
-            <Explorer />
-          </div>
+        <div className="flex-1 overflow-y-auto flex h-full w-full flex-col gap-4 p-4 pt-0">
+          <Explorer />
         </div>
       </SidebarInset>
     </ToolProvider>

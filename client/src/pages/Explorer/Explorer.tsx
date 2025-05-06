@@ -135,7 +135,7 @@ export function Explorer() {
     );
 
   return (
-    <div className="size-full grid grid-cols-1 lg:grid-cols-2 overflow-y-auto">
+    <div className="size-full grid grid-cols-1 lg:grid-cols-2 overflow-y-auto bg-muted/40">
       <div className="overflow-y-auto w-full">
         {cards.length >= 5 && (
           <Input
