@@ -16,6 +16,7 @@ import {
   ListResourcesResultSchema,
   ListToolsResultSchema,
 } from "@modelcontextprotocol/sdk/types.js";
+import { useQuery } from "@tanstack/react-query";
 import Fuse, { type RangeTuple } from "fuse.js";
 import { useEffect, useMemo, useState } from "react";
 import { cn } from "../../lib/utils";
@@ -29,72 +30,66 @@ interface CardType extends Cards {
 }
 
 export function Explorer() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [cards, setCards] = useState<CardType[]>([]);
   const [current, setCurrent] = useState<string>();
   const [search, setSearch] = useState<string>("");
-
   const { activeTool } = useTool();
   const { makeRequest, mcpClient } = useConnection();
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  useEffect(() => {
-    if (!mcpClient) return;
+  const { data: cards = [], isLoading } = useQuery<CardType[]>({
+    queryKey: ["cards", activeTool.name],
+    queryFn: async (): Promise<CardType[]> => {
+      let handler: Promise<typeof cards> | undefined;
 
-    let handler: Promise<typeof cards> | undefined;
+      switch (activeTool.name) {
+        case Tool.TOOLS:
+          handler = makeRequest(
+            { method: "tools/list" },
+            ListToolsResultSchema
+          ).then(({ tools }) =>
+            tools.map((tool) => ({
+              name: tool.name,
+              description: tool.description,
+              schema: tool.inputSchema
+                .properties as RequestForm["cards"][0]["schema"],
+            }))
+          );
+          break;
+        case Tool.PROMPTS:
+          handler = makeRequest(
+            {
+              method: "prompts/list",
+            },
+            ListPromptsResultSchema
+          ).then(({ prompts }) =>
+            prompts.map((prompt) => ({
+              name: prompt.name,
+              description: prompt.description,
+              schema: prompt.arguments as RequestForm["cards"][0]["schema"],
+            }))
+          );
+          break;
+        case Tool.STATIC_RESOURCES:
+          handler = makeRequest(
+            {
+              method: "resources/list",
+            },
+            ListResourcesResultSchema
+          ).then(({ resources }) => resources);
+          break;
+        case Tool.DYNAMIC_RESOURCES:
+          handler = makeRequest(
+            {
+              method: "resources/templates/list",
+            },
+            ListResourceTemplatesResultSchema
+          ).then(({ resourceTemplates }) => resourceTemplates);
+          break;
+      }
 
-    setIsLoading(true);
-    switch (activeTool.name) {
-      case Tool.TOOLS:
-        handler = makeRequest(
-          { method: "tools/list" },
-          ListToolsResultSchema
-        ).then(({ tools }) =>
-          tools.map((tool) => ({
-            name: tool.name,
-            description: tool.description,
-            schema: tool.inputSchema
-              .properties as RequestForm["cards"][0]["schema"],
-          }))
-        );
-        break;
-      case Tool.PROMPTS:
-        handler = makeRequest(
-          {
-            method: "prompts/list",
-          },
-          ListPromptsResultSchema
-        ).then(({ prompts }) =>
-          prompts.map((prompt) => ({
-            name: prompt.name,
-            description: prompt.description,
-            schema: prompt.arguments as RequestForm["cards"][0]["schema"],
-          }))
-        );
-        break;
-      case Tool.STATIC_RESOURCES:
-        handler = makeRequest(
-          {
-            method: "resources/list",
-          },
-          ListResourcesResultSchema
-        ).then(({ resources }) => resources);
-        break;
-      case Tool.DYNAMIC_RESOURCES:
-        handler = makeRequest(
-          {
-            method: "resources/templates/list",
-          },
-          ListResourceTemplatesResultSchema
-        ).then(({ resourceTemplates }) => resourceTemplates);
-        break;
-    }
-
-    handler?.then((data) => {
-      setCards(data);
-      setIsLoading(false);
-    });
-  }, [activeTool, mcpClient]);
+      return await handler;
+    },
+    enabled: !!mcpClient,
+  });
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {

@@ -7,13 +7,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { PencilIcon } from "lucide-react";
-import { useState } from "react";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { PencilIcon } from "lucide-react";
+import { useState } from "react";
 import { UpdateRequestForm } from "./Form";
 
 export type EditRequestDialog = Pick<UpdateRequestForm, "request">;
@@ -37,7 +37,9 @@ export function EditRequestDialog({ request }: EditRequestDialog) {
       </Tooltip>
       <DialogContent className="!max-w-2xl">
         <DialogHeader className="gap-0">
-          <DialogTitle>Update & Send Request</DialogTitle>
+          <DialogTitle className="flex items-center gap-2">
+            <PencilIcon className="size-[18px]" /> Send Request
+          </DialogTitle>
           <DialogDescription className="hidden" />
         </DialogHeader>
         <UpdateRequestForm

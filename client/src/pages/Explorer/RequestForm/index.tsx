@@ -7,9 +7,10 @@ import {
   GetPromptResultSchema,
   ReadResourceResultSchema,
 } from "@modelcontextprotocol/sdk/types.js";
+import { useMutation } from "@tanstack/react-query";
 import { SendHorizonal } from "lucide-react";
-import { useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { type FieldValues, FormProvider, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { Tool, useTool } from "../tools";
 import { DynamicResourceFieldRender } from "./DynamicResourceFieldRender";
 import { FormRender } from "./FormRender";
@@ -35,11 +36,6 @@ export function RequestForm({ cards, current }: RequestForm) {
   const { activeTool } = useTool();
   const { makeRequest } = useConnection();
 
-  const [response, setResponse] = useState<{
-    duration: number;
-    content: unknown;
-  }>();
-
   const methods = useForm();
 
   const {
@@ -49,82 +45,90 @@ export function RequestForm({ cards, current }: RequestForm) {
 
   const selectedCard = cards.find((card) => card.name === current);
 
+  const mutation = useMutation({
+    mutationFn: async (values: FieldValues) => {
+      let handler: Promise<unknown> | undefined;
+
+      switch (activeTool.name) {
+        case Tool.TOOLS:
+          handler = makeRequest(
+            {
+              method: "tools/call",
+              params: {
+                name: current,
+                arguments: values,
+              },
+            },
+            CallToolResultSchema
+          );
+          break;
+        case Tool.PROMPTS:
+          handler = makeRequest(
+            {
+              method: "prompts/get",
+              params: {
+                name: current,
+                arguments: values,
+              },
+            },
+            GetPromptResultSchema
+          );
+          break;
+        case Tool.STATIC_RESOURCES:
+          handler = makeRequest(
+            {
+              method: "resources/read",
+              params: {
+                uri: selectedCard?.uri as string,
+              },
+            },
+            ReadResourceResultSchema
+          );
+          break;
+        case Tool.DYNAMIC_RESOURCES:
+          handler = makeRequest(
+            {
+              method: "resources/read",
+              params: {
+                uri: fillTemplate(selectedCard?.uriTemplate as string, values),
+              },
+            },
+            ReadResourceResultSchema
+          );
+          break;
+        default:
+          throw new Error(`Invalid active tool - ${activeTool.name}`);
+      }
+
+      if (!handler) {
+        throw new Error("MCP client is not available");
+      }
+
+      const startTime = performance.now();
+      const result = await handler;
+      return {
+        duration: performance.now() - startTime,
+        content: result,
+      };
+    },
+    onSuccess: () => {
+      toast.success("Request completed successfully!");
+    },
+    onError: (error) => {
+      console.error("Request failed:", error);
+
+      toast.error(error.message);
+    },
+  });
+
   return (
     <>
       <FormProvider {...methods}>
         <form
-          onSubmit={handleSubmit(async (values) => {
-            let handler: Promise<unknown> | undefined;
-
-            switch (activeTool.name) {
-              case Tool.TOOLS:
-                handler = makeRequest(
-                  {
-                    method: "tools/call",
-                    params: {
-                      name: current,
-                      arguments: values,
-                    },
-                  },
-                  CallToolResultSchema
-                );
-                break;
-              case Tool.PROMPTS:
-                handler = makeRequest(
-                  {
-                    method: "prompts/get",
-                    params: {
-                      name: current,
-                      arguments: values,
-                    },
-                  },
-                  GetPromptResultSchema
-                );
-                break;
-              case Tool.STATIC_RESOURCES:
-                handler = makeRequest(
-                  {
-                    method: "resources/read",
-                    params: {
-                      uri: selectedCard?.uri as string,
-                    },
-                  },
-                  ReadResourceResultSchema
-                );
-                break;
-              case Tool.DYNAMIC_RESOURCES:
-                handler = makeRequest(
-                  {
-                    method: "resources/read",
-                    params: {
-                      uri: fillTemplate(
-                        selectedCard?.uriTemplate as string,
-                        values
-                      ),
-                    },
-                  },
-                  ReadResourceResultSchema
-                );
-                break;
-              default:
-                throw new Error(`Invalid active tool - ${activeTool.name}`);
-            }
-
-            if (!handler) {
-              throw new Error("MCP client is not available");
-            }
-
-            const startTime = performance.now();
-            await handler
-              .then((res) =>
-                setResponse({
-                  duration: performance.now() - startTime,
-                  content: res,
-                })
-              )
-              .catch((err) => console.error(err));
-          }, console.error)}
-          className="size-full overflow-y-auto"
+          onSubmit={handleSubmit(
+            (values) => mutation.mutate(values),
+            console.error
+          )}
         >
           <Tabs
             defaultValue={
@@ -205,7 +209,7 @@ export function RequestForm({ cards, current }: RequestForm) {
           </Tabs>
         </form>
       </FormProvider>
-      <ReponseRender data={response} />
+      <ReponseRender data={mutation.data} />
     </>
   );
 }

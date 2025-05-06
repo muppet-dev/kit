@@ -13,7 +13,7 @@ import {
   type Request,
 } from "@modelcontextprotocol/sdk/types.js";
 import { Editor as MonacoEditor, type OnMount } from "@monaco-editor/react";
-import { AlignLeft } from "lucide-react";
+import { AlignLeft, SendHorizontalIcon } from "lucide-react";
 import { useState } from "react";
 
 export type UpdateRequestForm = {
@@ -100,7 +100,8 @@ export function UpdateRequestForm({ request, closeDialog }: UpdateRequestForm) {
         onClick={handleUpdateRequest}
         onKeyDown={handleUpdateRequest}
       >
-        Update and send request
+        Send
+        <SendHorizontalIcon className="size-3.5" />
       </Button>
     </>
   );

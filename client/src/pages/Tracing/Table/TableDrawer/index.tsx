@@ -20,9 +20,20 @@ const EDIT_METHODS = [
   "completion/complete",
 ];
 
-export function TableDrawer() {
+export type TableDrawer = {
+  traces: {
+    request: any;
+    response: any;
+    timestamp: {
+      start: number;
+      latency: number;
+    };
+  }[];
+};
+
+export function TableDrawer({ traces }: TableDrawer) {
   const { makeRequest } = useConnection();
-  const { traces, selected, setSelected } = useTracing();
+  const { selected, setSelected } = useTracing();
 
   const selectedHistory = selected != null ? traces[selected] : null;
 
