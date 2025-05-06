@@ -64,6 +64,8 @@ function useTracingManager() {
 
     return results.map((item) => ({
       timestamp: item.timestamp,
+      sRequest: item.request,
+      sResponse: item.response,
       request: JSON.parse(item.request),
       response: item.response ? JSON.parse(item.response) : undefined,
     }));

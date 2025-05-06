@@ -30,22 +30,11 @@ export function TracingTable() {
   const parsedTraces = useMemo(() => {
     if (!search.trim()) return traces;
 
-    const formatted = traces.map((trace) => ({
-      ...trace,
-      request: JSON.stringify(trace.request, null, 2),
-      response: JSON.stringify(trace.response, null, 2),
-    }));
-
-    const fuse = new Fuse(formatted, {
-      keys: ["request", "response"],
-      includeMatches: true,
+    const fuse = new Fuse(traces, {
+      keys: ["sRequest", "sResponse"],
     });
 
-    return fuse.search(search).map(({ item }) => ({
-      ...item,
-      request: JSON.parse(item.request),
-      response: JSON.parse(item.response),
-    }));
+    return fuse.search(search).map(({ item }) => item);
   }, [search, traces]);
 
   return (
@@ -90,6 +79,7 @@ export function TracingTable() {
               {parsedTraces.length > 0 ? (
                 parsedTraces.map((trace, index) => {
                   const isError = Boolean(trace.response?.error);
+
                   const requestWasSentOn = trace.timestamp.start;
                   const monthWithDay = dayjs(requestWasSentOn).format("MMM DD");
                   const time = dayjs(requestWasSentOn).format("hh:mm:ss");
@@ -100,7 +90,7 @@ export function TracingTable() {
                       key={`row.${index + 1}`}
                       className={cn(
                         "cursor-pointer divide-x",
-                        selected === index && "bg-muted/50"
+                        selected === index && "bg-muted/50",
                       )}
                       onClick={handleSelectData(index)}
                       onKeyDown={handleSelectData(index)}
@@ -127,13 +117,13 @@ export function TracingTable() {
                         {trace.timestamp.latency > 1000
                           ? `${numberFormatter(
                               Number(
-                                (trace.timestamp.latency / 1000).toFixed(2)
+                                (trace.timestamp.latency / 1000).toFixed(2),
                               ),
-                              "decimal"
+                              "decimal",
                             )} s`
                           : `${numberFormatter(
                               trace.timestamp.latency,
-                              "decimal"
+                              "decimal",
                             )} ms`}
                       </TableCell>
                       <TableCell>{trace.request.method}</TableCell>
