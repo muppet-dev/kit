@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { cn, numberFormatter } from "../../../../lib/utils";
 import {
   ActionBarPrimitive,
   BranchPickerPrimitive,
@@ -21,7 +20,7 @@ import {
   SquareArrowOutUpRight,
 } from "lucide-react";
 import { type FC, useEffect } from "react";
-import { Link } from "react-router";
+import { cn, numberFormatter } from "../../../../lib/utils";
 import { useModels } from "../../providers";
 import { type ModelConfig, PROVIDER_ICONS } from "../../supportedModels";
 import { MarkdownText } from "./MarkdownText";
@@ -122,7 +121,7 @@ const ThreadWelcome = (props: ThreadWelcome) => {
               <div className="flex-1 text-muted-foreground">
                 {numberFormatter(
                   props.selectedModel.metadata.context,
-                  "decimal",
+                  "decimal"
                 )}{" "}
                 tokens
               </div>
@@ -132,7 +131,7 @@ const ThreadWelcome = (props: ThreadWelcome) => {
               <div className="flex-1 text-muted-foreground">
                 {numberFormatter(
                   props.selectedModel.metadata.input_pricing,
-                  "currency",
+                  "currency"
                 )}{" "}
                 / million tokens
               </div>
@@ -142,7 +141,7 @@ const ThreadWelcome = (props: ThreadWelcome) => {
               <div className="flex-1 text-muted-foreground">
                 {numberFormatter(
                   props.selectedModel.metadata.output_pricing,
-                  "currency",
+                  "currency"
                 )}{" "}
                 / million tokens
               </div>
@@ -151,34 +150,34 @@ const ThreadWelcome = (props: ThreadWelcome) => {
           <div className="px-6 py-5 text-xs font-medium border-t rounded-b-lg bg-zinc-100/75 dark:bg-zinc-900/75">
             <div className="flex items-center justify-between">
               <div className="flex items-center justify-between space-x-4">
-                <Link
-                  to={props.selectedModel.metadata.links.model}
+                <a
+                  href={props.selectedModel.metadata.links.model}
                   target="_blank"
-                  rel="noopener"
+                  rel="noreferrer noopener"
                   className="inline-flex items-center text-muted-foreground hover:text-foreground transition-all ease-in-out duration-300"
                 >
                   <span>Model Page</span>
                   <SquareArrowOutUpRight className="size-3 ml-1 stroke-[2.5]" />
-                </Link>
-                <Link
-                  to={props.selectedModel.metadata.links.pricing}
+                </a>
+                <a
+                  href={props.selectedModel.metadata.links.pricing}
                   target="_blank"
-                  rel="noopener"
+                  rel="noreferrer noopener"
                   className="inline-flex items-center text-muted-foreground hover:text-foreground transition-all ease-in-out duration-300"
                 >
                   <span>Pricing</span>
                   <SquareArrowOutUpRight className="size-3 ml-1 stroke-[2.5]" />
-                </Link>
+                </a>
               </div>
-              <Link
-                to={props.selectedModel.metadata.links.website}
+              <a
+                href={props.selectedModel.metadata.links.website}
                 target="_blank"
-                rel="noopener"
+                rel="noreferrer noopener"
                 className="inline-flex items-center text-muted-foreground hover:text-foreground transition-all ease-in-out duration-300"
               >
                 <span>Website</span>
                 <SquareArrowOutUpRight className="size-3 ml-1 stroke-[2.5]" />
-              </Link>
+              </a>
             </div>
           </div>
         </div>
