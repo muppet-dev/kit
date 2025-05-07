@@ -126,7 +126,7 @@ export function RequestForm({ cards, current }: RequestForm) {
       <FormProvider {...methods}>
         <form
           onSubmit={handleSubmit(
-            (values) => mutation.mutate(values),
+            async (values) => await mutation.mutateAsync(values),
             console.error
           )}
           className="h-full flex"

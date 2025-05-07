@@ -9,12 +9,15 @@ import {
 import { eventHandler } from "@/lib/eventHandler";
 import { useConnection, useTheme } from "@/providers";
 import {
+  type ClientRequest,
   EmptyResultSchema,
   type Request,
 } from "@modelcontextprotocol/sdk/types.js";
 import { Editor as MonacoEditor, type OnMount } from "@monaco-editor/react";
+import { useMutation } from "@tanstack/react-query";
 import { AlignLeft, SendHorizontalIcon } from "lucide-react";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export type UpdateRequestForm = {
   request: Request;
@@ -37,16 +40,26 @@ export function UpdateRequestForm({ request, closeDialog }: UpdateRequestForm) {
       editorInstance.getAction("editor.action.formatDocument")?.run();
   });
 
-  const handleUpdateRequest = eventHandler(async () => {
-    await makeRequest(
-      {
-        method: request.method as never,
-        params: JSON.parse(value),
-      },
-      EmptyResultSchema.passthrough()
-    );
+  const mutation = useMutation({
+    mutationFn: async (values: ClientRequest) =>
+      await makeRequest(values, EmptyResultSchema.passthrough()),
+    onSuccess: () => {
+      toast.success("Request updated successfully!");
 
-    closeDialog();
+      closeDialog();
+    },
+    onError: (err) => {
+      console.error(err);
+
+      toast.error(err.message);
+    },
+  });
+
+  const handleUpdateRequest = eventHandler(async () => {
+    await mutation.mutateAsync({
+      method: request.method as ClientRequest["method"],
+      params: JSON.parse(value),
+    });
   });
 
   return (
@@ -99,6 +112,7 @@ export function UpdateRequestForm({ request, closeDialog }: UpdateRequestForm) {
         className="w-max ml-auto"
         onClick={handleUpdateRequest}
         onKeyDown={handleUpdateRequest}
+        disabled={mutation.isPending}
       >
         Send
         <SendHorizontalIcon className="size-3.5" />
