@@ -11,7 +11,7 @@ import { useConnection } from "@/providers";
 import { EmptyResultSchema } from "@modelcontextprotocol/sdk/types.js";
 import { ChevronDown, ChevronUp, RefreshCcw, XIcon } from "lucide-react";
 import { useTracing } from "../../providers";
-import { EditRequestDialog } from "./EditRequestDialog";
+import { UpdateRequestDialog } from "./UpdateRequestDialog";
 
 const EDIT_METHODS = [
   "tools/call",
@@ -147,7 +147,7 @@ export function TableDrawer({ traces }: TableDrawer) {
             <TooltipContent>Resend current request</TooltipContent>
           </Tooltip>
           {EDIT_METHODS.includes(selectedHistory.request.method) && (
-            <EditRequestDialog request={selectedHistory.request} />
+            <UpdateRequestDialog request={selectedHistory.request} />
           )}
         </div>
       )}

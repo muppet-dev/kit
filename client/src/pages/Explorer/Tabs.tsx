@@ -20,7 +20,9 @@ export function Tabs() {
 
   const queryKey = ["explorer", activeTool.name];
 
-  const onRefetch = eventHandler(() =>
+  const queryState = queryClient.getQueryState(queryKey);
+
+  const handleRefresh = eventHandler(() =>
     queryClient.refetchQueries({ queryKey })
   );
 
@@ -46,16 +48,15 @@ export function Tabs() {
           <TooltipTrigger asChild>
             <Button
               variant="ghost"
-              className="size-max has-[>svg]:px-1.5 py-1.5"
-              onClick={onRefetch}
-              onKeyDown={onRefetch}
+              className="size-max has-[>svg]:px-1.5 py-1.5 mr-1"
+              onClick={handleRefresh}
+              onKeyDown={handleRefresh}
+              disabled={queryState?.status !== "success"}
             >
               <RefreshCcwIcon className="size-4 stroke-2" />
             </Button>
           </TooltipTrigger>
-          <TooltipContent>
-            Refresh the current {activeTool.name} data
-          </TooltipContent>
+          <TooltipContent>Refresh {activeTool.name}</TooltipContent>
         </Tooltip>
       </TabsList>
     </TabsPrimitive>
