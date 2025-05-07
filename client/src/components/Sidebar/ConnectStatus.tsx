@@ -2,7 +2,7 @@ import { eventHandler } from "@/lib/eventHandler";
 import { useConnection } from "@/providers";
 import { ConnectionStatus } from "@/providers/connection/manager";
 import { RotateCcw, Unplug } from "lucide-react";
-import { cn } from "../../lib/utils";
+import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { useSidebar } from "../ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";

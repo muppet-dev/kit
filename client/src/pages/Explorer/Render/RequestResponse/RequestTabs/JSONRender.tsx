@@ -32,7 +32,7 @@ export function JSONRender() {
   const value = formData ? JSON.stringify(formData, null, 2) : undefined;
 
   return (
-    <div className="border w-full relative h-[400px] border-secondary-200 dark:border-secondary-800 overflow-hidden">
+    <div className="border w-full relative h-full border-secondary-200 dark:border-secondary-800 overflow-hidden">
       <MonacoEditor
         language="json"
         onMount={handleEditorMount}

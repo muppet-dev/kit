@@ -9,7 +9,7 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { cn } from "../../lib/utils";
+import { cn } from "@/lib/utils";
 import { Frame, PieChart, Settings2, SquareTerminal } from "lucide-react";
 import { Link } from "react-router";
 import { ThemeSelector } from "../ThemeSelector";

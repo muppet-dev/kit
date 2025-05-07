@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { eventHandler } from "@/lib/eventHandler";
 import { SparklesIcon } from "lucide-react";
-import type { RequestForm } from ".";
+import type { ToolRender } from "./ToolRender";
 
 export type GenerateButton = {
-  selected?: RequestForm["cards"][0];
+  selected: ToolRender["selectedCard"];
 };
 
 export function GenerateButton({ selected }: GenerateButton) {

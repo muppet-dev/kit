@@ -1,7 +1,7 @@
 "use client";
 
 import "@assistant-ui/react-markdown/styles/dot.css";
-import { cn } from "../../../../lib/utils";
+import { cn } from "@/lib/utils";
 import {
   type CodeHeaderProps,
   MarkdownTextPrimitive,

@@ -13,7 +13,7 @@ import { ChevronDown, ChevronUp, RefreshCcw, XIcon } from "lucide-react";
 import { useTracing } from "../../providers";
 import { UpdateRequestDialog } from "./UpdateRequestDialog";
 
-const EDIT_METHODS = [
+const UPDATABLE_METHODS = [
   "tools/call",
   "resources/read",
   "prompts/get",
@@ -22,7 +22,9 @@ const EDIT_METHODS = [
 
 export type TableDrawer = {
   traces: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     request: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     response: any;
     timestamp: {
       start: number;
@@ -146,7 +148,7 @@ export function TableDrawer({ traces }: TableDrawer) {
             </TooltipTrigger>
             <TooltipContent>Resend current request</TooltipContent>
           </Tooltip>
-          {EDIT_METHODS.includes(selectedHistory.request.method) && (
+          {UPDATABLE_METHODS.includes(selectedHistory.request.method) && (
             <UpdateRequestDialog request={selectedHistory.request} />
           )}
         </div>

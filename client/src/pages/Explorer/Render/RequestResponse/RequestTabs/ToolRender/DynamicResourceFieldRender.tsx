@@ -1,4 +1,4 @@
-import { Combobox } from "@/components/ui/commbobox";
+import { Combobox } from "@/components/ui/combobox";
 import { Label } from "@/components/ui/label";
 import { useCompletionState } from "@/hooks/use-completion-state";
 import { useConnection } from "@/providers";
@@ -32,7 +32,7 @@ export function DynamicResourceFieldRender({
           uri: uriTemplate,
         },
         key,
-        value,
+        value
       );
     }
   };

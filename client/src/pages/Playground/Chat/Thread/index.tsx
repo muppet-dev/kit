@@ -20,7 +20,7 @@ import {
   SquareArrowOutUpRight,
 } from "lucide-react";
 import { type FC, useEffect } from "react";
-import { cn, numberFormatter } from "../../../../lib/utils";
+import { cn, numberFormatter } from "@/lib/utils";
 import { useModels } from "../../providers";
 import { type ModelConfig, PROVIDER_ICONS } from "../../supportedModels";
 import { MarkdownText } from "./MarkdownText";

@@ -12,9 +12,9 @@ import {
 import { eventHandler } from "@/lib/eventHandler";
 import { useQueryClient } from "@tanstack/react-query";
 import { RefreshCcwIcon } from "lucide-react";
-import { useTool } from "./tools";
+import { useTool } from "../providers";
 
-export function Tabs() {
+export function ToolsTabs() {
   const { tools, activeTool, changeTool } = useTool();
   const queryClient = useQueryClient();
 

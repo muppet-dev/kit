@@ -1,5 +1,5 @@
 import { Label } from "@/components/ui/label";
-import { cn } from "../../../../../lib/utils";
+import { cn } from "@/lib/utils";
 import { ErrorMessage } from "@hookform/error-message";
 import { useBlueprint, useDuckForm, useField } from "duck-form";
 import { type PropsWithChildren, useEffect, useId, useMemo } from "react";
@@ -20,7 +20,7 @@ export function FieldWrapper({ children }: FieldWrapper) {
   const autoId = useId();
   const customId = useMemo(
     () => generateId?.(schema, props),
-    [generateId, schema, props],
+    [generateId, schema, props]
   );
 
   const { required, label, onChange, type } = props;
@@ -36,7 +36,7 @@ export function FieldWrapper({ children }: FieldWrapper) {
       <div
         className={cn(
           "flex flex-col gap-1",
-          type === "boolean" && "flex-row-reverse w-max gap-2 items-center",
+          type === "boolean" && "flex-row-reverse w-max gap-2 items-center"
         )}
       >
         {label && (
@@ -45,7 +45,7 @@ export function FieldWrapper({ children }: FieldWrapper) {
             className={cn(
               required &&
                 "after:ml-0.5 after:text-red-500 after:content-['*'] after:dark:text-red-400",
-              "leading-snug capitalize",
+              "leading-snug capitalize"
             )}
           >
             {label}

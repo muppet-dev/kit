@@ -5,7 +5,7 @@ import {
   sidebarMenuButtonVariants,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { cn } from "../../lib/utils";
+import { cn } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
 import { NavLink } from "react-router";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
@@ -46,7 +46,7 @@ export function SidebarItem({ items }: SidebarItem) {
                   cn(
                     sidebarMenuButtonVariants(),
                     isActive &&
-                      "bg-primary hover:bg-primary text-primary-foreground hover:text-primary-foreground",
+                      "bg-primary hover:bg-primary text-primary-foreground hover:text-primary-foreground"
                   )
                 }
               >

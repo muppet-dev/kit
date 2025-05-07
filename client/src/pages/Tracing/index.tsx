@@ -67,10 +67,7 @@ function CopyUrl(props: { url: string }) {
       ) : (
         <Input readOnly value={props.url} className="max-w-[300px] h-max" />
       )}
-      <CopyButton
-        data={isLoading ? undefined : props.url}
-        tooltipContent="Copy URL"
-      />
+      {!isLoading && <CopyButton data={props.url} tooltipContent="Copy URL" />}
       <Tooltip>
         <TooltipTrigger asChild>
           <Button

@@ -9,6 +9,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { eventHandler } from "@/lib/eventHandler";
+import { cn } from "@/lib/utils";
 import { useConnection } from "@/providers";
 import {
   ListPromptsResultSchema,
@@ -19,26 +20,26 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import Fuse, { type RangeTuple } from "fuse.js";
 import { useEffect, useMemo, useState } from "react";
-import { cn } from "../../lib/utils";
-import { RequestForm } from "./RequestForm";
-import { DEFAULT_TOOLS, Tool, useTool } from "./tools";
-import { Tabs } from "./Tabs";
+import { DEFAULT_TOOLS, Tool, useTool } from "../providers";
+import { RequestResponseRender } from "./RequestResponse";
+import { ToolsTabs } from "./Tabs";
+import { CircleX } from "lucide-react";
 
-type Cards = RequestForm["cards"][0];
+type Cards = RequestResponseRender["cards"][0];
 
 interface CardType extends Cards {
   matches?: RangeTuple[];
 }
 
-export function Explorer() {
+export function ExplorerRender() {
   const [current, setCurrent] = useState<string>();
   const [search, setSearch] = useState<string>("");
   const { activeTool } = useTool();
   const { makeRequest, mcpClient } = useConnection();
 
-  const { data: cards = [], isLoading } = useQuery<CardType[]>({
+  const { data: cards, isLoading } = useQuery({
     queryKey: ["explorer", activeTool.name],
-    queryFn: async (): Promise<CardType[]> => {
+    queryFn: async (): Promise<CardType[] | undefined> => {
       let handler: Promise<typeof cards> | undefined;
 
       switch (activeTool.name) {
@@ -51,7 +52,7 @@ export function Explorer() {
               name: tool.name,
               description: tool.description,
               schema: tool.inputSchema
-                .properties as RequestForm["cards"][0]["schema"],
+                .properties as RequestResponseRender["cards"][0]["schema"],
             }))
           );
           break;
@@ -65,7 +66,8 @@ export function Explorer() {
             prompts.map((prompt) => ({
               name: prompt.name,
               description: prompt.description,
-              schema: prompt.arguments as RequestForm["cards"][0]["schema"],
+              schema:
+                prompt.arguments as RequestResponseRender["cards"][0]["schema"],
             }))
           );
           break;
@@ -106,6 +108,22 @@ export function Explorer() {
     [cards]
   );
 
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center gap-1.5 size-full select-none text-muted-foreground">
+        <Spinner className="size-5 min-w-5 min-h-5" />
+        <p className="text-sm">Loading...</p>
+      </div>
+    );
+
+  if (!cards || cards.length === 0)
+    return (
+      <div className="flex items-center justify-center gap-1.5 size-full select-none text-muted-foreground">
+        <CircleX className="size-5 min-w-5 min-h-5" />
+        <p className="text-sm">No data found</p>
+      </div>
+    );
+
   let searchResults: CardType[] | undefined = cards;
 
   if (search) {
@@ -127,27 +145,23 @@ export function Explorer() {
   const handleSelectItem = (name: string) =>
     eventHandler(() => setCurrent(name));
 
-  if (isLoading)
-    return (
-      <div className="flex items-center justify-center gap-1.5 size-full select-none text-muted-foreground">
-        <Spinner className="size-5 min-w-5 min-h-5" />
-        <p className="text-sm">Loading...</p>
-      </div>
-    );
+  const activeToolName =
+    DEFAULT_TOOLS.find((tool) => tool.name === activeTool.name)?.label ??
+    activeTool.name;
 
   return (
     <div className="size-full grid grid-cols-1 lg:grid-cols-2 overflow-y-auto bg-muted/40">
       <div className="overflow-y-auto flex flex-col gap-2 w-full">
-        <Tabs />
+        <ToolsTabs />
         {cards.length >= 5 && (
           <Input
             type="search"
             value={search}
-            placeholder={`Search ${getToolName(activeTool.name)}...`}
+            placeholder={`Search ${activeToolName}...`}
             onChange={(e) => setSearch(e.target.value)}
           />
         )}
-        <div className="flex flex-col">
+        <div className="flex flex-col overflow-y-auto flex-1">
           {searchResults.map((card) => (
             <Card
               key={card.name}
@@ -188,19 +202,15 @@ export function Explorer() {
           ))}
         </div>
       </div>
-      <div className="pl-4 overflow-hidden flex flex-col gap-2 w-full bg-white dark:bg-background border-l pt-2">
+      <div className="lg:pl-4 overflow-y-auto grid grid-rows-2 w-full bg-white dark:bg-background lg:border-l lg:pt-4">
         {current ? (
-          <RequestForm cards={cards} current={current} />
+          <RequestResponseRender cards={cards} current={current} />
         ) : (
-          <div className="flex items-center justify-center size-full select-none text-muted-foreground">
-            <p className="text-sm">Select a {getToolName(activeTool.name)}</p>
+          <div className="row-span-2 flex items-center justify-center size-full select-none text-muted-foreground">
+            <p className="text-sm">Select a {activeToolName}</p>
           </div>
         )}
       </div>
     </div>
   );
-}
-
-function getToolName(name: Tool) {
-  return DEFAULT_TOOLS.find((tool) => tool.name === name)?.label ?? name;
 }

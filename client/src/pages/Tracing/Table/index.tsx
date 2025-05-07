@@ -12,7 +12,7 @@ import dayjs from "dayjs";
 import Fuse from "fuse.js";
 import { MoveDown, MoveUp } from "lucide-react";
 import { useMemo, useState } from "react";
-import { cn, numberFormatter } from "../../../lib/utils";
+import { cn, numberFormatter } from "@/lib/utils";
 import { SortingEnum, useTracing } from "../providers";
 import { FilterMethod } from "./FilterMethod";
 import { TableDrawer } from "./TableDrawer";

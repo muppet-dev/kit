@@ -3,11 +3,11 @@ import type { JSONSchema7 } from "json-schema";
 import { quackFields } from "./fields";
 import { FieldWrapper } from "./fields/FieldWrapper";
 
-export type FormRender = {
+export type ToolFieldsRender = {
   schema?: JSONSchema7["properties"];
 };
 
-export function FormRender(props: FormRender) {
+export function ToolFieldsRender(props: ToolFieldsRender) {
   if (!props.schema) return <></>;
 
   const schema = transformSchema(props.schema);
@@ -27,7 +27,7 @@ export function FormRender(props: FormRender) {
 
 function transformSchema(
   schema: JSONSchema7["properties"] = {},
-  requiredFields: string[] = [],
+  requiredFields: string[] = []
 ): JSONSchema7["properties"] {
   return Object.entries(schema).reduce<JSONSchema7["properties"]>(
     (prev, [key, value]) => {
@@ -44,7 +44,7 @@ function transformSchema(
       };
 
       if (value.type === "object") {
-        const subRequired = "required" in value ? (value.required ?? []) : [];
+        const subRequired = "required" in value ? value.required ?? [] : [];
         field.properties = transformSchema(value.properties, subRequired);
       }
 
@@ -57,8 +57,7 @@ function transformSchema(
           items.type === "object" &&
           "properties" in items
         ) {
-          const itemRequired =
-            "required" in items ? (items.required ?? []) : [];
+          const itemRequired = "required" in items ? items.required ?? [] : [];
           field.items = {
             ...items,
             properties: transformSchema(items.properties, itemRequired),
@@ -69,6 +68,6 @@ function transformSchema(
       tmp[key] = field;
       return tmp;
     },
-    {},
+    {}
   );
 }

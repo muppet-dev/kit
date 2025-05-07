@@ -1,8 +1,7 @@
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App";
-import { ConfigProvider } from "./providers/config";
-import { ThemeProvider } from "./providers/theme";
+import { ConfigProvider, ThemeProvider } from "./providers";
 import { Toaster } from "react-hot-toast";
 
 createRoot(document.getElementById("root")!).render(
@@ -11,5 +10,5 @@ createRoot(document.getElementById("root")!).render(
       <App />
       <Toaster />
     </ThemeProvider>
-  </ConfigProvider>,
+  </ConfigProvider>
 );
