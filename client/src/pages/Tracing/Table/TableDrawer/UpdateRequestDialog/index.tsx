@@ -16,9 +16,9 @@ import { PencilIcon } from "lucide-react";
 import { useState } from "react";
 import { UpdateRequestForm } from "./Form";
 
-export type EditRequestDialog = Pick<UpdateRequestForm, "request">;
+export type UpdateRequestDialog = Pick<UpdateRequestForm, "request">;
 
-export function EditRequestDialog({ request }: EditRequestDialog) {
+export function UpdateRequestDialog({ request }: UpdateRequestDialog) {
   const [isOpen, setOpen] = useState<boolean>();
 
   return (

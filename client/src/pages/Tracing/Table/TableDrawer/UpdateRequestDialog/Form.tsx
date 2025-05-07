@@ -41,8 +41,8 @@ export function UpdateRequestForm({ request, closeDialog }: UpdateRequestForm) {
   });
 
   const mutation = useMutation({
-    mutationFn: async (values: ClientRequest) =>
-      await makeRequest(values, EmptyResultSchema.passthrough()),
+    mutationFn: (values: ClientRequest) =>
+      makeRequest(values, EmptyResultSchema.passthrough()),
     onSuccess: () => {
       toast.success("Request updated successfully!");
 
