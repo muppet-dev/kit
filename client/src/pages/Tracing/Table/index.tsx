@@ -45,9 +45,10 @@ export function TracingTable() {
           placeholder="Search..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+          className="min-h-9"
         />
-        <div className="flex-1 grid overflow-hidden">
-          <Table className="border border-t-0 overflow-y-auto table-fixed [&>thead>tr>th]:bg-accent [&>thead>tr>th]:sticky [&>thead>tr>th]:top-0 [&>thead>tr>th]:z-10">
+        <div className="h-max grid overflow-hidden">
+          <Table className="overflow-y-auto lg:table-fixed [&>thead>tr>th]:bg-accent [&>thead>tr>th]:sticky [&>thead>tr>th]:top-0 [&>thead>tr>th]:z-10">
             <TableHeader>
               <TableRow className="hover:bg-accent divide-x bg-accent">
                 <TableHead
@@ -90,7 +91,7 @@ export function TracingTable() {
                       key={`row.${index + 1}`}
                       className={cn(
                         "cursor-pointer divide-x",
-                        selected === index && "bg-muted/50",
+                        selected === index && "bg-muted/50"
                       )}
                       onClick={handleSelectData(index)}
                       onKeyDown={handleSelectData(index)}
@@ -117,13 +118,13 @@ export function TracingTable() {
                         {trace.timestamp.latency > 1000
                           ? `${numberFormatter(
                               Number(
-                                (trace.timestamp.latency / 1000).toFixed(2),
+                                (trace.timestamp.latency / 1000).toFixed(2)
                               ),
-                              "decimal",
+                              "decimal"
                             )} s`
                           : `${numberFormatter(
                               trace.timestamp.latency,
-                              "decimal",
+                              "decimal"
                             )} ms`}
                       </TableCell>
                       <TableCell>{trace.request.method}</TableCell>
