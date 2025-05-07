@@ -178,7 +178,7 @@ function TracingDetails({
   return (
     <div className="space-y-1">
       <h2 className="text-sm font-semibold">{label}</h2>
-      <CodeHighlighter content={content} />
+      <CodeHighlighter content={content} className="max-h-96" />
     </div>
   );
 }

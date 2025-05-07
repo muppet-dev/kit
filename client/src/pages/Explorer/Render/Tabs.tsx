@@ -32,7 +32,7 @@ export function ToolsTabs() {
       onValueChange={(value) => changeTool(value)}
       className="w-full"
     >
-      <TabsList className="w-full p-0 bg-background justify-start gap-4 text-md border-b rounded-none">
+      <TabsList className="w-full p-0 bg-background justify-start gap-4 text-md border-b rounded-none overflow-x-auto">
         {tools.map((tab) => (
           <TabsTrigger
             key={tab.name}
@@ -43,12 +43,11 @@ export function ToolsTabs() {
             {tab.label}
           </TabsTrigger>
         ))}
-        <div className="flex-1" />
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
               variant="ghost"
-              className="size-max has-[>svg]:px-1.5 py-1.5 mr-1"
+              className="size-max has-[>svg]:px-1.5 py-1.5 ml-auto"
               onClick={handleRefresh}
               onKeyDown={handleRefresh}
               disabled={queryState?.status !== "success"}

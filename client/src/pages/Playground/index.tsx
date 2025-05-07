@@ -22,5 +22,11 @@ function ChatRenderer() {
     }
   }, []);
 
-  return models.map(({ id }) => <Chat key={id} chatId={id} />);
+  return (
+    <>
+      {models.map(({ id }) => (
+        <Chat key={id} chatId={id} />
+      ))}
+    </>
+  );
 }
