@@ -22,6 +22,7 @@ import { useEffect, useMemo, useState } from "react";
 import { cn } from "../../lib/utils";
 import { RequestForm } from "./RequestForm";
 import { DEFAULT_TOOLS, Tool, useTool } from "./tools";
+import { Tabs } from "./Tabs";
 
 type Cards = RequestForm["cards"][0];
 
@@ -44,14 +45,14 @@ export function Explorer() {
         case Tool.TOOLS:
           handler = makeRequest(
             { method: "tools/list" },
-            ListToolsResultSchema,
+            ListToolsResultSchema
           ).then(({ tools }) =>
             tools.map((tool) => ({
               name: tool.name,
               description: tool.description,
               schema: tool.inputSchema
                 .properties as RequestForm["cards"][0]["schema"],
-            })),
+            }))
           );
           break;
         case Tool.PROMPTS:
@@ -59,13 +60,13 @@ export function Explorer() {
             {
               method: "prompts/list",
             },
-            ListPromptsResultSchema,
+            ListPromptsResultSchema
           ).then(({ prompts }) =>
             prompts.map((prompt) => ({
               name: prompt.name,
               description: prompt.description,
               schema: prompt.arguments as RequestForm["cards"][0]["schema"],
-            })),
+            }))
           );
           break;
         case Tool.STATIC_RESOURCES:
@@ -73,7 +74,7 @@ export function Explorer() {
             {
               method: "resources/list",
             },
-            ListResourcesResultSchema,
+            ListResourcesResultSchema
           ).then(({ resources }) => resources);
           break;
         case Tool.DYNAMIC_RESOURCES:
@@ -81,7 +82,7 @@ export function Explorer() {
             {
               method: "resources/templates/list",
             },
-            ListResourceTemplatesResultSchema,
+            ListResourceTemplatesResultSchema
           ).then(({ resourceTemplates }) => resourceTemplates);
           break;
       }
@@ -102,7 +103,7 @@ export function Explorer() {
         keys: ["name"],
         includeMatches: true,
       }),
-    [cards],
+    [cards]
   );
 
   let searchResults: CardType[] | undefined = cards;
@@ -119,7 +120,7 @@ export function Explorer() {
 
         return prev;
       },
-      [],
+      []
     );
   }
 
@@ -136,13 +137,13 @@ export function Explorer() {
 
   return (
     <div className="size-full grid grid-cols-1 lg:grid-cols-2 overflow-y-auto bg-muted/40">
-      <div className="overflow-y-auto w-full">
+      <div className="overflow-y-auto flex flex-col gap-2 w-full">
+        <Tabs />
         {cards.length >= 5 && (
           <Input
             type="search"
             value={search}
             placeholder={`Search ${getToolName(activeTool.name)}...`}
-            className="mb-2"
             onChange={(e) => setSearch(e.target.value)}
           />
         )}
@@ -154,7 +155,7 @@ export function Explorer() {
                 card.name === current
                   ? "bg-white dark:bg-background"
                   : "bg-transparent hover:bg-white dark:hover:bg-background transition-all ease-in-out",
-                "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max",
+                "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max"
               )}
               onClick={handleSelectItem(card.name)}
               onKeyDown={handleSelectItem(card.name)}
@@ -187,7 +188,7 @@ export function Explorer() {
           ))}
         </div>
       </div>
-      <div className="pl-4 overflow-y-auto flex flex-col gap-2 w-full bg-white dark:bg-background border-l">
+      <div className="pl-4 overflow-y-auto flex flex-col gap-2 w-full bg-white dark:bg-background border-l pt-2">
         {current ? (
           <RequestForm cards={cards} current={current} />
         ) : (
