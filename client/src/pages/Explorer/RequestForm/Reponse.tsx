@@ -12,7 +12,7 @@ export function ReponseRender(props: ReponseRender) {
   if (props.data == null) return <></>;
 
   return (
-    <>
+    <div className="flex-1">
       <div className="w-full h-px bg-zinc-200 dark:bg-zinc-800" />
       <div className="h-full flex flex-col gap-2 overflow-y-auto">
         <div className="flex">
@@ -22,7 +22,7 @@ export function ReponseRender(props: ReponseRender) {
             {props.data.duration > 1000
               ? `${numberFormatter(
                   Number((props.data.duration / 1000).toFixed(2)),
-                  "decimal",
+                  "decimal"
                 )} s`
               : `${numberFormatter(props.data.duration, "decimal")} ms`}
           </span>
@@ -31,6 +31,6 @@ export function ReponseRender(props: ReponseRender) {
           content={JSON.stringify(props.data.content, null, 2)}
         />
       </div>
-    </>
+    </div>
   );
 }

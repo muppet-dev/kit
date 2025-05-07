@@ -129,7 +129,7 @@ export function RequestForm({ cards, current }: RequestForm) {
             async (values) => await mutation.mutateAsync(values),
             console.error
           )}
-          className="h-full flex"
+          className="h-full flex-1 overflow-y-auto"
         >
           <Tabs
             defaultValue={

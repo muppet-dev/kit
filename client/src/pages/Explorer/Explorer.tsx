@@ -188,7 +188,7 @@ export function Explorer() {
           ))}
         </div>
       </div>
-      <div className="pl-4 overflow-y-auto flex flex-col gap-2 w-full bg-white dark:bg-background border-l pt-2">
+      <div className="pl-4 overflow-hidden flex flex-col gap-2 w-full bg-white dark:bg-background border-l pt-2">
         {current ? (
           <RequestForm cards={cards} current={current} />
         ) : (
