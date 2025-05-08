@@ -33,7 +33,7 @@ export function GenerateButton() {
   });
 
   const handleGenerate = eventHandler(() =>
-    mutation.mutateAsync((selectedItem ?? {}) as MCPItemType)
+    mutation.mutateAsync(selectedItem!),
   );
 
   return (
