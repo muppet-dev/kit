@@ -15,15 +15,15 @@ export function ReponseRender(props: ReponseRender) {
     formState: { isSubmitting },
   } = useFormContext();
 
-  if (props.data == null) return <></>;
-
   if (isSubmitting)
     return (
-      <div className="flex items-center justify-center gap-2">
+      <div className="flex items-center h-full justify-center gap-2">
         <Spinner />
         Loading...
       </div>
     );
+
+  if (props.data == null) return <></>;
 
   return (
     <div className="h-full flex flex-col gap-2 overflow-y-auto pt-2 border-t">
