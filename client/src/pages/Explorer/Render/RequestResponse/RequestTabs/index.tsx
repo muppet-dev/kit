@@ -2,8 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SendHorizonal } from "lucide-react";
+import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { Tool, useTool } from "../../../providers";
+import { AnalyseButton } from "./AnalyseButton";
 import { GenerateButton } from "./GenerateButton";
 import { JSONRender } from "./JSONRender";
 import { ScoreRender } from "./ScoreRender";
@@ -13,15 +15,17 @@ export type RequestTabs = ToolRender;
 
 export function RequestTabs({ selectedCard, current }: RequestTabs) {
   const { activeTool } = useTool();
+  const [selectedTab, setSelectedTab] = useState(
+    activeTool.name === Tool.STATIC_RESOURCES ? "score" : "form"
+  );
   const {
     formState: { isSubmitting },
   } = useFormContext();
 
   return (
     <Tabs
-      defaultValue={
-        activeTool.name === Tool.STATIC_RESOURCES ? "score" : "form"
-      }
+      value={selectedTab}
+      onValueChange={setSelectedTab}
       className="w-full max-h-full overflow-y-auto"
     >
       <div className="flex items-center justify-between gap-2">
@@ -48,14 +52,24 @@ export function RequestTabs({ selectedCard, current }: RequestTabs) {
           </TabsTrigger>
         </TabsList>
         <div className="flex-1" />
-        {activeTool.name === Tool.TOOLS && (
-          <GenerateButton selected={selectedCard} />
+        {selectedTab === "score" ? (
+          <AnalyseButton />
+        ) : (
+          <>
+            {activeTool.name === Tool.TOOLS && (
+              <GenerateButton selected={selectedCard} />
+            )}
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="px-3 py-1.5"
+            >
+              {isSubmitting && <Spinner className="size-4 min-w-4 min-h-4" />}
+              {isSubmitting ? "Sending" : "Send"}
+              <SendHorizonal />
+            </Button>
+          </>
         )}
-        <Button type="submit" disabled={isSubmitting} className="px-3 py-1.5">
-          {isSubmitting && <Spinner className="size-4 min-w-4 min-h-4" />}
-          {isSubmitting ? "Sending" : "Send"}
-          <SendHorizonal />
-        </Button>
       </div>
       <TabsContent
         value="form"
