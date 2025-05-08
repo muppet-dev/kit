@@ -2,19 +2,12 @@ import { Combobox } from "@/components/ui/combobox";
 import { Label } from "@/components/ui/label";
 import { useCompletionState } from "@/hooks/use-completion-state";
 import { cn } from "@/lib/utils";
+import type { PromptItemType } from "../../../../types";
 import { useConnection } from "@/providers";
-import type { JSONSchema7 } from "json-schema";
 import { useEffect } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
-export interface ExtendedJSONSchema7 extends JSONSchema7 {
-  name: string;
-}
-
-export type PromptFieldRender = {
-  schema?: ExtendedJSONSchema7[];
-  selectedPromptName: string;
-};
+export type PromptFieldRender = PromptItemType & { selectedPromptName: string };
 
 export function PromptFieldRender({
   schema,
@@ -40,7 +33,7 @@ export function PromptFieldRender({
           name: selectedPromptName,
         },
         argName,
-        value,
+        value
       );
     }
   };
@@ -53,7 +46,7 @@ export function PromptFieldRender({
           className={cn(
             item.required &&
               "after:ml-0.5 after:text-red-500 after:content-['*'] after:dark:text-red-400",
-            "leading-snug capitalize",
+            "leading-snug capitalize"
           )}
         >
           {item.name}

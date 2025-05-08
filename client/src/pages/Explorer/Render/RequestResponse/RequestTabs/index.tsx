@@ -13,10 +13,10 @@ import { ToolRender } from "./ToolRender";
 
 export type RequestTabs = ToolRender;
 
-export function RequestTabs({ selectedCard, current }: RequestTabs) {
+export function RequestTabs({ selectedCard }: RequestTabs) {
   const { activeTool } = useTool();
   const [selectedTab, setSelectedTab] = useState(
-    activeTool.name === Tool.STATIC_RESOURCES ? "score" : "form",
+    activeTool.name === Tool.STATIC_RESOURCES ? "score" : "form"
   );
   const {
     formState: { isSubmitting },
@@ -75,7 +75,7 @@ export function RequestTabs({ selectedCard, current }: RequestTabs) {
         value="form"
         className="h-full flex flex-col gap-1.5 overflow-y-auto"
       >
-        <ToolRender current={current} selectedCard={selectedCard} />
+        <ToolRender selectedCard={selectedCard} />
       </TabsContent>
       <TabsContent
         value="json"

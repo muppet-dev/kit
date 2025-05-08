@@ -13,10 +13,10 @@ import { RequestTabs } from "./RequestTabs";
 import type { MCPItemType } from "../../types";
 
 export type RequestResponseRender = {
-  selected: MCPItemType;
+  selectedCard: MCPItemType;
 };
 
-export function RequestResponseRender({ selected }: RequestResponseRender) {
+export function RequestResponseRender({ selectedCard }: RequestResponseRender) {
   const { makeRequest } = useConnection();
 
   const methods = useForm();
@@ -27,17 +27,17 @@ export function RequestResponseRender({ selected }: RequestResponseRender) {
     mutationFn: async (values: FieldValues) => {
       let handler: Promise<unknown> | undefined;
 
-      switch (selected.type) {
+      switch (selectedCard.type) {
         case Tool.TOOLS:
           handler = makeRequest(
             {
               method: "tools/call",
               params: {
-                name: selected.name,
+                name: selectedCard.name,
                 arguments: values,
               },
             },
-            CallToolResultSchema,
+            CallToolResultSchema
           );
           break;
         case Tool.PROMPTS:
@@ -45,11 +45,11 @@ export function RequestResponseRender({ selected }: RequestResponseRender) {
             {
               method: "prompts/get",
               params: {
-                name: selected.name,
+                name: selectedCard.name,
                 arguments: values,
               },
             },
-            GetPromptResultSchema,
+            GetPromptResultSchema
           );
           break;
         case Tool.STATIC_RESOURCES:
@@ -57,10 +57,10 @@ export function RequestResponseRender({ selected }: RequestResponseRender) {
             {
               method: "resources/read",
               params: {
-                uri: selected.uri,
+                uri: selectedCard.uri,
               },
             },
-            ReadResourceResultSchema,
+            ReadResourceResultSchema
           );
           break;
         case Tool.DYNAMIC_RESOURCES:
@@ -68,10 +68,10 @@ export function RequestResponseRender({ selected }: RequestResponseRender) {
             {
               method: "resources/read",
               params: {
-                uri: fillTemplate(selected.uriTemplate, values),
+                uri: fillTemplate(selectedCard.uriTemplate, values),
               },
             },
-            ReadResourceResultSchema,
+            ReadResourceResultSchema
           );
           break;
       }
@@ -102,11 +102,11 @@ export function RequestResponseRender({ selected }: RequestResponseRender) {
       <form
         onSubmit={handleSubmit(
           (values) => mutation.mutateAsync(values),
-          console.error,
+          console.error
         )}
         className="h-full flex"
       >
-        <RequestTabs selected={selected} />
+        <RequestTabs selectedCard={selectedCard} />
       </form>
       <ReponseRender data={mutation.data} />
     </FormProvider>
@@ -115,7 +115,7 @@ export function RequestResponseRender({ selected }: RequestResponseRender) {
 
 const fillTemplate = (
   template: string,
-  values: Record<string, string>,
+  values: Record<string, string>
 ): string => {
   return template.replace(/{([^}]+)}/g, (_, key) => values[key] || `{${key}}`);
 };

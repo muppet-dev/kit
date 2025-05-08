@@ -2,12 +2,9 @@ import { Blueprint, DuckField, DuckForm } from "duck-form";
 import type { JSONSchema7 } from "json-schema";
 import { quackFields } from "./fields";
 import { FieldWrapper } from "./fields/FieldWrapper";
+import type { ToolItemType } from "@/pages/Explorer/types";
 
-export type ToolFieldsRender = {
-  schema?: JSONSchema7["properties"];
-};
-
-export function ToolFieldsRender(props: ToolFieldsRender) {
+export function ToolFieldsRender(props: ToolItemType) {
   if (!props.schema) return <></>;
 
   const schema = transformSchema(props.schema);
@@ -26,7 +23,7 @@ export function ToolFieldsRender(props: ToolFieldsRender) {
 }
 
 function transformSchema(
-  schema: JSONSchema7["properties"] = {},
+  schema: ToolItemType["schema"] = {},
   requiredFields: string[] = []
 ): JSONSchema7["properties"] {
   return Object.entries(schema).reduce<JSONSchema7["properties"]>(

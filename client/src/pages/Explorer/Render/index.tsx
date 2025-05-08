@@ -247,7 +247,7 @@ export function ExplorerRender() {
       </div>
       <div className="lg:pl-4 overflow-y-auto grid grid-rows-2 w-full bg-white dark:bg-background lg:border-l lg:pt-4">
         {selectedItem ? (
-          <RequestResponseRender selected={selectedItem} />
+          <RequestResponseRender selectedCard={selectedItem} />
         ) : (
           <div className="row-span-2 flex items-center justify-center size-full select-none text-muted-foreground">
             <p className="text-sm">Select a {activeToolName}</p>

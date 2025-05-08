@@ -1,17 +1,14 @@
 import { Combobox } from "@/components/ui/combobox";
 import { Label } from "@/components/ui/label";
 import { useCompletionState } from "@/hooks/use-completion-state";
+import type { DynamicResourceItemType } from "@/pages/Explorer/types";
 import { useConnection } from "@/providers";
 import { useEffect } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
-export type DynamicResourceFieldRender = {
-  uriTemplate?: string;
-};
-
 export function DynamicResourceFieldRender({
   uriTemplate,
-}: DynamicResourceFieldRender) {
+}: DynamicResourceItemType) {
   const { control } = useFormContext();
   const { handleCompletion, completionsSupported } = useConnection();
 
