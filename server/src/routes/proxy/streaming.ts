@@ -14,6 +14,10 @@ import mcpProxy from "./mcpProxy.js";
 import { toFetchResponse, toReqRes } from "fetch-to-node";
 
 const router = new Hono<ProxyEnv>()
+  .use(async (c, next) => {
+    await next();
+    c.header("Access-Control-Expose-Headers", "mcp-session-id");
+  })
   .get(
     "/",
     sValidator(
