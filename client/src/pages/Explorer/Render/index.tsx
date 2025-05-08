@@ -23,7 +23,7 @@ import { useEffect, useMemo, useState } from "react";
 import { DEFAULT_TOOLS, Tool, useTool } from "../providers";
 import { RequestResponseRender } from "./RequestResponse";
 import { ToolsTabs } from "./Tabs";
-import { CircleX } from "lucide-react";
+import { CircleX, Unplug, XCircle } from "lucide-react";
 import type {
   DynamicResourceItemType,
   MCPItemType,
@@ -31,12 +31,13 @@ import type {
   StaticResourceItemType,
   ToolItemType,
 } from "../types";
+import { ConnectionStatus } from "@/providers/connection/manager";
 
 export function ExplorerRender() {
   const [current, setCurrent] = useState<string>();
   const [search, setSearch] = useState<string>("");
   const { activeTool } = useTool();
-  const { makeRequest, mcpClient } = useConnection();
+  const { makeRequest, mcpClient, connectionStatus } = useConnection();
 
   const { data: cards, isLoading } = useQuery({
     queryKey: ["explorer", activeTool.name],
@@ -47,7 +48,7 @@ export function ExplorerRender() {
         case Tool.TOOLS:
           handler = makeRequest(
             { method: "tools/list" },
-            ListToolsResultSchema,
+            ListToolsResultSchema
           ).then(({ tools }) =>
             tools.map(
               (tool) =>
@@ -56,8 +57,8 @@ export function ExplorerRender() {
                   name: tool.name,
                   description: tool.description,
                   schema: tool.inputSchema.properties as ToolItemType["schema"],
-                }) satisfies ToolItemType,
-            ),
+                } satisfies ToolItemType)
+            )
           );
           break;
         case Tool.PROMPTS:
@@ -65,7 +66,7 @@ export function ExplorerRender() {
             {
               method: "prompts/list",
             },
-            ListPromptsResultSchema,
+            ListPromptsResultSchema
           ).then(({ prompts }) =>
             prompts.map(
               (prompt) =>
@@ -74,8 +75,8 @@ export function ExplorerRender() {
                   name: prompt.name,
                   description: prompt.description,
                   schema: prompt.arguments,
-                }) satisfies PromptItemType,
-            ),
+                } satisfies PromptItemType)
+            )
           );
           break;
         case Tool.STATIC_RESOURCES:
@@ -83,15 +84,15 @@ export function ExplorerRender() {
             {
               method: "resources/list",
             },
-            ListResourcesResultSchema,
+            ListResourcesResultSchema
           ).then(({ resources }) =>
             resources.map(
               (resource) =>
                 ({
                   ...resource,
                   type: Tool.STATIC_RESOURCES,
-                }) satisfies StaticResourceItemType,
-            ),
+                } satisfies StaticResourceItemType)
+            )
           );
           break;
         case Tool.DYNAMIC_RESOURCES:
@@ -99,15 +100,15 @@ export function ExplorerRender() {
             {
               method: "resources/templates/list",
             },
-            ListResourceTemplatesResultSchema,
+            ListResourceTemplatesResultSchema
           ).then(({ resourceTemplates }) =>
             resourceTemplates.map(
               (resource) =>
                 ({
                   ...resource,
                   type: Tool.DYNAMIC_RESOURCES,
-                }) satisfies DynamicResourceItemType,
-            ),
+                } satisfies DynamicResourceItemType)
+            )
           );
           break;
       }
@@ -138,11 +139,38 @@ export function ExplorerRender() {
     }));
   }, [search, cards]);
 
+  if (connectionStatus === ConnectionStatus.CONNECTING)
+    return (
+      <div className="flex items-center justify-center gap-1.5 size-full select-none text-muted-foreground">
+        <Spinner className="size-5 min-w-5 min-h-5" />
+        <p className="text-sm">Connecting...</p>
+      </div>
+    );
+
+  if (connectionStatus === ConnectionStatus.DISCONNECTED)
+    return (
+      <div className="flex flex-col items-center justify-center gap-2 size-full select-none text-muted-foreground">
+        <Unplug className="size-14" />
+        <p className="text-xl font-medium">Server Disconnected</p>
+      </div>
+    );
+
+  if (
+    connectionStatus === ConnectionStatus.ERROR ||
+    connectionStatus === ConnectionStatus.ERROR_CONNECTING_TO_PROXY
+  )
+    return (
+      <div className="flex flex-col items-center justify-center gap-2 size-full select-none text-red-500 dark:text-red-300">
+        <XCircle className="size-14" />
+        <p className="text-xl font-medium">Error Connecting Server</p>
+      </div>
+    );
+
   if (isLoading)
     return (
       <div className="flex items-center justify-center gap-1.5 size-full select-none text-muted-foreground">
         <Spinner className="size-5 min-w-5 min-h-5" />
-        <p className="text-sm">Loading...</p>
+        <p className="text-sm">Loading data...</p>
       </div>
     );
 
@@ -183,7 +211,7 @@ export function ExplorerRender() {
                 card.name === current
                   ? "bg-white dark:bg-background"
                   : "bg-transparent hover:bg-white dark:hover:bg-background transition-all ease-in-out",
-                "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max",
+                "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max"
               )}
               onClick={handleSelectItem(card.name)}
               onKeyDown={handleSelectItem(card.name)}
