@@ -161,6 +161,8 @@ export function ExplorerRender() {
     DEFAULT_TOOLS.find((tool) => tool.name === activeTool.name)?.label ??
     activeTool.name;
 
+  const selectedItem = parsedItems.find((item) => item.name === current);
+
   return (
     <div className="size-full grid grid-cols-1 lg:grid-cols-2 overflow-y-auto bg-muted/40">
       <div className="overflow-y-auto flex flex-col gap-2 w-full">
@@ -216,8 +218,8 @@ export function ExplorerRender() {
         </div>
       </div>
       <div className="lg:pl-4 overflow-y-auto grid grid-rows-2 w-full bg-white dark:bg-background lg:border-l lg:pt-4">
-        {current ? (
-          <RequestResponseRender cards={cards} current={current} />
+        {selectedItem ? (
+          <RequestResponseRender selected={selectedItem} />
         ) : (
           <div className="row-span-2 flex items-center justify-center size-full select-none text-muted-foreground">
             <p className="text-sm">Select a {activeToolName}</p>

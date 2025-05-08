@@ -7,43 +7,37 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import { type FieldValues, FormProvider, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { Tool, useTool } from "../../providers";
+import { Tool } from "../../providers";
 import { ReponseRender } from "./Reponse";
 import { RequestTabs } from "./RequestTabs";
+import type { MCPItemType } from "../../types";
 
 export type RequestResponseRender = {
-  cards: RequestTabs["selectedCard"][];
-  current: string;
+  selected: MCPItemType;
 };
 
-export function RequestResponseRender({
-  cards,
-  current,
-}: RequestResponseRender) {
-  const { activeTool } = useTool();
+export function RequestResponseRender({ selected }: RequestResponseRender) {
   const { makeRequest } = useConnection();
 
   const methods = useForm();
 
   const { handleSubmit } = methods;
 
-  const selectedCard = cards.find((card) => card.name === current);
-
   const mutation = useMutation({
     mutationFn: async (values: FieldValues) => {
       let handler: Promise<unknown> | undefined;
 
-      switch (activeTool.name) {
+      switch (selected.type) {
         case Tool.TOOLS:
           handler = makeRequest(
             {
               method: "tools/call",
               params: {
-                name: current,
+                name: selected.name,
                 arguments: values,
               },
             },
-            CallToolResultSchema
+            CallToolResultSchema,
           );
           break;
         case Tool.PROMPTS:
@@ -51,11 +45,11 @@ export function RequestResponseRender({
             {
               method: "prompts/get",
               params: {
-                name: current,
+                name: selected.name,
                 arguments: values,
               },
             },
-            GetPromptResultSchema
+            GetPromptResultSchema,
           );
           break;
         case Tool.STATIC_RESOURCES:
@@ -63,10 +57,10 @@ export function RequestResponseRender({
             {
               method: "resources/read",
               params: {
-                uri: selectedCard?.uri as string,
+                uri: selected.uri,
               },
             },
-            ReadResourceResultSchema
+            ReadResourceResultSchema,
           );
           break;
         case Tool.DYNAMIC_RESOURCES:
@@ -74,14 +68,12 @@ export function RequestResponseRender({
             {
               method: "resources/read",
               params: {
-                uri: fillTemplate(selectedCard?.uriTemplate as string, values),
+                uri: fillTemplate(selected.uriTemplate, values),
               },
             },
-            ReadResourceResultSchema
+            ReadResourceResultSchema,
           );
           break;
-        default:
-          throw new Error(`Invalid active tool - ${activeTool.name}`);
       }
 
       if (!handler) {
@@ -105,26 +97,25 @@ export function RequestResponseRender({
     },
   });
 
-  if (selectedCard)
-    return (
-      <FormProvider {...methods}>
-        <form
-          onSubmit={handleSubmit(
-            (values) => mutation.mutateAsync(values),
-            console.error
-          )}
-          className="h-full flex"
-        >
-          <RequestTabs current={current} selectedCard={selectedCard} />
-        </form>
-        <ReponseRender data={mutation.data} />
-      </FormProvider>
-    );
+  return (
+    <FormProvider {...methods}>
+      <form
+        onSubmit={handleSubmit(
+          (values) => mutation.mutateAsync(values),
+          console.error,
+        )}
+        className="h-full flex"
+      >
+        <RequestTabs selected={selected} />
+      </form>
+      <ReponseRender data={mutation.data} />
+    </FormProvider>
+  );
 }
 
 const fillTemplate = (
   template: string,
-  values: Record<string, string>
+  values: Record<string, string>,
 ): string => {
   return template.replace(/{([^}]+)}/g, (_, key) => values[key] || `{${key}}`);
 };
