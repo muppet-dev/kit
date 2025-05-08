@@ -25,7 +25,7 @@ export function SSEFields() {
       </div>
       <Accordion type="single" collapsible>
         <AccordionItem value="1" className="border-b-0">
-          <AccordionTrigger className="hover:no-underline cursor-pointer hover:bg-accent/80 data-[state=open]:bg-accent/80 py-1.5">
+          <AccordionTrigger className="hover:no-underline cursor-pointer hover:bg-accent/80 data-[state=open]:bg-accent/80 py-1.5 hover:px-2 data-[state=open]:px-2">
             Authentication
           </AccordionTrigger>
           <AccordionContent className="pt-2 pb-0">
