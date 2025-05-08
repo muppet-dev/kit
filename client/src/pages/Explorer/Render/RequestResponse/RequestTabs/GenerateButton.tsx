@@ -36,7 +36,13 @@ function ActionButton() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(values),
-      }).then((res) => res.json()),
+      }).then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to generate data. Please try again later.");
+        }
+
+        return res.json();
+      }),
     onSuccess: (data) => {
       reset(data);
       toast.success("Data generated successfully!");

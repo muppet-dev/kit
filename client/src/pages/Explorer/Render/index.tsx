@@ -10,10 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { eventHandler } from "@/lib/eventHandler";
 import { cn } from "@/lib/utils";
-import { useConnection } from "@/providers";
-import { ConnectionStatus } from "@/providers/connection/manager";
 import Fuse, { type RangeTuple } from "fuse.js";
-import { CircleX, Unplug, XCircle } from "lucide-react";
+import { CircleX } from "lucide-react";
 import { useMemo, useState } from "react";
 import { DEFAULT_TOOLS, Tool, useTool } from "../providers";
 import { useMCPItem } from "../providers/item";
@@ -25,7 +23,6 @@ export function ExplorerRender() {
   const [search, setSearch] = useState<string>("");
   const { activeTool } = useTool();
   const { items, isLoading, selectedItem, changeSelectedItem } = useMCPItem();
-  const { connectionStatus } = useConnection();
 
   const parsedItems = useMemo<
     (MCPItemType & { matches?: RangeTuple[] })[] | undefined
@@ -42,33 +39,6 @@ export function ExplorerRender() {
       matches: matches?.flatMap((match) => match.indices),
     }));
   }, [search, items]);
-
-  if (connectionStatus === ConnectionStatus.CONNECTING)
-    return (
-      <div className="flex items-center justify-center gap-1.5 size-full select-none text-muted-foreground">
-        <Spinner className="size-5 min-w-5 min-h-5" />
-        <p className="text-sm">Connecting...</p>
-      </div>
-    );
-
-  if (connectionStatus === ConnectionStatus.DISCONNECTED)
-    return (
-      <div className="flex flex-col items-center justify-center gap-2 size-full select-none text-muted-foreground">
-        <Unplug className="size-14" />
-        <p className="text-xl font-medium">Server Disconnected</p>
-      </div>
-    );
-
-  if (
-    connectionStatus === ConnectionStatus.ERROR ||
-    connectionStatus === ConnectionStatus.ERROR_CONNECTING_TO_PROXY
-  )
-    return (
-      <div className="flex flex-col items-center justify-center gap-2 size-full select-none text-red-500 dark:text-red-300">
-        <XCircle className="size-14" />
-        <p className="text-xl font-medium">Error Connecting Server</p>
-      </div>
-    );
 
   if (isLoading)
     return (

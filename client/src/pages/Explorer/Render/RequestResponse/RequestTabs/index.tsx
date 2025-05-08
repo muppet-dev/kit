@@ -8,6 +8,7 @@ import { Tool, useTool } from "../../../providers";
 import { AnalyseButton } from "./AnalyseButton";
 import { GenerateButton } from "./GenerateButton";
 import { JSONRender } from "./JSONRender";
+import { SchemaRender } from "./SchemaRender";
 import { ScoreRender } from "./ScoreRender";
 import { ToolRender } from "./ToolRender";
 
@@ -48,23 +49,31 @@ export function RequestTabs() {
           >
             Score
           </TabsTrigger>
+          <TabsTrigger
+            value="schema"
+            className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black"
+          >
+            Schema
+          </TabsTrigger>
         </TabsList>
         <div className="flex-1" />
         {selectedTab === "score" ? (
           <AnalyseButton />
         ) : (
-          <>
-            {activeTool.name === Tool.TOOLS && <GenerateButton />}
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              className="px-3 py-1.5"
-            >
-              {isSubmitting && <Spinner className="size-4 min-w-4 min-h-4" />}
-              {isSubmitting ? "Sending" : "Send"}
-              <SendHorizonal />
-            </Button>
-          </>
+          selectedTab !== "schema" && (
+            <>
+              {activeTool.name === Tool.TOOLS && <GenerateButton />}
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="px-3 py-1.5"
+              >
+                {isSubmitting && <Spinner className="size-4 min-w-4 min-h-4" />}
+                {isSubmitting ? "Sending" : "Send"}
+                <SendHorizonal />
+              </Button>
+            </>
+          )
         )}
       </div>
       <TabsContent
@@ -81,6 +90,9 @@ export function RequestTabs() {
       </TabsContent>
       <TabsContent value="score" className="h-full flex overflow-y-auto">
         <ScoreRender />
+      </TabsContent>
+      <TabsContent value="schema" className="h-full flex overflow-y-auto">
+        <SchemaRender />
       </TabsContent>
     </Tabs>
   );

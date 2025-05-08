@@ -5,13 +5,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Spinner } from "@/components/ui/spinner";
 import { eventHandler } from "@/lib/eventHandler";
+import { useMCPItem } from "@/pages/Explorer/providers/item";
+import type { MCPItemType } from "@/pages/Explorer/types";
 import { getMCPProxyAddress } from "@/providers/connection/manager";
 import { useMutation } from "@tanstack/react-query";
 import { ChevronDown } from "lucide-react";
 import toast from "react-hot-toast";
-import type { MCPItemType } from "@/pages/Explorer/types";
-import { useMCPItem } from "@/pages/Explorer/providers/item";
 
 export function AnalyseButton() {
   return (
@@ -33,9 +34,14 @@ function ActionButton() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(values),
-      }).then((res) => res.json()),
-    onSuccess: (data) => {
-      console.log(data);
+      }).then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to fetch analysis data. Please try again.");
+        }
+
+        return res.json();
+      }),
+    onSuccess: () => {
       toast.success("Data generated successfully!");
     },
     onError: (err) => {
@@ -44,18 +50,17 @@ function ActionButton() {
     },
   });
 
-  const handleGenerate = eventHandler(() =>
-    mutation.mutateAsync(selectedItem!),
-  );
+  const handleAnalyse = eventHandler(() => mutation.mutateAsync(selectedItem!));
 
   return (
     <Button
       variant="secondary"
-      onClick={handleGenerate}
-      onKeyDown={handleGenerate}
+      onClick={handleAnalyse}
+      onKeyDown={handleAnalyse}
       disabled={mutation.isPending}
     >
-      Analyse
+      {mutation.isPending && <Spinner className="size-4 min-w-4 min-h-4" />}
+      {mutation.isPending ? "Analysing" : "Analyse"}
     </Button>
   );
 }
