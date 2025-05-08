@@ -1,5 +1,4 @@
-import { useMCPItem } from "@/pages/Explorer/providers/item";
-import { Tool, useTool } from "../../../../providers";
+import { useMCPItem, Tool, useTool } from "../../../../providers";
 import { DynamicResourceFieldRender } from "./DynamicResourceFieldRender";
 import { PromptFieldRender } from "./PromptFieldRender";
 import { ToolFieldsRender } from "./ToolFieldsRender";

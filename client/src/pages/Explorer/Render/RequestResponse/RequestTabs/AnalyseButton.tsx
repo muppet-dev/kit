@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Spinner } from "@/components/ui/spinner";
 import { eventHandler } from "@/lib/eventHandler";
-import { useMCPItem } from "@/pages/Explorer/providers/item";
+import { useMCPItem } from "../../../providers";
 import type { MCPItemType } from "@/pages/Explorer/types";
 import { getMCPProxyAddress } from "@/providers/connection/manager";
 import { useMutation } from "@tanstack/react-query";

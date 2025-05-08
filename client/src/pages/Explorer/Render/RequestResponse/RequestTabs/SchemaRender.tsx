@@ -1,6 +1,5 @@
 import { CodeHighlighter } from "@/components/Hightlighter";
-import { Tool } from "@/pages/Explorer/providers";
-import { useMCPItem } from "@/pages/Explorer/providers/item";
+import { Tool, useMCPItem } from "../../../providers";
 
 export function SchemaRender() {
   const { selectedItem } = useMCPItem();

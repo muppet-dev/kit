@@ -6,7 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { ChevronDown, SparklesIcon } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useMCPItem } from "@/pages/Explorer/providers/item";
+import { useMCPItem } from "../../../providers";
 import type { MCPItemType } from "@/pages/Explorer/types";
 import {
   DropdownMenu,
@@ -54,7 +54,7 @@ function ActionButton() {
   });
 
   const handleGenerate = eventHandler(() =>
-    mutation.mutateAsync(selectedItem!),
+    mutation.mutateAsync(selectedItem!)
   );
 
   return (

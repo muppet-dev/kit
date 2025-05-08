@@ -1,28 +1,18 @@
-import { highlightMatches } from "@/components/highlightMatches";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
-import { eventHandler } from "@/lib/eventHandler";
-import { cn } from "@/lib/utils";
 import Fuse, { type RangeTuple } from "fuse.js";
 import { CircleX } from "lucide-react";
 import { useMemo, useState } from "react";
-import { DEFAULT_TOOLS, Tool, useTool } from "../providers";
-import { useMCPItem } from "../providers/item";
+import { DEFAULT_TOOLS, useTool, useMCPItem } from "../providers";
 import type { MCPItemType } from "../types";
+import { MCPItem } from "./MCPItem";
 import { RequestResponseRender } from "./RequestResponse";
 import { ToolsTabs } from "./Tabs";
 
 export function ExplorerRender() {
   const [search, setSearch] = useState<string>("");
   const { activeTool } = useTool();
-  const { items, isLoading, selectedItem, changeSelectedItem } = useMCPItem();
+  const { items, isLoading } = useMCPItem();
 
   const parsedItems = useMemo<
     (MCPItemType & { matches?: RangeTuple[] })[] | undefined
@@ -56,9 +46,6 @@ export function ExplorerRender() {
       </div>
     );
 
-  const handleSelectItem = (name: string) =>
-    eventHandler(() => changeSelectedItem(name));
-
   const activeToolName =
     DEFAULT_TOOLS.find((tool) => tool.name === activeTool.name)?.label ??
     activeTool.name;
@@ -77,43 +64,7 @@ export function ExplorerRender() {
         )}
         <div className="flex flex-col overflow-y-auto flex-1">
           {parsedItems?.map((card) => (
-            <Card
-              key={card.name}
-              className={cn(
-                card.name === selectedItem?.name
-                  ? "bg-white dark:bg-background"
-                  : "bg-transparent hover:bg-white dark:hover:bg-background transition-all ease-in-out",
-                "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max"
-              )}
-              onClick={handleSelectItem(card.name)}
-              onKeyDown={handleSelectItem(card.name)}
-            >
-              {card.name === selectedItem?.name && (
-                <div className="h-full w-1 bg-primary absolute left-0 top-0" />
-              )}
-              <CardHeader className="px-4 -mb-1">
-                <CardTitle className="text-sm font-normal flex justify-between">
-                  <p>
-                    {card.matches
-                      ? highlightMatches(card.name, card.matches)
-                      : card.name}
-                  </p>
-                  {(card.type === Tool.DYNAMIC_RESOURCES ||
-                    card.type === Tool.STATIC_RESOURCES) && (
-                    <span className="italic text-zinc-500 dark:text-zinc-400">
-                      {card.mimeType}
-                    </span>
-                  )}
-                </CardTitle>
-              </CardHeader>
-              {card.description && (
-                <CardContent className="px-4">
-                  <CardDescription className="line-clamp-1 leading-tight tracking-tight">
-                    {card.description}
-                  </CardDescription>
-                </CardContent>
-              )}
-            </Card>
+            <MCPItem key={card.name} {...card} />
           ))}
         </div>
       </div>

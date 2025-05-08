@@ -1,7 +1,6 @@
 import { SidebarInset } from "@/components/ui/sidebar";
 import { ExplorerRender } from "./Render";
-import { ToolProvider } from "./providers";
-import { MCPItemProvider } from "./providers/item";
+import { ToolProvider, MCPItemProvider } from "./providers";
 
 export default function ExplorerPage() {
   return (
