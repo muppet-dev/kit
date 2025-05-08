@@ -3,13 +3,28 @@ import { Spinner } from "@/components/ui/spinner";
 import { eventHandler } from "@/lib/eventHandler";
 import { getMCPProxyAddress } from "@/providers/connection/manager";
 import { useMutation } from "@tanstack/react-query";
-import { SparklesIcon } from "lucide-react";
+import { ChevronDown, SparklesIcon } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useMCPItem } from "@/pages/Explorer/providers/item";
 import type { MCPItemType } from "@/pages/Explorer/types";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export function GenerateButton() {
+  return (
+    <div className="flex items-center gap-0.5">
+      <ActionButton />
+      <ActionMenu />
+    </div>
+  );
+}
+
+function ActionButton() {
   const { selectedItem } = useMCPItem();
   const { reset } = useFormContext();
 
@@ -48,5 +63,23 @@ export function GenerateButton() {
       {mutation.isPending ? "Generating" : "Generate"}
       {mutation.isPending && <Spinner className="size-4 min-w-4 min-h-4" />}
     </Button>
+  );
+}
+
+function ActionMenu() {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="secondary"
+          className="has-[>svg]:px-[3px] dark:data-[state=open]:bg-secondary/80"
+        >
+          <ChevronDown />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem>Generate with context</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

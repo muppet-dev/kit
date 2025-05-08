@@ -3,7 +3,6 @@ import { type FieldValues, FormProvider, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { DEFAULT_TOOLS, useTool } from "../../providers";
 import { useMCPItem } from "../../providers/item";
-import type { MCPItemType } from "../../types";
 import { ReponseRender } from "./Reponse";
 import { RequestTabs } from "./RequestTabs";
 
@@ -18,10 +17,7 @@ export function RequestResponseRender() {
   const mutation = useMutation({
     mutationFn: async (values: FieldValues) => {
       const startTime = performance.now();
-      const result = await callItem(
-        (selectedItem ?? {}) as MCPItemType,
-        values
-      );
+      const result = await callItem(selectedItem!, values);
       return {
         duration: performance.now() - startTime,
         content: result,
