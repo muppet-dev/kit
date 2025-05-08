@@ -1,13 +1,21 @@
 import { useMutation } from "@tanstack/react-query";
 import { type FieldValues, FormProvider, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { DEFAULT_TOOLS, useTool, useMCPItem } from "../../providers";
+import { DEFAULT_TOOLS, useTool, useMCPItem, Tool } from "../../providers";
 import { ReponseRender } from "./Reponse";
 import { RequestTabs } from "./RequestTabs";
+import { useState } from "react";
+import { RequestTab } from "./RequestTabs/constant";
 
 export function RequestResponseRender() {
   const { activeTool } = useTool();
   const { selectedItem, callItem } = useMCPItem();
+
+  const [selectedTab, setSelectedTab] = useState<RequestTab>(
+    activeTool.name === Tool.STATIC_RESOURCES
+      ? RequestTab.SCORE
+      : RequestTab.FORM
+  );
 
   const methods = useForm();
 
@@ -52,9 +60,11 @@ export function RequestResponseRender() {
         )}
         className="h-full flex"
       >
-        <RequestTabs />
+        <RequestTabs tabValue={selectedTab} onTabValueChange={setSelectedTab} />
       </form>
-      <ReponseRender data={mutation.data} />
+      {(selectedTab === RequestTab.FORM || selectedTab === RequestTab.JSON) && (
+        <ReponseRender data={mutation.data} />
+      )}
     </FormProvider>
   );
 }
