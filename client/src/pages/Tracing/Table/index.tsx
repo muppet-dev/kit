@@ -90,7 +90,7 @@ export function TracingTable() {
                       key={`row.${index + 1}`}
                       className={cn(
                         "cursor-pointer divide-x",
-                        selected === trace.id && "bg-muted/50"
+                        selected === trace.id && "bg-muted/50",
                       )}
                       onClick={handleSelectData(trace.id)}
                       onKeyDown={handleSelectData(trace.id)}
@@ -117,13 +117,13 @@ export function TracingTable() {
                         {trace.timestamp.latency > 1000
                           ? `${numberFormatter(
                               Number(
-                                (trace.timestamp.latency / 1000).toFixed(2)
+                                (trace.timestamp.latency / 1000).toFixed(2),
                               ),
-                              "decimal"
+                              "decimal",
                             )} s`
                           : `${numberFormatter(
                               trace.timestamp.latency,
-                              "decimal"
+                              "decimal",
                             )} ms`}
                       </TableCell>
                       <TableCell>{trace.request.method}</TableCell>

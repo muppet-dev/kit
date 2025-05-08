@@ -40,7 +40,7 @@ export function PromptFieldRender({
           name: selectedPromptName,
         },
         argName,
-        value
+        value,
       );
     }
   };
@@ -53,7 +53,7 @@ export function PromptFieldRender({
           className={cn(
             item.required &&
               "after:ml-0.5 after:text-red-500 after:content-['*'] after:dark:text-red-400",
-            "leading-snug capitalize"
+            "leading-snug capitalize",
           )}
         >
           {item.name}

@@ -14,14 +14,19 @@ router.post(
       name: z.string(),
       description: z.string(),
       schema: z.record(z.string(), z.any()),
+      context: z.string().optional(),
     }),
   ),
   async (c) => {
-    const { name, description, schema } = c.req.valid("json");
+    const { name, description, schema, context } = c.req.valid("json");
 
-    const prompt = `Generate sample data for the tool "${name}" with the description "${description}". The input schema is ${JSON.stringify(
+    let prompt = `Generate sample data for the tool "${name}" with the description "${description}". The input schema is ${JSON.stringify(
       schema,
     )}. The sample data should be a JSON object that matches the input schema. This is a MCP (Model Context Protocol) tool.`;
+
+    if (context) {
+      prompt += ` The context is "${context}". The sample data should be relevant to the context.`;
+    }
 
     const result = await generateObject({
       model: openai("gpt-4o"),

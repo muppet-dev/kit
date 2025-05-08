@@ -1,7 +1,7 @@
 import { Tool, useTool } from "../../../../providers";
+import { DynamicResourceFieldRender } from "./DynamicResourceFieldRender";
 import { PromptFieldRender } from "./PromptFieldRender";
 import { ToolFieldsRender } from "./ToolFieldsRender";
-import { DynamicResourceFieldRender } from "./DynamicResourceFieldRender";
 
 export type ToolRender = {
   selectedCard: {

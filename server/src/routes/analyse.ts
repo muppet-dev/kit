@@ -14,19 +14,24 @@ router.post(
       name: z.string(),
       description: z.string(),
       schema: z.record(z.string(), z.any()),
+      context: z.string().optional(),
     }),
   ),
   async (c) => {
-    const { name, description, schema } = c.req.valid("json");
+    const { name, description, schema, context } = c.req.valid("json");
 
-    const prompt = `Generate a score and recommendations for the MCP (Model Context Protocol) tool "${name}" with the description "${description}". The input schema is ${JSON.stringify(
+    let prompt = `Generate a score and recommendations for the MCP (Model Context Protocol) tool "${name}" with the description "${description}". The input schema is ${JSON.stringify(
       schema,
     )}. The score should be between 0 and 10, with 10 being the best. The recommendations should include a category, description, and severity (low, medium, high). The output should be a JSON object that includes the score and an array of recommendations. The recommendations should be actionable and specific to the tool's description and schema.`;
+
+    if (context) {
+      prompt += ` The context is "${context}". The sample data should be relevant to the context.`;
+    }
 
     const result = await generateObject({
       model: openai("gpt-4o"),
       prompt,
-      schemaName: "MCP Tool Scoring Schema",
+      schemaName: "mcp-tool-scoring",
       schemaDescription:
         "This is used to score the MCP (Model Context Protocol) tools, prompts, and resources.",
       schema: z.object({
@@ -52,6 +57,8 @@ router.post(
     });
 
     c.header("Content-Type", "text/plain; charset=utf-8");
+
+    console.log(result.object);
 
     return c.json(result.object);
   },

@@ -23,14 +23,9 @@ export function GenerateButton({ selected }: GenerateButton) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(values),
-      }).then(async (res) => {
-        if (res.status === 200) {
-          reset(await res.json());
-        } else {
-          toast.error("Failed to generate data.");
-        }
-      }),
-    onSuccess: () => {
+      }).then((res) => res.json()),
+    onSuccess: (data) => {
+      reset(data);
       toast.success("Data generated successfully!");
     },
     onError: (err) => {
@@ -39,9 +34,7 @@ export function GenerateButton({ selected }: GenerateButton) {
     },
   });
 
-  const handleGenerate = eventHandler(
-    async () => await mutation.mutateAsync(selected)
-  );
+  const handleGenerate = eventHandler(() => mutation.mutateAsync(selected));
 
   return (
     <Button

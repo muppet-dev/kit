@@ -4,7 +4,7 @@ import proxyRouter from "./proxy/index.js";
 import tunnelRouter from "./tunnel.js";
 import modelRouter from "./models/index.js";
 import generateRouter from "./generate.js";
-import scoreRouter from "./score.js";
+import analyseRouter from "./analyse.js";
 
 const router = new Hono().basePath("/api");
 
@@ -12,7 +12,7 @@ router.route("/", utilsRouter);
 router.route("/", modelRouter);
 router.route("/tunnel", tunnelRouter);
 router.route("/generate", generateRouter);
-router.route("/score", scoreRouter);
+router.route("/analyse", analyseRouter);
 router.route("/", proxyRouter);
 
 export default router;

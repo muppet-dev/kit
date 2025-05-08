@@ -16,7 +16,7 @@ export type RequestTabs = ToolRender;
 export function RequestTabs({ selectedCard, current }: RequestTabs) {
   const { activeTool } = useTool();
   const [selectedTab, setSelectedTab] = useState(
-    activeTool.name === Tool.STATIC_RESOURCES ? "score" : "form"
+    activeTool.name === Tool.STATIC_RESOURCES ? "score" : "form",
   );
   const {
     formState: { isSubmitting },
@@ -53,7 +53,7 @@ export function RequestTabs({ selectedCard, current }: RequestTabs) {
         </TabsList>
         <div className="flex-1" />
         {selectedTab === "score" ? (
-          <AnalyseButton />
+          <AnalyseButton selected={selectedCard} />
         ) : (
           <>
             {activeTool.name === Tool.TOOLS && (
