@@ -107,20 +107,18 @@ export function RequestResponseRender({
 
   if (selectedCard)
     return (
-      <>
-        <FormProvider {...methods}>
-          <form
-            onSubmit={handleSubmit(
-              (values) => mutation.mutateAsync(values),
-              console.error
-            )}
-            className="h-full flex"
-          >
-            <RequestTabs current={current} selectedCard={selectedCard} />
-          </form>
-        </FormProvider>
+      <FormProvider {...methods}>
+        <form
+          onSubmit={handleSubmit(
+            (values) => mutation.mutateAsync(values),
+            console.error
+          )}
+          className="h-full flex"
+        >
+          <RequestTabs current={current} selectedCard={selectedCard} />
+        </form>
         <ReponseRender data={mutation.data} />
-      </>
+      </FormProvider>
     );
 }
 

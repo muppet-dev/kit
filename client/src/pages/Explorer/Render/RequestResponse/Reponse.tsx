@@ -1,5 +1,7 @@
 import { CodeHighlighter } from "@/components/Hightlighter";
+import { Spinner } from "@/components/ui/spinner";
 import { numberFormatter } from "@/lib/utils";
+import { useFormContext } from "react-hook-form";
 
 export type ReponseRender = {
   data?: {
@@ -9,7 +11,19 @@ export type ReponseRender = {
 };
 
 export function ReponseRender(props: ReponseRender) {
+  const {
+    formState: { isSubmitting },
+  } = useFormContext();
+
   if (props.data == null) return <></>;
+
+  if (isSubmitting)
+    return (
+      <div className="flex items-center justify-center gap-2">
+        <Spinner />
+        Loading...
+      </div>
+    );
 
   return (
     <div className="h-full flex flex-col gap-2 overflow-y-auto pt-2 border-t">
