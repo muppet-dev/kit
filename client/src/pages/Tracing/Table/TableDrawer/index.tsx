@@ -132,7 +132,7 @@ export function TableDrawer({ traces }: TableDrawer) {
               <ChevronUp />
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Go to previous request</TooltipContent>
+          <TooltipContent>Previous request</TooltipContent>
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
@@ -147,7 +147,7 @@ export function TableDrawer({ traces }: TableDrawer) {
               <ChevronDown />
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Go to next request</TooltipContent>
+          <TooltipContent>Next request</TooltipContent>
         </Tooltip>
         <div className="h-4 w-px bg-muted" />
         <Tooltip>
@@ -162,7 +162,7 @@ export function TableDrawer({ traces }: TableDrawer) {
               <XIcon />
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Close the drawer</TooltipContent>
+          <TooltipContent>Close</TooltipContent>
         </Tooltip>
       </div>
       {selectedHistory.request.method !== "initialize" && (
@@ -186,7 +186,7 @@ export function TableDrawer({ traces }: TableDrawer) {
                 />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Resend current request</TooltipContent>
+            <TooltipContent>Resend request</TooltipContent>
           </Tooltip>
           {UPDATABLE_METHODS.includes(selectedHistory.request.method) && (
             <UpdateRequestDialog request={selectedHistory.request} />
