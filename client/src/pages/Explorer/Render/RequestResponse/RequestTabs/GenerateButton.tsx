@@ -14,6 +14,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useContextDialog } from "./providers";
+import type { BaseSyntheticEvent } from "react";
+import { ContextDialog } from "./types";
 
 export function GenerateButton() {
   return (
@@ -73,6 +76,13 @@ function ActionButton() {
 }
 
 function ActionMenu() {
+  const { setOpen } = useContextDialog();
+
+  const handleOpenGenerateDialog = (event: BaseSyntheticEvent) => {
+    if ("key" in event && event.key !== "Enter") return;
+    setOpen(ContextDialog.GENERATE);
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -84,7 +94,12 @@ function ActionMenu() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem>Generate with context</DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={handleOpenGenerateDialog}
+          onKeyDown={handleOpenGenerateDialog}
+        >
+          Generate with context
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
