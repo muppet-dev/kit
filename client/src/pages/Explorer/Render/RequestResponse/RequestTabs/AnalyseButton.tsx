@@ -7,12 +7,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Spinner } from "@/components/ui/spinner";
 import { eventHandler } from "@/lib/eventHandler";
-import { useMCPItem } from "../../../providers";
 import type { MCPItemType } from "@/pages/Explorer/types";
 import { getMCPProxyAddress } from "@/providers/connection/manager";
 import { useMutation } from "@tanstack/react-query";
 import { ChevronDown } from "lucide-react";
 import toast from "react-hot-toast";
+import { useMCPItem } from "../../../providers";
+import { useAnalyse } from "./providers/analyse";
 
 export function AnalyseButton() {
   return (
@@ -25,6 +26,7 @@ export function AnalyseButton() {
 
 function ActionButton() {
   const { selectedItem } = useMCPItem();
+  const { setAnalyseData } = useAnalyse();
 
   const mutation = useMutation({
     mutationFn: async (values: MCPItemType) =>
@@ -41,8 +43,9 @@ function ActionButton() {
 
         return res.json();
       }),
-    onSuccess: () => {
-      toast.success("Data generated successfully!");
+    onSuccess: (data) => {
+      setAnalyseData(data);
+      toast.success("Analysis completed successfully!");
     },
     onError: (err) => {
       toast.error(err.message);

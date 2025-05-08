@@ -1,13 +1,19 @@
+import { Button } from "@/components/ui/button";
+import { eventHandler } from "@/lib/eventHandler";
+import type { ToolItemType } from "@/pages/Explorer/types";
 import { Blueprint, DuckField, DuckForm } from "duck-form";
 import type { JSONSchema7 } from "json-schema";
+import { useFormContext } from "react-hook-form";
 import { quackFields } from "./fields";
 import { FieldWrapper } from "./fields/FieldWrapper";
-import type { ToolItemType } from "@/pages/Explorer/types";
 
 export function ToolFieldsRender(props: ToolItemType) {
+  const { reset } = useFormContext();
   if (!props.schema) return <></>;
 
   const schema = transformSchema(props.schema);
+
+  const onReset = eventHandler(() => reset());
 
   return (
     <DuckForm
@@ -18,6 +24,9 @@ export function ToolFieldsRender(props: ToolItemType) {
         {schema &&
           Object.keys(schema).map((key) => <DuckField key={key} id={key} />)}
       </Blueprint>
+      <Button className="ml-auto" onClick={onReset} onKeyDown={onReset}>
+        Reset
+      </Button>
     </DuckForm>
   );
 }

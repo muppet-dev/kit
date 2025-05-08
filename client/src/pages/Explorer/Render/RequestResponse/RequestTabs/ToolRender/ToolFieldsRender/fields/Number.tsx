@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { useBlueprint, useDuckForm, useField } from "duck-form";
 import { useId, useMemo } from "react";
-import { Controller, useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import type { FieldType } from "./constants";
 
 export type NumberProps = {
@@ -13,14 +13,14 @@ export type NumberProps = {
 
 export function NumberField() {
   const props = useField<NumberProps>();
-  const { control } = useFormContext();
+  const { register } = useFormContext();
   const { generateId } = useDuckForm();
   const { schema } = useBlueprint();
 
   const autoId = useId();
   const customId = useMemo(
     () => generateId?.(schema, props),
-    [generateId, schema, props],
+    [generateId, schema, props]
   );
 
   const componentId = customId ?? autoId;
@@ -29,24 +29,10 @@ export function NumberField() {
   const { type, ...fieldProps } = props;
 
   return (
-    <Controller
-      name={componentId}
-      control={control}
-      render={({ field: { name, onChange, value, ref, disabled } }) => (
-        <Input
-          {...fieldProps}
-          id={name}
-          disabled={disabled}
-          type="number"
-          value={value}
-          onChange={(event) => {
-            const value = event.target.value;
-
-            onChange?.(value !== "" ? Number(value) : undefined);
-          }}
-          ref={ref}
-        />
-      )}
+    <Input
+      {...fieldProps}
+      type="number"
+      {...register(componentId, { valueAsNumber: true })}
     />
   );
 }
