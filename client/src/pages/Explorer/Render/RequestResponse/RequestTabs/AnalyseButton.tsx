@@ -13,7 +13,9 @@ import { useMutation } from "@tanstack/react-query";
 import { ChevronDown } from "lucide-react";
 import toast from "react-hot-toast";
 import { useMCPItem } from "../../../providers";
-import { useAnalyse } from "./providers/analyse";
+import { useAnalyse, useContextDialog } from "./providers";
+import type { BaseSyntheticEvent } from "react";
+import { ContextDialog } from "./types";
 
 export function AnalyseButton() {
   return (
@@ -69,6 +71,13 @@ function ActionButton() {
 }
 
 function ActionMenu() {
+  const { setOpen } = useContextDialog();
+
+  const handleOpenAnalyseDialog = (event: BaseSyntheticEvent) => {
+    if ("key" in event && event.key !== "Enter") return;
+    setOpen(ContextDialog.ANALYSE);
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -80,7 +89,12 @@ function ActionMenu() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem>Analyse with context</DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={handleOpenAnalyseDialog}
+          onKeyDown={handleOpenAnalyseDialog}
+        >
+          Analyse with context
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

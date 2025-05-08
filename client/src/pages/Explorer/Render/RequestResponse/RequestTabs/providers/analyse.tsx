@@ -4,6 +4,7 @@ import {
   useContext,
   useState,
 } from "react";
+import type { AnalyseDataType } from "../types";
 
 type AnalyseContextType = ReturnType<typeof useAnalyseManager>;
 
@@ -17,21 +18,6 @@ export const AnalyseProvider = (props: PropsWithChildren) => {
       {props.children}
     </AnalyseContext.Provider>
   );
-};
-
-export enum AnalyseSeverity {
-  HIGH = "high",
-  MEDIUM = "medium",
-  LOW = "low",
-}
-
-export type AnalyseDataType = {
-  score: number;
-  recommendations: {
-    category: string;
-    description: string;
-    severity: AnalyseSeverity;
-  }[];
 };
 
 function useAnalyseManager() {
