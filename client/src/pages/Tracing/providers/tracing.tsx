@@ -41,16 +41,16 @@ export enum SortingEnum {
 
 function useTracingManager() {
   const { requestHistory } = useConnection();
-  const [selected, setSelected] = useState<number | null>(null);
+  const [selected, setSelected] = useState<string | null>(null);
   const [methodFilters, setMethodFilters] =
     useState<string[]>(AVAILABLE_METHODS);
   const [timestampSort, setTimestampSort] = useState<SortingEnum>(
-    SortingEnum.ASCENDING,
+    SortingEnum.ASCENDING
   );
 
   const traces = useMemo(() => {
     let results = requestHistory.filter((item) =>
-      methodFilters.includes(JSON.parse(item.request).method),
+      methodFilters.includes(JSON.parse(item.request).method)
     );
 
     results = results.sort((a, b) => {
@@ -63,6 +63,7 @@ function useTracingManager() {
     });
 
     return results.map((item) => ({
+      id: item.id,
       timestamp: item.timestamp,
       sRequest: item.request,
       sResponse: item.response,
@@ -89,11 +90,6 @@ function useTracingManager() {
 
   function toggleTimestampSort() {
     setTimestampSort((prev) => {
-      if (selected)
-        setSelected((prev) => {
-          if (prev) return traces.length - 1 - prev;
-          return prev;
-        });
       return prev === SortingEnum.ASCENDING
         ? SortingEnum.DESCENDING
         : SortingEnum.ASCENDING;

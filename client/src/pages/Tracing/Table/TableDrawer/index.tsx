@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CodeHighlighter } from "@/components/Hightlighter";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,6 +14,7 @@ import { ChevronDown, ChevronUp, RefreshCcw, XIcon } from "lucide-react";
 import { useTracing } from "../../providers";
 import { UpdateRequestDialog } from "./UpdateRequestDialog";
 import { useState } from "react";
+import type { RequestHistory } from "@/providers/connection/manager";
 
 const UPDATABLE_METHODS = [
   "tools/call",
@@ -22,31 +24,30 @@ const UPDATABLE_METHODS = [
 ];
 
 export type TableDrawer = {
-  traces: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  traces: (RequestHistory & {
     request: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    response: any;
-    timestamp: {
-      start: number;
-      latency: number;
-    };
-  }[];
+    response?: any;
+  })[];
 };
 
 export function TableDrawer({ traces }: TableDrawer) {
-  const [isSendingRequest, setIsSendingRequest] = useState(false);
   const { makeRequest } = useConnection();
+  const [resendDirectory, setResendDirectory] = useState<
+    Record<string, boolean | undefined>
+  >({});
   const { selected, setSelected } = useTracing();
 
-  const selectedHistory = selected != null ? traces[selected] : null;
+  const selectedHistory =
+    selected != null ? traces.find((item) => item.id === selected) : null;
 
   if (!selectedHistory) return <></>;
 
   const handleGoToPreviosRequest = eventHandler(() =>
     setSelected((prev) => {
-      if (prev != null && prev > 0) {
-        return prev - 1;
+      const index = traces.findIndex((item) => item.id === selected);
+
+      if (index != null && index > 0) {
+        return traces[index - 1].id;
       }
 
       return prev;
@@ -54,28 +55,54 @@ export function TableDrawer({ traces }: TableDrawer) {
   );
   const handleGoToNextRequest = eventHandler(() =>
     setSelected((prev) => {
-      if (prev != null && prev < traces.length - 1) {
-        return prev + 1;
+      const index = traces.findIndex((item) => item.id === selected);
+
+      if (index != null && index < traces.length - 1) {
+        return traces[index + 1].id;
       }
 
       return prev;
     })
   );
-  const handleSendRequest = eventHandler(() => {
-    if (selectedHistory.request.method !== "initialize") {
-      setIsSendingRequest(true);
-      makeRequest(
-        {
-          method: selectedHistory.request.method,
-          params: selectedHistory.request.params,
-        },
-        EmptyResultSchema.passthrough()
-      )
-        .then(() => setIsSendingRequest(false))
-        .catch(() => setIsSendingRequest(false));
-    }
+  const handleSendRequest = eventHandler(async () => {
+    if (
+      selectedHistory.request.method === "initialize" ||
+      (selected &&
+        selected in resendDirectory &&
+        resendDirectory[selected] === true)
+    )
+      return;
+
+    setResendDirectory((prev) => {
+      const tmp = { ...prev };
+
+      if (selected && !(selected in tmp && tmp[selected] === true)) {
+        tmp[selected] = true;
+      }
+
+      return tmp;
+    });
+
+    await makeRequest(
+      {
+        method: selectedHistory.request.method,
+        params: selectedHistory.request.params,
+      },
+      EmptyResultSchema.passthrough()
+    );
+
+    setResendDirectory((prev) => {
+      const tmp = { ...prev };
+
+      if (selected && selected in tmp) tmp[selected] = undefined;
+
+      return tmp;
+    });
   });
+
   const handleCloseDrawer = eventHandler(() => setSelected(null));
+
+  const selectedIndex = traces.findIndex((item) => item.id === selected);
 
   return (
     <div className="p-4 w-[550px] border space-y-3 h-full overflow-y-auto">
@@ -98,7 +125,7 @@ export function TableDrawer({ traces }: TableDrawer) {
               size="icon"
               variant="ghost"
               className="p-1 size-max"
-              disabled={selected != null && selected === 0}
+              disabled={selected != null && selectedIndex === 0}
               onClick={handleGoToPreviosRequest}
               onKeyDown={handleGoToPreviosRequest}
             >
@@ -113,7 +140,7 @@ export function TableDrawer({ traces }: TableDrawer) {
               size="icon"
               variant="ghost"
               className="p-1 size-max"
-              disabled={selected != null && selected === traces.length - 1}
+              disabled={selected != null && selectedIndex === traces.length - 1}
               onClick={handleGoToNextRequest}
               onKeyDown={handleGoToNextRequest}
             >
@@ -148,10 +175,14 @@ export function TableDrawer({ traces }: TableDrawer) {
                 className="p-1.5 size-max"
                 onClick={handleSendRequest}
                 onKeyDown={handleSendRequest}
-                disabled={isSendingRequest}
+                disabled={resendDirectory[selectedHistory.id]}
               >
                 <RefreshCcw
-                  className={isSendingRequest ? "animate-spin" : undefined}
+                  className={
+                    resendDirectory[selectedHistory.id]
+                      ? "animate-spin"
+                      : undefined
+                  }
                 />
               </Button>
             </TooltipTrigger>

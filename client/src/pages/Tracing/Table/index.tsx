@@ -24,8 +24,7 @@ export function TracingTable() {
 
   const handleSortDate = eventHandler(() => toggleTimestampSort());
 
-  const handleSelectData = (index: number) =>
-    eventHandler(() => setSelected(index));
+  const handleSelectData = (id: string) => eventHandler(() => setSelected(id));
 
   const parsedTraces = useMemo(() => {
     if (!search.trim()) return traces;
@@ -91,10 +90,10 @@ export function TracingTable() {
                       key={`row.${index + 1}`}
                       className={cn(
                         "cursor-pointer divide-x",
-                        selected === index && "bg-muted/50"
+                        selected === trace.id && "bg-muted/50"
                       )}
-                      onClick={handleSelectData(index)}
-                      onKeyDown={handleSelectData(index)}
+                      onClick={handleSelectData(trace.id)}
+                      onKeyDown={handleSelectData(trace.id)}
                     >
                       <TableCell className="space-x-1 font-medium uppercase">
                         <span className="text-black/50 dark:text-white/50">
