@@ -1,23 +1,15 @@
-import { useConnection } from "@/providers";
-import {
-  CallToolResultSchema,
-  GetPromptResultSchema,
-  ReadResourceResultSchema,
-} from "@modelcontextprotocol/sdk/types.js";
 import { useMutation } from "@tanstack/react-query";
 import { type FieldValues, FormProvider, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { Tool } from "../../providers";
+import { DEFAULT_TOOLS, useTool } from "../../providers";
+import { useMCPItem } from "../../providers/item";
+import type { MCPItemType } from "../../types";
 import { ReponseRender } from "./Reponse";
 import { RequestTabs } from "./RequestTabs";
-import type { MCPItemType } from "../../types";
 
-export type RequestResponseRender = {
-  selectedCard: MCPItemType;
-};
-
-export function RequestResponseRender({ selectedCard }: RequestResponseRender) {
-  const { makeRequest } = useConnection();
+export function RequestResponseRender() {
+  const { activeTool } = useTool();
+  const { selectedItem, callItem } = useMCPItem();
 
   const methods = useForm();
 
@@ -25,63 +17,11 @@ export function RequestResponseRender({ selectedCard }: RequestResponseRender) {
 
   const mutation = useMutation({
     mutationFn: async (values: FieldValues) => {
-      let handler: Promise<unknown> | undefined;
-
-      switch (selectedCard.type) {
-        case Tool.TOOLS:
-          handler = makeRequest(
-            {
-              method: "tools/call",
-              params: {
-                name: selectedCard.name,
-                arguments: values,
-              },
-            },
-            CallToolResultSchema
-          );
-          break;
-        case Tool.PROMPTS:
-          handler = makeRequest(
-            {
-              method: "prompts/get",
-              params: {
-                name: selectedCard.name,
-                arguments: values,
-              },
-            },
-            GetPromptResultSchema
-          );
-          break;
-        case Tool.STATIC_RESOURCES:
-          handler = makeRequest(
-            {
-              method: "resources/read",
-              params: {
-                uri: selectedCard.uri,
-              },
-            },
-            ReadResourceResultSchema
-          );
-          break;
-        case Tool.DYNAMIC_RESOURCES:
-          handler = makeRequest(
-            {
-              method: "resources/read",
-              params: {
-                uri: fillTemplate(selectedCard.uriTemplate, values),
-              },
-            },
-            ReadResourceResultSchema
-          );
-          break;
-      }
-
-      if (!handler) {
-        throw new Error("MCP client is not available");
-      }
-
       const startTime = performance.now();
-      const result = await handler;
+      const result = await callItem(
+        (selectedItem ?? {}) as MCPItemType,
+        values
+      );
       return {
         duration: performance.now() - startTime,
         content: result,
@@ -97,6 +37,17 @@ export function RequestResponseRender({ selectedCard }: RequestResponseRender) {
     },
   });
 
+  const activeToolName =
+    DEFAULT_TOOLS.find((tool) => tool.name === activeTool.name)?.label ??
+    activeTool.name;
+
+  if (!selectedItem)
+    return (
+      <div className="row-span-2 flex items-center justify-center size-full select-none text-muted-foreground">
+        <p className="text-sm">Select a {activeToolName}</p>
+      </div>
+    );
+
   return (
     <FormProvider {...methods}>
       <form
@@ -106,16 +57,9 @@ export function RequestResponseRender({ selectedCard }: RequestResponseRender) {
         )}
         className="h-full flex"
       >
-        <RequestTabs selectedCard={selectedCard} />
+        <RequestTabs />
       </form>
       <ReponseRender data={mutation.data} />
     </FormProvider>
   );
 }
-
-const fillTemplate = (
-  template: string,
-  values: Record<string, string>
-): string => {
-  return template.replace(/{([^}]+)}/g, (_, key) => values[key] || `{${key}}`);
-};

@@ -11,9 +11,7 @@ import { JSONRender } from "./JSONRender";
 import { ScoreRender } from "./ScoreRender";
 import { ToolRender } from "./ToolRender";
 
-export type RequestTabs = ToolRender;
-
-export function RequestTabs({ selectedCard }: RequestTabs) {
+export function RequestTabs() {
   const { activeTool } = useTool();
   const [selectedTab, setSelectedTab] = useState(
     activeTool.name === Tool.STATIC_RESOURCES ? "score" : "form"
@@ -53,12 +51,10 @@ export function RequestTabs({ selectedCard }: RequestTabs) {
         </TabsList>
         <div className="flex-1" />
         {selectedTab === "score" ? (
-          <AnalyseButton selected={selectedCard} />
+          <AnalyseButton />
         ) : (
           <>
-            {activeTool.name === Tool.TOOLS && (
-              <GenerateButton selected={selectedCard} />
-            )}
+            {activeTool.name === Tool.TOOLS && <GenerateButton />}
             <Button
               type="submit"
               disabled={isSubmitting}
@@ -75,7 +71,7 @@ export function RequestTabs({ selectedCard }: RequestTabs) {
         value="form"
         className="h-full flex flex-col gap-1.5 overflow-y-auto"
       >
-        <ToolRender selectedCard={selectedCard} />
+        <ToolRender />
       </TabsContent>
       <TabsContent
         value="json"

@@ -6,17 +6,15 @@ import { useMutation } from "@tanstack/react-query";
 import { SparklesIcon } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import toast from "react-hot-toast";
-import type { ToolRender } from "./ToolRender";
+import { useMCPItem } from "@/pages/Explorer/providers/item";
+import type { MCPItemType } from "@/pages/Explorer/types";
 
-export type GenerateButton = {
-  selected: ToolRender["selectedCard"];
-};
-
-export function GenerateButton({ selected }: GenerateButton) {
+export function GenerateButton() {
+  const { selectedItem } = useMCPItem();
   const { reset } = useFormContext();
 
   const mutation = useMutation({
-    mutationFn: async (values: ToolRender["selectedCard"]) =>
+    mutationFn: async (values: MCPItemType) =>
       await fetch(`${getMCPProxyAddress()}/generate`, {
         method: "POST",
         headers: {
@@ -34,7 +32,9 @@ export function GenerateButton({ selected }: GenerateButton) {
     },
   });
 
-  const handleGenerate = eventHandler(() => mutation.mutateAsync(selected));
+  const handleGenerate = eventHandler(() =>
+    mutation.mutateAsync((selectedItem ?? {}) as MCPItemType)
+  );
 
   return (
     <Button

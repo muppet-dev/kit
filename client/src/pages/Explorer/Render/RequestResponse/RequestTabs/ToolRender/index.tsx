@@ -1,28 +1,27 @@
-import type { MCPItemType } from "../../../../types";
+import { useMCPItem } from "@/pages/Explorer/providers/item";
 import { Tool, useTool } from "../../../../providers";
 import { DynamicResourceFieldRender } from "./DynamicResourceFieldRender";
 import { PromptFieldRender } from "./PromptFieldRender";
 import { ToolFieldsRender } from "./ToolFieldsRender";
 
-export type ToolRender = {
-  selectedCard: MCPItemType;
-};
-
-export function ToolRender({ selectedCard }: ToolRender) {
+export function ToolRender() {
   const { activeTool } = useTool();
+  const { selectedItem } = useMCPItem();
 
-  if (activeTool.name === Tool.TOOLS && selectedCard.type === Tool.TOOLS)
-    return <ToolFieldsRender {...selectedCard} />;
-  if (activeTool.name === Tool.PROMPTS && selectedCard.type === Tool.PROMPTS)
+  if (!selectedItem) return;
+
+  if (activeTool.name === Tool.TOOLS && selectedItem.type === Tool.TOOLS)
+    return <ToolFieldsRender {...selectedItem} />;
+  if (activeTool.name === Tool.PROMPTS && selectedItem.type === Tool.PROMPTS)
     return (
       <PromptFieldRender
-        {...selectedCard}
-        selectedPromptName={selectedCard.name}
+        {...selectedItem}
+        selectedPromptName={selectedItem.name}
       />
     );
   if (
     activeTool.name === Tool.DYNAMIC_RESOURCES &&
-    selectedCard.type === Tool.DYNAMIC_RESOURCES
+    selectedItem.type === Tool.DYNAMIC_RESOURCES
   )
-    return <DynamicResourceFieldRender {...selectedCard} />;
+    return <DynamicResourceFieldRender {...selectedItem} />;
 }

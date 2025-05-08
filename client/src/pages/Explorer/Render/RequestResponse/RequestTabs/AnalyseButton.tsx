@@ -10,24 +10,23 @@ import { getMCPProxyAddress } from "@/providers/connection/manager";
 import { useMutation } from "@tanstack/react-query";
 import { ChevronDown } from "lucide-react";
 import toast from "react-hot-toast";
-import type { ToolRender } from "./ToolRender";
+import type { MCPItemType } from "@/pages/Explorer/types";
+import { useMCPItem } from "@/pages/Explorer/providers/item";
 
-export type AnalyseButton = {
-  selected: ToolRender["selectedCard"];
-};
-
-export function AnalyseButton({ selected }: AnalyseButton) {
+export function AnalyseButton() {
   return (
     <div className="flex items-center gap-0.5">
-      <ActionButton selected={selected} />
+      <ActionButton />
       <ActionMenu />
     </div>
   );
 }
 
-function ActionButton({ selected }: AnalyseButton) {
+function ActionButton() {
+  const { selectedItem } = useMCPItem();
+
   const mutation = useMutation({
-    mutationFn: async (values: ToolRender["selectedCard"]) =>
+    mutationFn: async (values: MCPItemType) =>
       await fetch(`${getMCPProxyAddress()}/analyse`, {
         method: "POST",
         headers: {
@@ -45,7 +44,9 @@ function ActionButton({ selected }: AnalyseButton) {
     },
   });
 
-  const handleGenerate = eventHandler(() => mutation.mutateAsync(selected));
+  const handleGenerate = eventHandler(() =>
+    mutation.mutateAsync((selectedItem ?? {}) as MCPItemType)
+  );
 
   return (
     <Button
