@@ -12,6 +12,7 @@ import { EmptyResultSchema } from "@modelcontextprotocol/sdk/types.js";
 import { ChevronDown, ChevronUp, RefreshCcw, XIcon } from "lucide-react";
 import { useTracing } from "../../providers";
 import { UpdateRequestDialog } from "./UpdateRequestDialog";
+import { useState } from "react";
 
 const UPDATABLE_METHODS = [
   "tools/call",
@@ -34,6 +35,7 @@ export type TableDrawer = {
 };
 
 export function TableDrawer({ traces }: TableDrawer) {
+  const [isSendingRequest, setIsSendingRequest] = useState(false);
   const { makeRequest } = useConnection();
   const { selected, setSelected } = useTracing();
 
@@ -60,14 +62,18 @@ export function TableDrawer({ traces }: TableDrawer) {
     })
   );
   const handleSendRequest = eventHandler(() => {
-    if (selectedHistory.request.method !== "initialize")
+    if (selectedHistory.request.method !== "initialize") {
+      setIsSendingRequest(true);
       makeRequest(
         {
           method: selectedHistory.request.method,
           params: selectedHistory.request.params,
         },
         EmptyResultSchema.passthrough()
-      );
+      )
+        .then(() => setIsSendingRequest(false))
+        .catch(() => setIsSendingRequest(false));
+    }
   });
   const handleCloseDrawer = eventHandler(() => setSelected(null));
 
@@ -142,8 +148,11 @@ export function TableDrawer({ traces }: TableDrawer) {
                 className="p-1.5 size-max"
                 onClick={handleSendRequest}
                 onKeyDown={handleSendRequest}
+                disabled={isSendingRequest}
               >
-                <RefreshCcw />
+                <RefreshCcw
+                  className={isSendingRequest ? "animate-spin" : undefined}
+                />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Resend current request</TooltipContent>
