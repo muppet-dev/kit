@@ -13,14 +13,14 @@ router.post(
     z.object({
       name: z.string(),
       description: z.string(),
-      inputSchema: z.record(z.string(), z.any()),
+      schema: z.record(z.string(), z.any()),
     }),
   ),
   async (c) => {
-    const { name, description, inputSchema } = c.req.valid("json");
+    const { name, description, schema } = c.req.valid("json");
 
     const prompt = `Generate sample data for the tool "${name}" with the description "${description}". The input schema is ${JSON.stringify(
-      inputSchema,
+      schema,
     )}. The sample data should be a JSON object that matches the input schema. This is a MCP (Model Context Protocol) tool.`;
 
     const result = await generateObject({
@@ -28,7 +28,7 @@ router.post(
       prompt,
       schemaName: name,
       schemaDescription: description,
-      schema: convertJsonSchemaToZod(inputSchema),
+      schema: convertJsonSchemaToZod(schema),
     });
 
     c.header("Content-Type", "text/plain; charset=utf-8");
