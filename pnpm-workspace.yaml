@@ -2,3 +2,4 @@ packages:
   - 'client'
   - 'kit'
   - 'server'
+  - 'packages/*'

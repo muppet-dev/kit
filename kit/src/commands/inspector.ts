@@ -2,7 +2,7 @@ import { serve } from "@hono/node-server";
 import { loadConfig } from "c12";
 import { Command } from "commander";
 import { type ExecutionContext, Hono } from "hono";
-import type { InspectorConfig } from "../types";
+import type { InspectorConfig } from "@muppet-kit/shared";
 
 const command = new Command("inspector")
   .description("start the MCP Inspector")

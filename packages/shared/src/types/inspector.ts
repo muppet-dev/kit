@@ -1,22 +1,8 @@
 import type { LanguageModelV1 } from "ai";
+import type z from "zod";
+import type { transportSchema } from "../validations";
 
-type StdioServerConfig = {
-  name?: string;
-  transport: "stdio";
-  command: string;
-  args?: string;
-  env?: Array<Record<string, string>>;
-};
-
-type HttpServerConfig = {
-  name?: string;
-  transport: "http" | "sse";
-  url: string;
-  headerName?: string;
-  bearerToken?: string;
-};
-
-type TransportConfig = StdioServerConfig | HttpServerConfig;
+type TransportConfig = { name?: string } & z.infer<typeof transportSchema>;
 
 export type InspectorConfig = {
   /**
