@@ -5,11 +5,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Spinner } from "@/components/ui/spinner";
 import { eventHandler } from "@/lib/eventHandler";
 import { ChevronDown } from "lucide-react";
 import { useState, type BaseSyntheticEvent } from "react";
-import { useMCPItem } from "../../../../providers";
+import { useMCPItem } from "../../../providers";
+import { AnalyseButton } from "./AnalyseButton";
 import { AnalyseDialog } from "./AnalyseDialog";
 import { useAnalyse } from "./provider";
 
@@ -28,17 +28,7 @@ function ActionButton() {
 
   const handleAnalyse = eventHandler(() => mutation.mutateAsync(selectedItem!));
 
-  return (
-    <Button
-      variant="secondary"
-      onClick={handleAnalyse}
-      onKeyDown={handleAnalyse}
-      disabled={mutation.isPending}
-    >
-      {mutation.isPending && <Spinner className="size-4 min-w-4 min-h-4" />}
-      {mutation.isPending ? "Analysing" : "Analyse"}
-    </Button>
-  );
+  return <AnalyseButton onClick={handleAnalyse} onKeyDown={handleAnalyse} />;
 }
 
 function ActionMenu() {

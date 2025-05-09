@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
-import { useMCPItem } from "../../../../providers";
+import { useMCPItem } from "../../../providers";
 import { AnalyseButton } from "./AnalyseButton";
 import { useAnalyse } from "./provider";
 

@@ -1,0 +1,162 @@
+import {
+  type ComponentProps,
+  type ForwardRefExoticComponent,
+  type RefAttributes,
+  useState,
+} from "react";
+import type * as TabsPrimitive from "@radix-ui/react-tabs";
+import { Tool, useMCPItem, useTool } from "../../providers";
+import { RequestTab } from "./constant";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  AlignJustify,
+  Braces,
+  Gauge,
+  type LucideProps,
+  Variable,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { AnalyseButtonGroup } from "./AnalyseButtonGroup";
+import { FormResetButton } from "./FormResetButton";
+import { GenerateButtonGroup } from "./GenerateButtonGroup";
+import { SendButton } from "./SendButton";
+import { AnalyseProvider } from "./AnalyseButtonGroup/provider";
+import { FormPanel } from "./FormPanel";
+import { JSONPanel } from "./JSONPanel";
+import { AnalysePanel } from "./AnalysePanel";
+import { SchemaPanel } from "./SchemaPanel";
+import { FormProvider, useForm } from "react-hook-form";
+import { ReponsePanel } from "./Reponse";
+import { CustomFormProvider } from "./provider";
+
+export function Executor() {
+  const { activeTool } = useTool();
+  const { selectedItem } = useMCPItem();
+
+  const methods = useForm();
+
+  const [selectedTab, setSelectedTab] = useState<RequestTab>(
+    activeTool.name === Tool.STATIC_RESOURCES
+      ? RequestTab.SCORE
+      : RequestTab.FORM
+  );
+
+  if (!selectedItem)
+    return (
+      <div className="bg-background flex items-center justify-center size-full select-none text-muted-foreground">
+        <p className="text-sm">Select a {activeTool.label}</p>
+      </div>
+    );
+
+  return (
+    <CustomFormProvider>
+      <AnalyseProvider>
+        <FormProvider {...methods}>
+          <Tabs
+            value={selectedTab}
+            onValueChange={(val) => setSelectedTab(val as RequestTab)}
+            className="lg:pl-4 overflow-y-auto flex flex-col w-full bg-background lg:border-l lg:pt-4 py-2"
+          >
+            <div className="flex items-center justify-between gap-2 overflow-x-auto">
+              <TabsList>
+                <TabsTriggerComponent
+                  value={RequestTab.FORM}
+                  label="Form"
+                  icon={AlignJustify}
+                  disabled={activeTool.name === Tool.STATIC_RESOURCES}
+                />
+                <TabsTriggerComponent
+                  value={RequestTab.JSON}
+                  label="JSON"
+                  icon={Braces}
+                  disabled={activeTool.name === Tool.STATIC_RESOURCES}
+                />
+                <TabsTriggerComponent
+                  value={RequestTab.SCORE}
+                  label="Score"
+                  icon={Gauge}
+                />
+                <TabsTriggerComponent
+                  value={RequestTab.SCHEMA}
+                  label="Schema"
+                  icon={Variable}
+                />
+              </TabsList>
+              <div className="flex-1" />
+              {selectedTab === RequestTab.SCORE ? (
+                <AnalyseButtonGroup />
+              ) : (
+                selectedTab !== RequestTab.SCHEMA && (
+                  <>
+                    <FormResetButton />
+                    {activeTool.name === Tool.TOOLS && <GenerateButtonGroup />}
+                    <SendButton />
+                  </>
+                )
+              )}
+            </div>
+            {(selectedTab === RequestTab.FORM ||
+              selectedTab === RequestTab.JSON) && (
+              <div className="h-full flex flex-col overflow-y-auto">
+                {selectedTab === RequestTab.FORM && (
+                  <div className="h-full flex overflow-y-auto">
+                    <FormPanel />
+                  </div>
+                )}
+                {selectedTab === RequestTab.JSON && (
+                  <div className="h-full flex flex-col gap-1.5 overflow-y-auto">
+                    <JSONPanel />
+                  </div>
+                )}
+                <ReponsePanel />
+              </div>
+            )}
+            <TabsContent
+              value={RequestTab.SCORE}
+              className="h-full flex overflow-y-auto"
+            >
+              <AnalysePanel />
+            </TabsContent>
+            <TabsContent
+              value={RequestTab.SCHEMA}
+              className="h-full flex overflow-y-auto"
+            >
+              <SchemaPanel />
+            </TabsContent>
+          </Tabs>
+        </FormProvider>
+      </AnalyseProvider>
+    </CustomFormProvider>
+  );
+}
+
+type TabsTriggerComponent = Omit<
+  ComponentProps<typeof TabsPrimitive.Trigger>,
+  "value"
+> & {
+  value: RequestTab;
+  label: string;
+  icon: ForwardRefExoticComponent<
+    Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
+  >;
+};
+
+function TabsTriggerComponent({
+  icon: Icon,
+  label,
+  className,
+  ...props
+}: TabsTriggerComponent) {
+  return (
+    <TabsTrigger
+      {...props}
+      className={cn(
+        "data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-2 xl:px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black",
+        className
+      )}
+    >
+      <p className="xl:flex hidden">{label}</p>
+      <Icon className="xl:hidden" />
+    </TabsTrigger>
+  );
+}

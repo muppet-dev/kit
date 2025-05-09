@@ -1,7 +1,7 @@
 import { CodeHighlighter } from "@/components/Hightlighter";
-import { Tool, useMCPItem } from "../../../providers";
+import { Tool, useMCPItem } from "../../providers";
 
-export function SchemaRender() {
+export function SchemaPanel() {
   const { selectedItem } = useMCPItem();
 
   let trasformedItem: Record<string, unknown>;

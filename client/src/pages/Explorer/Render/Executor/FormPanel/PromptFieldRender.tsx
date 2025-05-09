@@ -2,7 +2,7 @@ import { Combobox } from "@/components/ui/combobox";
 import { Label } from "@/components/ui/label";
 import { useCompletionState } from "@/hooks/use-completion-state";
 import { cn } from "@/lib/utils";
-import type { PromptItemType } from "../../../../types";
+import type { PromptItemType } from "../../../types";
 import { useConnection } from "@/providers";
 import { useEffect } from "react";
 import { Controller, useFormContext } from "react-hook-form";

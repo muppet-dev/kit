@@ -1,9 +1,30 @@
-import { useMCPItem, Tool, useTool } from "../../../../providers";
+import { useFormContext } from "react-hook-form";
+import { Tool, useMCPItem, useTool } from "../../../providers";
+import { useCustomForm } from "../provider";
 import { DynamicResourceFieldRender } from "./DynamicResourceFieldRender";
 import { PromptFieldRender } from "./PromptFieldRender";
 import { ToolFieldsRender } from "./ToolFieldsRender";
 
-export function ToolRender() {
+export function FormPanel() {
+  const { handleSubmit } = useFormContext();
+
+  const mutation = useCustomForm();
+
+  return (
+    <form
+      id="request-form"
+      onSubmit={handleSubmit(
+        (values) => mutation.mutateAsync(values),
+        console.error
+      )}
+      className="h-full w-full flex flex-col gap-1.5 overflow-y-auto"
+    >
+      <PanelRender />
+    </form>
+  );
+}
+
+function PanelRender() {
   const { activeTool } = useTool();
   const { selectedItem } = useMCPItem();
 

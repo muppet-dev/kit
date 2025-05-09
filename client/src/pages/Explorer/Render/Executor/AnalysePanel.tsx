@@ -4,7 +4,7 @@ import {
   AnalyseSeverity,
   useAnalyse,
 } from "./AnalyseButtonGroup/provider";
-import { useTool } from "@/pages/Explorer/providers";
+import { useTool } from "../../providers";
 
 enum Score {
   VPOOR = "Very Poor",
@@ -30,7 +30,7 @@ const scoreBgColor = {
   [Score.EXCELLENT]: "bg-green-600 dark:bg-green-500",
 };
 
-export function ScoreRender() {
+export function AnalysePanel() {
   const { data } = useAnalyse();
   const { activeTool } = useTool();
 

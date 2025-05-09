@@ -13,7 +13,7 @@ import { AlignLeft } from "lucide-react";
 import { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 
-export function JSONRender() {
+export function JSONPanel() {
   const { control, reset } = useFormContext();
 
   const formData = useWatch({ control });

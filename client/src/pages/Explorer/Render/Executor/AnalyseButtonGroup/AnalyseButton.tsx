@@ -20,7 +20,7 @@ export function AnalyseButton(props: AnalyseButton) {
         disabled={mutation.isPending}
       >
         <SparklesIcon className="size-4" />
-        {mutation.isPending ? "Generating" : "Generate"}
+        {mutation.isPending ? "Analysing" : "Analyse"}
         {mutation.isPending && <Spinner className="size-4 min-w-4 min-h-4" />}
       </Button>
       <Button
@@ -30,7 +30,7 @@ export function AnalyseButton(props: AnalyseButton) {
         disabled={mutation.isPending}
       >
         <SparklesIcon className="size-4" />
-        {mutation.isPending ? "Generating" : "Generate"}
+        {mutation.isPending ? "Analysing" : "Analyse"}
         {mutation.isPending && <Spinner className="size-4 min-w-4 min-h-4" />}
       </Button>
     </>

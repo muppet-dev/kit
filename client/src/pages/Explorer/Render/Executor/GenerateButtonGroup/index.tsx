@@ -8,7 +8,7 @@ import {
 import { eventHandler } from "@/lib/eventHandler";
 import { ChevronDown } from "lucide-react";
 import { useState, type BaseSyntheticEvent } from "react";
-import { useMCPItem } from "../../../../providers";
+import { useMCPItem } from "../../../providers";
 import { GenerateButton } from "./GenerateButton";
 import { GenerateDialog } from "./GenerateDialog";
 import { GenerateProvider, useGenerate } from "./provider";

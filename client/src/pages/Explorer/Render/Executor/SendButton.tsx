@@ -11,6 +11,7 @@ export function SendButton() {
   return (
     <>
       <Button
+        form="request-form"
         type="submit"
         disabled={isSubmitting}
         className="px-3 py-1.5 xl:flex hidden"
@@ -20,6 +21,7 @@ export function SendButton() {
         <SendHorizonal />
       </Button>
       <Button
+        form="request-form"
         type="submit"
         disabled={isSubmitting}
         className="xl:hidden size-max has-[>svg]:px-2.5 py-2.5"

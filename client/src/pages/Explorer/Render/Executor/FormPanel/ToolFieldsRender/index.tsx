@@ -1,8 +1,8 @@
-import type { ToolItemType } from "@/pages/Explorer/types";
 import { Blueprint, DuckField, DuckForm } from "duck-form";
 import type { JSONSchema7 } from "json-schema";
 import { quackFields } from "./fields";
 import { FieldWrapper } from "./fields/FieldWrapper";
+import type { ToolItemType } from "../../../../types";
 
 export function ToolFieldsRender(props: ToolItemType) {
   if (!props.schema) return <></>;

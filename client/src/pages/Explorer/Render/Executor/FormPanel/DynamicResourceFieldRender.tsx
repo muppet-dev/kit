@@ -1,7 +1,7 @@
 import { Combobox } from "@/components/ui/combobox";
 import { Label } from "@/components/ui/label";
 import { useCompletionState } from "@/hooks/use-completion-state";
-import type { DynamicResourceItemType } from "@/pages/Explorer/types";
+import type { DynamicResourceItemType } from "../../../types";
 import { useConnection } from "@/providers";
 import { useEffect } from "react";
 import { Controller, useFormContext } from "react-hook-form";
