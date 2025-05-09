@@ -1,10 +1,11 @@
 import { ConfigForm } from "@/components/ConfigForm";
 import { Card, CardContent } from "@/components/ui/card";
-import { useConfig } from "@/providers";
+import { useConfig, useConnection } from "@/providers";
 import { FormFooter } from "./Footer";
 
 export default function SettingsPage() {
   const { connectionInfo, setConnectionInfo } = useConfig();
+  const { connect } = useConnection();
 
   return (
     <div className="p-4 max-w-4xl w-full mx-auto flex flex-col gap-4 overflow-y-auto">
@@ -13,7 +14,10 @@ export default function SettingsPage() {
         <CardContent className="px-4">
           <ConfigForm
             data={connectionInfo}
-            onSubmit={(values) => setConnectionInfo(values)}
+            onSubmit={(values) => {
+              setConnectionInfo(values);
+              connect();
+            }}
           >
             <FormFooter />
           </ConfigForm>

@@ -1,3 +1,4 @@
+import { CopyButton } from "@/components/CopyButton";
 import {
   Accordion,
   AccordionContent,
@@ -7,7 +8,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { transportSchema } from "@/validations";
-import { useFormContext } from "react-hook-form";
+import { useFormContext, useWatch } from "react-hook-form";
 import type z from "zod";
 
 export function SSEFields() {
@@ -17,11 +18,7 @@ export function SSEFields() {
     <>
       <div className="grid grid-cols-4 items-center gap-4">
         <Label htmlFor="url">URL</Label>
-        <Input
-          className="col-span-3"
-          placeholder="Enter URL"
-          {...register("url")}
-        />
+        <URLField />
       </div>
       <Accordion type="single" collapsible>
         <AccordionItem value="1" className="border-b-0">
@@ -49,5 +46,35 @@ export function SSEFields() {
         </AccordionItem>
       </Accordion>
     </>
+  );
+}
+
+function URLField() {
+  const { register, control } =
+    useFormContext<z.infer<typeof transportSchema>>();
+
+  const url = useWatch({ control, name: "url" });
+
+  if (url != null)
+    return (
+      <div className="relative flex items-center col-span-3">
+        <Input
+          placeholder="Enter URL"
+          {...register("url")}
+          className="w-full pr-9"
+        />
+        <CopyButton
+          className="absolute right-1"
+          data={url}
+          tooltipContent="Copy URL"
+        />
+      </div>
+    );
+  return (
+    <Input
+      placeholder="Enter URL"
+      {...register("url")}
+      className="col-span-3"
+    />
   );
 }
