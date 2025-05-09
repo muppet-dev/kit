@@ -104,14 +104,14 @@ export function Executor() {
             </div>
             {(selectedTab === RequestTab.FORM ||
               selectedTab === RequestTab.JSON) && (
-              <div className="h-full flex flex-col overflow-y-auto">
+              <div className="flex-1 h-full flex flex-col overflow-y-auto">
                 {selectedTab === RequestTab.FORM && (
-                  <div className="h-full flex overflow-y-auto">
+                  <div className="flex-1 h-full flex overflow-y-auto">
                     <FormPanel />
                   </div>
                 )}
                 {selectedTab === RequestTab.JSON && (
-                  <div className="h-full flex flex-col gap-1.5 overflow-y-auto">
+                  <div className="flex-1 h-full flex flex-col gap-1.5 overflow-y-auto">
                     <JSONPanel />
                   </div>
                 )}
