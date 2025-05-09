@@ -1,6 +1,6 @@
 import { program } from "commander";
 import pkg from "../package.json" assert { type: "json" };
-import inspectorCommand from "./inspector.js";
+import inspectorCommand from "./commands/inspector.js";
 
 program
   .name("muppet kit")

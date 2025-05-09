@@ -4,21 +4,31 @@
   "license": "MIT",
   "type": "module",
   "bin": "./dist/cli.js",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "build": "pkgroll --minify"
   },
   "publishConfig": {
     "access": "public"
   },
+  "exports": {
+    "import": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "require": {
+      "types": "./dist/index.d.cts",
+      "default": "./dist/index.cjs"
+    }
+  },
   "dependencies": {
+    "@hono/node-server": "^1.14.1",
     "c12": "^3.0.3",
-    "chalk": "^5.4.1",
-    "commander": "^13.1.0"
+    "commander": "^13.1.0",
+    "hono": "^4.7.9"
   },
   "devDependencies": {
+    "ai": "^4.3.13",
     "esbuild": "^0.25.3",
     "pkgroll": "^2.12.2",
     "tsx": "^4.19.4"
