@@ -5,7 +5,7 @@ import { FormFooter } from "./Footer";
 
 export default function SettingsPage() {
   const { connectionInfo, setConnectionInfo } = useConfig();
-  const { connect } = useConnection();
+  const { connect, disconnect } = useConnection();
 
   return (
     <div className="p-4 max-w-4xl w-full mx-auto flex flex-col gap-4 overflow-y-auto">
@@ -14,9 +14,10 @@ export default function SettingsPage() {
         <CardContent className="px-4">
           <ConfigForm
             data={connectionInfo}
-            onSubmit={(values) => {
+            onSubmit={async (values) => {
               setConnectionInfo(values);
-              connect();
+              await disconnect();
+              await connect();
             }}
           >
             <FormFooter />
