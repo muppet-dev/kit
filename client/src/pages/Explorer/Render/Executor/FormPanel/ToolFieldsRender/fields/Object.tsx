@@ -4,14 +4,14 @@ import type { FieldType } from "./constants";
 import type { FieldProps } from "./types";
 
 export interface ObjectProps<
-  T extends Record<string, FieldProps> = Record<string, FieldProps>,
+  T extends Record<string, FieldProps> = Record<string, FieldProps>
 > {
   type: FieldType.OBJECT;
   properties: T;
 }
 
 export function ObjectField<
-  T extends Record<string, FieldProps> = Record<string, FieldProps>,
+  T extends Record<string, FieldProps> = Record<string, FieldProps>
 >() {
   // @ts-expect-error: <explaination>
   const props = useField() as ObjectProps<T>;
@@ -22,13 +22,13 @@ export function ObjectField<
   const customId = useMemo(
     // @ts-expect-error: <explaination>
     () => generateId?.(schema, props),
-    [generateId, schema, props],
+    [generateId, schema, props]
   );
 
   const componentId = customId ?? autoId;
 
   return (
-    <div className="p-3 md:p-4 lg:p-5 xl:p-6 border flex flex-col border-secondary-200 dark:border-secondary-800 rounded-md gap-3 md:gap-4 lg:gap-5 xl:gap-6">
+    <div className="p-1 md:p-2 lg:p-3 xl:p-4 border flex flex-col border-secondary-200 dark:border-secondary-800 rounded-md gap-1 md:gap-2 lg:gap-3 xl:gap-4">
       {Object.entries(props.properties).map(([fieldName, field]) => {
         const uniqueName = `${componentId}.${fieldName}`;
 

@@ -2,6 +2,7 @@ import {
   type ComponentProps,
   type ForwardRefExoticComponent,
   type RefAttributes,
+  useEffect,
   useState,
 } from "react";
 import type * as TabsPrimitive from "@radix-ui/react-tabs";
@@ -41,6 +42,11 @@ export function Executor() {
       : RequestTab.FORM
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    methods.reset();
+  }, [selectedItem]);
+
   if (!selectedItem)
     return (
       <div className="bg-background flex items-center justify-center size-full select-none text-muted-foreground">
@@ -63,7 +69,6 @@ export function Executor() {
                   value={RequestTab.FORM}
                   label="Form"
                   icon={AlignJustify}
-                  disabled={activeTool.name === Tool.STATIC_RESOURCES}
                 />
                 <TabsTriggerComponent
                   value={RequestTab.JSON}
@@ -88,7 +93,9 @@ export function Executor() {
               ) : (
                 selectedTab !== RequestTab.SCHEMA && (
                   <>
-                    <FormResetButton />
+                    {activeTool.name !== Tool.STATIC_RESOURCES && (
+                      <FormResetButton />
+                    )}
                     {activeTool.name === Tool.TOOLS && <GenerateButtonGroup />}
                     <SendButton />
                   </>

@@ -8,6 +8,7 @@ export type FieldWrapperProps = {
   label?: string;
   required?: boolean;
   onChange?: () => void;
+  description?: string;
 };
 
 export type FieldWrapper = PropsWithChildren;
@@ -23,7 +24,7 @@ export function FieldWrapper({ children }: FieldWrapper) {
     [generateId, schema, props]
   );
 
-  const { required, label, onChange, type } = props;
+  const { required, label, onChange, type, description } = props;
 
   const componentId = customId ?? autoId;
 
@@ -35,8 +36,10 @@ export function FieldWrapper({ children }: FieldWrapper) {
     <div className="relative [&>div>div]:w-full w-full space-y-1">
       <div
         className={cn(
-          "flex flex-col gap-1",
-          type === "boolean" && "flex-row-reverse w-max gap-2 items-center"
+          "flex",
+          type === "boolean"
+            ? "flex-row-reverse w-max gap-2 items-center"
+            : "flex-col"
         )}
       >
         {label && (
@@ -50,6 +53,9 @@ export function FieldWrapper({ children }: FieldWrapper) {
           >
             {label}
           </Label>
+        )}
+        {description && (
+          <p className="text-sm text-muted-foreground mb-0.5">{description}</p>
         )}
         {children}
       </div>
