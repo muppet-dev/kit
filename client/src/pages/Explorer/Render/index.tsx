@@ -62,7 +62,7 @@ export function ExplorerRender() {
           )}
         </div>
       </div>
-      <div className="lg:pl-4 overflow-y-auto flex flex-col w-full bg-background lg:border-l lg:pt-4">
+      <div className="lg:pl-4 overflow-y-auto flex flex-col w-full bg-background lg:border-l lg:pt-4 py-2 lg:py-0">
         <RequestResponseRender />
       </div>
     </div>

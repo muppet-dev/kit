@@ -1,5 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BookType, Braces, Gauge, Variable } from "lucide-react";
+import { AlignJustify, Braces, Gauge, Variable } from "lucide-react";
 import { Tool, useTool } from "../../../providers";
 import { AnalyseButtonGroup } from "./AnalyseButtonGroup";
 import { AnalyseProvider } from "./AnalyseButtonGroup/provider";
@@ -35,7 +35,7 @@ export function RequestTabs(props: RequestTabs) {
               disabled={activeTool.name === Tool.STATIC_RESOURCES}
             >
               <p className="xl:flex hidden">Form</p>
-              <BookType className="xl:hidden" />
+              <AlignJustify className="xl:hidden" />
             </TabsTrigger>
             <TabsTrigger
               value={RequestTab.JSON}
