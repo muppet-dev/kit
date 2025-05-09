@@ -11,6 +11,8 @@ import { HomePage } from "./pages/Home";
 import PlaygroundPage from "./pages/Playground";
 import SettingsPage from "./pages/Settings";
 import TracingPage from "./pages/Tracing";
+import OAuthCallbackPage from "./pages/OAuthCallback";
+import { Transport } from "./constants";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -32,8 +34,21 @@ const queryClient = new QueryClient({
   },
 });
 
-function App() {
+export default function App() {
   const { connectionInfo, setConnectionInfo } = useConfig();
+
+  if (window.location.pathname === "/oauth/callback") {
+    return (
+      <OAuthCallbackPage
+        onConnect={(url) => {
+          setConnectionInfo({
+            transportType: Transport.SSE,
+            url,
+          });
+        }}
+      />
+    );
+  }
 
   if (!connectionInfo) {
     return <ConfigurationsDialog onSubmit={setConnectionInfo} />;
@@ -62,5 +77,3 @@ function App() {
     </ConnectionProvider>
   );
 }
-
-export default App;

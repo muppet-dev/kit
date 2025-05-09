@@ -24,14 +24,14 @@ const command = new Command("inspector")
         await next();
       })
       .all("*", (c) => {
-        let executionCtx: ExecutionContext | undefined = undefined;
+        let executionCtx: ExecutionContext | undefined;
         try {
           executionCtx = c.executionCtx;
         } catch {}
         return app.fetch(c.req.raw, c.env, executionCtx);
       })
       .notFound((c) => {
-        let executionCtx: ExecutionContext | undefined = undefined;
+        let executionCtx: ExecutionContext | undefined;
         try {
           executionCtx = c.executionCtx;
         } catch {}
