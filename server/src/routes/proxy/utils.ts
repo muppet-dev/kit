@@ -7,12 +7,12 @@ import { parse as shellParseArgs } from "shell-quote";
 import { findActualExecutable } from "spawn-rx";
 import z from "zod";
 
-const SSE_HEADERS_PASSTHROUGH = ["authorization"];
+const SSE_HEADERS_PASSTHROUGH = ["authorization"] as const;
 const STREAMABLE_HTTP_HEADERS_PASSTHROUGH = [
   "authorization",
   "mcp-session-id",
   "last-event-id",
-];
+] as const;
 
 export const transportSchema = z.union([
   z.object({
@@ -104,6 +104,9 @@ export async function createTransport<
     );
 
     const transport = new SSEClientTransport(new URL(query.url), {
+      eventSourceInit: {
+        fetch: (url, init) => fetch(url, { ...init, headers }),
+      },
       requestInit: {
         headers,
       },
