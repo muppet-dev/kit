@@ -1,9 +1,6 @@
 import { cn } from "@/lib/utils";
-import {
-  type AnalyseDataType,
-  AnalyseSeverity,
-  useAnalyse,
-} from "./providers/analyse";
+import { useAnalyse } from "./providers/analyse";
+import { AnalyseSeverity, type AnalyseDataType } from "./types";
 
 export function ScoreRender() {
   const { analyseData } = useAnalyse();
@@ -29,17 +26,17 @@ export function ScoreRender() {
 
 function ScoreItem(props: AnalyseDataType["recommendations"][0]) {
   return (
-    <div className="w-full border flex flex-col px-2.5 py-1 cursor-pointer hover:bg-accent/80 dark:hover:bg-accent/50 hover:border-primary/30 transition-all ease-in-out">
+    <div className="w-full border flex flex-col px-2.5 py-1 hover:bg-accent/80 dark:hover:bg-accent/50 hover:border-primary/30 transition-all ease-in-out">
       <div className="flex items-center justify-between">
         <h4 className="font-medium">{props.category}</h4>
         <p
           className={cn(
-            "text-sm italic",
+            "text-sm italic select-none font-medium px-1.5 py-0.5",
             props.severity === AnalyseSeverity.LOW
-              ? "text-blue-500 dark:text-blue-300"
+              ? "text-blue-500 dark:text-blue-300 bg-blue-200/40 dark:bg-blue-300/10"
               : props.severity === AnalyseSeverity.MEDIUM
-              ? "text-yellow-500 dark:text-yellow-300"
-              : "text-red-500 dark:text-red-300"
+              ? "text-yellow-500 dark:text-yellow-300 bg-yellow-200/40 dark:bg-yellow-300/10"
+              : "text-red-500 dark:text-red-300 bg-red-200/40 dark:bg-red-300/10"
           )}
         >
           {props.severity}
