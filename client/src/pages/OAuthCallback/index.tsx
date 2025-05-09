@@ -1,10 +1,11 @@
+import { Spinner } from "@/components/ui/spinner";
 import {
   InspectorOAuthClientProvider,
   SESSION_KEYS,
 } from "@/providers/connection/auth";
 import {
-  auth,
   type AuthResult,
+  auth,
 } from "@modelcontextprotocol/sdk/client/auth.js";
 import { useEffect, useRef } from "react";
 import toast from "react-hot-toast";
@@ -57,7 +58,7 @@ export default function OAuthCallback({ onConnect }: OAuthCallbackProps) {
 
       if (result !== "AUTHORIZED") {
         return notifyError(
-          `Expected to be authorized after providing auth code, got: ${result}`,
+          `Expected to be authorized after providing auth code, got: ${result}`
         );
       }
 
@@ -72,8 +73,11 @@ export default function OAuthCallback({ onConnect }: OAuthCallbackProps) {
   }, [onConnect]);
 
   return (
-    <div className="flex items-center justify-center h-screen">
-      <p className="text-lg text-gray-500">Processing OAuth callback...</p>
+    <div className="flex flex-col gap-2 items-center justify-center h-screen select-none">
+      <Spinner className="size-8 min-w-8 min-h-8" />
+      <p className="text-lg font-medium text-muted-foreground">
+        Processing OAuth callback
+      </p>
     </div>
   );
 }
