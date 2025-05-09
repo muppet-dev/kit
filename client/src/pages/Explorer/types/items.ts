@@ -16,6 +16,7 @@ export type ToolItemType = {
         [key: string]: JSONSchema7Definition;
       }
     | undefined;
+  inputSchema: unknown;
 };
 
 export type PromptItemType = {

@@ -10,7 +10,7 @@ export function SchemaPanel() {
     trasformedItem = {
       name: selectedItem.name,
       description: selectedItem.description,
-      inputSchema: selectedItem.schema,
+      inputSchema: selectedItem.inputSchema,
     };
   else if (selectedItem?.type === Tool.PROMPTS)
     trasformedItem = {
@@ -26,9 +26,9 @@ export function SchemaPanel() {
     };
   else
     trasformedItem = {
-      mimeType: selectedItem?.mimeType,
       name: selectedItem?.name,
       uriTemplate: selectedItem?.uriTemplate,
+      mimeType: selectedItem?.mimeType,
     };
 
   const content = JSON.stringify(trasformedItem, null, 2);
