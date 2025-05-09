@@ -14,8 +14,9 @@ export default function SettingsPage() {
           <ConfigForm
             data={connectionInfo}
             onSubmit={(values) => setConnectionInfo(values)}
-            footer={<FormFooter />}
-          />
+          >
+            <FormFooter />
+          </ConfigForm>
         </CardContent>
       </Card>
     </div>

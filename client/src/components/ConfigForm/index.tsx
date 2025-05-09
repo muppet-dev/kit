@@ -2,7 +2,7 @@ import { Transport } from "@/constants";
 import type { ConnectionInfo } from "@/providers/connection/manager";
 import { transportSchema as schema } from "@/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type * as React from "react";
+import type { PropsWithChildren } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import type z from "zod";
 import { Label } from "../ui/label";
@@ -17,11 +17,10 @@ import { OptionalFields } from "./OptionalFields";
 
 export type ConfigForm = {
   onSubmit: (values: ConnectionInfo) => void;
-  footer: React.JSX.Element;
   data?: ConnectionInfo;
 };
 
-export function ConfigForm(props: ConfigForm) {
+export function ConfigForm(props: PropsWithChildren<ConfigForm>) {
   const methods = useForm<z.output<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: props.data ?? {
@@ -44,8 +43,8 @@ export function ConfigForm(props: ConfigForm) {
               _values.env.length > 0
                 ? JSON.stringify(
                     Object.fromEntries(
-                      _values.env.map((item) => [item.key, item.value])
-                    )
+                      _values.env.map((item) => [item.key, item.value]),
+                    ),
                   )
                 : undefined;
           }
@@ -82,7 +81,7 @@ export function ConfigForm(props: ConfigForm) {
             <OptionalFields />
           </div>
         </div>
-        {props.footer}
+        {props.children}
       </form>
     </FormProvider>
   );

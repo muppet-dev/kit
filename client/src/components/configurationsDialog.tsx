@@ -22,23 +22,26 @@ export type ConfigurationsDialogProps = {
 
 export function ConfigurationsDialog({ onSubmit }: ConfigurationsDialogProps) {
   const localStorageValue = localStorage.getItem(CONFIG_STORAGE_KEY);
-  const data = localStorageValue
+  const localStorageData = localStorageValue
     ? (JSON.parse(localStorageValue) as ConnectionInfo)
     : undefined;
 
   const formattedData =
-    data?.transportType === Transport.STDIO
+    localStorageData?.transportType === Transport.STDIO
       ? {
-          ...data,
-          env: data.env
-            ? // @ts-expect-error: formatting env data
-              Object.entries(JSON.parse(data.env)).map(([key, value]) => ({
-                key,
-                value,
-              }))
+          ...localStorageData,
+          env: localStorageData.env
+            ? typeof localStorageData.env === "string"
+              ? Object.entries(JSON.parse(localStorageData.env)).map(
+                  ([key, value]) => ({
+                    key,
+                    value: String(value),
+                  }),
+                )
+              : localStorageData.env
             : undefined,
         }
-      : data;
+      : localStorageData;
 
   return (
     <Dialog open={true}>
@@ -50,11 +53,11 @@ export function ConfigurationsDialog({ onSubmit }: ConfigurationsDialogProps) {
           </DialogDescription>
         </DialogHeader>
         <ConfigForm
-          footer={<FormFooter />}
           onSubmit={(values) => onSubmit(values)}
-          // @ts-expect-error: formatted data
           data={formattedData}
-        />
+        >
+          <FormFooter />
+        </ConfigForm>
       </DialogContent>
     </Dialog>
   );
@@ -66,7 +69,7 @@ function FormFooter() {
   const handleResetForm = eventHandler(() =>
     reset({
       transportType: Transport.STDIO,
-    })
+    }),
   );
 
   return (
