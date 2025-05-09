@@ -30,9 +30,6 @@ export function RequestResponseRender() {
         content: result,
       };
     },
-    onSuccess: () => {
-      toast.success("Request completed successfully!");
-    },
     onError: (error) => {
       console.error("Request failed:", error);
 

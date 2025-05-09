@@ -8,7 +8,7 @@ createRoot(document.getElementById("root")!).render(
   <ConfigProvider>
     <ThemeProvider>
       <App />
-      <Toaster />
+      <Toaster position="bottom-right" />
     </ThemeProvider>
   </ConfigProvider>
 );

@@ -1,11 +1,14 @@
 import { cn } from "@/lib/utils";
-import { useAnalyse } from "./providers/analyse";
-import { AnalyseSeverity, type AnalyseDataType } from "./types";
+import {
+  type AnalyseDataType,
+  AnalyseSeverity,
+  useAnalyse,
+} from "./AnalyseButtonGroup/provider";
 
 export function ScoreRender() {
-  const { analyseData } = useAnalyse();
+  const { data } = useAnalyse();
 
-  if (!analyseData)
+  if (!data)
     return (
       <div className="flex items-center justify-center w-full h-full text-muted-foreground">
         No analysis data available
@@ -15,9 +18,9 @@ export function ScoreRender() {
   return (
     <div className="w-full h-full overflow-y-auto flex flex-col gap-2">
       <div className="border text-3xl text-center py-4 font-bold">
-        Score : {analyseData.score}
+        Score : {data.score}
       </div>
-      {analyseData.recommendations.map((item, index) => (
+      {data.recommendations.map((item, index) => (
         <ScoreItem key={`${index + 1}-${item.category}`} {...item} />
       ))}
     </div>
