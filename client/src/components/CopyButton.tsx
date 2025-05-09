@@ -10,6 +10,7 @@ export type CopyButton = {
   tooltipContent?: string;
   tooltipSide?: "top" | "right" | "bottom" | "left";
   className?: HTMLDivElement["className"];
+  disabled?: boolean;
 };
 
 export function CopyButton({
@@ -17,6 +18,7 @@ export function CopyButton({
   className,
   tooltipContent,
   tooltipSide,
+  disabled,
 }: CopyButton) {
   const [isCopied, setIsCopied] = useState(false);
 
@@ -46,7 +48,7 @@ export function CopyButton({
           size="icon"
           aria-label="copy"
           variant="ghost"
-          disabled={!data}
+          disabled={!data || disabled}
           className={cn("size-max has-[>svg]:px-1.5 py-1.5", className)}
           onClick={handleCopyData}
           onKeyDown={handleCopyData}
