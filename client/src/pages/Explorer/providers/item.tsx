@@ -1,20 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
-import {
-  type PropsWithChildren,
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { Tool, useTool } from "./tools";
-import type {
-  DynamicResourceItemType,
-  MCPItemType,
-  PromptItemType,
-  StaticResourceItemType,
-  ToolItemType,
-} from "../types";
+import { useConfig, useConnection } from "@/providers";
 import {
   CallToolResultSchema,
   GetPromptResultSchema,
@@ -24,8 +8,24 @@ import {
   ListToolsResultSchema,
   ReadResourceResultSchema,
 } from "@modelcontextprotocol/sdk/types.js";
-import { useConnection } from "@/providers";
+import { useQuery } from "@tanstack/react-query";
+import {
+  type PropsWithChildren,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import type { FieldValues } from "react-hook-form";
+import type {
+  DynamicResourceItemType,
+  MCPItemType,
+  PromptItemType,
+  StaticResourceItemType,
+  ToolItemType,
+} from "../types";
+import { Tool, useTool } from "./tools";
 
 type MCPItemContextType = ReturnType<typeof useMCPItemManager>;
 
@@ -41,6 +41,13 @@ export const MCPItemProvider = (props: PropsWithChildren) => {
   );
 };
 
+export function useGetMCPItemQueryKey() {
+  const { connectionInfo } = useConfig();
+  const { activeTool } = useTool();
+
+  return [connectionInfo, "explorer", activeTool.name];
+}
+
 function useMCPItemManager() {
   const { activeTool } = useTool();
   const { makeRequest, mcpClient } = useConnection();
@@ -55,8 +62,10 @@ function useMCPItemManager() {
     setSelectedItemName(name);
   }
 
+  const queryKey = useGetMCPItemQueryKey();
+
   const { data: items, isLoading } = useQuery({
-    queryKey: ["explorer", activeTool.name],
+    queryKey,
     queryFn: async () => {
       let handler: Promise<MCPItemType[]> | undefined;
 

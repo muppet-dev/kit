@@ -12,13 +12,13 @@ import {
 import { eventHandler } from "@/lib/eventHandler";
 import { useQueryClient } from "@tanstack/react-query";
 import { RefreshCcwIcon } from "lucide-react";
-import { useTool } from "../providers";
+import { useGetMCPItemQueryKey, useTool } from "../providers";
 
 export function ToolsTabs() {
   const { tools, activeTool, changeTool } = useTool();
   const queryClient = useQueryClient();
 
-  const queryKey = ["explorer", activeTool.name];
+  const queryKey = useGetMCPItemQueryKey();
 
   const queryState = queryClient.getQueryState(queryKey);
 

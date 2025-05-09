@@ -4,22 +4,29 @@ import {
   useContext,
   useEffect,
 } from "react";
-import { type ConnectionInfo, useConnectionManager } from "./manager";
+import { useConnectionManager } from "./manager";
+import { useConfig } from "../config";
 
 type ConnectionContextType = ReturnType<typeof useConnectionManager>;
 
 const ConnectionContext = createContext<ConnectionContextType | null>(null);
 
-export const ConnectionProvider = ({
-  children,
-  ...props
-}: PropsWithChildren<ConnectionInfo>) => {
-  const values = useConnectionManager(props);
+export const ConnectionProvider = ({ children }: PropsWithChildren) => {
+  const { connectionInfo } = useConfig();
+  const values = useConnectionManager(connectionInfo!);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    values.connect();
-  }, []);
+    async function handler() {
+      if (values.mcpClient) {
+        await values.disconnect();
+      }
+
+      await values.connect();
+    }
+
+    handler();
+  }, [connectionInfo]);
 
   return (
     <ConnectionContext.Provider value={values}>

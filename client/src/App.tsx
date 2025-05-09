@@ -40,7 +40,7 @@ function App() {
   }
 
   return (
-    <ConnectionProvider {...connectionInfo}>
+    <ConnectionProvider>
       <QueryClientProvider client={queryClient}>
         <ShikiProvider>
           <SidebarProvider>
