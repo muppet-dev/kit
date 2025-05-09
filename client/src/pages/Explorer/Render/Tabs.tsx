@@ -47,7 +47,7 @@ export function ToolsTabs() {
           <TooltipTrigger asChild>
             <Button
               variant="ghost"
-              className="size-max has-[>svg]:px-1.5 py-1.5 ml-auto"
+              className="size-max has-[>svg]:px-1.5 py-1.5 ml-auto mr-2"
               onClick={handleRefresh}
               onKeyDown={handleRefresh}
               disabled={queryState?.status !== "success"}

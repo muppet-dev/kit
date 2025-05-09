@@ -1,18 +1,16 @@
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { SendHorizonal } from "lucide-react";
-import { useFormContext } from "react-hook-form";
+import { BookType, Braces, Gauge, Variable } from "lucide-react";
 import { Tool, useTool } from "../../../providers";
 import { AnalyseButtonGroup } from "./AnalyseButtonGroup";
 import { AnalyseProvider } from "./AnalyseButtonGroup/provider";
+import { RequestTab } from "./constant";
 import { FormResetButton } from "./FormResetButton";
 import { GenerateButtonGroup } from "./GenerateButtonGroup";
 import { JSONRender } from "./JSONRender";
 import { SchemaRender } from "./SchemaRender";
 import { ScoreRender } from "./ScoreRender";
+import { SendButton } from "./SendButton";
 import { ToolRender } from "./ToolRender";
-import { RequestTab } from "./constant";
 
 export type RequestTabs = {
   tabValue: RequestTab;
@@ -21,9 +19,6 @@ export type RequestTabs = {
 
 export function RequestTabs(props: RequestTabs) {
   const { activeTool } = useTool();
-  const {
-    formState: { isSubmitting },
-  } = useFormContext();
 
   return (
     <AnalyseProvider>
@@ -36,29 +31,33 @@ export function RequestTabs(props: RequestTabs) {
           <TabsList>
             <TabsTrigger
               value={RequestTab.FORM}
-              className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black"
+              className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-2 xl:px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black"
               disabled={activeTool.name === Tool.STATIC_RESOURCES}
             >
-              Form
+              <p className="xl:flex hidden">Form</p>
+              <BookType className="xl:hidden" />
             </TabsTrigger>
             <TabsTrigger
               value={RequestTab.JSON}
-              className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black"
+              className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-2 xl:px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black"
               disabled={activeTool.name === Tool.STATIC_RESOURCES}
             >
-              JSON
+              <p className="xl:flex hidden">JSON</p>
+              <Braces className="xl:hidden" />
             </TabsTrigger>
             <TabsTrigger
               value={RequestTab.SCORE}
-              className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black"
+              className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-2 xl:px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black"
             >
-              Score
+              <p className="xl:flex hidden">Score</p>
+              <Gauge className="xl:hidden" />
             </TabsTrigger>
             <TabsTrigger
               value={RequestTab.SCHEMA}
-              className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black"
+              className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-2 xl:px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black"
             >
-              Schema
+              <p className="xl:flex hidden">Schema</p>
+              <Variable className="xl:hidden" />
             </TabsTrigger>
           </TabsList>
           <div className="flex-1" />
@@ -69,17 +68,7 @@ export function RequestTabs(props: RequestTabs) {
               <>
                 <FormResetButton />
                 {activeTool.name === Tool.TOOLS && <GenerateButtonGroup />}
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="px-3 py-1.5"
-                >
-                  {isSubmitting && (
-                    <Spinner className="size-4 min-w-4 min-h-4" />
-                  )}
-                  {isSubmitting ? "Sending" : "Send"}
-                  <SendHorizonal />
-                </Button>
+                <SendButton />
               </>
             )
           )}
