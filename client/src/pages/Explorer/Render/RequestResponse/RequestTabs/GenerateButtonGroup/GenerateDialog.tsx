@@ -58,7 +58,7 @@ export function GenerateDialog({ onOpenChange, open }: GenerateDialog) {
             reset();
             onOpenChange(false);
           }, console.error)}
-          className="w-full space-y-2"
+          className="w-full space-y-4"
         >
           <Textarea {...register("context")} required />
           <p className="text-sm text-red-500 dark:text-red-300 empty:hidden">

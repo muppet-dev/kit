@@ -45,7 +45,7 @@ export function AnalyseDialog({ onOpenChange, open }: AnalyseDialog) {
           <DialogTitle>Additional Context</DialogTitle>
           <DialogDescription>
             Add background information or specific conditions to customize the
-            generated sample data.
+            analysis results.
           </DialogDescription>
         </DialogHeader>
         <form
@@ -58,7 +58,7 @@ export function AnalyseDialog({ onOpenChange, open }: AnalyseDialog) {
             reset();
             onOpenChange(false);
           }, console.error)}
-          className="w-full space-y-2"
+          className="w-full space-y-4"
         >
           <Textarea {...register("context")} required />
           <p className="text-sm text-red-500 dark:text-red-300 empty:hidden">

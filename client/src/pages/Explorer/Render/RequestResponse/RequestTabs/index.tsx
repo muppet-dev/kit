@@ -32,7 +32,7 @@ export function RequestTabs(props: RequestTabs) {
         onValueChange={(val) => props.onTabValueChange(val as RequestTab)}
         className="w-full max-h-full overflow-y-auto"
       >
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center justify-between gap-2 overflow-x-auto">
           <TabsList>
             <TabsTrigger
               value={RequestTab.FORM}
