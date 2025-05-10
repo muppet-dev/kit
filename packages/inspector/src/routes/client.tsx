@@ -13,9 +13,6 @@ const router = new Hono().get(
             name="viewport"
             content="width=device-width, initial-scale=1.0"
           />
-          {import.meta.env.PROD && (
-            <link rel="stylesheet" href="/assets/main.css" />
-          )}
           <title>Muppet Inspector</title>
         </head>
         <body>{children}</body>

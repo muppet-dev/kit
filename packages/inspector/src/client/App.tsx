@@ -4,6 +4,7 @@ import { ConfigurationsDialog } from "@/client/components/configurationsDialog";
 import { SidebarProvider } from "@/client/components/ui/sidebar";
 import {
   ConnectionProvider,
+  NotificationProvider,
   ShikiProvider,
   useConfig,
 } from "@/client/providers";
@@ -59,25 +60,27 @@ export default function App() {
   }
 
   return (
-    <ConnectionProvider>
-      <QueryClientProvider client={queryClient}>
-        <ShikiProvider>
-          <SidebarProvider>
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<AppWrapper />}>
-                  <Route index element={<HomePage />} />
-                  <Route path="/explorer" element={<ExplorerPage />} />
-                  <Route path="/playground" element={<PlaygroundPage />} />
-                  <Route path="/tracing" element={<TracingPage />} />
-                  <Route path="/settings" element={<SettingsPage />} />
-                </Route>
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </BrowserRouter>
-          </SidebarProvider>
-        </ShikiProvider>
-      </QueryClientProvider>
-    </ConnectionProvider>
+    <NotificationProvider>
+      <ConnectionProvider>
+        <QueryClientProvider client={queryClient}>
+          <ShikiProvider>
+            <SidebarProvider>
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<AppWrapper />}>
+                    <Route index element={<HomePage />} />
+                    <Route path="/explorer" element={<ExplorerPage />} />
+                    <Route path="/playground" element={<PlaygroundPage />} />
+                    <Route path="/tracing" element={<TracingPage />} />
+                    <Route path="/settings" element={<SettingsPage />} />
+                  </Route>
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </BrowserRouter>
+            </SidebarProvider>
+          </ShikiProvider>
+        </QueryClientProvider>
+      </ConnectionProvider>
+    </NotificationProvider>
   );
 }

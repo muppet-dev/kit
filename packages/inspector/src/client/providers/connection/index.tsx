@@ -6,6 +6,7 @@ import {
 } from "react";
 import { useConnectionManager } from "./manager";
 import { useConfig } from "../config";
+import { useNotification } from "../notifications";
 
 type ConnectionContextType = ReturnType<typeof useConnectionManager>;
 
@@ -13,7 +14,12 @@ const ConnectionContext = createContext<ConnectionContextType | null>(null);
 
 export const ConnectionProvider = ({ children }: PropsWithChildren) => {
   const { connectionInfo } = useConfig();
-  const values = useConnectionManager(connectionInfo!);
+  const { addNotification, addStdErrNotification } = useNotification();
+  const values = useConnectionManager({
+    ...connectionInfo!,
+    onNotification: addNotification,
+    onStdErrNotification: addStdErrNotification,
+  });
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
