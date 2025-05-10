@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { reactRenderer } from "@hono/react-renderer";
 
 const router = new Hono().get(
-  "/",
+  "/*",
   reactRenderer(({ children }) => {
     return (
       <html lang="en">
