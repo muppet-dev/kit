@@ -1,9 +1,13 @@
-import type { InspectorConfig } from "./types";
+import type { InspectorConfig } from "@muppet-kit/shared";
 
 export function defineInspectorConfig(
   config: Partial<InspectorConfig>,
 ): InspectorConfig {
-  const { host = "0.0.0.0", port = 3553, ...others } = config;
+  const {
+    host = process.env.HOST ?? "0.0.0.0",
+    port = Number(process.env.PORT ?? 3553),
+    ...others
+  } = config;
 
   return {
     host,

@@ -1,8 +1,9 @@
 import { serve } from "@hono/node-server";
+import app from "@muppet-kit/inspector";
+import type { InspectorConfig } from "@muppet-kit/shared";
 import { loadConfig } from "c12";
 import { Command } from "commander";
-import { type ExecutionContext, Hono } from "hono";
-import type { InspectorConfig } from "@muppet-kit/shared";
+import { defineInspectorConfig } from "..";
 
 const command = new Command("inspector")
   .description("start the MCP Inspector")
@@ -15,37 +16,17 @@ const command = new Command("inspector")
       name: "muppet",
     });
 
-    // TODO: get this from @muppet-kit/inspector
-    const app = new Hono();
-
-    const mainApp = new Hono<{ Variables: { config: InspectorConfig } }>()
-      .use(async (c, next) => {
-        c.set("config", config);
-        await next();
-      })
-      .all("*", (c) => {
-        let executionCtx: ExecutionContext | undefined;
-        try {
-          executionCtx = c.executionCtx;
-        } catch {}
-        return app.fetch(c.req.raw, c.env, executionCtx);
-      })
-      .notFound((c) => {
-        let executionCtx: ExecutionContext | undefined;
-        try {
-          executionCtx = c.executionCtx;
-        } catch {}
-        return app.fetch(c.req.raw, c.env, executionCtx);
-      });
+    const _config = defineInspectorConfig(config);
 
     serve({
-      fetch: mainApp.fetch,
-      port: config.port,
-      hostname: config.host,
+      // @ts-expect-error
+      fetch: app.fetch,
+      port: _config.port,
+      hostname: _config.host,
     });
 
     console.log(
-      `Inspector is up and running at http://${config.host}:${config.port}`,
+      `Inspector is up and running at http://${_config.host}:${_config.port}`,
     );
   });
 

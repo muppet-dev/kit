@@ -4,7 +4,9 @@
   "license": "MIT",
   "type": "module",
   "bin": "./dist/cli.js",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "pkgroll --minify"
   },
@@ -23,12 +25,17 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.14.1",
-    "@muppet-kit/shared": "workspace:*",
     "c12": "^3.0.3",
     "commander": "^13.1.0",
     "hono": "^4.7.9"
   },
+  "peerDependencies": {
+    "@muppet-kit/inspector": "workspace:*",
+    "@muppet-kit/shared": "workspace:*",
+    "@ngrok/ngrok": "^1.5.1"
+  },
   "devDependencies": {
+    "@types/node": "^22.15.17",
     "ai": "^4.3.13",
     "pkgroll": "^2.12.2"
   }
