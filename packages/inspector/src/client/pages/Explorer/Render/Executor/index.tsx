@@ -44,7 +44,7 @@ export function Executor() {
   const [selectedTab, setSelectedTab] = useState<RequestTab>(
     activeTool.name === Tool.STATIC_RESOURCES
       ? RequestTab.SCORE
-      : RequestTab.FORM,
+      : RequestTab.FORM
   );
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -66,7 +66,7 @@ export function Executor() {
           <Tabs
             value={selectedTab}
             onValueChange={(val) => setSelectedTab(val as RequestTab)}
-            className="lg:pl-4 overflow-y-auto flex flex-col w-full bg-background lg:border-l lg:pt-4 py-2"
+            className="lg:pl-4 overflow-y-auto flex flex-col w-full bg-background lg:border-l lg:pt-4 pt-2"
           >
             <div className="flex items-center justify-between gap-2 overflow-x-auto">
               <TabsList>
@@ -111,12 +111,12 @@ export function Executor() {
               selectedTab === RequestTab.JSON) && (
               <div className="flex-1 h-full flex flex-col overflow-y-auto">
                 {selectedTab === RequestTab.FORM && (
-                  <div className="flex-1 h-full flex overflow-y-auto">
+                  <div className="flex-1 min-h-1/2 h-full flex overflow-y-auto">
                     <FormPanel />
                   </div>
                 )}
                 {selectedTab === RequestTab.JSON && (
-                  <div className="flex-1 h-full flex flex-col gap-1.5 overflow-y-auto">
+                  <div className="flex-1 min-h-1/2 h-full flex flex-col gap-1.5 overflow-y-auto">
                     <JSONPanel />
                   </div>
                 )}
@@ -164,7 +164,7 @@ function TabsTriggerComponent({
       {...props}
       className={cn(
         "data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-2 xl:px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black",
-        className,
+        className
       )}
     >
       <p className="xl:flex hidden">{label}</p>
