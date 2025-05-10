@@ -36,7 +36,7 @@ export type AnalyseDataType = {
 function useAnalyseManager() {
   return useMutation({
     mutationFn: async (values: MCPItemType & { context?: string }) =>
-      fetch(`${getMCPProxyAddress()}/analyse`, {
+      fetch(`${getMCPProxyAddress()}/models/analyse`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -4,6 +4,7 @@ import { ModelHeader } from "./Header";
 import { Thread } from "./Thread";
 import { useModels } from "../providers";
 import { MODELS_CONFIG } from "../supportedModels";
+import { getMCPProxyAddress } from "@/client/providers/connection/manager";
 
 export type Chat = {
   chatId: string;
@@ -15,7 +16,7 @@ export function Chat(props: Chat) {
   const model = getModel(props.chatId);
 
   const runtime = useChatRuntime({
-    api: `http://localhost:3000/api/${model?.model ?? "default"}/chat`,
+    api: `${getMCPProxyAddress()}/models/chat?modelId=${model?.model ?? "default"}`,
   });
 
   if (!model) {

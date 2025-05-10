@@ -43,3 +43,10 @@ export type InspectorConfig = {
       }
   >;
 };
+
+export type SanitizedInspectorConfig = Omit<InspectorConfig, "models"> & {
+  models?: {
+    default: LanguageModelV1;
+    available: Record<string, LanguageModelV1>;
+  };
+};

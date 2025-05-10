@@ -1,9 +1,16 @@
+import type { EnvWithConfig } from "@/types";
 import { Hono } from "hono";
 
-const router = new Hono();
+const router = new Hono<EnvWithConfig>();
 
 router.get("/config", (c) => {
-  return c.json({});
+  const config = c.get("config");
+
+  return c.json({
+    tunneling: !!config.tunneling?.apiKey,
+    models: !!config.models,
+    configurations: config.configurations,
+  });
 });
 
 router.get("/health", (c) => {

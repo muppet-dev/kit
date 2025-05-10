@@ -1,4 +1,8 @@
-import { Transport as MuppetTransport } from "@muppet-kit/shared";
+import {
+  Transport as MuppetTransport,
+  remoteTransportSchema,
+  stdioTransportSchema,
+} from "@muppet-kit/shared";
 import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
@@ -15,24 +19,24 @@ const STREAMABLE_HTTP_HEADERS_PASSTHROUGH = [
 ] as const;
 
 export const transportSchema = z.union([
-  z.object({
-    transportType: z.literal(MuppetTransport.STDIO),
-    command: z.string(),
-    args: z
-      .string()
-      .optional()
-      .transform((val) => shellParseArgs(val ?? "")),
-    env: z
-      .string()
-      .optional()
-      .transform((val) => (val ? JSON.parse(val) : {})),
-  }),
-  z.object({
-    transportType: z.union([
-      z.literal(MuppetTransport.SSE),
-      z.literal(MuppetTransport.HTTP),
-    ]),
-    url: z.string().url(),
+  stdioTransportSchema
+    .pick({
+      transportType: true,
+      command: true,
+    })
+    .extend({
+      args: z
+        .string()
+        .optional()
+        .transform((val) => shellParseArgs(val ?? "")),
+      env: z
+        .string()
+        .optional()
+        .transform((val) => (val ? JSON.parse(val) : {})),
+    }),
+  remoteTransportSchema.pick({
+    transportType: true,
+    url: true,
   }),
 ]);
 
