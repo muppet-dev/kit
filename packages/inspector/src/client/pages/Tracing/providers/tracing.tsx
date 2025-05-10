@@ -24,15 +24,6 @@ const TRACES_METHODS = [
   "completion/complete",
 ];
 
-const NOTIFICATION_METHODS = [
-  "notifications/initialized",
-  "notifications/cancelled",
-  "notifications/message",
-  "notifications/resources/updated",
-];
-
-const STD_ERROR_METHODS = ["notifications/stderr"];
-
 export const TracingProvider = (props: PropsWithChildren) => {
   const values = useTracingManager();
 
@@ -58,7 +49,7 @@ function useTracingManager() {
   const { requestHistory } = useConnection();
   const { notifications, stdErrNotifications } = useNotification();
 
-  const [tab, setTab] = useState<{ value: TraceTab; methods: string[] }>({
+  const [tab, setTab] = useState<{ value: TraceTab; methods?: string[] }>({
     value: TraceTab.TRACES,
     methods: TRACES_METHODS,
   });
@@ -66,37 +57,33 @@ function useTracingManager() {
   function changeTab(value: TraceTab) {
     setTab({
       value,
-      methods:
-        value === TraceTab.TRACES
-          ? TRACES_METHODS
-          : value === TraceTab.NOTIFICATIONS
-          ? NOTIFICATION_METHODS
-          : STD_ERROR_METHODS,
+      methods: value === TraceTab.TRACES ? TRACES_METHODS : undefined,
     });
   }
 
   const [selected, setSelected] = useState<string | null>(null);
 
-  const [methodFilters, setMethodFilters] = useState<string[]>();
+  const [methodFilters, setMethodFilters] = useState<string[] | null>(null);
   const [timestampSort, setTimestampSort] = useState<SortingEnum>(
-    SortingEnum.ASCENDING
+    SortingEnum.ASCENDING,
   );
 
   const rawTraces = useMemo(() => {
     return tab.value === TraceTab.TRACES
       ? requestHistory
       : tab.value === TraceTab.NOTIFICATIONS
-      ? notifications
-      : stdErrNotifications;
+        ? notifications
+        : stdErrNotifications;
   }, [tab, requestHistory, notifications, stdErrNotifications]);
 
   const traces = useMemo(() => {
     const _methodFilters = methodFilters ?? tab.methods;
 
-    let results = rawTraces.filter((item) =>
-      _methodFilters.includes(
-        "request" in item ? JSON.parse(item.request).method : item.method
-      )
+    let results = rawTraces.filter(
+      (item) =>
+        _methodFilters?.includes(
+          "request" in item ? JSON.parse(item.request).method : item.method,
+        ) ?? true,
     );
 
     results = results.sort((a, b) => {
@@ -129,11 +116,10 @@ function useTracingManager() {
     });
   }, [rawTraces, tab, methodFilters, timestampSort]);
 
-  function changeMethodFilters(method: string | string[]) {
+  function changeMethodFilters(method?: string | string[]) {
     setMethodFilters((prev) => {
-      if (Array.isArray(method)) {
-        return method;
-      }
+      if (method == null) return null;
+      if (Array.isArray(method)) return method;
 
       const updated = prev ? [...prev] : [];
       if (updated.includes(method)) {

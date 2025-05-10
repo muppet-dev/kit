@@ -14,6 +14,8 @@ export function FilterMethod() {
   const { methodFilters, tab, changeMethodFilters, setSelected } = useTracing();
   const filters = new Set(methodFilters);
 
+  if (!tab.methods) return <></>;
+
   const isAllSelected = filters.size === tab.methods.length;
 
   const handleSelectAll = eventHandler(() => {
