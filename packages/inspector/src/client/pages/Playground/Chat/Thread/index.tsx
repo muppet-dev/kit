@@ -96,90 +96,14 @@ const ThreadWelcome = (props: ThreadWelcome) => {
 
   return (
     <ThreadPrimitive.Empty>
-      <div className="w-full h-full flex items-center justify-center">
-        <div className="w-full max-w-2xl border rounded-lg shadow-xs">
-          <div className="px-6 pt-5 text-sm bg-background rounded-t-lg">
-            <div className="flex items-center">
-              <div className="size-4 mr-2">
-                <Icon />
-              </div>
-              <div className="space-x-1 text-muted-foreground">
-                <span>{props.selectedModel.provider}</span>
-                <span>/</span>
-                <span className="font-medium text-foreground">
-                  {props.selectedModel.name}
-                </span>
-              </div>
-            </div>
-            <div className="mt-4 text-xs text-muted-foreground">
-              {props.selectedModel.description}
-            </div>
-          </div>
-          <div className="px-6 py-5 text-xs bg-background divide-y">
-            <div className="flex items-start py-3">
-              <div className="font-medium w-28">Context</div>
-              <div className="flex-1 text-muted-foreground">
-                {numberFormatter(
-                  props.selectedModel.metadata.context,
-                  "decimal",
-                )}{" "}
-                tokens
-              </div>
-            </div>
-            <div className="flex items-start py-3">
-              <div className="font-medium w-28">Input Pricing</div>
-              <div className="flex-1 text-muted-foreground">
-                {numberFormatter(
-                  props.selectedModel.metadata.input_pricing,
-                  "currency",
-                )}{" "}
-                / million tokens
-              </div>
-            </div>
-            <div className="flex items-start py-3">
-              <div className="font-medium w-28">Output Pricing</div>
-              <div className="flex-1 text-muted-foreground">
-                {numberFormatter(
-                  props.selectedModel.metadata.output_pricing,
-                  "currency",
-                )}{" "}
-                / million tokens
-              </div>
-            </div>
-          </div>
-          <div className="px-6 py-5 text-xs font-medium border-t rounded-b-lg bg-zinc-100/75 dark:bg-zinc-900/75">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center justify-between space-x-4">
-                <a
-                  href={props.selectedModel.metadata.links.model}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="inline-flex items-center text-muted-foreground hover:text-foreground transition-all ease-in-out duration-300"
-                >
-                  <span>Model Page</span>
-                  <SquareArrowOutUpRight className="size-3 ml-1 stroke-[2.5]" />
-                </a>
-                <a
-                  href={props.selectedModel.metadata.links.pricing}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="inline-flex items-center text-muted-foreground hover:text-foreground transition-all ease-in-out duration-300"
-                >
-                  <span>Pricing</span>
-                  <SquareArrowOutUpRight className="size-3 ml-1 stroke-[2.5]" />
-                </a>
-              </div>
-              <a
-                href={props.selectedModel.metadata.links.website}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="inline-flex items-center text-muted-foreground hover:text-foreground transition-all ease-in-out duration-300"
-              >
-                <span>Website</span>
-                <SquareArrowOutUpRight className="size-3 ml-1 stroke-[2.5]" />
-              </a>
-            </div>
-          </div>
+      <div className="flex items-center flex-col h-full justify-center gap-2">
+        <Icon className="size-9" />
+        <div className="space-x-1 text-lg text-muted-foreground">
+          <span>{props.selectedModel.provider}</span>
+          <span>/</span>
+          <span className="font-medium text-foreground">
+            {props.selectedModel.name}
+          </span>
         </div>
       </div>
     </ThreadPrimitive.Empty>

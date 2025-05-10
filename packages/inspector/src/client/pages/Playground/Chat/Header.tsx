@@ -14,7 +14,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/client/components/ui/dropdown-menu";
-import { Label } from "@/client/components/ui/label";
 import {
   Popover,
   PopoverContent,
@@ -27,6 +26,7 @@ import {
   TooltipTrigger,
 } from "@/client/components/ui/tooltip";
 import { eventHandler } from "@/client/lib/eventHandler";
+import { cn } from "@/client/lib/utils";
 import { useThreadRuntime } from "@assistant-ui/react";
 import Fuse from "fuse.js";
 import {
@@ -35,10 +35,8 @@ import {
   Check,
   ChevronDown,
   Ellipsis,
-  Info,
   Plus,
   RefreshCcw,
-  SlidersHorizontal,
   ToggleLeft,
   ToggleRight,
   Trash,
@@ -52,11 +50,9 @@ import {
   useRef,
   useState,
 } from "react";
-import { cn } from "@/client/lib/utils";
 import { useModels } from "../providers";
 import {
   MODELS_CONFIG,
-  PROPERTIES_CONFIG,
   PROVIDER_ICONS,
   type SupportedModels,
 } from "../supportedModels";
@@ -101,7 +97,6 @@ export function ModelHeader(props: { chatId: string }) {
           </div>
         )}
       </Button>
-      <ConfigurationMenu modelId={model.model} />
       <Button
         title="Add model for comparison"
         variant="ghost"
@@ -138,7 +133,7 @@ function ModelSelect(props: { model: ModelProps }) {
         keys: ["name", "provider"],
         includeMatches: true,
       }),
-    [models],
+    [models]
   );
 
   let searchResults = models;
@@ -214,7 +209,7 @@ function ModelSelect(props: { model: ModelProps }) {
                         "size-4",
                         item.key === props.model.model
                           ? "opacity-100"
-                          : "opacity-0",
+                          : "opacity-0"
                       )}
                     />
                   </CommandItem>
@@ -223,59 +218,6 @@ function ModelSelect(props: { model: ModelProps }) {
             </CommandList>
           </CommandGroup>
         </Command>
-      </PopoverContent>
-    </Popover>
-  );
-}
-
-type ConfigurationMenu = {
-  modelId: SupportedModels;
-};
-
-function ConfigurationMenu(porps: ConfigurationMenu) {
-  const { onConfigChange } = useModels();
-
-  const modelConfig = MODELS_CONFIG[porps.modelId];
-
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          title="Configure model"
-          variant="ghost"
-          className="has-[>svg]:px-1.5 py-1.5 h-max rounded-sm data-[state=open]:bg-accent dark:data-[state=open]:bg-accent/50"
-        >
-          <SlidersHorizontal className="size-[18px] stroke-zinc-600 dark:stroke-zinc-300" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="p-3 md:p-4 md:w-[300px] max-w-full space-y-4">
-        {Object.entries(modelConfig.properties).map(([key, value]) => {
-          const propertyConfig =
-            PROPERTIES_CONFIG[key as keyof typeof PROPERTIES_CONFIG];
-
-          return (
-            <div key={key} className="flex items-center gap-2">
-              <Label>{propertyConfig.label}</Label>
-              <TooltipWrapper content={propertyConfig.description}>
-                <Info className="size-3.5 stroke-2 stroke-muted-foreground" />
-              </TooltipWrapper>
-              <div className="flex-1" />
-              <NumberInput
-                min={value?.min}
-                max={value?.max}
-                step={1}
-                value={value?.default}
-                onChange={(event) => {
-                  const value = event.target.value;
-                  if (value)
-                    onConfigChange(porps.modelId, {
-                      [key]: Number(value),
-                    });
-                }}
-              />
-            </div>
-          );
-        })}
       </PopoverContent>
     </Popover>
   );
