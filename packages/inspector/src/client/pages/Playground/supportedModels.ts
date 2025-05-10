@@ -1,4 +1,19 @@
-import { OpenAIIcon } from "@/client/components/icons/OpenAI";
+import {
+  AmazonIcon,
+  AnthropicIcon,
+  CerebrasIcon,
+  CohereIcon,
+  DeepInfraIcon,
+  DeepSeekIcon,
+  FireworksIcon,
+  GoogleIcon,
+  GroqIconIcon,
+  InceptionIcon,
+  MistralIcon,
+  OpenAIIcon,
+  PerplexityIcon,
+  xAIIcon,
+} from "./icons";
 
 export type SupportedModels = "openai:gpt-4.1" | "openai:gpt-4.1-mini";
 
@@ -9,6 +24,19 @@ export type ModelConfig = {
 
 export const PROVIDER_ICONS = {
   OpenAI: OpenAIIcon,
+  Anthropic: AnthropicIcon,
+  Cerebras: CerebrasIcon,
+  Cohere: CohereIcon,
+  DeepInfra: DeepInfraIcon,
+  DeepSeek: DeepSeekIcon,
+  Fireworks: FireworksIcon,
+  Google: GoogleIcon,
+  GroqIcon: GroqIconIcon,
+  Inception: InceptionIcon,
+  Mistral: MistralIcon,
+  Amazon: AmazonIcon,
+  Perplexity: PerplexityIcon,
+  xAI: xAIIcon,
 };
 
 export const MODELS_CONFIG: Record<SupportedModels, ModelConfig> = {
