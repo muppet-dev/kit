@@ -14,6 +14,7 @@ export default defineConfig(({ mode }) => {
           input: "./src/client/main.tsx",
           output: {
             entryFileNames: "static/client.js",
+            manualChunks: undefined,
           },
         },
       },
