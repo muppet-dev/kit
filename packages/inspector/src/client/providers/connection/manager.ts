@@ -310,10 +310,8 @@ export function useConnectionManager(props: UseConnectionOptions) {
         mcpProxyServerUrl.searchParams.append("url", props.url);
         break;
     }
-    (mcpProxyServerUrl as URL).searchParams.append(
-      "transportType",
-      props.transportType,
-    );
+
+    mcpProxyServerUrl.searchParams.append("transportType", props.transportType);
 
     try {
       // Inject auth manually instead of using SSEClientTransport, because we're
