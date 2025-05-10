@@ -8,7 +8,7 @@ import {
   TooltipTrigger,
 } from "@/client/components/ui/tooltip";
 import { useConnection } from "@/client/providers";
-import { ArchiveX, Pickaxe, RefreshCcw } from "lucide-react";
+import { ArchiveX, ListX, Pickaxe, RefreshCcw } from "lucide-react";
 import { TracingTable } from "./Table";
 import { TracingProvider } from "./providers";
 import toast from "react-hot-toast";
@@ -37,11 +37,31 @@ export default function TracingPage() {
 }
 
 function PageHeader() {
+  const { setRequestHistory } = useConnection();
+
+  const onClear = eventHandler(() => {
+    setRequestHistory([]);
+  });
+
   return (
     <div className="flex items-center gap-2">
       <h2 className="text-2xl font-bold">Traces</h2>
       <div className="flex-1" />
       <TunnelLink />
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            size="icon"
+            variant="ghost"
+            className="size-max has-[>svg]:px-1.5 py-1.5"
+            onClick={onClear}
+            onKeyDown={onClear}
+          >
+            <ListX className="size-4 stroke-2" />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>Clear all traces</TooltipContent>
+      </Tooltip>
     </div>
   );
 }
@@ -52,7 +72,7 @@ function TunnelLink() {
       fetch(`${getMCPProxyAddress()}/tunnel`).then((res) => {
         if (!res.ok) {
           throw new Error(
-            "Failed to generate a new tunneling URL. Please try again.",
+            "Failed to generate a new tunneling URL. Please try again."
           );
         }
 

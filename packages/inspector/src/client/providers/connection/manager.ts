@@ -459,6 +459,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
     sendNotification,
     handleCompletion,
     completionsSupported,
+    setRequestHistory,
     connect,
     disconnect,
   };
