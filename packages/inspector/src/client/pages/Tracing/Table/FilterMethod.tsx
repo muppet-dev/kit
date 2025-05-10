@@ -6,18 +6,18 @@ import {
   DropdownMenuTrigger,
 } from "@/client/components/ui/dropdown-menu";
 import { Check, FilterIcon } from "lucide-react";
-import { AVAILABLE_METHODS, useTracing } from "../providers";
+import { useTracing } from "../providers";
 import { Button } from "@/client/components/ui/button";
 import { eventHandler } from "@/client/lib/eventHandler";
 
 export function FilterMethod() {
-  const { methodFilters, changeMethodFilters, setSelected } = useTracing();
+  const { methodFilters, tab, changeMethodFilters, setSelected } = useTracing();
   const filters = new Set(methodFilters);
 
-  const isAllSelected = filters.size === AVAILABLE_METHODS.length;
+  const isAllSelected = filters.size === tab.methods.length;
 
   const handleSelectAll = eventHandler(() => {
-    changeMethodFilters(isAllSelected ? [] : AVAILABLE_METHODS);
+    changeMethodFilters(isAllSelected ? [] : tab.methods);
     setSelected(null);
   });
 
@@ -47,7 +47,7 @@ export function FilterMethod() {
           Select All
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        {AVAILABLE_METHODS.map((method) => (
+        {tab.methods.map((method) => (
           <DropdownMenuItem
             key={method}
             onClick={handleSelectMethod(method)}

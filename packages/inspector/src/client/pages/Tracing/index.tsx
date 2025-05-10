@@ -2,36 +2,66 @@ import { CopyButton } from "@/client/components/CopyButton";
 import { Button } from "@/client/components/ui/button";
 import { Input } from "@/client/components/ui/input";
 import { Skeleton } from "@/client/components/ui/skeleton";
+import { Tabs, TabsList, TabsTrigger } from "@/client/components/ui/tabs";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/client/components/ui/tooltip";
+import { eventHandler } from "@/client/lib/eventHandler";
 import { useConnection } from "@/client/providers";
-import { ArchiveX, ListX, Pickaxe, RefreshCcw } from "lucide-react";
-import { TracingTable } from "./Table";
-import { TracingProvider } from "./providers";
-import toast from "react-hot-toast";
 import { getMCPProxyAddress } from "@/client/providers/connection/manager";
 import { useMutation } from "@tanstack/react-query";
-import { eventHandler } from "@/client/lib/eventHandler";
+import { ListX, Pickaxe, RefreshCcw } from "lucide-react";
+import toast from "react-hot-toast";
+import { TraceTab, TracingProvider, useTracing } from "./providers";
+import { TracingTable } from "./Table";
 
 export default function TracingPage() {
-  const { requestHistory } = useConnection();
+  return (
+    <TracingProvider>
+      <TracingPanel />
+    </TracingProvider>
+  );
+}
+
+function TracingPanel() {
+  const { tab, changeTab } = useTracing();
 
   return (
-    <div className="p-4 w-full flex flex-col gap-4 overflow-y-auto">
-      <PageHeader />
-      {requestHistory.length > 0 ? (
-        <TracingProvider>
-          <TracingTable />
-        </TracingProvider>
-      ) : (
-        <div className="size-full flex items-center justify-center gap-1.5 text-muted-foreground select-none">
-          <ArchiveX className="size-4" />
-          <p className="text-sm">No history found</p>
+    <div className="p-4 size-full">
+      <Tabs
+        value={tab.value}
+        onValueChange={(value) => changeTab(value as TraceTab)}
+        className="size-full"
+      >
+        <div className="flex items-center justify-between gap-2">
+          <TabsList>
+            <TabsTrigger
+              value={TraceTab.TRACES}
+              className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black"
+            >
+              Traces
+            </TabsTrigger>
+            <TabsTrigger
+              value={TraceTab.NOTIFICATIONS}
+              className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black"
+            >
+              Notifications
+            </TabsTrigger>
+            <TabsTrigger
+              value={TraceTab.ERRORS}
+              className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black"
+            >
+              Errors
+            </TabsTrigger>
+          </TabsList>
+          <PageHeader />
         </div>
-      )}
+        <div className="size-full flex flex-col gap-4 overflow-y-auto">
+          <TracingTable />
+        </div>
+      </Tabs>
     </div>
   );
 }
@@ -45,8 +75,6 @@ function PageHeader() {
 
   return (
     <div className="flex items-center gap-2">
-      <h2 className="text-2xl font-bold">Traces</h2>
-      <div className="flex-1" />
       <TunnelLink />
       <Tooltip>
         <TooltipTrigger asChild>

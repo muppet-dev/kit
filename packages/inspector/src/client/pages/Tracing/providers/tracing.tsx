@@ -1,4 +1,4 @@
-import { useConnection } from "@/client/providers";
+import { useConnection, useNotification } from "@/client/providers";
 import {
   type PropsWithChildren,
   createContext,
@@ -11,7 +11,7 @@ type TracingContextType = ReturnType<typeof useTracingManager>;
 
 const TracingContext = createContext<TracingContextType | null>(null);
 
-export const AVAILABLE_METHODS = [
+const TRACES_METHODS = [
   "initialize",
   "ping",
   "tools/list",
@@ -24,6 +24,15 @@ export const AVAILABLE_METHODS = [
   "completion/complete",
 ];
 
+const NOTIFICATION_METHODS = [
+  "notifications/initialized",
+  "notifications/cancelled",
+  "notifications/message",
+  "notifications/resources/updated",
+];
+
+const STD_ERROR_METHODS = ["notifications/stderr"];
+
 export const TracingProvider = (props: PropsWithChildren) => {
   const values = useTracingManager();
 
@@ -34,6 +43,12 @@ export const TracingProvider = (props: PropsWithChildren) => {
   );
 };
 
+export enum TraceTab {
+  TRACES = "traces",
+  NOTIFICATIONS = "notifications",
+  ERRORS = "errors",
+}
+
 export enum SortingEnum {
   ASCENDING = 1,
   DESCENDING = -1,
@@ -41,16 +56,47 @@ export enum SortingEnum {
 
 function useTracingManager() {
   const { requestHistory } = useConnection();
+  const { notifications, stdErrNotifications } = useNotification();
+
+  const [tab, setTab] = useState<{ value: TraceTab; methods: string[] }>({
+    value: TraceTab.TRACES,
+    methods: TRACES_METHODS,
+  });
+
+  function changeTab(value: TraceTab) {
+    setTab({
+      value,
+      methods:
+        value === TraceTab.TRACES
+          ? TRACES_METHODS
+          : value === TraceTab.NOTIFICATIONS
+          ? NOTIFICATION_METHODS
+          : STD_ERROR_METHODS,
+    });
+  }
+
   const [selected, setSelected] = useState<string | null>(null);
-  const [methodFilters, setMethodFilters] =
-    useState<string[]>(AVAILABLE_METHODS);
+
+  const [methodFilters, setMethodFilters] = useState<string[]>();
   const [timestampSort, setTimestampSort] = useState<SortingEnum>(
-    SortingEnum.ASCENDING,
+    SortingEnum.ASCENDING
   );
 
+  const rawTraces = useMemo(() => {
+    return tab.value === TraceTab.TRACES
+      ? requestHistory
+      : tab.value === TraceTab.NOTIFICATIONS
+      ? notifications
+      : stdErrNotifications;
+  }, [tab, requestHistory, notifications, stdErrNotifications]);
+
   const traces = useMemo(() => {
-    let results = requestHistory.filter((item) =>
-      methodFilters.includes(JSON.parse(item.request).method),
+    const _methodFilters = methodFilters ?? tab.methods;
+
+    let results = rawTraces.filter((item) =>
+      _methodFilters.includes(
+        "request" in item ? JSON.parse(item.request).method : item.method
+      )
     );
 
     results = results.sort((a, b) => {
@@ -62,15 +108,26 @@ function useTracingManager() {
         : bTimestamp - aTimestamp;
     });
 
-    return results.map((item) => ({
-      id: item.id,
-      timestamp: item.timestamp,
-      sRequest: item.request,
-      sResponse: item.response,
-      request: JSON.parse(item.request),
-      response: item.response ? JSON.parse(item.response) : undefined,
-    }));
-  }, [requestHistory, methodFilters, timestampSort]);
+    return results.map((item) => {
+      if ("request" in item) {
+        return {
+          id: item.id,
+          timestamp: item.timestamp,
+          sRequest: item.request,
+          sResponse: item.response,
+          request: JSON.parse(item.request),
+          response: item.response ? JSON.parse(item.response) : undefined,
+        };
+      }
+
+      return {
+        id: item.id,
+        timestamp: item.timestamp,
+        sRequest: JSON.stringify(item.params),
+        request: item.params,
+      };
+    });
+  }, [rawTraces, tab, methodFilters, timestampSort]);
 
   function changeMethodFilters(method: string | string[]) {
     setMethodFilters((prev) => {
@@ -78,7 +135,7 @@ function useTracingManager() {
         return method;
       }
 
-      const updated = [...prev];
+      const updated = prev ? [...prev] : [];
       if (updated.includes(method)) {
         updated.splice(updated.indexOf(method), 1);
       } else {
@@ -97,6 +154,8 @@ function useTracingManager() {
   }
 
   return {
+    tab,
+    changeTab,
     traces,
     selected,
     setSelected,

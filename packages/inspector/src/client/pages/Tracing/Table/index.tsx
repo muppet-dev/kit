@@ -13,13 +13,19 @@ import Fuse from "fuse.js";
 import { MoveDown, MoveUp } from "lucide-react";
 import { useMemo, useState } from "react";
 import { cn, numberFormatter } from "@/client/lib/utils";
-import { SortingEnum, useTracing } from "../providers";
+import { SortingEnum, TraceTab, useTracing } from "../providers";
 import { FilterMethod } from "./FilterMethod";
 import { TableDrawer } from "./TableDrawer";
 
 export function TracingTable() {
-  const { traces, selected, setSelected, timestampSort, toggleTimestampSort } =
-    useTracing();
+  const {
+    traces,
+    tab,
+    selected,
+    setSelected,
+    timestampSort,
+    toggleTimestampSort,
+  } = useTracing();
   const [search, setSearch] = useState<string>("");
 
   const handleSortDate = eventHandler(() => toggleTimestampSort());
@@ -56,7 +62,7 @@ export function TracingTable() {
                   className="w-64 cursor-pointer"
                 >
                   <div className="flex items-center justify-between">
-                    Date
+                    Timestamp
                     {timestampSort === SortingEnum.ASCENDING && (
                       <MoveUp className="size-3.5" />
                     )}
@@ -65,8 +71,12 @@ export function TracingTable() {
                     )}
                   </div>
                 </TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Latency</TableHead>
+                {tab.value === TraceTab.TRACES && (
+                  <>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Latency</TableHead>
+                  </>
+                )}
                 <TableHead>
                   <div className="flex items-center justify-between">
                     Method
@@ -85,12 +95,17 @@ export function TracingTable() {
                   const time = dayjs(requestWasSentOn).format("hh:mm:ss");
                   const millisecond = dayjs(requestWasSentOn).format("SSS");
 
+                  const latency =
+                    "latency" in trace.timestamp
+                      ? trace.timestamp.latency
+                      : undefined;
+
                   return (
                     <TableRow
                       key={`row.${index + 1}`}
                       className={cn(
                         "cursor-pointer divide-x",
-                        selected === trace.id && "bg-muted/50",
+                        selected === trace.id && "bg-muted/50"
                       )}
                       onClick={handleSelectData(trace.id)}
                       onKeyDown={handleSelectData(trace.id)}
@@ -104,28 +119,27 @@ export function TracingTable() {
                           .{millisecond}
                         </span>
                       </TableCell>
-                      <TableCell
-                        className={
-                          isError
-                            ? "text-red-500 dark:text-red-300"
-                            : "text-green-600 dark:text-green-300"
-                        }
-                      >
-                        {isError ? "Error" : "Success"}
-                      </TableCell>
-                      <TableCell>
-                        {trace.timestamp.latency > 1000
-                          ? `${numberFormatter(
-                              Number(
-                                (trace.timestamp.latency / 1000).toFixed(2),
-                              ),
-                              "decimal",
-                            )} s`
-                          : `${numberFormatter(
-                              trace.timestamp.latency,
-                              "decimal",
-                            )} ms`}
-                      </TableCell>
+                      {latency && (
+                        <>
+                          <TableCell
+                            className={
+                              isError
+                                ? "text-red-500 dark:text-red-300"
+                                : "text-green-600 dark:text-green-300"
+                            }
+                          >
+                            {isError ? "Error" : "Success"}
+                          </TableCell>
+                          <TableCell>
+                            {latency > 1000
+                              ? `${numberFormatter(
+                                  Number((latency / 1000).toFixed(2)),
+                                  "decimal"
+                                )} s`
+                              : `${numberFormatter(latency, "decimal")} ms`}
+                          </TableCell>
+                        </>
+                      )}
                       <TableCell>{trace.request.method}</TableCell>
                     </TableRow>
                   );
@@ -134,7 +148,7 @@ export function TracingTable() {
                 <TableRow className="hover:bg-transparent">
                   <TableCell
                     className="h-[500px] text-center select-none text-muted-foreground"
-                    colSpan={4}
+                    colSpan={tab.value === TraceTab.TRACES ? 4 : 2}
                   >
                     No data available
                   </TableCell>
