@@ -9,7 +9,7 @@ import {
   TooltipTrigger,
 } from "@/client/components/ui/tooltip";
 import { eventHandler } from "@/client/lib/eventHandler";
-import { useConfig, useConnection } from "@/client/providers";
+import { useConfig, useConnection, useNotification } from "@/client/providers";
 import { getMCPProxyAddress } from "@/client/providers/connection/manager";
 import { useMutation } from "@tanstack/react-query";
 import { ListX, Pickaxe, RefreshCcw } from "lucide-react";
@@ -68,10 +68,22 @@ function TracingPanel() {
 
 function PageHeader() {
   const { config } = useConfig();
+  const { tab } = useTracing();
+  const { clearNotifications, clearStdErrNotifications } = useNotification();
   const { setRequestHistory } = useConnection();
 
   const onClear = eventHandler(() => {
-    setRequestHistory([]);
+    switch (tab.value) {
+      case TraceTab.TRACES:
+        setRequestHistory([]);
+        break;
+      case TraceTab.NOTIFICATIONS:
+        clearNotifications();
+        break;
+      case TraceTab.ERRORS:
+        clearStdErrNotifications();
+        break;
+    }
   });
 
   return (
