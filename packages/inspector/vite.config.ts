@@ -9,15 +9,6 @@ export default defineConfig(({ mode }) => {
   if (mode === "client")
     return {
       plugins: [react(), tailwindcss()],
-      build: {
-        rollupOptions: {
-          input: "./src/client/main.tsx",
-          output: {
-            entryFileNames: "static/client.js",
-            manualChunks: undefined,
-          },
-        },
-      },
       resolve: {
         alias: {
           "@": path.resolve(__dirname, "./src"),

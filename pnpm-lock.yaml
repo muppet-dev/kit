@@ -78,9 +78,6 @@ importers:
       '@hono/node-server':
         specifier: ^1.14.1
         version: 1.14.1(hono@4.7.9)
-      '@hono/react-renderer':
-        specifier: ^1.0.1
-        version: 1.0.1(hono@4.7.9)(react-dom@19.1.0)(react@19.1.0)
       '@hono/standard-validator':
         specifier: ^0.1.2
         version: 0.1.2(@standard-schema/spec@1.0.0)(hono@4.7.9)
@@ -1310,19 +1307,6 @@ packages:
       hono: ^4
     dependencies:
       hono: 4.7.9
-
-  /@hono/react-renderer@1.0.1(hono@4.7.9)(react-dom@19.1.0)(react@19.1.0):
-    resolution: {integrity: sha512-vjQ/70hVrbgsi2O44N7w5sO0v51lRcuXau/4caVzw0A1hje+U2zAnuhiBC3JhX56gGfhGT4kO5B0di4SROx0Lg==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      hono: '*'
-      react: ^19.0.0
-      react-dom: ^19.0.0
-    dependencies:
-      hono: 4.7.9
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
-    dev: false
 
   /@hono/standard-validator@0.1.2(@standard-schema/spec@1.0.0)(hono@4.7.9):
     resolution: {integrity: sha512-mVyv2fpx/o0MNAEhjXhvuVbW3BWTGnf8F4w8ZifztE+TWXjUAKr7KAOZfcDhVrurgVhKw7RbTnEog2beZM6QtQ==}

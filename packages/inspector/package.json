@@ -4,7 +4,9 @@
   "license": "MIT",
   "type": "module",
   "bin": "./dist/cli.js",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite",
     "build:client": "vite build --mode client",
@@ -30,7 +32,6 @@
     "@assistant-ui/react": "^0.10.5",
     "@assistant-ui/react-ai-sdk": "^0.10.6",
     "@assistant-ui/react-markdown": "^0.10.3",
-    "@hono/react-renderer": "^1.0.1",
     "@hono/standard-validator": "^0.1.2",
     "@hookform/error-message": "^2.0.1",
     "@hookform/resolvers": "^5.0.1",
