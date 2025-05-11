@@ -1,8 +1,8 @@
 import {
   Accordion,
-  AccordionTrigger,
-  AccordionItem,
   AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
 } from "@/client/components/ui/accordion";
 import { Button } from "@/client/components/ui/button";
 import { Input } from "@/client/components/ui/input";

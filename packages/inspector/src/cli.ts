@@ -1,11 +1,11 @@
-import { program } from "commander";
 import { serve } from "@hono/node-server";
-import { loadConfig } from "c12";
-import pkg from "../package.json" assert { type: "json" };
 import {
   type InspectorConfig,
   defineInspectorConfig,
 } from "@muppet-kit/shared";
+import { loadConfig } from "c12";
+import { program } from "commander";
+import pkg from "../package.json" assert { type: "json" };
 import app from "./index.js";
 
 program

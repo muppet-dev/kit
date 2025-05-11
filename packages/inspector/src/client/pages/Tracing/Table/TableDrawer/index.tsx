@@ -9,12 +9,12 @@ import {
 import { eventHandler } from "@/client/lib/eventHandler";
 import { cn } from "@/client/lib/utils";
 import { useConnection } from "@/client/providers";
+import type { RequestHistory } from "@/client/providers/connection/manager";
 import { EmptyResultSchema } from "@modelcontextprotocol/sdk/types.js";
 import { ChevronDown, ChevronUp, RefreshCcw, XIcon } from "lucide-react";
+import { useState } from "react";
 import { useTracing } from "../../providers";
 import { UpdateRequestDialog } from "./UpdateRequestDialog";
-import { useState } from "react";
-import type { RequestHistory } from "@/client/providers/connection/manager";
 
 const UPDATABLE_METHODS = [
   "tools/call",

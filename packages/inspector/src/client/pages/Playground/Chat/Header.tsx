@@ -27,6 +27,7 @@ import {
 } from "@/client/components/ui/tooltip";
 import { eventHandler } from "@/client/lib/eventHandler";
 import { cn } from "@/client/lib/utils";
+import { useConfig } from "@/client/providers";
 import { useThreadRuntime } from "@assistant-ui/react";
 import Fuse from "fuse.js";
 import {
@@ -50,10 +51,9 @@ import {
   useRef,
   useState,
 } from "react";
-import { useModels } from "../providers";
 import { PROVIDER_ICONS } from "../icons";
+import { useModels } from "../providers";
 import type { ModelProps } from "../type";
-import { useConfig } from "@/client/providers";
 
 export function ModelHeader(props: { chatId: string }) {
   const { getModel, addModel, onConfigChange } = useModels();

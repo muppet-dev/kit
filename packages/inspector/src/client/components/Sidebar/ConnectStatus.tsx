@@ -1,8 +1,8 @@
 import { eventHandler } from "@/client/lib/eventHandler";
+import { cn } from "@/client/lib/utils";
 import { useConnection } from "@/client/providers";
 import { ConnectionStatus } from "@/client/providers/connection/manager";
 import { RotateCcw, Unplug } from "lucide-react";
-import { cn } from "@/client/lib/utils";
 import { Button } from "../ui/button";
 import { useSidebar } from "../ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";

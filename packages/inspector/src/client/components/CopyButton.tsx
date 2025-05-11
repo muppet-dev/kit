@@ -1,7 +1,7 @@
 import { eventHandler } from "@/client/lib/eventHandler";
+import { cn } from "@/client/lib/utils";
 import { Check, Copy } from "lucide-react";
 import { useEffect, useState } from "react";
-import { cn } from "@/client/lib/utils";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 

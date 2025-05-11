@@ -1,7 +1,7 @@
-import { Transport } from "@muppet-kit/shared";
 import type { ConnectionInfo } from "@/client/providers/connection/manager";
 import { transportSchema as schema } from "@/client/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Transport } from "@muppet-kit/shared";
 import type { PropsWithChildren } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import type z from "zod";

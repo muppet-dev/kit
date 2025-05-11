@@ -7,9 +7,9 @@ import {
 } from "@/client/components/ui/sidebar";
 import { cn } from "@/client/lib/utils";
 import type { LucideIcon } from "lucide-react";
+import type { PropsWithChildren } from "react";
 import { NavLink } from "react-router";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import type { PropsWithChildren } from "react";
 
 export type SidebarItem = {
   items: {

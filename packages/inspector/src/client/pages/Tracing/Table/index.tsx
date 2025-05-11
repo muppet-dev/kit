@@ -8,11 +8,11 @@ import {
   TableRow,
 } from "@/client/components/ui/table";
 import { eventHandler } from "@/client/lib/eventHandler";
+import { cn, numberFormatter } from "@/client/lib/utils";
 import dayjs from "dayjs";
 import Fuse from "fuse.js";
 import { MoveDown, MoveUp } from "lucide-react";
 import { useMemo, useState } from "react";
-import { cn, numberFormatter } from "@/client/lib/utils";
 import { SortingEnum, TraceTab, useTracing } from "../providers";
 import { FilterMethod } from "./FilterMethod";
 import { TableDrawer } from "./TableDrawer";
@@ -105,7 +105,7 @@ export function TracingTable() {
                       key={`row.${index + 1}`}
                       className={cn(
                         "cursor-pointer divide-x",
-                        selected === trace.id && "bg-muted/50"
+                        selected === trace.id && "bg-muted/50",
                       )}
                       onClick={handleSelectData(trace.id)}
                       onKeyDown={handleSelectData(trace.id)}
@@ -134,7 +134,7 @@ export function TracingTable() {
                             {latency > 1000
                               ? `${numberFormatter(
                                   Number((latency / 1000).toFixed(2)),
-                                  "decimal"
+                                  "decimal",
                                 )} s`
                               : `${numberFormatter(latency, "decimal")} ms`}
                           </TableCell>

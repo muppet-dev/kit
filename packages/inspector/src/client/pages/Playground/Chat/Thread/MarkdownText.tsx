@@ -1,6 +1,7 @@
 "use client";
 
 import "@assistant-ui/react-markdown/styles/dot.css";
+import { eventHandler } from "@/client/lib/eventHandler";
 import { cn } from "@/client/lib/utils";
 import {
   type CodeHeaderProps,
@@ -12,7 +13,6 @@ import { CheckIcon, CopyIcon } from "lucide-react";
 import { type FC, memo, useState } from "react";
 import remarkGfm from "remark-gfm";
 import { TooltipIconButton } from "./TooltipIconButton";
-import { eventHandler } from "@/client/lib/eventHandler";
 
 const MarkdownTextImpl = () => {
   return (

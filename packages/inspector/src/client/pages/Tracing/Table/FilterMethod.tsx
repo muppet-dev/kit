@@ -1,3 +1,4 @@
+import { Button } from "@/client/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -5,10 +6,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/client/components/ui/dropdown-menu";
+import { eventHandler } from "@/client/lib/eventHandler";
 import { Check, FilterIcon } from "lucide-react";
 import { useTracing } from "../providers";
-import { Button } from "@/client/components/ui/button";
-import { eventHandler } from "@/client/lib/eventHandler";
 
 export function FilterMethod() {
   const { methodFilters, tab, changeMethodFilters, setSelected } = useTracing();

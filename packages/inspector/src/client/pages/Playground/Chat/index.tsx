@@ -1,9 +1,9 @@
+import { getMCPProxyAddress } from "@/client/providers/connection/manager";
 import { AssistantRuntimeProvider } from "@assistant-ui/react";
 import { useChatRuntime } from "@assistant-ui/react-ai-sdk";
+import { useModels } from "../providers";
 import { ModelHeader } from "./Header";
 import { Thread } from "./Thread";
-import { useModels } from "../providers";
-import { getMCPProxyAddress } from "@/client/providers/connection/manager";
 
 export type Chat = {
   chatId: string;

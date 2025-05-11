@@ -1,9 +1,9 @@
-import devServer from "@hono/vite-dev-server";
-import { defineConfig } from "vite";
+import path from "node:path";
 import build from "@hono/vite-build/node";
+import devServer from "@hono/vite-dev-server";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
-import path from "node:path";
+import { defineConfig } from "vite";
 
 export default defineConfig(({ mode }) => {
   if (mode === "client")

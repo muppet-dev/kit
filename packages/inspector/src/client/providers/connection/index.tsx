@@ -4,9 +4,9 @@ import {
   useContext,
   useEffect,
 } from "react";
-import { useConnectionManager } from "./manager";
 import { useConfig } from "../config";
 import { useNotification } from "../notifications";
+import { useConnectionManager } from "./manager";
 
 type ConnectionContextType = ReturnType<typeof useConnectionManager>;
 

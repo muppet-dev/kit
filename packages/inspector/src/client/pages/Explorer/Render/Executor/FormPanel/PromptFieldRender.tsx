@@ -2,10 +2,10 @@ import { Combobox } from "@/client/components/ui/combobox";
 import { Label } from "@/client/components/ui/label";
 import { useCompletionState } from "@/client/hooks/use-completion-state";
 import { cn } from "@/client/lib/utils";
-import type { PromptItemType } from "../../../types";
 import { useConnection } from "@/client/providers";
 import { useEffect } from "react";
 import { Controller, useFormContext } from "react-hook-form";
+import type { PromptItemType } from "../../../types";
 
 export type PromptFieldRender = PromptItemType & { selectedPromptName: string };
 

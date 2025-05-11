@@ -1,5 +1,6 @@
 import type { ConnectionInfo } from "@/client/providers/connection/manager";
 import type { ServerNotification } from "@modelcontextprotocol/sdk/types.js";
+import { nanoid } from "nanoid";
 import {
   type PropsWithChildren,
   createContext,
@@ -8,7 +9,6 @@ import {
   useState,
 } from "react";
 import type { StdErrNotification } from "../types";
-import { nanoid } from "nanoid";
 
 type NotificationContextType = ReturnType<typeof useNotificationManager>;
 

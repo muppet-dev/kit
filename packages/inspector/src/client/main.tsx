@@ -1,9 +1,9 @@
 import { createRoot } from "react-dom/client";
 import "./index.css";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import toast, { Toaster } from "react-hot-toast";
 import App from "./App";
 import { ConfigProvider, ThemeProvider } from "./providers";
-import toast, { Toaster } from "react-hot-toast";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,5 +33,5 @@ createRoot(document.getElementById("root")!).render(
         <Toaster position="bottom-right" />
       </ThemeProvider>
     </ConfigProvider>
-  </QueryClientProvider>
+  </QueryClientProvider>,
 );

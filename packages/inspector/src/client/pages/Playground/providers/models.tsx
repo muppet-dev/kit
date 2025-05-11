@@ -1,3 +1,4 @@
+import { useConfig } from "@/client/providers";
 import { nanoid } from "nanoid";
 import {
   type PropsWithChildren,
@@ -6,7 +7,6 @@ import {
   useState,
 } from "react";
 import type { ModelProps } from "../type";
-import { useConfig } from "@/client/providers";
 
 type ModelsContextType = ReturnType<typeof useModelsManager>;
 

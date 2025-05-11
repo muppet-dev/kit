@@ -14,8 +14,8 @@ import { getMCPProxyAddress } from "@/client/providers/connection/manager";
 import { useMutation } from "@tanstack/react-query";
 import { ListX, Pickaxe, RefreshCcw } from "lucide-react";
 import toast from "react-hot-toast";
-import { TraceTab, TracingProvider, useTracing } from "./providers";
 import { TracingTable } from "./Table";
+import { TraceTab, TracingProvider, useTracing } from "./providers";
 
 export default function TracingPage() {
   return (

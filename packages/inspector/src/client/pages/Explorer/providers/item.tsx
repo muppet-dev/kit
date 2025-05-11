@@ -3,8 +3,8 @@ import {
   CallToolResultSchema,
   GetPromptResultSchema,
   ListPromptsResultSchema,
-  ListResourcesResultSchema,
   ListResourceTemplatesResultSchema,
+  ListResourcesResultSchema,
   ListToolsResultSchema,
   ReadResourceResultSchema,
 } from "@modelcontextprotocol/sdk/types.js";

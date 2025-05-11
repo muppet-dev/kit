@@ -1,5 +1,5 @@
-import esbuild from "esbuild";
 import { performance } from "node:perf_hooks";
+import esbuild from "esbuild";
 
 const start = performance.now();
 

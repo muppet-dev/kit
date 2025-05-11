@@ -3,11 +3,11 @@ import { Spinner } from "@/client/components/ui/spinner";
 import Fuse, { type RangeTuple } from "fuse.js";
 import { CircleX } from "lucide-react";
 import { useMemo, useState } from "react";
-import { useTool, useMCPItem } from "../providers";
+import { useMCPItem, useTool } from "../providers";
 import type { MCPItemType } from "../types";
+import { Executor } from "./Executor";
 import { MCPItem } from "./MCPItem";
 import { ToolsTabs } from "./Tabs";
-import { Executor } from "./Executor";
 
 export function ExplorerRender() {
   const [search, setSearch] = useState<string>("");

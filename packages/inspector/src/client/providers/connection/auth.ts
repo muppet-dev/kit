@@ -1,7 +1,7 @@
 import type { OAuthClientProvider } from "@modelcontextprotocol/sdk/client/auth.js";
 import {
-  OAuthClientInformationSchema,
   type OAuthClientInformation,
+  OAuthClientInformationSchema,
   type OAuthTokens,
   OAuthTokensSchema,
 } from "@modelcontextprotocol/sdk/shared/auth.js";

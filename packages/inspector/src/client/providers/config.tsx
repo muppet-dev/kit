@@ -1,6 +1,6 @@
 import {
-  getMCPProxyAddress,
   type ConnectionInfo,
+  getMCPProxyAddress,
 } from "@/client/providers/connection/manager";
 import { useQuery } from "@tanstack/react-query";
 import {

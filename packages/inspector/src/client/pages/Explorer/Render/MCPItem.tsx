@@ -1,5 +1,4 @@
-import type { RangeTuple } from "fuse.js";
-import type { MCPItemType } from "../types";
+import { highlightMatches } from "@/client/components/highlightMatches";
 import {
   Card,
   CardContent,
@@ -7,10 +6,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/client/components/ui/card";
-import { useMCPItem, Tool } from "../providers";
-import { cn } from "@/client/lib/utils";
 import { eventHandler } from "@/client/lib/eventHandler";
-import { highlightMatches } from "@/client/components/highlightMatches";
+import { cn } from "@/client/lib/utils";
+import type { RangeTuple } from "fuse.js";
+import { Tool, useMCPItem } from "../providers";
+import type { MCPItemType } from "../types";
 
 export type MCPItem = MCPItemType & {
   matches?: RangeTuple[];

@@ -1,8 +1,8 @@
-import { Transport } from "@muppet-kit/shared";
 import { eventHandler } from "@/client/lib/eventHandler";
 import { CONFIG_STORAGE_KEY, useConfig } from "@/client/providers";
 import type { ConnectionInfo } from "@/client/providers/connection/manager";
 import type { transportSchema } from "@/client/validations";
+import { Transport } from "@muppet-kit/shared";
 import { useFormContext } from "react-hook-form";
 import type z from "zod";
 import { ConfigForm } from "./ConfigForm";

@@ -1,19 +1,12 @@
 import {
-  type ComponentProps,
-  type ForwardRefExoticComponent,
-  type RefAttributes,
-  useEffect,
-  useState,
-} from "react";
-import type * as TabsPrimitive from "@radix-ui/react-tabs";
-import { Tool, useMCPItem, useTool } from "../../providers";
-import { RequestTab } from "./constant";
-import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@/client/components/ui/tabs";
+import { cn } from "@/client/lib/utils";
+import { useConfig } from "@/client/providers";
+import type * as TabsPrimitive from "@radix-ui/react-tabs";
 import {
   AlignJustify,
   Braces,
@@ -21,20 +14,27 @@ import {
   type LucideProps,
   Variable,
 } from "lucide-react";
-import { cn } from "@/client/lib/utils";
+import {
+  type ComponentProps,
+  type ForwardRefExoticComponent,
+  type RefAttributes,
+  useEffect,
+  useState,
+} from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { Tool, useMCPItem, useTool } from "../../providers";
 import { AnalyseButtonGroup } from "./AnalyseButtonGroup";
+import { AnalyseProvider } from "./AnalyseButtonGroup/provider";
+import { AnalysePanel } from "./AnalysePanel";
+import { FormPanel } from "./FormPanel";
 import { FormResetButton } from "./FormResetButton";
 import { GenerateButtonGroup } from "./GenerateButtonGroup";
-import { SendButton } from "./SendButton";
-import { AnalyseProvider } from "./AnalyseButtonGroup/provider";
-import { FormPanel } from "./FormPanel";
 import { JSONPanel } from "./JSONPanel";
-import { AnalysePanel } from "./AnalysePanel";
-import { SchemaPanel } from "./SchemaPanel";
-import { FormProvider, useForm } from "react-hook-form";
 import { ReponsePanel } from "./Reponse";
+import { SchemaPanel } from "./SchemaPanel";
+import { SendButton } from "./SendButton";
+import { RequestTab } from "./constant";
 import { CustomFormProvider } from "./provider";
-import { useConfig } from "@/client/providers";
 
 export function Executor() {
   const { isModelsEnabled } = useConfig();

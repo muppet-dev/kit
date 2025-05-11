@@ -1,10 +1,10 @@
+import { cn } from "@/client/lib/utils";
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useTheme } from "@/client/providers";
-import { useEffect, useState } from "react";
 import { useShiki } from "@/client/providers";
-import { Skeleton } from "./ui/skeleton";
-import { cn } from "@/client/lib/utils";
+import { useEffect, useState } from "react";
 import { CopyButton } from "./CopyButton";
+import { Skeleton } from "./ui/skeleton";
 
 export type CodeHighlighter = { content: string; className?: string };
 

@@ -1,10 +1,10 @@
 import { cn } from "@/client/lib/utils";
+import { useTool } from "../../providers";
 import {
   type AnalyseDataType,
   AnalyseSeverity,
   useAnalyse,
 } from "./AnalyseButtonGroup/provider";
-import { useTool } from "../../providers";
 
 enum Score {
   VPOOR = "Very Poor",

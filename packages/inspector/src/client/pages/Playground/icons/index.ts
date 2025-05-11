@@ -1,3 +1,4 @@
+import { AmazonIcon } from "./Amazon";
 import { AnthropicIcon } from "./Anthropic";
 import { CerebrasIcon } from "./Cerebras";
 import { CohereIcon } from "./Cohere";
@@ -8,7 +9,6 @@ import { GoogleIcon } from "./Google";
 import { GroqIconIcon } from "./Groq";
 import { InceptionIcon } from "./Inception";
 import { MistralIcon } from "./Mistral";
-import { AmazonIcon } from "./Amazon";
 import { OpenAIIcon } from "./OpenAI";
 import { PerplexityIcon } from "./Perplexity";
 import { xAIIcon } from "./xAI";

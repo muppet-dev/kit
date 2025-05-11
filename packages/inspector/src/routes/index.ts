@@ -1,11 +1,11 @@
-import { Hono } from "hono";
-import utilsRouter from "./utils";
-import proxyRouter from "./proxy";
-import tunnelRouter from "./tunnel";
-import modelRouter from "./models";
-import clientRouter from "./client";
 import type { EnvWithConfig } from "@/types";
 import { defineInspectorConfig } from "@muppet-kit/shared";
+import { Hono } from "hono";
+import clientRouter from "./client";
+import modelRouter from "./models";
+import proxyRouter from "./proxy";
+import tunnelRouter from "./tunnel";
+import utilsRouter from "./utils";
 
 const apiRouter = new Hono<EnvWithConfig>().use(async (c, next) => {
   if (import.meta.env.MODE === "development") {

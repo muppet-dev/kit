@@ -1,13 +1,12 @@
-import { Transport } from "@muppet-kit/shared";
 import { type Notification, StdErrNotificationSchema } from "@/client/types";
 import type { transportSchema } from "@/client/validations";
-import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { auth } from "@modelcontextprotocol/sdk/client/auth.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import {
   SSEClientTransport,
   SseError,
 } from "@modelcontextprotocol/sdk/client/sse.js";
+import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import type { RequestOptions } from "@modelcontextprotocol/sdk/shared/protocol.js";
 import {
   CancelledNotificationSchema,
@@ -30,11 +29,12 @@ import {
   type ServerCapabilities,
   ToolListChangedNotificationSchema,
 } from "@modelcontextprotocol/sdk/types.js";
+import { Transport } from "@muppet-kit/shared";
+import { nanoid } from "nanoid";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import type z from "zod";
 import { InspectorOAuthClientProvider } from "./auth";
-import { nanoid } from "nanoid";
 
 export type ConnectionInfo = z.infer<typeof transportSchema>;
 

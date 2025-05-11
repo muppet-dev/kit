@@ -1,8 +1,8 @@
+import { useConfig } from "@/client/providers";
+import { Sparkles } from "lucide-react";
 import { useEffect } from "react";
 import { Chat } from "./Chat";
 import { ModelsProvider, useModels } from "./providers";
-import { useConfig } from "@/client/providers";
-import { Sparkles } from "lucide-react";
 
 export default function PlaygroundPage() {
   const { isModelsEnabled } = useConfig();

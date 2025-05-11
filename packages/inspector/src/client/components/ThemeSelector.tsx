@@ -1,6 +1,6 @@
+import { cn } from "@/client/lib/utils";
 import { type Theme, useTheme } from "@/client/providers";
 import { MoonIcon, SunIcon, TvIcon } from "lucide-react";
-import { cn } from "@/client/lib/utils";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
