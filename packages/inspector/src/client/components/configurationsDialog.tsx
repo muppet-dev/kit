@@ -1,6 +1,6 @@
 import { Transport } from "@muppet-kit/shared";
 import { eventHandler } from "@/client/lib/eventHandler";
-import { CONFIG_STORAGE_KEY } from "@/client/providers";
+import { CONFIG_STORAGE_KEY, useConfig } from "@/client/providers";
 import type { ConnectionInfo } from "@/client/providers/connection/manager";
 import type { transportSchema } from "@/client/validations";
 import { useFormContext } from "react-hook-form";
@@ -21,6 +21,7 @@ export type ConfigurationsDialogProps = {
 };
 
 export function ConfigurationsDialog({ onSubmit }: ConfigurationsDialogProps) {
+  const { getConfigurations } = useConfig();
   const localStorageValue = localStorage.getItem(CONFIG_STORAGE_KEY);
   const localStorageData = localStorageValue
     ? (JSON.parse(localStorageValue) as ConnectionInfo)
@@ -43,6 +44,8 @@ export function ConfigurationsDialog({ onSubmit }: ConfigurationsDialogProps) {
         }
       : localStorageData;
 
+  const defaultConfiguration = getConfigurations();
+
   return (
     <Dialog open={true}>
       <DialogContent>
@@ -54,7 +57,7 @@ export function ConfigurationsDialog({ onSubmit }: ConfigurationsDialogProps) {
         </DialogHeader>
         <ConfigForm
           onSubmit={(values) => onSubmit(values)}
-          data={formattedData}
+          data={defaultConfiguration ?? formattedData}
         >
           <FormFooter />
         </ConfigForm>

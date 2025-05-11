@@ -1,8 +1,6 @@
-import type { SVGProps } from "react";
+import type { IconProps } from "./type";
 
-export type InceptionIcon = SVGProps<SVGSVGElement>;
-
-export function InceptionIcon({ style, ...props }: InceptionIcon) {
+export function InceptionIcon({ style, ...props }: IconProps) {
   return (
     <svg
       {...props}

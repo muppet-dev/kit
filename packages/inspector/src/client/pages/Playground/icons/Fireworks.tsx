@@ -1,15 +1,15 @@
-import type { SVGProps } from "react";
+import type { IconProps } from "./type";
 
-export type FireworksIcon = SVGProps<SVGSVGElement>;
-
-export function FireworksIcon() {
+export function FireworksIcon({ style, ...props }: IconProps) {
   return (
     <svg
+      {...props}
       height="16"
       width="16"
       viewBox="0 0 638 315"
       xmlns="http://www.w3.org/2000/svg"
       fill="#5019c5"
+      style={{ color: "currentcolor", ...style }}
     >
       <title>Fireworks</title>
       <path d="M318.563 221.755C300.863 221.755 284.979 211.247 278.206 194.978L196.549 0H244.342L318.842 178.361L393.273 0H441.066L358.92 195.048C352.112 211.247 336.263 221.755 318.563 221.755Z" />

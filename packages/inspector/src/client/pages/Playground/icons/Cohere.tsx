@@ -1,8 +1,6 @@
-import type { SVGProps } from "react";
+import type { IconProps } from "./type";
 
-export type CohereIcon = SVGProps<SVGSVGElement>;
-
-export function CohereIcon({ style, ...props }: CohereIcon) {
+export function CohereIcon({ style, ...props }: IconProps) {
   return (
     <svg
       {...props}

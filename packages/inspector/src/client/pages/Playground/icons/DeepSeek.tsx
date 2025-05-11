@@ -1,8 +1,6 @@
-import type { SVGProps } from "react";
+import type { IconProps } from "./type";
 
-export type DeepSeekIcon = SVGProps<SVGSVGElement>;
-
-export function DeepSeekIcon(props: DeepSeekIcon) {
+export function DeepSeekIcon(props: IconProps) {
   return (
     <svg
       {...props}

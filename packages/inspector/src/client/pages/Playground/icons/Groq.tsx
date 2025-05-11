@@ -1,8 +1,6 @@
-import type { SVGProps } from "react";
+import type { IconProps } from "./type";
 
-export type GroqIconIcon = SVGProps<SVGSVGElement>;
-
-export function GroqIconIcon(props: GroqIconIcon) {
+export function GroqIconIcon(props: IconProps) {
   return (
     <svg
       {...props}

@@ -17,12 +17,11 @@ import {
   PencilIcon,
   RefreshCwIcon,
   SendHorizontalIcon,
-  SquareArrowOutUpRight,
 } from "lucide-react";
 import { type FC, useEffect } from "react";
-import { cn, numberFormatter } from "@/client/lib/utils";
+import { cn } from "@/client/lib/utils";
 import { useModels } from "../../providers";
-import { type ModelConfig, PROVIDER_ICONS } from "../../supportedModels";
+import { PROVIDER_ICONS } from "../../icons";
 import { MarkdownText } from "./MarkdownText";
 import { TooltipIconButton } from "./TooltipIconButton";
 
@@ -55,7 +54,7 @@ export function Thread(props: { chatId: string } & ThreadWelcome) {
       }}
     >
       <ThreadPrimitive.Viewport className="flex h-full flex-col items-center overflow-y-scroll scroll-smooth bg-inherit px-4 pt-8">
-        <ThreadWelcome selectedModel={props.selectedModel} />
+        <ThreadWelcome modelId={props.modelId} />
         <ThreadPrimitive.Messages
           components={{
             UserMessage: UserMessage,
@@ -89,21 +88,20 @@ const ThreadScrollToBottom: FC = () => {
   );
 };
 
-type ThreadWelcome = { selectedModel: ModelConfig };
+type ThreadWelcome = { modelId: string };
 
 const ThreadWelcome = (props: ThreadWelcome) => {
-  const Icon = PROVIDER_ICONS[props.selectedModel.provider];
+  const [provider, name] = props.modelId.split(":");
+  const Icon = PROVIDER_ICONS[provider];
 
   return (
     <ThreadPrimitive.Empty>
       <div className="flex items-center flex-col h-full justify-center gap-2">
         <Icon className="size-9" />
         <div className="space-x-1 text-lg text-muted-foreground">
-          <span>{props.selectedModel.provider}</span>
+          <span>{provider}</span>
           <span>/</span>
-          <span className="font-medium text-foreground">
-            {props.selectedModel.name}
-          </span>
+          <span className="font-medium text-foreground">{name}</span>
         </div>
       </div>
     </ThreadPrimitive.Empty>

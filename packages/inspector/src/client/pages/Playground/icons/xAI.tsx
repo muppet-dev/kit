@@ -1,8 +1,6 @@
-import type { SVGProps } from "react";
+import type { IconProps } from "./type";
 
-export type xAIIcon = SVGProps<SVGSVGElement>;
-
-export function xAIIcon({ style, ...props }: xAIIcon) {
+export function xAIIcon({ style, ...props }: IconProps) {
   return (
     <svg
       {...props}

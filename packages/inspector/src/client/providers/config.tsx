@@ -6,7 +6,9 @@ import { useQuery } from "@tanstack/react-query";
 import {
   type PropsWithChildren,
   createContext,
+  useCallback,
   useContext,
+  useMemo,
   useState,
 } from "react";
 import type { z } from "zod";
@@ -47,13 +49,42 @@ function useConfigManager(props: ConfigProvider) {
         return res.json() as Promise<{
           tunneling: boolean;
           models: string[] | false;
-          configurations: z.infer<typeof transportSchema>;
+          configurations:
+            | z.infer<typeof transportSchema>
+            | z.infer<typeof transportSchema>[];
         }>;
       }),
   });
 
+  const isTunnelingEnabled = useMemo(() => {
+    return !!config?.tunneling;
+  }, [config?.tunneling]);
+
+  const availableModels = useCallback(() => {
+    return config?.models ? config.models : [];
+  }, [config?.models]);
+
+  const isModelsEnabled = useMemo(() => {
+    const models = availableModels();
+    return models.length > 0;
+  }, [availableModels]);
+
+  function getConfigurations() {
+    if (!config?.configurations) return undefined;
+
+    if (Array.isArray(config.configurations)) {
+      // TODO: Add support for multiple configurations
+      return config.configurations[0];
+    }
+
+    return config.configurations;
+  }
+
   return {
-    config,
+    getConfigurations,
+    isTunnelingEnabled,
+    isModelsEnabled,
+    availableModels,
     connectionInfo,
     setConnectionInfo: (info: ConnectionInfo) => {
       localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(info));

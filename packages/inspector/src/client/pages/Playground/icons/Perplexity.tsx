@@ -1,8 +1,6 @@
-import type { SVGProps } from "react";
+import type { IconProps } from "./type";
 
-export type PerplexityIcon = SVGProps<SVGSVGElement>;
-
-export function PerplexityIcon(props: PerplexityIcon) {
+export function PerplexityIcon(props: IconProps) {
   return (
     <svg
       {...props}

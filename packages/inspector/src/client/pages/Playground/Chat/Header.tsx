@@ -51,7 +51,7 @@ import {
   useState,
 } from "react";
 import { useModels } from "../providers";
-import { PROVIDER_ICONS } from "../supportedModels";
+import { PROVIDER_ICONS } from "../icons";
 import type { ModelProps } from "../type";
 import { useConfig } from "@/client/providers";
 
@@ -114,14 +114,14 @@ function ModelSelect(props: { model: ModelProps }) {
 
   const [contentWidth, setContentWidth] = useState(0);
   const [search, setSearch] = useState<string>();
-  const { config } = useConfig();
+  const { availableModels } = useConfig();
   const { onConfigChange } = useModels();
 
   const [provider, name] = props.model.model.split(":");
   const SelectedModelIcon = PROVIDER_ICONS[provider];
 
   const searchResults = useMemo(() => {
-    const _models = config?.models ? config.models : [];
+    const _models = availableModels();
     const items = _models.map((item) => {
       const [provider, name] = item.split(":");
 
@@ -143,7 +143,7 @@ function ModelSelect(props: { model: ModelProps }) {
       ...item,
       matches: matches?.flatMap((match) => match.indices),
     }));
-  }, [config?.models, search]);
+  }, [availableModels, search]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {

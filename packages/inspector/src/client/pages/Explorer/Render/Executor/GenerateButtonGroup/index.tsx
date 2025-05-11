@@ -12,8 +12,13 @@ import { useMCPItem } from "../../../providers";
 import { GenerateButton } from "./GenerateButton";
 import { GenerateDialog } from "./GenerateDialog";
 import { GenerateProvider, useGenerate } from "./provider";
+import { useConfig } from "@/client/providers";
 
 export function GenerateButtonGroup() {
+  const { isModelsEnabled } = useConfig();
+
+  if (!isModelsEnabled) return <></>;
+
   return (
     <div className="flex items-center gap-0.5">
       <GenerateProvider>

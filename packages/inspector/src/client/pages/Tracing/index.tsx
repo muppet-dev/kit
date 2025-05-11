@@ -67,7 +67,7 @@ function TracingPanel() {
 }
 
 function PageHeader() {
-  const { config } = useConfig();
+  const { isTunnelingEnabled } = useConfig();
   const { tab } = useTracing();
   const { clearNotifications, clearStdErrNotifications } = useNotification();
   const { setRequestHistory } = useConnection();
@@ -88,7 +88,7 @@ function PageHeader() {
 
   return (
     <div className="flex items-center gap-2">
-      {config?.tunneling && <TunnelLink />}
+      {isTunnelingEnabled && <TunnelLink />}
       <Tooltip>
         <TooltipTrigger asChild>
           <Button

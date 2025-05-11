@@ -1,8 +1,6 @@
-import type { SVGProps } from "react";
+import type { IconProps } from "./type";
 
-export type CerebrasIcon = SVGProps<SVGSVGElement>;
-
-export function CerebrasIcon(props: CerebrasIcon) {
+export function CerebrasIcon(props: IconProps) {
   return (
     <svg {...props} width="16" height="16" viewBox="0 0 512 512" fill="none">
       <title>Cerebras</title>

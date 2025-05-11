@@ -1,8 +1,6 @@
-import type { SVGProps } from "react";
+import type { IconProps } from "./type";
 
-export type DeepInfraIcon = SVGProps<SVGSVGElement>;
-
-export function DeepInfraIcon(props: DeepInfraIcon) {
+export function DeepInfraIcon(props: IconProps) {
   return (
     <svg
       {...props}

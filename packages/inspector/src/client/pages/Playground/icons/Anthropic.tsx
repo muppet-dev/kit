@@ -1,8 +1,6 @@
-import type { SVGProps } from "react";
+import type { IconProps } from "./type";
 
-export type AnthropicIcon = SVGProps<SVGSVGElement>;
-
-export function AnthropicIcon({ style, ...props }: AnthropicIcon) {
+export function AnthropicIcon({ style, ...props }: IconProps) {
   return (
     <svg
       {...props}

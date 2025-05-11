@@ -1,8 +1,6 @@
-import type { SVGProps } from "react";
+import type { IconProps } from "./type";
 
-export type AmazonIcon = SVGProps<SVGSVGElement>;
-
-export function AmazonIcon({ style, ...props }: AmazonIcon) {
+export function AmazonIcon({ style, ...props }: IconProps) {
   return (
     <svg
       {...props}

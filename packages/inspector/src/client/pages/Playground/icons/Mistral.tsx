@@ -1,8 +1,6 @@
-import type { SVGProps } from "react";
+import type { IconProps } from "./type";
 
-export type MistralIcon = SVGProps<SVGSVGElement>;
-
-export function MistralIcon(props: MistralIcon) {
+export function MistralIcon(props: IconProps) {
   return (
     <svg
       {...props}

@@ -1,8 +1,6 @@
-import type { SVGProps } from "react";
+import type { IconProps } from "./type";
 
-export type OpenAIIcon = SVGProps<SVGSVGElement>;
-
-export function OpenAIIcon({ style, ...props }: OpenAIIcon) {
+export function OpenAIIcon({ style, ...props }: IconProps) {
   return (
     <svg
       {...props}
