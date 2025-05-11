@@ -6,6 +6,7 @@ import {
   useState,
 } from "react";
 import type { ModelProps } from "../type";
+import { useConfig } from "@/client/providers";
 
 type ModelsContextType = ReturnType<typeof useModelsManager>;
 
@@ -22,6 +23,7 @@ export const ModelsProvider = (props: PropsWithChildren) => {
 };
 
 function useModelsManager() {
+  const { getDefaultModel } = useConfig();
   const [models, setModels] = useState<ModelProps[]>([]);
   const [syncText, setSyncText] = useState<string>("");
 
@@ -53,7 +55,7 @@ function useModelsManager() {
   function addModel() {
     setModels((prev) => [
       ...prev,
-      { id: nanoid(), model: "openai:gpt-4.1", sync: true },
+      { id: nanoid(), model: getDefaultModel()!, sync: true },
     ]);
   }
 

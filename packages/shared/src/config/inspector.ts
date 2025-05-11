@@ -1,4 +1,4 @@
-import type { LanguageModelV1 } from "ai";
+import type { LanguageModel, LanguageModelV1 } from "ai";
 import type { InspectorConfig, SanitizedInspectorConfig } from "../types";
 
 export function defineInspectorConfig(
@@ -8,6 +8,7 @@ export function defineInspectorConfig(
     host = process.env.HOST ?? "localhost",
     port = Number(process.env.PORT ?? 3553),
     models,
+    tunneling,
     ..._config
   } = config;
 
@@ -15,15 +16,14 @@ export function defineInspectorConfig(
   const availableModels: Record<string, LanguageModelV1> = {};
 
   if (models) {
-    for (const model of models) {
-      if ("modelId" in model) {
-        availableModels[`${model.provider}:${model.modelId}`] = model;
+    for (const entry of models) {
+      if ("modelId" in entry) {
+        availableModels[_generateModelKey(entry)] = entry;
       } else {
-        availableModels[`${model.model.provider}:${model.model.modelId}`] =
-          model.model;
+        availableModels[_generateModelKey(entry.model)] = entry.model;
 
-        if (model.default) {
-          defaultModel = model.model;
+        if (entry.default) {
+          defaultModel = entry.model;
         }
       }
     }
@@ -33,9 +33,16 @@ export function defineInspectorConfig(
     defaultModel = availableModels[Object.keys(availableModels)[0]];
   }
 
+  const tunnelingApiKey = tunneling?.apiKey ?? process.env.TUNNEL_API_KEY;
+
   return {
     host,
     port,
+    tunneling: tunnelingApiKey
+      ? {
+          apiKey: tunnelingApiKey,
+        }
+      : undefined,
     models: models
       ? {
           default: defaultModel!,
@@ -44,4 +51,8 @@ export function defineInspectorConfig(
       : undefined,
     ..._config,
   };
+}
+
+export function _generateModelKey(model: LanguageModel) {
+  return `${model.provider.split(".")[0]}:${model.modelId}`;
 }

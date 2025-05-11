@@ -48,7 +48,12 @@ function useConfigManager(props: ConfigProvider) {
 
         return res.json() as Promise<{
           tunneling: boolean;
-          models: string[] | false;
+          models:
+            | {
+                default: string;
+                available: string[];
+              }
+            | false;
           configurations:
             | z.infer<typeof transportSchema>
             | z.infer<typeof transportSchema>[];
@@ -60,14 +65,20 @@ function useConfigManager(props: ConfigProvider) {
     return !!config?.tunneling;
   }, [config?.tunneling]);
 
-  const availableModels = useCallback(() => {
-    return config?.models ? config.models : [];
+  const getAvailableModels = useCallback(() => {
+    return config?.models ? config.models.available : [];
+  }, [config?.models]);
+
+  const getDefaultModel = useCallback(() => {
+    if (!config?.models) return undefined;
+
+    return config.models.default;
   }, [config?.models]);
 
   const isModelsEnabled = useMemo(() => {
-    const models = availableModels();
+    const models = getAvailableModels();
     return models.length > 0;
-  }, [availableModels]);
+  }, [getAvailableModels]);
 
   function getConfigurations() {
     if (!config?.configurations) return undefined;
@@ -84,7 +95,8 @@ function useConfigManager(props: ConfigProvider) {
     getConfigurations,
     isTunnelingEnabled,
     isModelsEnabled,
-    availableModels,
+    getAvailableModels,
+    getDefaultModel,
     connectionInfo,
     setConnectionInfo: (info: ConnectionInfo) => {
       localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(info));

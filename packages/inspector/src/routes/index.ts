@@ -4,8 +4,23 @@ import proxyRouter from "./proxy";
 import tunnelRouter from "./tunnel";
 import modelRouter from "./models";
 import clientRouter from "./client";
+import type { EnvWithConfig } from "@/types";
+import { defineInspectorConfig } from "@muppet-kit/shared";
 
-const apiRouter = new Hono();
+const apiRouter = new Hono<EnvWithConfig>().use(async (c, next) => {
+  if (import.meta.env.MODE === "development") {
+    const openai = await import("@ai-sdk/openai").then((mod) => mod.openai);
+
+    c.set(
+      "config",
+      defineInspectorConfig({
+        models: [openai("chatgpt-4o-latest")],
+      }),
+    );
+  }
+
+  await next();
+});
 
 apiRouter.route("/", utilsRouter);
 apiRouter.route("/", modelRouter);

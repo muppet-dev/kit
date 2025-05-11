@@ -34,8 +34,10 @@ import { SchemaPanel } from "./SchemaPanel";
 import { FormProvider, useForm } from "react-hook-form";
 import { ReponsePanel } from "./Reponse";
 import { CustomFormProvider } from "./provider";
+import { useConfig } from "@/client/providers";
 
 export function Executor() {
+  const { isModelsEnabled } = useConfig();
   const { activeTool } = useTool();
   const { selectedItem } = useMCPItem();
 
@@ -44,7 +46,7 @@ export function Executor() {
   const [selectedTab, setSelectedTab] = useState<RequestTab>(
     activeTool.name === Tool.STATIC_RESOURCES
       ? RequestTab.SCORE
-      : RequestTab.FORM
+      : RequestTab.FORM,
   );
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -81,11 +83,13 @@ export function Executor() {
                   icon={Braces}
                   disabled={activeTool.name === Tool.STATIC_RESOURCES}
                 />
-                <TabsTriggerComponent
-                  value={RequestTab.SCORE}
-                  label="Score"
-                  icon={Gauge}
-                />
+                {isModelsEnabled && (
+                  <TabsTriggerComponent
+                    value={RequestTab.SCORE}
+                    label="Score"
+                    icon={Gauge}
+                  />
+                )}
                 <TabsTriggerComponent
                   value={RequestTab.SCHEMA}
                   label="Schema"
@@ -164,7 +168,7 @@ function TabsTriggerComponent({
       {...props}
       className={cn(
         "data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-2 xl:px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black",
-        className
+        className,
       )}
     >
       <p className="xl:flex hidden">{label}</p>

@@ -9,10 +9,6 @@ import { AnalyseDialog } from "./AnalyseDialog";
 import { useAnalyse } from "./provider";
 
 export function AnalyseButtonGroup() {
-  const { isModelsEnabled } = useConfig();
-
-  if (!isModelsEnabled) return <></>;
-
   return (
     <div className="flex items-center gap-0.5">
       <ActionButton />
