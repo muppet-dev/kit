@@ -1,31 +1,24 @@
-import type { EnvWithDefaultModel, EnvWithModels } from "@/types/index.js";
+import type { EnvWithDefaultModel } from "@/types/index.js";
 import { sValidator } from "@hono/standard-validator";
 import { Hono } from "hono";
 import { z } from "zod";
 import { generateObject, streamText } from "ai";
 import { stream } from "hono/streaming";
 
-const router = new Hono<EnvWithModels>().use(async (c, next) => {
-  const { models } = c.get("config");
+const router = new Hono<EnvWithDefaultModel>();
 
-  if (!models) {
-    return c.json({
-      error: "LLM models are not configured",
-    });
-  }
+router.all(
+  async (c, next) => {
+    const { models } = c.get("config");
 
-  await next();
-});
+    if (!models) {
+      return c.json({
+        error: "LLM models are not configured",
+      });
+    }
 
-router.get("/", (c) => {
-  const modelsConfig = c.get("models");
-
-  return c.json(Object.keys(modelsConfig.available));
-});
-
-const subRouter = new Hono<EnvWithDefaultModel>();
-
-subRouter.all(
+    await next();
+  },
   sValidator(
     "query",
     z.object({
@@ -47,7 +40,7 @@ subRouter.all(
   },
 );
 
-subRouter.post(
+router.post(
   "/chat",
   sValidator(
     "json",
@@ -69,8 +62,8 @@ subRouter.post(
   },
 );
 
-subRouter.post(
-  "/",
+router.post(
+  "/generate",
   sValidator(
     "json",
     z.object({
@@ -105,8 +98,8 @@ subRouter.post(
   },
 );
 
-subRouter.post(
-  "/",
+router.post(
+  "/analyse",
   sValidator(
     "json",
     z.object({
@@ -136,6 +129,8 @@ subRouter.post(
       schema: z.object({
         score: z
           .number()
+          .min(0)
+          .max(10)
           .describe("The overall score of the tool, between 0 and 10."),
         recommendations: z.array(
           z.object({
@@ -160,8 +155,6 @@ subRouter.post(
     return c.json(result.object);
   },
 );
-
-router.route("/", subRouter);
 
 export default router;
 

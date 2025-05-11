@@ -18,7 +18,7 @@ export function ExplorerRender() {
   >(() => {
     if (!search.trim() || !items || items.length === 0) return items;
 
-    const fuse = new Fuse(items ?? [], {
+    const fuse = new Fuse(items, {
       keys: ["name", "description"],
       includeMatches: true,
     });

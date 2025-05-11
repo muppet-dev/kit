@@ -1,10 +1,16 @@
-import type { ConnectionInfo } from "@/client/providers/connection/manager";
+import {
+  getMCPProxyAddress,
+  type ConnectionInfo,
+} from "@/client/providers/connection/manager";
+import { useQuery } from "@tanstack/react-query";
 import {
   type PropsWithChildren,
   createContext,
   useContext,
   useState,
 } from "react";
+import type { z } from "zod";
+import type { transportSchema } from "../validations";
 
 export const CONFIG_STORAGE_KEY = "muppet-config";
 
@@ -30,7 +36,24 @@ export const ConfigProvider = ({
 function useConfigManager(props: ConfigProvider) {
   const [connectionInfo, setConnectionInfo] = useState(props.connection);
 
+  const { data: config } = useQuery({
+    queryKey: ["base-config"],
+    queryFn: () =>
+      fetch(`${getMCPProxyAddress()}/config`).then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to fetch config data. Please try again.");
+        }
+
+        return res.json() as Promise<{
+          tunneling: boolean;
+          models: string[] | false;
+          configurations: z.infer<typeof transportSchema>;
+        }>;
+      }),
+  });
+
   return {
+    config,
     connectionInfo,
     setConnectionInfo: (info: ConnectionInfo) => {
       localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(info));

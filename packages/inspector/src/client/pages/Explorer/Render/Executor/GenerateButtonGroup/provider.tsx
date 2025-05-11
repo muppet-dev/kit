@@ -24,7 +24,7 @@ function useGenerateManager() {
 
   return useMutation({
     mutationFn: async (values: MCPItemType & { context?: string }) =>
-      await fetch(`${getMCPProxyAddress()}/models/generate`, {
+      await fetch(`${getMCPProxyAddress()}/generate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

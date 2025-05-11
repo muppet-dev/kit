@@ -8,7 +8,7 @@ import clientRouter from "./client";
 const apiRouter = new Hono();
 
 apiRouter.route("/", utilsRouter);
-apiRouter.route("/models", modelRouter);
+apiRouter.route("/", modelRouter);
 apiRouter.route("/tunnel", tunnelRouter);
 apiRouter.route("/", proxyRouter);
 

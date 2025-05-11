@@ -9,7 +9,7 @@ import {
   TooltipTrigger,
 } from "@/client/components/ui/tooltip";
 import { eventHandler } from "@/client/lib/eventHandler";
-import { useConnection } from "@/client/providers";
+import { useConfig, useConnection } from "@/client/providers";
 import { getMCPProxyAddress } from "@/client/providers/connection/manager";
 import { useMutation } from "@tanstack/react-query";
 import { ListX, Pickaxe, RefreshCcw } from "lucide-react";
@@ -67,6 +67,7 @@ function TracingPanel() {
 }
 
 function PageHeader() {
+  const { config } = useConfig();
   const { setRequestHistory } = useConnection();
 
   const onClear = eventHandler(() => {
@@ -75,7 +76,7 @@ function PageHeader() {
 
   return (
     <div className="flex items-center gap-2">
-      <TunnelLink />
+      {config?.tunneling && <TunnelLink />}
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
@@ -100,7 +101,7 @@ function TunnelLink() {
       fetch(`${getMCPProxyAddress()}/tunnel`).then((res) => {
         if (!res.ok) {
           throw new Error(
-            "Failed to generate a new tunneling URL. Please try again."
+            "Failed to generate a new tunneling URL. Please try again.",
           );
         }
 

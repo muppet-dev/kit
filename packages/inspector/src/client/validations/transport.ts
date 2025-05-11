@@ -1,27 +1,14 @@
-import { Transport } from "@muppet-kit/shared";
+import {
+  remoteTransportSchema,
+  stdioTransportSchema,
+} from "@muppet-kit/shared";
 import z from "zod";
 
+const extendedProps = {
+  name: z.string().optional(),
+};
+
 export const transportSchema = z.union([
-  z.object({
-    transportType: z.literal(Transport.STDIO),
-    command: z.string(),
-    args: z.string().optional(),
-    env: z
-      .array(
-        z.object({
-          key: z.string(),
-          value: z.string(),
-        }),
-      )
-      .optional(),
-  }),
-  z.object({
-    transportType: z.union([
-      z.literal(Transport.SSE),
-      z.literal(Transport.HTTP),
-    ]),
-    url: z.string().url(),
-    headerName: z.string().optional(),
-    bearerToken: z.string().optional(),
-  }),
+  stdioTransportSchema.extend(extendedProps),
+  remoteTransportSchema.extend(extendedProps),
 ]);

@@ -7,12 +7,6 @@ export type EnvWithConfig = {
   };
 };
 
-export type EnvWithModels = {
-  Variables: EnvWithConfig["Variables"] & {
-    models: NonNullable<SanitizedInspectorConfig["models"]>;
-  };
-};
-
 export type EnvWithDefaultModel = {
   Variables: EnvWithConfig["Variables"] & {
     models: NonNullable<SanitizedInspectorConfig["models"]>;

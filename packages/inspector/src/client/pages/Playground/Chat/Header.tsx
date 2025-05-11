@@ -51,12 +51,9 @@ import {
   useState,
 } from "react";
 import { useModels } from "../providers";
-import {
-  MODELS_CONFIG,
-  PROVIDER_ICONS,
-  type SupportedModels,
-} from "../supportedModels";
+import { PROVIDER_ICONS } from "../supportedModels";
 import type { ModelProps } from "../type";
+import { useConfig } from "@/client/providers";
 
 export function ModelHeader(props: { chatId: string }) {
   const { getModel, addModel, onConfigChange } = useModels();
@@ -117,36 +114,36 @@ function ModelSelect(props: { model: ModelProps }) {
 
   const [contentWidth, setContentWidth] = useState(0);
   const [search, setSearch] = useState<string>();
+  const { config } = useConfig();
   const { onConfigChange } = useModels();
 
-  const selectedModelConfig = MODELS_CONFIG[props.model.model];
-  const SelectedModelIcon = PROVIDER_ICONS[selectedModelConfig.provider];
+  const [provider, name] = props.model.model.split(":");
+  const SelectedModelIcon = PROVIDER_ICONS[provider];
 
-  const models = Object.entries(MODELS_CONFIG).map(([key, value]) => ({
-    key,
-    ...value,
-  }));
+  const searchResults = useMemo(() => {
+    const _models = config?.models ? config.models : [];
+    const items = _models.map((item) => {
+      const [provider, name] = item.split(":");
 
-  const fuse = useMemo(
-    () =>
-      new Fuse(models, {
-        keys: ["name", "provider"],
-        includeMatches: true,
-      }),
-    [models]
-  );
+      return {
+        id: item,
+        provider,
+        name,
+      };
+    });
 
-  let searchResults = models;
+    if (!search?.trim() || items.length === 0) return items;
 
-  if (search) {
-    const results = fuse.search(search);
+    const fuse = new Fuse(items, {
+      keys: ["provider", "name"],
+      includeMatches: true,
+    });
 
-    searchResults = results.reduce<typeof searchResults>((prev, { item }) => {
-      prev?.push(item);
-
-      return prev;
-    }, []);
-  }
+    return fuse.search(search).map(({ item, matches }) => ({
+      ...item,
+      matches: matches?.flatMap((match) => match.indices),
+    }));
+  }, [config?.models, search]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
@@ -165,7 +162,7 @@ function ModelSelect(props: { model: ModelProps }) {
         >
           <SelectedModelIcon className="size-4" />
           <p>
-            {selectedModelConfig.provider} {selectedModelConfig.name}
+            {provider} {name}
           </p>
           <div className="flex-1" />
           <ChevronDown className="size-4 opacity-50" />
@@ -190,11 +187,11 @@ function ModelSelect(props: { model: ModelProps }) {
 
                 return (
                   <CommandItem
-                    key={item.key}
-                    value={item.key}
+                    key={item.id}
+                    value={item.id}
                     onSelect={() => {
                       onConfigChange(props.model.id, {
-                        model: item.key as SupportedModels,
+                        model: item.id,
                       });
                       setIsOpen(false);
                     }}
@@ -207,9 +204,9 @@ function ModelSelect(props: { model: ModelProps }) {
                     <Check
                       className={cn(
                         "size-4",
-                        item.key === props.model.model
+                        item.id === props.model.model
                           ? "opacity-100"
-                          : "opacity-0"
+                          : "opacity-0",
                       )}
                     />
                   </CommandItem>
