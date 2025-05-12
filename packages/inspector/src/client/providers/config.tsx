@@ -11,9 +11,9 @@ import {
   useMemo,
   useState,
 } from "react";
+import toast from "react-hot-toast";
 import type { z } from "zod";
 import type { configTransportSchema } from "../validations";
-import toast from "react-hot-toast";
 
 export const CONFIG_STORAGE_KEY = "muppet-config";
 

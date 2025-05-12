@@ -4,9 +4,7 @@
   "license": "MIT",
   "type": "module",
   "bin": "./dist/cli.js",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "dev": "vite",
     "build:client": "vite build --mode client",

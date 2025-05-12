@@ -4,7 +4,7 @@ import {
   defineInspectorConfig,
 } from "@muppet-kit/shared";
 import { loadConfig } from "c12";
-import { program, Option } from "commander";
+import { Option, program } from "commander";
 import pkg from "../package.json" assert { type: "json" };
 import app from "./index.js";
 

@@ -31,12 +31,12 @@ function useLogsManager() {
 
   const [methodFilters, setMethodFilters] = useState<string[] | null>(null);
   const [timestampSort, setTimestampSort] = useState<SortingEnum>(
-    SortingEnum.ASCENDING
+    SortingEnum.ASCENDING,
   );
 
   const logs = useMemo(() => {
     let results = traces.filter(
-      (item) => methodFilters?.includes(item.request?.method ?? "") ?? true
+      (item) => methodFilters?.includes(item.request?.method ?? "") ?? true,
     );
 
     results = results.sort((a, b) => {

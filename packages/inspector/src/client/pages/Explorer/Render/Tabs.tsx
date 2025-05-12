@@ -23,7 +23,7 @@ export function ToolsTabs() {
   const queryState = queryClient.getQueryState(queryKey);
 
   const handleRefresh = eventHandler(() =>
-    queryClient.refetchQueries({ queryKey })
+    queryClient.refetchQueries({ queryKey }),
   );
 
   return (

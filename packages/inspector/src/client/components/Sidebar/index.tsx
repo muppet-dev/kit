@@ -30,11 +30,11 @@ const data = {
       url: "/explorer",
       icon: SquareTerminal,
     },
-    {
-      name: "Playground",
-      url: "/playground",
-      icon: PieChart,
-    },
+    // {
+    //   name: "Playground",
+    //   url: "/playground",
+    //   icon: PieChart,
+    // },
     {
       name: "Tracing",
       url: "/tracing",

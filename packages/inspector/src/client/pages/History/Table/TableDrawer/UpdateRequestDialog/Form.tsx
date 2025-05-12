@@ -28,7 +28,7 @@ export function UpdateRequestForm({ request, closeDialog }: UpdateRequestForm) {
   const [editorInstance, setEditorInstance] =
     useState<Parameters<OnMount>[0]>();
   const [value, setValue] = useState<string>(
-    JSON.stringify(request.params, null, 2)
+    JSON.stringify(request.params, null, 2),
   );
   const { makeRequest } = useConnection();
   const { resolvedTheme } = useTheme();

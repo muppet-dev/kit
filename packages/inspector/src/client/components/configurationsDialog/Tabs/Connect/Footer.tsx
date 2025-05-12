@@ -3,8 +3,8 @@ import { DocumentSubmitType, SUBMIT_BUTTON_KEY } from "@/client/validations";
 import { Transport } from "@muppet-kit/shared";
 import type { BaseSyntheticEvent } from "react";
 import { useFormContext } from "react-hook-form";
-import { DialogFooter } from "../../../ui/dialog";
 import { Button } from "../../../ui/button";
+import { DialogFooter } from "../../../ui/dialog";
 
 export function FormFooter() {
   const { reset, setValue } = useFormContext();
@@ -12,7 +12,7 @@ export function FormFooter() {
   const handleResetForm = eventHandler(() =>
     reset({
       transportType: Transport.STDIO,
-    })
+    }),
   );
 
   const handleSaveAndConnect = (event: BaseSyntheticEvent) => {

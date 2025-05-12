@@ -1,11 +1,11 @@
 import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 import { Hono } from "hono";
+import { streamSSE } from "muppet/streaming";
+import { Broadcast } from "./broadcast";
 import sseRouter from "./sse";
 import stdioRouter from "./stdio";
 import streamingRouter from "./streaming";
 import type { ProxyEnv } from "./types";
-import { streamSSE } from "muppet/streaming";
-import { Broadcast } from "./broadcast";
 
 const webAppTransports: Map<string, Transport> = new Map<string, Transport>();
 let backingServerTransport: Transport | undefined;

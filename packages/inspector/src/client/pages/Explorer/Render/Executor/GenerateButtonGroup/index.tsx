@@ -29,7 +29,7 @@ function ActionButton() {
   const mutation = useGenerate();
 
   const handleGenerate = eventHandler(() =>
-    mutation.mutateAsync(selectedItem!)
+    mutation.mutateAsync(selectedItem!),
   );
 
   return <GenerateButton onClick={handleGenerate} onKeyDown={handleGenerate} />;

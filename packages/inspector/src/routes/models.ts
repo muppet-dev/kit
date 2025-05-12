@@ -2,9 +2,9 @@ import type { EnvWithDefaultModel } from "@/types/index.js";
 import { sValidator } from "@hono/standard-validator";
 import { generateObject, streamText } from "ai";
 import { Hono } from "hono";
+import { createFactory } from "hono/factory";
 import { stream } from "hono/streaming";
 import { z } from "zod";
-import { createFactory } from "hono/factory";
 
 const router = new Hono<EnvWithDefaultModel>();
 

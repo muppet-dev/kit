@@ -1,4 +1,7 @@
+import type { configTransportSchema as schema } from "@/client/validations";
+import { Transport } from "@muppet-kit/shared";
 import { Controller, useFormContext } from "react-hook-form";
+import type z from "zod";
 import { Label } from "../ui/label";
 import {
   Select,
@@ -7,10 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { Transport } from "@muppet-kit/shared";
 import { OptionalFields } from "./OptionalFields";
-import type { configTransportSchema as schema } from "@/client/validations";
-import type z from "zod";
 
 export function ConfigFormFields() {
   const { control } = useFormContext<z.output<typeof schema>>();

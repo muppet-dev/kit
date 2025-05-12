@@ -10,7 +10,7 @@ export function useConfigForm() {
   const id = nanoid(6);
   const { setConnectionInfo } = useConfig();
   const [_, setConfigurations] = useLocalStorage<ConnectionInfo[] | null>(
-    CONFIG_STORAGE_KEY
+    CONFIG_STORAGE_KEY,
   );
 
   return useMutation({
@@ -28,8 +28,8 @@ export function useConfigForm() {
           _values.env.length > 0
             ? JSON.stringify(
                 Object.fromEntries(
-                  _values.env.map((item) => [item.key, item.value])
-                )
+                  _values.env.map((item) => [item.key, item.value]),
+                ),
               )
             : undefined;
       }

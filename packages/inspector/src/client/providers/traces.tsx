@@ -56,7 +56,7 @@ function useTracingManager() {
 
               if (from === "server") {
                 const index = tmp.findIndex(
-                  (log) => log.mid === message.id && log.session === session
+                  (log) => log.mid === message.id && log.session === session,
                 );
 
                 if (index !== -1) {

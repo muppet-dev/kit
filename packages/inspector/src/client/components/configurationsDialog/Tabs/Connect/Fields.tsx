@@ -1,9 +1,9 @@
-import { useFormContext } from "react-hook-form";
-import { Input } from "../../../ui/input";
-import { Label } from "../../../ui/label";
 import type { configTransportSchema as schema } from "@/client/validations";
+import { useFormContext } from "react-hook-form";
 import type z from "zod";
 import { ConfigFormFields } from "../../../ConfigFormFields";
+import { Input } from "../../../ui/input";
+import { Label } from "../../../ui/label";
 
 export function FormFields() {
   const { register } = useFormContext<z.output<typeof schema>>();

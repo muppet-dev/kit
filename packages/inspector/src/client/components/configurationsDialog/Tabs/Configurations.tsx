@@ -4,13 +4,13 @@ import { CONFIG_STORAGE_KEY } from "@/client/providers";
 import type { ConnectionInfo } from "@/client/providers/connection/manager";
 import { DocumentSubmitType, SUBMIT_BUTTON_KEY } from "@/client/validations";
 import { Transport } from "@muppet-kit/shared";
+import { useLocalStorage } from "@uidotdev/usehooks";
 import { Trash } from "lucide-react";
 import { useMemo, useState } from "react";
-import { Button } from "../../ui/button";
 import { useConfigForm } from "../../ConfigForm/useConfigForm";
-import { Spinner } from "../../ui/spinner";
-import { useLocalStorage } from "@uidotdev/usehooks";
 import { Badge } from "../../ui/badge";
+import { Button } from "../../ui/button";
+import { Spinner } from "../../ui/spinner";
 
 export function Configurations() {
   const [selected, setSelected] = useState<ConnectionInfo>();
@@ -30,7 +30,7 @@ export function Configurations() {
                       ([key, value]) => ({
                         key,
                         value: String(value),
-                      })
+                      }),
                     )
                   : value.env
                 : undefined,
@@ -54,7 +54,7 @@ export function Configurations() {
     eventHandler(() => {
       if (id) {
         setConfigurations(
-          (prev) => prev?.filter((item) => item.id !== id) ?? []
+          (prev) => prev?.filter((item) => item.id !== id) ?? [],
         );
       }
     });
@@ -72,7 +72,7 @@ export function Configurations() {
                 selected?.id === item.id
                   ? "bg-accent/80 dark:bg-accent/50 border-primary/30"
                   : "hover:bg-accent/80 dark:hover:bg-accent/50 hover:border-primary/30 transition-all",
-                "border px-3 pt-1.5 pb-2 cursor-pointer flex items-center justify-between select-none"
+                "border px-3 pt-1.5 pb-2 cursor-pointer flex items-center justify-between select-none",
               )}
             >
               <div>
@@ -84,8 +84,8 @@ export function Configurations() {
                       item.transportType === Transport.HTTP
                         ? "bg-green-500 dark:bg-green-300"
                         : item.transportType === Transport.SSE
-                        ? "bg-yellow-500 dark:bg-yellow-300"
-                        : "bg-blue-500 dark:bg-blue-300"
+                          ? "bg-yellow-500 dark:bg-yellow-300"
+                          : "bg-blue-500 dark:bg-blue-300",
                     )}
                   >
                     {item.transportType === Transport.HTTP ? (

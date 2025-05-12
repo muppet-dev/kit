@@ -2,15 +2,15 @@ import type { ConnectionInfo } from "@/client/providers/connection/manager";
 import { configTransportSchema as schema } from "@/client/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  Transport,
   remoteTransportSchema,
   stdioTransportSchema,
-  Transport,
 } from "@muppet-kit/shared";
-import { useEffect, type PropsWithChildren } from "react";
+import { type PropsWithChildren, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { useSearchParams } from "react-router";
 import z from "zod";
 import { useConfigForm } from "./useConfigForm";
-import { useSearchParams } from "react-router";
 
 export type ConfigForm = PropsWithChildren<{
   data?: ConnectionInfo;
@@ -40,7 +40,7 @@ export function ConfigForm(props: ConfigForm) {
         className="flex flex-col h-full gap-2 flex-1"
         onSubmit={handleSubmit(
           (values) => mutation.mutateAsync(values),
-          console.error
+          console.error,
         )}
       >
         {props.children}

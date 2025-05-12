@@ -1,24 +1,6 @@
 import { CopyButton } from "@/client/components/CopyButton";
+import { CodeHighlighter } from "@/client/components/Hightlighter";
 import { Button } from "@/client/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/client/components/ui/dropdown-menu";
-import { Input } from "@/client/components/ui/input";
-import { Skeleton } from "@/client/components/ui/skeleton";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/client/components/ui/tooltip";
-import { eventHandler } from "@/client/lib/eventHandler";
-import { useConfig } from "@/client/providers";
-import { ListX, Logs, Pickaxe } from "lucide-react";
-import type { BaseSyntheticEvent } from "react";
-import { TracingTable } from "./Table";
-import { LogsProvider } from "./providers";
 import {
   Dialog,
   DialogContent,
@@ -27,9 +9,27 @@ import {
   DialogOverlay,
   DialogTitle,
 } from "@/client/components/ui/dialog";
-import { DialogTrigger } from "@radix-ui/react-dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/client/components/ui/dropdown-menu";
+import { Input } from "@/client/components/ui/input";
 import { Label } from "@/client/components/ui/label";
-import { CodeHighlighter } from "@/client/components/Hightlighter";
+import { Skeleton } from "@/client/components/ui/skeleton";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/client/components/ui/tooltip";
+import { eventHandler } from "@/client/lib/eventHandler";
+import { useConfig } from "@/client/providers";
+import { DialogTrigger } from "@radix-ui/react-dialog";
+import { ListX, Logs, Pickaxe } from "lucide-react";
+import type { BaseSyntheticEvent } from "react";
+import { TracingTable } from "./Table";
+import { LogsProvider } from "./providers";
 
 export default function TracingPage() {
   return (

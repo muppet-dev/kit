@@ -34,8 +34,8 @@ import { nanoid } from "nanoid";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import type z from "zod";
-import { InspectorOAuthClientProvider } from "./auth";
 import { useConfig } from "../config";
+import { InspectorOAuthClientProvider } from "./auth";
 
 export type ConnectionInfo = z.infer<typeof configTransportSchema> & {
   id?: string;
