@@ -43,16 +43,20 @@ export function Executor() {
 
   const methods = useForm();
 
-  const [selectedTab, setSelectedTab] = useState<RequestTab>(
-    activeTool.name === Tool.STATIC_RESOURCES
-      ? RequestTab.SCORE
-      : RequestTab.FORM,
-  );
+  const [selectedTab, setSelectedTab] = useState<RequestTab>(RequestTab.FORM);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     methods.reset();
   }, [selectedItem]);
+
+  useEffect(() => {
+    setSelectedTab(
+      activeTool.name === Tool.STATIC_RESOURCES
+        ? RequestTab.SCORE
+        : RequestTab.FORM
+    );
+  }, [activeTool]);
 
   if (!selectedItem)
     return (
@@ -76,6 +80,7 @@ export function Executor() {
                   value={RequestTab.FORM}
                   label="Form"
                   icon={AlignJustify}
+                  disabled={activeTool.name === Tool.STATIC_RESOURCES}
                 />
                 <TabsTriggerComponent
                   value={RequestTab.JSON}
@@ -168,7 +173,7 @@ function TabsTriggerComponent({
       {...props}
       className={cn(
         "data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-2 xl:px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black",
-        className,
+        className
       )}
     >
       <p className="xl:flex hidden">{label}</p>

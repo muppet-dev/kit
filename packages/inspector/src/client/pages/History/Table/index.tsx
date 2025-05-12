@@ -13,12 +13,19 @@ import dayjs from "dayjs";
 import Fuse from "fuse.js";
 import { MoveDown, MoveUp } from "lucide-react";
 import { useMemo, useState } from "react";
-import { SortingEnum, useLogs } from "../providers";
+import { HistoryTab, SortingEnum, useHistory } from "../providers";
+import { FilterMethod } from "./FilterMethod";
 import { TableDrawer } from "./TableDrawer";
 
 export function TracingTable() {
-  const { logs, selected, setSelected, timestampSort, toggleTimestampSort } =
-    useLogs();
+  const {
+    traces,
+    tab,
+    selected,
+    setSelected,
+    timestampSort,
+    toggleTimestampSort,
+  } = useHistory();
   const [search, setSearch] = useState<string>("");
 
   const handleSortDate = eventHandler(() => toggleTimestampSort());
@@ -26,14 +33,14 @@ export function TracingTable() {
   const handleSelectData = (id: string) => eventHandler(() => setSelected(id));
 
   const parsedTraces = useMemo(() => {
-    if (!search.trim()) return logs;
+    if (!search.trim()) return traces;
 
-    const fuse = new Fuse(logs, {
-      keys: ["session", "sRequest", "sResponse"],
+    const fuse = new Fuse(traces, {
+      keys: ["sRequest", "sResponse"],
     });
 
     return fuse.search(search).map(({ item }) => item);
-  }, [search, logs]);
+  }, [search, traces]);
 
   return (
     <div className="w-full h-full flex gap-2 md:gap-3 lg:gap-4 overflow-y-auto">
@@ -49,7 +56,6 @@ export function TracingTable() {
           <Table className="overflow-y-auto lg:table-fixed [&>thead>tr>th]:bg-accent [&>thead>tr>th]:sticky [&>thead>tr>th]:top-0 [&>thead>tr>th]:z-10">
             <TableHeader>
               <TableRow className="hover:bg-accent divide-x bg-accent">
-                <TableHead>Session ID</TableHead>
                 <TableHead
                   onClick={handleSortDate}
                   onKeyDown={handleSortDate}
@@ -65,11 +71,16 @@ export function TracingTable() {
                     )}
                   </div>
                 </TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Latency</TableHead>
+                {tab.value === HistoryTab.HISTORY && (
+                  <>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Latency</TableHead>
+                  </>
+                )}
                 <TableHead>
                   <div className="flex items-center justify-between">
                     Method
+                    <FilterMethod />
                   </div>
                 </TableHead>
               </TableRow>
@@ -99,9 +110,6 @@ export function TracingTable() {
                       onClick={handleSelectData(trace.id)}
                       onKeyDown={handleSelectData(trace.id)}
                     >
-                      <TableCell className="truncate">
-                        {trace.session}
-                      </TableCell>
                       <TableCell className="space-x-1 font-medium uppercase">
                         <span className="text-black/50 dark:text-white/50">
                           {monthWithDay}
@@ -111,29 +119,31 @@ export function TracingTable() {
                           .{millisecond}
                         </span>
                       </TableCell>
-                      <TableCell>
-                        <div
-                          className={cn(
-                            "border px-1.5 w-max",
-                            isError
-                              ? "text-red-500 dark:text-red-300 bg-red-200/40 dark:bg-red-300/10"
-                              : "text-green-600 dark:text-green-300 bg-green-200/40 dark:bg-green-300/10"
-                          )}
-                        >
-                          {isError ? "Error" : "Success"}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        {latency
-                          ? latency > 1000
-                            ? `${numberFormatter(
-                                Number((latency / 1000).toFixed(2)),
-                                "decimal"
-                              )} s`
-                            : `${numberFormatter(latency, "decimal")} ms`
-                          : "-"}
-                      </TableCell>
-                      <TableCell>{String(trace.request?.method)}</TableCell>
+                      {latency && (
+                        <>
+                          <TableCell>
+                            <div
+                              className={cn(
+                                "border px-1.5 w-max",
+                                isError
+                                  ? "text-red-500 dark:text-red-300 bg-red-200/40 dark:bg-red-300/10"
+                                  : "text-green-600 dark:text-green-300 bg-green-200/40 dark:bg-green-300/10"
+                              )}
+                            >
+                              {isError ? "Error" : "Success"}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            {latency > 1000
+                              ? `${numberFormatter(
+                                  Number((latency / 1000).toFixed(2)),
+                                  "decimal"
+                                )} s`
+                              : `${numberFormatter(latency, "decimal")} ms`}
+                          </TableCell>
+                        </>
+                      )}
+                      <TableCell>{trace.request.method}</TableCell>
                     </TableRow>
                   );
                 })
@@ -141,7 +151,7 @@ export function TracingTable() {
                 <TableRow className="hover:bg-transparent">
                   <TableCell
                     className="h-[500px] text-center select-none text-muted-foreground"
-                    colSpan={5}
+                    colSpan={tab.value === HistoryTab.HISTORY ? 4 : 2}
                   >
                     No data available
                   </TableCell>
@@ -151,6 +161,7 @@ export function TracingTable() {
           </Table>
         </div>
       </div>
+      {/* @ts-expect-error */}
       <TableDrawer traces={parsedTraces} />
     </div>
   );

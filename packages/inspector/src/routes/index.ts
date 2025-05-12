@@ -14,7 +14,7 @@ const apiRouter = new Hono<EnvWithConfig>().use(async (c, next) => {
     c.set(
       "config",
       defineInspectorConfig({
-        models: [openai("chatgpt-4o-latest")],
+        models: [openai("gpt-4.1-nano")],
       }),
     );
   }

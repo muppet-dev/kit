@@ -23,7 +23,9 @@ function useGenerateManager() {
   const { reset } = useFormContext();
 
   return useMutation({
-    mutationFn: async (values: MCPItemType & { context?: string }) =>
+    mutationFn: async (
+      values: MCPItemType & { context?: string; modelId?: string }
+    ) =>
       await fetch(`${getMCPProxyAddress()}/generate`, {
         method: "POST",
         headers: {

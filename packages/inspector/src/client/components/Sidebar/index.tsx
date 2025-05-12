@@ -10,7 +10,13 @@ import {
   useSidebar,
 } from "@/client/components/ui/sidebar";
 import { cn } from "@/client/lib/utils";
-import { Frame, PieChart, Settings2, SquareTerminal } from "lucide-react";
+import {
+  History,
+  Logs,
+  PieChart,
+  Settings2,
+  SquareTerminal,
+} from "lucide-react";
 import { Link } from "react-router";
 import { ThemeSelector } from "../ThemeSelector";
 import { ConnectStatus } from "./ConnectStatus";
@@ -32,7 +38,12 @@ const data = {
     {
       name: "Tracing",
       url: "/tracing",
-      icon: Frame,
+      icon: Logs,
+    },
+    {
+      name: "History",
+      url: "/history",
+      icon: History,
     },
   ],
   projects: [

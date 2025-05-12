@@ -1,7 +1,7 @@
 import { getMCPProxyAddress } from "@/client/providers/connection/manager";
 import { AssistantRuntimeProvider } from "@assistant-ui/react";
 import { useChatRuntime } from "@assistant-ui/react-ai-sdk";
-import { useModels } from "../providers";
+import { useChats } from "../providers";
 import { ModelHeader } from "./Header";
 import { Thread } from "./Thread";
 
@@ -10,15 +10,17 @@ export type Chat = {
 };
 
 export function Chat(props: Chat) {
-  const { getModel } = useModels();
+  const { getChat } = useChats();
 
-  const model = getModel(props.chatId);
+  const chat = getChat(props.chatId);
 
   const runtime = useChatRuntime({
-    api: `${getMCPProxyAddress()}/chat?modelId=${model?.model ?? "default"}`,
+    api: `${getMCPProxyAddress()}/chat${
+      chat?.model ? `?modelId=${chat.model}` : ""
+    }`,
   });
 
-  if (!model) {
+  if (!chat) {
     throw new Error(`Unable to find model with id ${props.chatId}`);
   }
 
@@ -26,7 +28,7 @@ export function Chat(props: Chat) {
     <AssistantRuntimeProvider runtime={runtime}>
       <div className="w-full min-w-[543px] flex flex-col h-full border border-zinc-300 dark:border-zinc-800">
         <ModelHeader chatId={props.chatId} />
-        <Thread chatId={props.chatId} modelId={model.model} />
+        <Thread chatId={props.chatId} modelId={chat.model} />
       </div>
     </AssistantRuntimeProvider>
   );

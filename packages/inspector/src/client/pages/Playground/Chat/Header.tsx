@@ -1,12 +1,5 @@
+import { ModelField } from "@/client/components/ModelField";
 import { Button } from "@/client/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/client/components/ui/command";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,27 +7,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/client/components/ui/dropdown-menu";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/client/components/ui/popover";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/client/components/ui/tooltip";
 import { eventHandler } from "@/client/lib/eventHandler";
-import { cn } from "@/client/lib/utils";
-import { useConfig } from "@/client/providers";
 import { useThreadRuntime } from "@assistant-ui/react";
-import Fuse from "fuse.js";
 import {
   ArrowLeft,
   ArrowRight,
-  Check,
-  ChevronDown,
   Ellipsis,
   Plus,
   RefreshCcw,
@@ -42,23 +19,14 @@ import {
   ToggleRight,
   Trash,
 } from "lucide-react";
-import {
-  type BaseSyntheticEvent,
-  type InputHTMLAttributes,
-  type PropsWithChildren,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { PROVIDER_ICONS } from "../icons";
-import { useModels } from "../providers";
-import type { ModelProps } from "../type";
+import { type BaseSyntheticEvent, useState } from "react";
+import { useChats } from "../providers";
+import type { ChatProps } from "../type";
 
 export function ModelHeader(props: { chatId: string }) {
-  const { getModel, addModel, onConfigChange } = useModels();
+  const { getChat, addChat, onConfigChange } = useChats();
 
-  const model = getModel(props.chatId);
+  const model = getChat(props.chatId);
 
   if (!model) {
     throw new Error(`Unable to find model with id ${props.chatId}`);
@@ -69,7 +37,7 @@ export function ModelHeader(props: { chatId: string }) {
   const handleConfigChange = (id: string, sync?: boolean) =>
     eventHandler(() => onConfigChange(id, { sync }));
 
-  const handleAddModel = eventHandler(() => addModel());
+  const handleAddingChat = eventHandler(() => addChat());
 
   return (
     <div className="p-2 flex items-center gap-1 border-b border-zinc-300 dark:border-zinc-800 bg-background">
@@ -98,8 +66,8 @@ export function ModelHeader(props: { chatId: string }) {
         title="Add model for comparison"
         variant="ghost"
         className="has-[>svg]:px-1.5 py-1.5 h-max rounded-sm"
-        onClick={handleAddModel}
-        onKeyDown={handleAddModel}
+        onClick={handleAddingChat}
+        onKeyDown={handleAddingChat}
       >
         <Plus className="size-[18px] stroke-zinc-600 dark:stroke-zinc-300" />
       </Button>
@@ -108,146 +76,31 @@ export function ModelHeader(props: { chatId: string }) {
   );
 }
 
-function ModelSelect(props: { model: ModelProps }) {
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const [isOpen, setIsOpen] = useState(false);
+function ModelSelect(props: { model: ChatProps }) {
+  const [value, setValue] = useState<string>(props.model.model);
 
-  const [contentWidth, setContentWidth] = useState(0);
-  const [search, setSearch] = useState<string>();
-  const { getAvailableModels } = useConfig();
-  const { onConfigChange } = useModels();
-
-  const [provider, name] = props.model.model.split(":");
-  const SelectedModelIcon = PROVIDER_ICONS[provider];
-
-  const searchResults = useMemo(() => {
-    const _models = getAvailableModels();
-    const items = _models.map((item) => {
-      const [provider, name] = item.split(":");
-
-      return {
-        id: item,
-        provider,
-        name,
-      };
-    });
-
-    if (!search?.trim() || items.length === 0) return items;
-
-    const fuse = new Fuse(items, {
-      keys: ["provider", "name"],
-      includeMatches: true,
-    });
-
-    return fuse.search(search).map(({ item, matches }) => ({
-      ...item,
-      matches: matches?.flatMap((match) => match.indices),
-    }));
-  }, [getAvailableModels, search]);
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  useEffect(() => {
-    if (triggerRef.current) {
-      setContentWidth(triggerRef.current.offsetWidth);
-    }
-  }, [triggerRef]);
+  const { onConfigChange } = useChats();
 
   return (
-    <Popover open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          className="w-[300px] justify-start rounded-sm data-[state=closed]:hover:[&>svg]:opacity-100 data-[state=open]:[&>svg]:opacity-100 transition-all ease-in-out [&>svg]:transition-all [&>svg]:ease-in-out"
-          ref={triggerRef}
-        >
-          <SelectedModelIcon className="size-4" />
-          <p>
-            {provider} {name}
-          </p>
-          <div className="flex-1" />
-          <ChevronDown className="size-4 opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent
-        className="p-0"
-        style={{ width: contentWidth }}
-        align="start"
-      >
-        <Command shouldFilter={false}>
-          <CommandInput
-            placeholder="Search LLM"
-            value={search}
-            onValueChange={setSearch}
-          />
-          <CommandGroup>
-            <CommandEmpty>No result found for `{search}`</CommandEmpty>
-            <CommandList>
-              {searchResults.map((item) => {
-                const Icon = PROVIDER_ICONS[item.provider];
-
-                return (
-                  <CommandItem
-                    key={item.id}
-                    value={item.id}
-                    onSelect={() => {
-                      onConfigChange(props.model.id, {
-                        model: item.id,
-                      });
-                      setIsOpen(false);
-                    }}
-                  >
-                    <Icon />
-                    <p>
-                      {item.provider} {item.name}
-                    </p>
-                    <div className="flex-1" />
-                    <Check
-                      className={cn(
-                        "size-4",
-                        item.id === props.model.model
-                          ? "opacity-100"
-                          : "opacity-0",
-                      )}
-                    />
-                  </CommandItem>
-                );
-              })}
-            </CommandList>
-          </CommandGroup>
-        </Command>
-      </PopoverContent>
-    </Popover>
-  );
-}
-
-function TooltipWrapper(props: PropsWithChildren<{ content: string }>) {
-  return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>{props.children}</TooltipTrigger>
-        <TooltipContent>
-          <p>{props.content}</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
-  );
-}
-
-function NumberInput(props: InputHTMLAttributes<HTMLInputElement>) {
-  return (
-    <input
-      {...props}
-      type="number"
-      className="py-0 px-1 text-right tabular-nums border border-transparent w-[64px] font-medium text-zinc-700 text-sm tracking-tight rounded dark:bg-black dark:text-zinc-300 focus:outline-none focus:ring-0 hover:border-zinc-200 focus:border-zinc-400 dark:hover:border-zinc-700 dark:focus:border-zinc-500"
+    <ModelField
+      value={value}
+      onChange={(value) => {
+        if (value) {
+          onConfigChange(props.model.id, {
+            model: value,
+          });
+          setValue(value);
+        }
+      }}
     />
   );
 }
 
-function OptionsMenu(props: { model: ModelProps }) {
+function OptionsMenu(props: { model: ChatProps }) {
   const threadRuntime = useThreadRuntime();
-  const { moveRight, moveLeft, deleteModel, models } = useModels();
+  const { chats, moveRight, moveLeft, deleteChat } = useChats();
 
-  const index = models.findIndex((item) => item.id === props.model.id);
+  const index = chats.findIndex((chat) => chat.id === props.model.id);
 
   const handleClearChat = (event: BaseSyntheticEvent) => {
     if ("key" in event && event.key !== "Enter") return;
@@ -261,9 +114,9 @@ function OptionsMenu(props: { model: ModelProps }) {
     if ("key" in event && event.key !== "Enter") return;
     moveLeft(props.model.id);
   };
-  const handleDeleteModel = (event: BaseSyntheticEvent) => {
+  const handleDeletingChat = (event: BaseSyntheticEvent) => {
     if ("key" in event && event.key !== "Enter") return;
-    deleteModel(props.model.id);
+    deleteChat(props.model.id);
   };
 
   return (
@@ -284,7 +137,7 @@ function OptionsMenu(props: { model: ModelProps }) {
         <DropdownMenuItem
           onClick={handleMoveRight}
           onKeyDown={handleMoveRight}
-          disabled={models.length === 1 || index === models.length - 1}
+          disabled={chats.length === 1 || index === chats.length - 1}
         >
           <ArrowRight className="size-4 text-accent-foreground" />
           Move Right
@@ -292,7 +145,7 @@ function OptionsMenu(props: { model: ModelProps }) {
         <DropdownMenuItem
           onClick={handleMoveLeft}
           onKeyDown={handleMoveLeft}
-          disabled={models.length === 1 || index === 0}
+          disabled={chats.length === 1 || index === 0}
         >
           <ArrowLeft className="size-4 text-accent-foreground" />
           Move Left
@@ -300,9 +153,9 @@ function OptionsMenu(props: { model: ModelProps }) {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="text-destructive focus:text-destructive"
-          onClick={handleDeleteModel}
-          onKeyDown={handleDeleteModel}
-          disabled={models.length === 1}
+          onClick={handleDeletingChat}
+          onKeyDown={handleDeletingChat}
+          disabled={chats.length === 1}
         >
           <Trash className="size-4 text-destructive" />
           Delete Chat

@@ -1,6 +1,6 @@
 import { cn } from "@/client/lib/utils";
 import { type Theme, useTheme } from "@/client/providers";
-import { MoonIcon, SunIcon, TvIcon } from "lucide-react";
+import { Moon, Sun, Tv } from "lucide-react";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -13,9 +13,9 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import type { BaseSyntheticEvent } from "react";
 
 const THEMES = {
-  light: SunIcon,
-  dark: MoonIcon,
-  system: TvIcon,
+  light: Sun,
+  dark: Moon,
+  system: Tv,
 };
 
 export function ThemeSelector() {

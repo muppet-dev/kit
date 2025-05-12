@@ -195,6 +195,9 @@ importers:
       duck-form:
         specifier: ^0.1.4
         version: 0.1.4(react@19.1.0)
+      fetch-event-stream:
+        specifier: ^0.1.5
+        version: 0.1.5
       fetch-to-node:
         specifier: ^2.1.0
         version: 2.1.0
@@ -4303,6 +4306,10 @@ packages:
     dependencies:
       picomatch: 4.0.2
     dev: true
+
+  /fetch-event-stream@0.1.5:
+    resolution: {integrity: sha512-V1PWovkspxQfssq/NnxoEyQo1DV+MRK/laPuPblIZmSjMN8P5u46OhlFQznSr9p/t0Sp8Uc6SbM3yCMfr0KU8g==}
+    dev: false
 
   /fetch-to-node@2.1.0:
     resolution: {integrity: sha512-Wq05j6LE1GrWpT2t1YbCkyFY6xKRJq3hx/oRJdWEJpZlik3g25MmdJS6RFm49iiMJw6zpZuBOrgihOgy2jGyAA==}

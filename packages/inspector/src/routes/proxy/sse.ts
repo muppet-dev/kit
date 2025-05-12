@@ -49,6 +49,7 @@ const router = new Hono<ProxyEnv>()
         mcpProxy({
           transportToClient: webAppTransport,
           transportToServer: c.get("backing")!,
+          ctx: c,
         });
 
         console.log("Set up MCP proxy");

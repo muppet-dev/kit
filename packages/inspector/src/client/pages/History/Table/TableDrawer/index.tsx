@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CodeHighlighter } from "@/client/components/Hightlighter";
 import { Button } from "@/client/components/ui/button";
 import {
@@ -7,11 +8,12 @@ import {
 } from "@/client/components/ui/tooltip";
 import { eventHandler } from "@/client/lib/eventHandler";
 import { cn } from "@/client/lib/utils";
-import { type Trace, useConnection } from "@/client/providers";
+import { useConnection } from "@/client/providers";
+import type { RequestHistory } from "@/client/providers/connection/manager";
 import { EmptyResultSchema } from "@modelcontextprotocol/sdk/types.js";
 import { ChevronDown, ChevronUp, RefreshCcw, X } from "lucide-react";
 import { useState } from "react";
-import { useLogs } from "../../providers";
+import { useHistory } from "../../providers";
 import { UpdateRequestDialog } from "./UpdateRequestDialog";
 
 const UPDATABLE_METHODS = [
@@ -22,7 +24,10 @@ const UPDATABLE_METHODS = [
 ];
 
 export type TableDrawer = {
-  traces: Trace[];
+  traces: (RequestHistory & {
+    request: any;
+    response?: any;
+  })[];
 };
 
 export function TableDrawer({ traces }: TableDrawer) {
@@ -30,7 +35,7 @@ export function TableDrawer({ traces }: TableDrawer) {
   const [resendDirectory, setResendDirectory] = useState<
     Record<string, boolean | undefined>
   >({});
-  const { selected, setSelected } = useLogs();
+  const { selected, setSelected } = useHistory();
 
   const selectedHistory =
     selected != null ? traces.find((item) => item.id === selected) : null;
@@ -61,7 +66,7 @@ export function TableDrawer({ traces }: TableDrawer) {
   );
   const handleSendRequest = eventHandler(async () => {
     if (
-      selectedHistory.request?.method === "initialize" ||
+      selectedHistory.request.method === "initialize" ||
       (selected &&
         selected in resendDirectory &&
         resendDirectory[selected] === true)
@@ -80,8 +85,8 @@ export function TableDrawer({ traces }: TableDrawer) {
 
     await makeRequest(
       {
-        method: selectedHistory.request?.method as any,
-        params: selectedHistory.request?.params,
+        method: selectedHistory.request.method,
+        params: selectedHistory.request.params,
       },
       EmptyResultSchema.passthrough()
     );
@@ -103,7 +108,7 @@ export function TableDrawer({ traces }: TableDrawer) {
     <div className="p-4 w-[550px] border space-y-3 h-full overflow-y-auto">
       <div className="flex items-center gap-2">
         <kbd className="text-foreground dark:text-secondary-300 bg-secondary border px-1.5 text-sm font-medium shadow dark:shadow-none">
-          {selectedHistory.request?.method ?? "N/A"}
+          {selectedHistory.request.method}
         </kbd>
         <p
           className={cn(
@@ -160,7 +165,7 @@ export function TableDrawer({ traces }: TableDrawer) {
           <TooltipContent>Close</TooltipContent>
         </Tooltip>
       </div>
-      {selectedHistory.request?.method !== "initialize" && (
+      {selectedHistory.request.method !== "initialize" && (
         <div className="flex items-center justify-end gap-2">
           <Tooltip>
             <TooltipTrigger asChild>
@@ -183,19 +188,15 @@ export function TableDrawer({ traces }: TableDrawer) {
             </TooltipTrigger>
             <TooltipContent>Resend request</TooltipContent>
           </Tooltip>
-          {selectedHistory.request &&
-            UPDATABLE_METHODS.includes(selectedHistory.request.method) && (
-              <UpdateRequestDialog request={selectedHistory.request} />
-            )}
+          {UPDATABLE_METHODS.includes(selectedHistory.request.method) && (
+            <UpdateRequestDialog request={selectedHistory.request} />
+          )}
         </div>
       )}
-      {Object.values(selectedHistory.request ?? {}).map((res) => res != null)
-        .length > 0 && (
-        <TracingDetails
-          label="Request"
-          content={JSON.stringify(selectedHistory.request, null, 2)}
-        />
-      )}
+      <TracingDetails
+        label="Request"
+        content={JSON.stringify(selectedHistory.request, null, 2)}
+      />
       {Object.values(selectedHistory.response ?? {}).map((res) => res != null)
         .length > 0 && (
         <TracingDetails

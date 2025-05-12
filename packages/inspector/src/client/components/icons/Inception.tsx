@@ -7,7 +7,7 @@ export function InceptionIcon({ style, ...props }: IconProps) {
       data-testid="geist-icon"
       width="16"
       height="16"
-      stroke-linejoin="miter"
+      strokeLinejoin="miter"
       viewBox="0 46 99.01 99"
       style={{ color: "currentcolor", ...style }}
     >
@@ -17,7 +17,7 @@ export function InceptionIcon({ style, ...props }: IconProps) {
           <rect x="0" y="46" width="99.01" height="99" />
         </clipPath>
       </defs>
-      <g clip-path="url(#clip0_inception)">
+      <g clipPath="url(#clip0_inception)">
         <path
           fill="currentColor"
           d="M31.3338 108.339H0V77.1781L31.3338 46H62.65V77.1781H31.3338V108.339Z"

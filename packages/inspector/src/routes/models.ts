@@ -4,10 +4,13 @@ import { generateObject, streamText } from "ai";
 import { Hono } from "hono";
 import { stream } from "hono/streaming";
 import { z } from "zod";
+import { createFactory } from "hono/factory";
 
 const router = new Hono<EnvWithDefaultModel>();
 
-router.all(
+const factory = createFactory<EnvWithDefaultModel>();
+
+const handlers = factory.createHandlers(
   async (c, next) => {
     const { models } = c.get("config");
 
@@ -16,6 +19,8 @@ router.all(
         error: "LLM models are not configured",
       });
     }
+
+    c.set("models", models);
 
     await next();
   },
@@ -42,6 +47,7 @@ router.all(
 
 router.post(
   "/chat",
+  ...handlers,
   sValidator(
     "json",
     z.object({
@@ -64,6 +70,7 @@ router.post(
 
 router.post(
   "/generate",
+  ...handlers,
   sValidator(
     "json",
     z.object({
@@ -100,6 +107,7 @@ router.post(
 
 router.post(
   "/analyse",
+  ...handlers,
   sValidator(
     "json",
     z.object({

@@ -6,39 +6,39 @@ import {
   useContext,
   useState,
 } from "react";
-import type { ModelProps } from "../type";
+import type { ChatProps } from "../type";
 
-type ModelsContextType = ReturnType<typeof useModelsManager>;
+type ChatsContextType = ReturnType<typeof useChatsManager>;
 
-const ModelsContext = createContext<ModelsContextType | null>(null);
+const ChatsContext = createContext<ChatsContextType | null>(null);
 
-export const ModelsProvider = (props: PropsWithChildren) => {
-  const values = useModelsManager();
+export const ChatsProvider = (props: PropsWithChildren) => {
+  const values = useChatsManager();
 
   return (
-    <ModelsContext.Provider value={values}>
+    <ChatsContext.Provider value={values}>
       {props.children}
-    </ModelsContext.Provider>
+    </ChatsContext.Provider>
   );
 };
 
-function useModelsManager() {
+function useChatsManager() {
   const { getDefaultModel } = useConfig();
-  const [models, setModels] = useState<ModelProps[]>([]);
+  const [chats, setChats] = useState<ChatProps[]>([]);
   const [syncText, setSyncText] = useState<string>("");
 
-  function getModel(id: string) {
-    const index = models.findIndex((model) => model.id === id);
+  function getChat(chatId: string) {
+    const index = chats.findIndex((chat) => chat.id === chatId);
     if (index !== -1) {
-      return models[index];
+      return chats[index];
     }
 
     return null;
   }
 
-  function onConfigChange(id: string, values: Partial<ModelProps>) {
-    setModels((prev) => {
-      const index = prev.findIndex((model) => model.id === id);
+  function onConfigChange(chatId: string, values: Partial<ChatProps>) {
+    setChats((prev) => {
+      const index = prev.findIndex((chat) => chat.id === chatId);
       if (index !== -1) {
         prev[index] = { ...prev[index], ...values };
 
@@ -52,16 +52,16 @@ function useModelsManager() {
     });
   }
 
-  function addModel() {
-    setModels((prev) => [
+  function addChat() {
+    setChats((prev) => [
       ...prev,
       { id: nanoid(), model: getDefaultModel()!, sync: true },
     ]);
   }
 
-  function deleteModel(id: string) {
-    setModels((prev) => {
-      const index = prev.findIndex((model) => model.id === id);
+  function deleteChat(id: string) {
+    setChats((prev) => {
+      const index = prev.findIndex((chat) => chat.id === id);
       if (index !== -1) {
         prev.splice(index, 1);
         return [...prev];
@@ -70,9 +70,9 @@ function useModelsManager() {
     });
   }
 
-  function moveRight(id: string) {
-    setModels((prev) => {
-      const index = prev.findIndex((model) => model.id === id);
+  function moveRight(chatId: string) {
+    setChats((prev) => {
+      const index = prev.findIndex((chat) => chat.id === chatId);
       if (index !== -1 && index < prev.length - 1) {
         const temp = prev[index + 1];
         prev[index + 1] = prev[index];
@@ -83,9 +83,9 @@ function useModelsManager() {
     });
   }
 
-  function moveLeft(id: string) {
-    setModels((prev) => {
-      const index = prev.findIndex((model) => model.id === id);
+  function moveLeft(chatId: string) {
+    setChats((prev) => {
+      const index = prev.findIndex((chat) => chat.id === chatId);
       if (index !== -1 && index > 0) {
         const temp = prev[index - 1];
         prev[index - 1] = prev[index];
@@ -99,19 +99,19 @@ function useModelsManager() {
   function syncTextChange(chatId: string, text: string) {
     setSyncText(text);
 
-    for (const model of models) {
-      if (model.sync && model.composer && model.id !== chatId) {
-        model.composer?.setText(text);
+    for (const chat of chats) {
+      if (chat.sync && chat.composer && chat.id !== chatId) {
+        chat.composer?.setText(text);
       }
     }
   }
 
   return {
-    models,
-    getModel,
+    chats,
+    getChat,
     onConfigChange,
-    addModel,
-    deleteModel,
+    addChat,
+    deleteChat,
     moveRight,
     moveLeft,
     // Sync
@@ -120,8 +120,8 @@ function useModelsManager() {
   };
 }
 
-export const useModels = () => {
-  const context = useContext(ModelsContext);
+export const useChats = () => {
+  const context = useContext(ChatsContext);
 
   if (!context) throw new Error("Missing ModelContext.Provider in the tree!");
 
