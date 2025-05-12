@@ -44,10 +44,16 @@ export function useConfigForm(props: Pick<ConfigForm, "onSubmit">) {
           : undefined;
 
         if (parsedValue) {
-          localStorage.setItem(
-            CONFIG_STORAGE_KEY,
-            JSON.stringify([...parsedValue, { id, ...values }])
-          );
+          if (values.id) {
+            localStorage.setItem(
+              CONFIG_STORAGE_KEY,
+              JSON.stringify([...parsedValue, values])
+            );
+          } else
+            localStorage.setItem(
+              CONFIG_STORAGE_KEY,
+              JSON.stringify([...parsedValue, { id, ...values }])
+            );
         } else
           localStorage.setItem(
             CONFIG_STORAGE_KEY,
