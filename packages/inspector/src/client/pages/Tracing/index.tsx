@@ -17,6 +17,7 @@ import {
 import { eventHandler } from "@/client/lib/eventHandler";
 import { useConfig, useConnection, useNotification } from "@/client/providers";
 import { ListX, Pickaxe } from "lucide-react";
+import type { BaseSyntheticEvent } from "react";
 import { TracingTable } from "./Table";
 import { TraceTab, TracingProvider, useTracing } from "./providers";
 
@@ -112,8 +113,12 @@ function PageHeader() {
 function TunnelLink() {
   const { isTunnelingEnabled, createLink } = useConfig();
 
-  const handler = (linkType: "local" | "public") =>
-    eventHandler(() => createLink.mutateAsync(linkType));
+  const handler =
+    (linkType: "local" | "public") => (event: BaseSyntheticEvent) => {
+      if ("key" in event && event.key !== "Enter") return;
+
+      createLink.mutateAsync(linkType);
+    };
 
   return (
     <>
