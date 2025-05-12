@@ -1,5 +1,5 @@
 import { type Notification, StdErrNotificationSchema } from "@/client/types";
-import type { transportSchema } from "@/client/validations";
+import type { configTransportSchema } from "@/client/validations";
 import { auth } from "@modelcontextprotocol/sdk/client/auth.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import {
@@ -36,7 +36,9 @@ import toast from "react-hot-toast";
 import type z from "zod";
 import { InspectorOAuthClientProvider } from "./auth";
 
-export type ConnectionInfo = z.infer<typeof transportSchema>;
+export type ConnectionInfo = z.infer<typeof configTransportSchema> & {
+  id?: string;
+};
 
 export type UseConnectionOptions = ConnectionInfo & {
   requestConfig?: {
@@ -73,7 +75,7 @@ export type RequestHistory = {
 
 export function useConnectionManager(props: UseConnectionOptions) {
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(
-    ConnectionStatus.DISCONNECTED,
+    ConnectionStatus.DISCONNECTED
   );
   const [serverCapabilities, setServerCapabilities] =
     useState<ServerCapabilities | null>(null);
@@ -84,7 +86,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
   const pushHistory = (
     timestamp: number,
     request: object,
-    response?: object,
+    response?: object
   ) => {
     setRequestHistory((prev) => [
       ...prev,
@@ -103,7 +105,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
   const makeRequest = async <T extends z.ZodType>(
     request: ClientRequest,
     schema: T,
-    options?: RequestOptions & { suppressToast?: boolean },
+    options?: RequestOptions & { suppressToast?: boolean }
   ): Promise<z.output<T>> => {
     if (!mcpClient) {
       throw new Error("MCP client not connected");
@@ -162,7 +164,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
     ref: ResourceReference | PromptReference,
     argName: string,
     value: string,
-    signal?: AbortSignal,
+    signal?: AbortSignal
   ): Promise<string[]> => {
     if (!mcpClient || !completionsSupported) {
       return [];
@@ -224,7 +226,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
   const checkProxyHealth = async () => {
     try {
       const proxyHealthUrl = new URL(
-        `${getMCPProxyAddress(props.requestConfig?.proxy)}/health`,
+        `${getMCPProxyAddress(props.requestConfig?.proxy)}/health`
       );
       const proxyHealthResponse = await fetch(proxyHealthUrl);
       const proxyHealth = await proxyHealthResponse.json();
@@ -269,7 +271,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
             listChanged: true,
           },
         },
-      },
+      }
     );
 
     try {
@@ -282,7 +284,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
     switch (props.transportType) {
       case Transport.STDIO:
         mcpProxyServerUrl = new URL(
-          `${getMCPProxyAddress(props.requestConfig?.proxy)}/stdio`,
+          `${getMCPProxyAddress(props.requestConfig?.proxy)}/stdio`
         );
         mcpProxyServerUrl.searchParams.append("command", props.command);
 
@@ -292,20 +294,20 @@ export function useConnectionManager(props: UseConnectionOptions) {
         if (props.env)
           mcpProxyServerUrl.searchParams.append(
             "env",
-            JSON.stringify(props.env),
+            JSON.stringify(props.env)
           );
         break;
 
       case Transport.SSE:
         mcpProxyServerUrl = new URL(
-          `${getMCPProxyAddress(props.requestConfig?.proxy)}/sse`,
+          `${getMCPProxyAddress(props.requestConfig?.proxy)}/sse`
         );
         mcpProxyServerUrl.searchParams.append("url", props.url);
         break;
 
       case Transport.HTTP:
         mcpProxyServerUrl = new URL(
-          `${getMCPProxyAddress(props.requestConfig?.proxy)}/mcp`,
+          `${getMCPProxyAddress(props.requestConfig?.proxy)}/mcp`
         );
         mcpProxyServerUrl.searchParams.append("url", props.url);
         break;
@@ -337,7 +339,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
         eventSourceInit: {
           fetch: (
             url: string | URL | globalThis.Request,
-            init: RequestInit | undefined,
+            init: RequestInit | undefined
           ) => fetch(url, { ...init, headers }),
         },
         requestInit: {
@@ -362,7 +364,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
         ]) {
           client.setNotificationHandler(
             notificationSchema,
-            props.onNotification,
+            props.onNotification
           );
         }
 
@@ -375,7 +377,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
       if (props.onStdErrNotification) {
         client.setNotificationHandler(
           StdErrNotificationSchema,
-          props.onStdErrNotification,
+          props.onStdErrNotification
         );
       }
 
@@ -396,7 +398,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
       } catch (error) {
         console.error(
           `Failed to connect to MCP Server via the MCP Inspector Proxy: ${mcpProxyServerUrl}:`,
-          error,
+          error
         );
         const shouldRetry = await handleAuthError(error);
         if (shouldRetry) {

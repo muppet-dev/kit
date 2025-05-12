@@ -7,12 +7,12 @@ import {
 } from "@/client/components/ui/accordion";
 import { Input } from "@/client/components/ui/input";
 import { Label } from "@/client/components/ui/label";
-import type { transportSchema } from "@/client/validations";
+import type { configTransportSchema } from "@/client/validations";
 import { useFormContext, useWatch } from "react-hook-form";
 import type z from "zod";
 
 export function SSEFields() {
-  const { register } = useFormContext<z.infer<typeof transportSchema>>();
+  const { register } = useFormContext<z.infer<typeof configTransportSchema>>();
 
   return (
     <>
@@ -51,7 +51,7 @@ export function SSEFields() {
 
 function URLField() {
   const { register, control } =
-    useFormContext<z.infer<typeof transportSchema>>();
+    useFormContext<z.infer<typeof configTransportSchema>>();
 
   const url = useWatch({ control, name: "url" });
 

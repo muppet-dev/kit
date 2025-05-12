@@ -1,44 +1,14 @@
 import { eventHandler } from "@/client/lib/eventHandler";
+import { CONFIG_STORAGE_KEY } from "@/client/providers";
 import type { ConnectionInfo } from "@/client/providers/connection/manager";
 import { DocumentSubmitType, SUBMIT_BUTTON_KEY } from "@/client/validations";
 import { Transport } from "@muppet-kit/shared";
-import { useFormContext } from "react-hook-form";
-import { ConfigForm } from "./ConfigForm";
-import { Button } from "./ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "./ui/dialog";
-export type ConfigurationsDialogProps = {
-  onSubmit: (data: ConnectionInfo) => void;
-};
+import { useFormContext, useWatch } from "react-hook-form";
+import { Button } from "../ui/button";
+import { DialogFooter } from "../ui/dialog";
 
-export function ConfigurationsDialog({ onSubmit }: ConfigurationsDialogProps) {
-  return (
-    <Dialog open={true}>
-      <DialogContent className="h-[580px]">
-        <div className="gap-4 flex flex-col">
-          <DialogHeader className="gap-0 h-max">
-            <DialogTitle>Configure Transport</DialogTitle>
-            <DialogDescription>
-              Please configure the transport settings to continue
-            </DialogDescription>
-          </DialogHeader>
-          <ConfigForm onSubmit={(values) => onSubmit(values)} isTab>
-            <FormFooter />
-          </ConfigForm>
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-function FormFooter() {
-  const { reset, setValue } = useFormContext();
+export function FormFooter() {
+  const { reset, setValue, control } = useFormContext();
 
   const handleResetForm = eventHandler(() =>
     reset({
@@ -53,6 +23,18 @@ function FormFooter() {
   const handleSave = () => {
     setValue(SUBMIT_BUTTON_KEY, DocumentSubmitType.CONNECT);
   };
+
+  const formValues = useWatch({ control });
+
+  const configurations = localStorage.getItem(CONFIG_STORAGE_KEY);
+
+  const localStorageData = configurations
+    ? (JSON.parse(configurations) as ConnectionInfo[])
+    : undefined;
+
+  const isSameValues = localStorageData?.find(
+    (values) => formValues.id === values.name
+  );
 
   return (
     <DialogFooter className="sm:justify-between">
@@ -70,6 +52,7 @@ function FormFooter() {
         </Button>
         <Button
           type="submit"
+          disabled={!!isSameValues}
           onClick={handleSaveAndAddAnother}
           onKeyDown={handleSaveAndAddAnother}
         >
