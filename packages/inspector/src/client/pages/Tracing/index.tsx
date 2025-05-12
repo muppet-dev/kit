@@ -143,19 +143,21 @@ function TunnelLink() {
         )
       )}
       <DropdownMenu>
-        <DropdownMenuTrigger>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                className="has-[>svg]:px-1.5 py-1.5 h-max rounded-sm data-[state=open]:bg-accent dark:data-[state=open]:bg-accent/50"
-              >
-                <Pickaxe className="size-[18px] stroke-zinc-600 dark:stroke-zinc-300" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Create a tunnel</TooltipContent>
-          </Tooltip>
-        </DropdownMenuTrigger>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="has-[>svg]:px-1.5 py-1.5 h-max rounded-sm data-[state=open]:bg-accent dark:data-[state=open]:bg-accent/50"
+                >
+                  <Pickaxe className="size-[18px] stroke-zinc-600 dark:stroke-zinc-300" />
+                </Button>
+              </DropdownMenuTrigger>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>Create a tunnel</TooltipContent>
+        </Tooltip>
         <DropdownMenuContent align="end">
           <DropdownMenuItem
             disabled={createLink.isPending}

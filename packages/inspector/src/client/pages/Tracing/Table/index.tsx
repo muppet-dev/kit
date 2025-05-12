@@ -121,14 +121,17 @@ export function TracingTable() {
                       </TableCell>
                       {latency && (
                         <>
-                          <TableCell
-                            className={
-                              isError
-                                ? "text-red-500 dark:text-red-300"
-                                : "text-green-600 dark:text-green-300"
-                            }
-                          >
-                            {isError ? "Error" : "Success"}
+                          <TableCell>
+                            <div
+                              className={cn(
+                                "border px-1.5 py-0.5 w-max",
+                                isError
+                                  ? "text-red-500 dark:text-red-300 bg-red-200/40 dark:bg-red-300/10"
+                                  : "text-green-600 dark:text-green-300 bg-green-200/40 dark:bg-green-300/10"
+                              )}
+                            >
+                              {isError ? "Error" : "Success"}
+                            </div>
                           </TableCell>
                           <TableCell>
                             {latency > 1000
