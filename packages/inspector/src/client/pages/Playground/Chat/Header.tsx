@@ -1,12 +1,5 @@
+import { ModelField } from "@/client/components/ModelField";
 import { Button } from "@/client/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/client/components/ui/command";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,27 +7,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/client/components/ui/dropdown-menu";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/client/components/ui/popover";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/client/components/ui/tooltip";
 import { eventHandler } from "@/client/lib/eventHandler";
-import { cn } from "@/client/lib/utils";
-import { useConfig } from "@/client/providers";
 import { useThreadRuntime } from "@assistant-ui/react";
-import Fuse from "fuse.js";
 import {
   ArrowLeft,
   ArrowRight,
-  Check,
-  ChevronDown,
   Ellipsis,
   Plus,
   RefreshCcw,
@@ -42,16 +19,7 @@ import {
   ToggleRight,
   Trash,
 } from "lucide-react";
-import {
-  type BaseSyntheticEvent,
-  type InputHTMLAttributes,
-  type PropsWithChildren,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { PROVIDER_ICONS } from "../icons";
+import { type BaseSyntheticEvent, useState } from "react";
 import { useModels } from "../providers";
 import type { ModelProps } from "../type";
 
@@ -109,136 +77,21 @@ export function ModelHeader(props: { chatId: string }) {
 }
 
 function ModelSelect(props: { model: ModelProps }) {
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const [isOpen, setIsOpen] = useState(false);
+  const [value, setValue] = useState<string>(props.model.model);
 
-  const [contentWidth, setContentWidth] = useState(0);
-  const [search, setSearch] = useState<string>();
-  const { getAvailableModels } = useConfig();
   const { onConfigChange } = useModels();
 
-  const [provider, name] = props.model.model.split(":");
-  const SelectedModelIcon = PROVIDER_ICONS[provider];
-
-  const searchResults = useMemo(() => {
-    const _models = getAvailableModels();
-    const items = _models.map((item) => {
-      const [provider, name] = item.split(":");
-
-      return {
-        id: item,
-        provider,
-        name,
-      };
-    });
-
-    if (!search?.trim() || items.length === 0) return items;
-
-    const fuse = new Fuse(items, {
-      keys: ["provider", "name"],
-      includeMatches: true,
-    });
-
-    return fuse.search(search).map(({ item, matches }) => ({
-      ...item,
-      matches: matches?.flatMap((match) => match.indices),
-    }));
-  }, [getAvailableModels, search]);
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  useEffect(() => {
-    if (triggerRef.current) {
-      setContentWidth(triggerRef.current.offsetWidth);
-    }
-  }, [triggerRef]);
-
   return (
-    <Popover open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          className="w-[300px] justify-start rounded-sm data-[state=closed]:hover:[&>svg]:opacity-100 data-[state=open]:[&>svg]:opacity-100 transition-all ease-in-out [&>svg]:transition-all [&>svg]:ease-in-out"
-          ref={triggerRef}
-        >
-          <SelectedModelIcon className="size-4" />
-          <p>
-            {provider} {name}
-          </p>
-          <div className="flex-1" />
-          <ChevronDown className="size-4 opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent
-        className="p-0"
-        style={{ width: contentWidth }}
-        align="start"
-      >
-        <Command shouldFilter={false}>
-          <CommandInput
-            placeholder="Search LLM"
-            value={search}
-            onValueChange={setSearch}
-          />
-          <CommandGroup>
-            <CommandEmpty>No result found for `{search}`</CommandEmpty>
-            <CommandList>
-              {searchResults.map((item) => {
-                const Icon = PROVIDER_ICONS[item.provider];
-
-                return (
-                  <CommandItem
-                    key={item.id}
-                    value={item.id}
-                    onSelect={() => {
-                      onConfigChange(props.model.id, {
-                        model: item.id,
-                      });
-                      setIsOpen(false);
-                    }}
-                  >
-                    <Icon />
-                    <p>
-                      {item.provider} {item.name}
-                    </p>
-                    <div className="flex-1" />
-                    <Check
-                      className={cn(
-                        "size-4",
-                        item.id === props.model.model
-                          ? "opacity-100"
-                          : "opacity-0",
-                      )}
-                    />
-                  </CommandItem>
-                );
-              })}
-            </CommandList>
-          </CommandGroup>
-        </Command>
-      </PopoverContent>
-    </Popover>
-  );
-}
-
-function TooltipWrapper(props: PropsWithChildren<{ content: string }>) {
-  return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>{props.children}</TooltipTrigger>
-        <TooltipContent>
-          <p>{props.content}</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
-  );
-}
-
-function NumberInput(props: InputHTMLAttributes<HTMLInputElement>) {
-  return (
-    <input
-      {...props}
-      type="number"
-      className="py-0 px-1 text-right tabular-nums border border-transparent w-[64px] font-medium text-zinc-700 text-sm tracking-tight rounded dark:bg-black dark:text-zinc-300 focus:outline-none focus:ring-0 hover:border-zinc-200 focus:border-zinc-400 dark:hover:border-zinc-700 dark:focus:border-zinc-500"
+    <ModelField
+      value={value}
+      onChange={(value) => {
+        if (value) {
+          onConfigChange(props.model.id, {
+            model: value,
+          });
+          setValue(value);
+        }
+      }}
     />
   );
 }

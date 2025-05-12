@@ -1,3 +1,4 @@
+import { PROVIDER_ICONS } from "@/client/components/icons";
 import { Button } from "@/client/components/ui/button";
 import { cn } from "@/client/lib/utils";
 import {
@@ -20,7 +21,6 @@ import {
   SendHorizontalIcon,
 } from "lucide-react";
 import { type FC, useEffect } from "react";
-import { PROVIDER_ICONS } from "../../icons";
 import { useModels } from "../../providers";
 import { MarkdownText } from "./MarkdownText";
 import { TooltipIconButton } from "./TooltipIconButton";
