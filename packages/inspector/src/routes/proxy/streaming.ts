@@ -83,6 +83,7 @@ const router = new Hono<ProxyEnv>()
         mcpProxy({
           transportToClient: webAppTransport,
           transportToServer: c.get("backing")!,
+          ctx: c,
         });
 
         const { req, res } = toReqRes(c.req.raw);

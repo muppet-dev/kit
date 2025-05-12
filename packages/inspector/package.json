@@ -67,6 +67,7 @@
     "dayjs": "^1.11.13",
     "dotenv": "^16.5.0",
     "duck-form": "^0.1.4",
+    "fetch-event-stream": "^0.1.5",
     "fetch-to-node": "^2.1.0",
     "fuse.js": "^7.1.0",
     "hono": "^4.7.9",
