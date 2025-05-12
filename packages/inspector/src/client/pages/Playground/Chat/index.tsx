@@ -15,7 +15,9 @@ export function Chat(props: Chat) {
   const model = getModel(props.chatId);
 
   const runtime = useChatRuntime({
-    api: `${getMCPProxyAddress()}/chat?modelId=${model?.model ?? "default"}`,
+    api: `${getMCPProxyAddress()}/chat${
+      model?.model ? `?modelId=${model.model}` : ""
+    }`,
   });
 
   if (!model) {
