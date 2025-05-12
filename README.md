@@ -6,6 +6,8 @@ It is a collection of tools for testing and debugging MCPs.
 
 It is a devtool for testing and debugging MCPs servers.
 
+[![Muppet Inspector](https://raw.githubusercontent.com/muppet-dev/kit/main/public/inspector.png)](https://raw.githubusercontent.com/muppet-dev/kit/main/public/inspector.png)
+
 ### Usage
 
 ```bash
