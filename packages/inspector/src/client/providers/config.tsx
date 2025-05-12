@@ -2,7 +2,7 @@ import {
   type ConnectionInfo,
   getMCPProxyAddress,
 } from "@/client/providers/connection/manager";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   type PropsWithChildren,
   createContext,
@@ -13,6 +13,7 @@ import {
 } from "react";
 import type { z } from "zod";
 import type { transportSchema } from "../validations";
+import toast from "react-hot-toast";
 
 export const CONFIG_STORAGE_KEY = "muppet-config";
 
@@ -61,6 +62,31 @@ function useConfigManager(props: ConfigProvider) {
       }),
   });
 
+  const createLink = useMutation({
+    mutationFn: async (linkType: "local" | "public") => {
+      let url: { url: string; id: string };
+      if (linkType === "local") {
+        url = { id: "local", url: getMCPProxyAddress() };
+      } else {
+        url = await fetch(`${getMCPProxyAddress()}/tunnel`).then((res) => {
+          if (!res.ok) {
+            throw new Error(
+              "Failed to generate a new tunneling URL. Please try again.",
+            );
+          }
+
+          return res.json() as Promise<{ id: string; url: string }>;
+        });
+      }
+
+      return url;
+    },
+    onError: (err) => {
+      toast.error(err.message);
+      console.error(err);
+    },
+  });
+
   const isTunnelingEnabled = useMemo(() => {
     return !!config?.tunneling;
   }, [config?.tunneling]);
@@ -94,6 +120,7 @@ function useConfigManager(props: ConfigProvider) {
   return {
     getConfigurations,
     isTunnelingEnabled,
+    createLink,
     isModelsEnabled,
     getAvailableModels,
     getDefaultModel,
