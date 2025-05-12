@@ -19,6 +19,17 @@ import { ListX, Logs, Pickaxe } from "lucide-react";
 import type { BaseSyntheticEvent } from "react";
 import { TracingTable } from "./Table";
 import { LogsProvider } from "./providers";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogOverlay,
+  DialogTitle,
+} from "@/client/components/ui/dialog";
+import { DialogTrigger } from "@radix-ui/react-dialog";
+import { Label } from "@/client/components/ui/label";
+import { CodeHighlighter } from "@/client/components/Hightlighter";
 
 export default function TracingPage() {
   return (
@@ -67,7 +78,7 @@ function PageHeader() {
 function TunnelLink() {
   const { isTunnelingEnabled, createLink } = useConfig();
 
-  const handler =
+  const handleCreateLink =
     (linkType: "local" | "public") => (event: BaseSyntheticEvent) => {
       if ("key" in event && event.key !== "Enter") return;
 
@@ -79,22 +90,7 @@ function TunnelLink() {
       {createLink.isPending ? (
         <Skeleton className="h-[30px] w-[300px]" />
       ) : (
-        createLink.data && (
-          <div className="w-[300px] flex relative items-center">
-            <Input
-              readOnly
-              value={createLink.data?.url.toString()}
-              placeholder=""
-              className="w-full h-max pr-8"
-            />
-            <CopyButton
-              data={createLink.data?.url.toString()}
-              tooltipContent="Copy URL"
-              disabled={createLink.isPending}
-              className="absolute right-0"
-            />
-          </div>
-        )
+        createLink.data && <TunnelInformationDialog {...createLink.data} />
       )}
       <DropdownMenu>
         <Tooltip>
@@ -115,20 +111,69 @@ function TunnelLink() {
         <DropdownMenuContent align="end">
           <DropdownMenuItem
             disabled={createLink.isPending}
-            onClick={handler("local")}
-            onKeyDown={handler("local")}
+            onClick={handleCreateLink("local")}
+            onKeyDown={handleCreateLink("local")}
           >
             Local Tunnel
           </DropdownMenuItem>
           <DropdownMenuItem
             disabled={!isTunnelingEnabled || createLink.isPending}
-            onClick={handler("public")}
-            onKeyDown={handler("public")}
+            onClick={handleCreateLink("public")}
+            onKeyDown={handleCreateLink("public")}
           >
             Public Tunnel
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </>
+  );
+}
+
+function TunnelInformationDialog(props: {
+  id: string;
+  url: URL;
+  headers: HeadersInit;
+}) {
+  const headers = Object.fromEntries(new Headers(props.headers).entries());
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="secondary" className="max-w-[300px] py-1.5">
+          <p className="truncate w-full">{props.url.toString()}</p>
+        </Button>
+      </DialogTrigger>
+      <DialogOverlay />
+      <DialogContent className="flex flex-col">
+        <DialogHeader>
+          <DialogTitle>Generated Information</DialogTitle>
+          <DialogDescription>
+            Your URL and headers are ready to use
+          </DialogDescription>
+        </DialogHeader>
+        <div className="w-full">
+          <Label className="mb-1.5">URL</Label>
+          <div className="w-full flex relative items-center">
+            <Input
+              readOnly
+              value={props.url.toString()}
+              placeholder=""
+              className="w-full h-max pr-8"
+            />
+            <CopyButton
+              data={props.url.toString()}
+              tooltipContent="Copy URL"
+              className="absolute right-0"
+            />
+          </div>
+        </div>
+        {Object.entries(headers).length > 0 && (
+          <div className="w-full">
+            <Label className="mb-1.5">Headers</Label>
+            <CodeHighlighter content={JSON.stringify(headers)} />
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 }
