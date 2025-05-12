@@ -1,4 +1,5 @@
 import { getMCPProxyAddress } from "@/client/providers/connection/manager";
+import type { Request } from "@modelcontextprotocol/sdk/types.js";
 import { events } from "fetch-event-stream";
 import { nanoid } from "nanoid";
 import {
@@ -27,10 +28,10 @@ export type Trace = {
   mid: string;
   timestamp: {
     start: number;
-    latency: number;
+    latency?: number;
   };
-  request?: unknown;
-  response?: unknown;
+  request?: Request;
+  response?: Record<string, any>;
 };
 
 function useTracingManager() {
@@ -54,7 +55,9 @@ function useTracingManager() {
               const { at, session, from, message } = data;
 
               if (from === "server") {
-                const index = tmp.findIndex((log) => log.mid === message.id);
+                const index = tmp.findIndex(
+                  (log) => log.mid === message.id && log.session === session
+                );
 
                 if (index !== -1) {
                   const exisiting = tmp[index];
@@ -72,10 +75,9 @@ function useTracingManager() {
                     session,
                     timestamp: {
                       start: at,
-                      latency: 0,
                     },
                     mid: message.id,
-                    response: JSON.stringify(message),
+                    response: message,
                   });
                 }
               } else {
@@ -84,10 +86,9 @@ function useTracingManager() {
                   session,
                   timestamp: {
                     start: at,
-                    latency: performance.now() - at,
                   },
                   mid: message.id,
-                  request: JSON.stringify(message),
+                  request: message,
                 });
               }
             }
@@ -100,9 +101,9 @@ function useTracingManager() {
 
     handler();
 
-    return () => {
-      abort.abort();
-    };
+    // return () => {
+    //   abort.abort();
+    // };
   }, []);
 
   function clearTraces() {

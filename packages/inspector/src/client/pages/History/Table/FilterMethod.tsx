@@ -8,10 +8,10 @@ import {
 } from "@/client/components/ui/dropdown-menu";
 import { eventHandler } from "@/client/lib/eventHandler";
 import { Check, FilterIcon } from "lucide-react";
-import { useTracing } from "../providers";
+import { useHistory } from "../providers";
 
 export function FilterMethod() {
-  const { methodFilters, tab, changeMethodFilters, setSelected } = useTracing();
+  const { methodFilters, tab, changeMethodFilters, setSelected } = useHistory();
   const filters = new Set(methodFilters);
 
   if (!tab.methods) return <></>;

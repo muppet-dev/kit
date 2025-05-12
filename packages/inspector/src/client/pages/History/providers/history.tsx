@@ -7,11 +7,11 @@ import {
   useState,
 } from "react";
 
-type TracingContextType = ReturnType<typeof useTracingManager>;
+type HistoryContextType = ReturnType<typeof useHistoryManager>;
 
-const TracingContext = createContext<TracingContextType | null>(null);
+const HistoryContext = createContext<HistoryContextType | null>(null);
 
-const TRACES_METHODS = [
+const HISTORY_METHODS = [
   "initialize",
   "ping",
   "tools/list",
@@ -24,18 +24,18 @@ const TRACES_METHODS = [
   "completion/complete",
 ];
 
-export const TracingProvider = (props: PropsWithChildren) => {
-  const values = useTracingManager();
+export const HistoryProvider = (props: PropsWithChildren) => {
+  const values = useHistoryManager();
 
   return (
-    <TracingContext.Provider value={values}>
+    <HistoryContext.Provider value={values}>
       {props.children}
-    </TracingContext.Provider>
+    </HistoryContext.Provider>
   );
 };
 
-export enum TraceTab {
-  TRACES = "traces",
+export enum HistoryTab {
+  HISTORY = "history",
   NOTIFICATIONS = "notifications",
   ERRORS = "errors",
 }
@@ -45,19 +45,19 @@ export enum SortingEnum {
   DESCENDING = -1,
 }
 
-function useTracingManager() {
+function useHistoryManager() {
   const { requestHistory } = useConnection();
   const { notifications, stdErrNotifications } = useNotification();
 
-  const [tab, setTab] = useState<{ value: TraceTab; methods?: string[] }>({
-    value: TraceTab.TRACES,
-    methods: TRACES_METHODS,
+  const [tab, setTab] = useState<{ value: HistoryTab; methods?: string[] }>({
+    value: HistoryTab.HISTORY,
+    methods: HISTORY_METHODS,
   });
 
-  function changeTab(value: TraceTab) {
+  function changeTab(value: HistoryTab) {
     setTab({
       value,
-      methods: value === TraceTab.TRACES ? TRACES_METHODS : undefined,
+      methods: value === HistoryTab.HISTORY ? HISTORY_METHODS : undefined,
     });
   }
 
@@ -65,15 +65,15 @@ function useTracingManager() {
 
   const [methodFilters, setMethodFilters] = useState<string[] | null>(null);
   const [timestampSort, setTimestampSort] = useState<SortingEnum>(
-    SortingEnum.ASCENDING,
+    SortingEnum.ASCENDING
   );
 
   const rawTraces = useMemo(() => {
-    return tab.value === TraceTab.TRACES
+    return tab.value === HistoryTab.HISTORY
       ? requestHistory
-      : tab.value === TraceTab.NOTIFICATIONS
-        ? notifications
-        : stdErrNotifications;
+      : tab.value === HistoryTab.NOTIFICATIONS
+      ? notifications
+      : stdErrNotifications;
   }, [tab, requestHistory, notifications, stdErrNotifications]);
 
   const traces = useMemo(() => {
@@ -82,8 +82,8 @@ function useTracingManager() {
     let results = rawTraces.filter(
       (item) =>
         _methodFilters?.includes(
-          "request" in item ? JSON.parse(item.request).method : item.method,
-        ) ?? true,
+          "request" in item ? JSON.parse(item.request).method : item.method
+        ) ?? true
     );
 
     results = results.sort((a, b) => {
@@ -152,8 +152,8 @@ function useTracingManager() {
   };
 }
 
-export const useTracing = () => {
-  const context = useContext(TracingContext);
+export const useHistory = () => {
+  const context = useContext(HistoryContext);
 
   if (!context) throw new Error("Missing ModelContext.Provider in the tree!");
 

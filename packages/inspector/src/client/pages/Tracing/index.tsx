@@ -8,85 +8,39 @@ import {
 } from "@/client/components/ui/dropdown-menu";
 import { Input } from "@/client/components/ui/input";
 import { Skeleton } from "@/client/components/ui/skeleton";
-import { Tabs, TabsList, TabsTrigger } from "@/client/components/ui/tabs";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/client/components/ui/tooltip";
 import { eventHandler } from "@/client/lib/eventHandler";
-import { useConfig, useConnection, useNotification } from "@/client/providers";
-import { ListX, Pickaxe } from "lucide-react";
+import { useConfig } from "@/client/providers";
+import { ListX, Logs, Pickaxe } from "lucide-react";
 import type { BaseSyntheticEvent } from "react";
 import { TracingTable } from "./Table";
-import { TraceTab, TracingProvider, useTracing } from "./providers";
+import { LogsProvider } from "./providers";
 
 export default function TracingPage() {
   return (
-    <TracingProvider>
-      <TracingPanel />
-    </TracingProvider>
-  );
-}
-
-function TracingPanel() {
-  const { tab, changeTab } = useTracing();
-
-  return (
-    <div className="p-4 size-full">
-      <Tabs
-        value={tab.value}
-        onValueChange={(value) => changeTab(value as TraceTab)}
-        className="size-full"
-      >
-        <div className="flex items-center justify-between gap-2">
-          <TabsList>
-            <TabsTrigger
-              value={TraceTab.TRACES}
-              className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black"
-            >
-              Traces
-            </TabsTrigger>
-            <TabsTrigger
-              value={TraceTab.NOTIFICATIONS}
-              className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black"
-            >
-              Notifications
-            </TabsTrigger>
-            <TabsTrigger
-              value={TraceTab.ERRORS}
-              className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black"
-            >
-              Errors
-            </TabsTrigger>
-          </TabsList>
+    <LogsProvider>
+      <div className="p-4 size-full flex flex-col gap-2">
+        <div className="flex items-center gap-2">
+          <Logs className="size-5" />
+          <h2 className="text-2xl font-bold">Traces</h2>
+          <div className="flex-1" />
           <PageHeader />
         </div>
-        <div className="size-full flex flex-col gap-4 overflow-y-auto">
+        <div className="size-full flex-1 flex flex-col gap-4 overflow-y-auto">
           <TracingTable />
         </div>
-      </Tabs>
-    </div>
+      </div>
+    </LogsProvider>
   );
 }
 
 function PageHeader() {
-  const { tab } = useTracing();
-  const { clearNotifications, clearStdErrNotifications } = useNotification();
-  const { setRequestHistory } = useConnection();
-
   const onClear = eventHandler(() => {
-    switch (tab.value) {
-      case TraceTab.TRACES:
-        setRequestHistory([]);
-        break;
-      case TraceTab.NOTIFICATIONS:
-        clearNotifications();
-        break;
-      case TraceTab.ERRORS:
-        clearStdErrNotifications();
-        break;
-    }
+    console.log("Clear logs");
   });
 
   return (
@@ -151,7 +105,7 @@ function TunnelLink() {
                   variant="ghost"
                   className="has-[>svg]:px-1.5 py-1.5 h-max rounded-sm data-[state=open]:bg-accent dark:data-[state=open]:bg-accent/50"
                 >
-                  <Pickaxe className="size-[18px] stroke-zinc-600 dark:stroke-zinc-300" />
+                  <Pickaxe className="stroke-zinc-600 dark:stroke-zinc-300" />
                 </Button>
               </DropdownMenuTrigger>
             </div>
