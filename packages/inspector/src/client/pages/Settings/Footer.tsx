@@ -9,6 +9,7 @@ import {
   type configTransportSchema,
 } from "@/client/validations";
 import _ from "lodash";
+import type { BaseSyntheticEvent } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import type z from "zod";
 
@@ -24,12 +25,14 @@ export function FormFooter() {
 
   const handleResetForm = eventHandler(() => reset(connectionInfo));
 
-  const handleSaveAndAddAnother = () => {
-    setValue(SUBMIT_BUTTON_KEY, DocumentSubmitType.SAVE_AND_CONNECT);
+  const handleConnect = (event: BaseSyntheticEvent) => {
+    if ("key" in event && event.key !== "Enter") return;
+
+    setValue(SUBMIT_BUTTON_KEY, DocumentSubmitType.CONNECT);
   };
 
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between mt-4">
       <Button
         type="button"
         variant="outline"
@@ -42,11 +45,11 @@ export function FormFooter() {
       <Button
         type="submit"
         disabled={isSameValues || isConnecting}
-        onClick={handleSaveAndAddAnother}
-        onKeyDown={handleSaveAndAddAnother}
+        onClick={handleConnect}
+        onKeyDown={handleConnect}
       >
         {isConnecting && <Spinner className="size-4 min-w-4 min-h-4" />}
-        {isConnecting ? "Connecting" : "Save & connect"}
+        {isConnecting ? "Connecting" : "Connect"}
       </Button>
     </div>
   );

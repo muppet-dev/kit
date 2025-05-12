@@ -1,13 +1,17 @@
-import { CONFIG_STORAGE_KEY } from "@/client/providers";
+import { CONFIG_STORAGE_KEY, useConfig } from "@/client/providers";
 import type { ConnectionInfo } from "@/client/providers/connection/manager";
 import { DocumentSubmitType, SUBMIT_BUTTON_KEY } from "@/client/validations";
 import { Transport } from "@muppet-kit/shared";
 import { useMutation } from "@tanstack/react-query";
+import { useLocalStorage } from "@uidotdev/usehooks";
 import { nanoid } from "nanoid";
-import type { ConfigForm } from ".";
 
-export function useConfigForm(props: Pick<ConfigForm, "onSubmit">) {
+export function useConfigForm() {
   const id = nanoid(6);
+  const { setConnectionInfo } = useConfig();
+  const [_, setConfigurations] = useLocalStorage<ConnectionInfo[] | null>(
+    CONFIG_STORAGE_KEY
+  );
 
   return useMutation({
     mutationFn: async (values: ConnectionInfo) => {
@@ -30,35 +34,14 @@ export function useConfigForm(props: Pick<ConfigForm, "onSubmit">) {
             : undefined;
       }
 
-      if (_values.id) props.onSubmit(_values);
-      else props.onSubmit({ id, ..._values });
+      setConnectionInfo(_values.id ? _values : { id, ..._values });
     },
     onSuccess: (_, values) => {
       const submit_type_value = values[SUBMIT_BUTTON_KEY];
 
       if (submit_type_value === DocumentSubmitType.SAVE_AND_CONNECT) {
-        const localStorageValue = localStorage.getItem(CONFIG_STORAGE_KEY);
-
-        const parsedValue = localStorageValue
-          ? (JSON.parse(localStorageValue) as ConnectionInfo[])
-          : undefined;
-
-        if (parsedValue) {
-          if (values.id) {
-            localStorage.setItem(
-              CONFIG_STORAGE_KEY,
-              JSON.stringify([...parsedValue, values])
-            );
-          } else
-            localStorage.setItem(
-              CONFIG_STORAGE_KEY,
-              JSON.stringify([...parsedValue, { id, ...values }])
-            );
-        } else
-          localStorage.setItem(
-            CONFIG_STORAGE_KEY,
-            JSON.stringify([{ id, ...values }])
-          );
+        const newItem = values.id ? values : { ...values, id };
+        setConfigurations((prev) => (prev ? [...prev, newItem] : [newItem]));
       }
     },
   });

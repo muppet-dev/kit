@@ -6,15 +6,15 @@ import { useFormContext } from "react-hook-form";
 export function FormResetButton() {
   const { reset } = useFormContext();
 
-  const onReset = eventHandler(() => reset());
+  const handleResetForm = eventHandler(() => reset());
 
   return (
     <>
       <Button
         variant="secondary"
         className="xl:flex hidden"
-        onClick={onReset}
-        onKeyDown={onReset}
+        onClick={handleResetForm}
+        onKeyDown={handleResetForm}
       >
         <ListRestart />
         Reset
@@ -22,8 +22,8 @@ export function FormResetButton() {
       <Button
         variant="secondary"
         className="xl:hidden size-max has-[>svg]:px-2.5 py-2.5"
-        onClick={onReset}
-        onKeyDown={onReset}
+        onClick={handleResetForm}
+        onKeyDown={handleResetForm}
       >
         <ListRestart />
       </Button>

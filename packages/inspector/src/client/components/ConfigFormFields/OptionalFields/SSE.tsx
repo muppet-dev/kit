@@ -16,7 +16,7 @@ export function SSEFields() {
 
   return (
     <>
-      <div className="grid grid-cols-4 items-center gap-4">
+      <div className="grid grid-cols-4 w-full items-center gap-2">
         <Label htmlFor="url">URL</Label>
         <URLField />
       </div>
@@ -26,7 +26,7 @@ export function SSEFields() {
             Authentication
           </AccordionTrigger>
           <AccordionContent className="pt-2 pb-0 space-y-2">
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid grid-cols-4 w-full items-center gap-2">
               <Label htmlFor="bearerToken">Bearer Token</Label>
               <Input
                 className="col-span-3"
@@ -34,7 +34,7 @@ export function SSEFields() {
                 {...register("bearerToken")}
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid grid-cols-4 w-full items-center gap-2">
               <Label htmlFor="headerName">Header Name</Label>
               <Input
                 className="col-span-3"

@@ -18,7 +18,7 @@ export function STDIOFields() {
 
   return (
     <>
-      <div className="grid grid-cols-4 items-center gap-4">
+      <div className="grid grid-cols-4 w-full items-center gap-2">
         <Label htmlFor="command">Command</Label>
         <Input
           id="command"
@@ -27,7 +27,7 @@ export function STDIOFields() {
           {...register("command")}
         />
       </div>
-      <div className="grid grid-cols-4 items-center gap-4">
+      <div className="grid grid-cols-4 w-full items-center gap-2">
         <Label htmlFor="arguments">Arguments</Label>
         <Input
           className="col-span-3 text-md"
@@ -35,12 +35,15 @@ export function STDIOFields() {
           {...register("args")}
         />
       </div>
-      <Accordion type="single" collapsible>
-        <AccordionItem value="1" className="border-b-0">
+      <Accordion type="single" collapsible className="h-full flex flex-col">
+        <AccordionItem
+          value="1"
+          className="border-b-0 h-full flex flex-col [&>div]:data-[state=open]:h-full [&>div]:data-[state=open]:flex"
+        >
           <AccordionTrigger className="hover:no-underline cursor-pointer hover:bg-accent/80 data-[state=open]:bg-accent/80 py-1.5 hover:px-2 data-[state=open]:px-2">
             Environmental Variables
           </AccordionTrigger>
-          <AccordionContent className="pt-2 pb-0">
+          <AccordionContent className="pt-2 pb-0 h-full w-full flex flex-col gap-2">
             <EnvField />
           </AccordionContent>
         </AccordionItem>
@@ -67,22 +70,17 @@ function EnvField() {
   const handleDeleteItem = (index: number) => eventHandler(() => remove(index));
 
   return (
-    <div className="space-y-2">
+    <>
       {fields.length === 0 ? (
-        <div className="h-[78px] w-full flex items-center justify-center border">
+        <div className="h-[36px] w-full flex items-center justify-center border">
           <p className="text-sm select-none">No variables added</p>
         </div>
       ) : (
-        <div className=" h-full overflow-y-auto space-y-1">
-          {fields.map((item, index, arr) => (
+        <div className="max-h-[110px] overflow-y-auto space-y-1">
+          {fields.map((item, index) => (
             <div key={item.id} className="flex w-full items-center gap-2">
-              <div className="flex w-full">
-                <Input {...register(`env.${index}.key`)} placeholder="Key" />
-                <Input
-                  {...register(`env.${index}.value`)}
-                  placeholder="Value"
-                />
-              </div>
+              <Input {...register(`env.${index}.key`)} placeholder="Key" />
+              <Input {...register(`env.${index}.value`)} placeholder="Value" />
               <Button
                 title="Delete"
                 type="button"
@@ -102,9 +100,10 @@ function EnvField() {
         variant="secondary"
         onClick={handleAddItem}
         onKeyDown={handleAddItem}
+        className="w-max"
       >
         Add variable
       </Button>
-    </div>
+    </>
   );
 }

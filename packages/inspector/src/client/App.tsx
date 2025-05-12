@@ -9,7 +9,7 @@ import {
   useConfig,
 } from "@/client/providers";
 import { Transport } from "@muppet-kit/shared";
-import { BrowserRouter, Route, Routes } from "react-router";
+import { Route, Routes } from "react-router";
 import ExplorerPage from "./pages/Explorer";
 import { HomePage } from "./pages/Home";
 import OAuthCallbackPage from "./pages/OAuthCallback";
@@ -34,7 +34,7 @@ export default function App() {
   }
 
   if (!connectionInfo) {
-    return <ConfigurationsDialog onSubmit={setConnectionInfo} />;
+    return <ConfigurationsDialog />;
   }
 
   return (
@@ -42,18 +42,16 @@ export default function App() {
       <ConnectionProvider>
         <ShikiProvider>
           <SidebarProvider>
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<AppWrapper />}>
-                  <Route index element={<HomePage />} />
-                  <Route path="/explorer" element={<ExplorerPage />} />
-                  <Route path="/playground" element={<PlaygroundPage />} />
-                  <Route path="/tracing" element={<TracingPage />} />
-                  <Route path="/settings" element={<SettingsPage />} />
-                </Route>
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </BrowserRouter>
+            <Routes>
+              <Route path="/" element={<AppWrapper />}>
+                <Route index element={<HomePage />} />
+                <Route path="/explorer" element={<ExplorerPage />} />
+                <Route path="/playground" element={<PlaygroundPage />} />
+                <Route path="/tracing" element={<TracingPage />} />
+                <Route path="/settings" element={<SettingsPage />} />
+              </Route>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
           </SidebarProvider>
         </ShikiProvider>
       </ConnectionProvider>
