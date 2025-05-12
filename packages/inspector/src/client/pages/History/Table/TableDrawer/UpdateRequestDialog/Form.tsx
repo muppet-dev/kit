@@ -15,7 +15,7 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import { Editor as MonacoEditor, type OnMount } from "@monaco-editor/react";
 import { useMutation } from "@tanstack/react-query";
-import { AlignLeft, SendHorizontalIcon } from "lucide-react";
+import { AlignLeft, SendHorizontal } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -28,7 +28,7 @@ export function UpdateRequestForm({ request, closeDialog }: UpdateRequestForm) {
   const [editorInstance, setEditorInstance] =
     useState<Parameters<OnMount>[0]>();
   const [value, setValue] = useState<string>(
-    JSON.stringify(request.params, null, 2),
+    JSON.stringify(request.params, null, 2)
   );
   const { makeRequest } = useConnection();
   const { resolvedTheme } = useTheme();
@@ -115,7 +115,7 @@ export function UpdateRequestForm({ request, closeDialog }: UpdateRequestForm) {
         disabled={mutation.isPending}
       >
         Send
-        <SendHorizontalIcon className="size-3.5" />
+        <SendHorizontal className="size-3.5" />
       </Button>
     </>
   );

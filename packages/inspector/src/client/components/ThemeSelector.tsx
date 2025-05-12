@@ -1,6 +1,6 @@
 import { cn } from "@/client/lib/utils";
 import { type Theme, useTheme } from "@/client/providers";
-import { MoonIcon, SunIcon, TvIcon } from "lucide-react";
+import { Moon, Sun, Tv } from "lucide-react";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -12,9 +12,9 @@ import { useSidebar } from "./ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 const THEMES = {
-  light: SunIcon,
-  dark: MoonIcon,
-  system: TvIcon,
+  light: Sun,
+  dark: Moon,
+  system: Tv,
 };
 
 export function ThemeSelector() {
@@ -51,7 +51,7 @@ export function ThemeSelector() {
               key={name}
               className={cn(
                 isSelected && "bg-secondary focus:bg-secondary",
-                "capitalize group",
+                "capitalize group"
               )}
               onClick={() => setTheme(name as Theme)}
               onKeyDown={() => setTheme(name as Theme)}
@@ -59,7 +59,7 @@ export function ThemeSelector() {
               <Icon
                 className={cn(
                   isSelected && "text-black dark:text-white",
-                  "stroke-2 size-4",
+                  "stroke-2 size-4"
                 )}
               />
               {name}

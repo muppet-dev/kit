@@ -12,7 +12,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/client/components/ui/tooltip";
-import { PencilIcon } from "lucide-react";
+import { Pencil } from "lucide-react";
 import { useState } from "react";
 import { UpdateRequestForm } from "./Form";
 
@@ -28,7 +28,7 @@ export function UpdateRequestDialog({ request }: UpdateRequestDialog) {
           <div>
             <DialogTrigger asChild>
               <Button size="icon" variant="ghost" className="p-1.5 size-max">
-                <PencilIcon />
+                <Pencil />
               </Button>
             </DialogTrigger>
           </div>
@@ -38,7 +38,7 @@ export function UpdateRequestDialog({ request }: UpdateRequestDialog) {
       <DialogContent className="!max-w-2xl">
         <DialogHeader className="gap-0">
           <DialogTitle className="flex items-center gap-2">
-            <PencilIcon className="size-[18px]" /> Send Request
+            <Pencil className="size-[18px]" /> Send Request
           </DialogTitle>
           <DialogDescription className="hidden" />
         </DialogHeader>

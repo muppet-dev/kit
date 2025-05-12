@@ -1,6 +1,5 @@
 import { Button } from "@/client/components/ui/button";
 import { eventHandler } from "@/client/lib/eventHandler";
-import { useConfig } from "@/client/providers";
 import { Settings } from "lucide-react";
 import { useState } from "react";
 import { useMCPItem } from "../../../providers";

@@ -11,14 +11,14 @@ import {
   useThreadRuntime,
 } from "@assistant-ui/react";
 import {
-  ArrowDownIcon,
-  CheckIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  CopyIcon,
-  PencilIcon,
-  RefreshCwIcon,
-  SendHorizontalIcon,
+  ArrowDown,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Copy,
+  Pencil,
+  RefreshCw,
+  SendHorizontal,
 } from "lucide-react";
 import { type FC, useEffect } from "react";
 import { useChats } from "../../providers";
@@ -82,7 +82,7 @@ const ThreadScrollToBottom: FC = () => {
         variant="outline"
         className="absolute -top-8 rounded-full disabled:invisible"
       >
-        <ArrowDownIcon />
+        <ArrowDown />
       </TooltipIconButton>
     </ThreadPrimitive.ScrollToBottom>
   );
@@ -132,7 +132,7 @@ const ComposerAction: FC = () => {
             variant="default"
             className="my-2.5 size-8 p-2 transition-opacity ease-in"
           >
-            <SendHorizontalIcon />
+            <SendHorizontal />
           </TooltipIconButton>
         </ComposerPrimitive.Send>
       </ThreadPrimitive.If>
@@ -172,7 +172,7 @@ const UserActionBar: FC = () => {
     >
       <ActionBarPrimitive.Edit asChild>
         <TooltipIconButton tooltip="Edit">
-          <PencilIcon />
+          <Pencil />
         </TooltipIconButton>
       </ActionBarPrimitive.Edit>
     </ActionBarPrimitive.Root>
@@ -218,16 +218,16 @@ const AssistantActionBar: FC = () => {
       <ActionBarPrimitive.Copy asChild>
         <TooltipIconButton tooltip="Copy">
           <MessagePrimitive.If copied>
-            <CheckIcon />
+            <Check />
           </MessagePrimitive.If>
           <MessagePrimitive.If copied={false}>
-            <CopyIcon />
+            <Copy />
           </MessagePrimitive.If>
         </TooltipIconButton>
       </ActionBarPrimitive.Copy>
       <ActionBarPrimitive.Reload asChild>
         <TooltipIconButton tooltip="Refresh">
-          <RefreshCwIcon />
+          <RefreshCw />
         </TooltipIconButton>
       </ActionBarPrimitive.Reload>
     </ActionBarPrimitive.Root>
@@ -243,13 +243,13 @@ const BranchPicker: FC<BranchPickerPrimitive.Root.Props> = ({
       hideWhenSingleBranch
       className={cn(
         "text-muted-foreground inline-flex items-center text-xs",
-        className,
+        className
       )}
       {...rest}
     >
       <BranchPickerPrimitive.Previous asChild>
         <TooltipIconButton tooltip="Previous">
-          <ChevronLeftIcon />
+          <ChevronLeft />
         </TooltipIconButton>
       </BranchPickerPrimitive.Previous>
       <span className="font-medium">
@@ -257,7 +257,7 @@ const BranchPicker: FC<BranchPickerPrimitive.Root.Props> = ({
       </span>
       <BranchPickerPrimitive.Next asChild>
         <TooltipIconButton tooltip="Next">
-          <ChevronRightIcon />
+          <ChevronRight />
         </TooltipIconButton>
       </BranchPickerPrimitive.Next>
     </BranchPickerPrimitive.Root>

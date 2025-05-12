@@ -11,7 +11,7 @@ import {
 } from "@/client/components/ui/tooltip";
 import { eventHandler } from "@/client/lib/eventHandler";
 import { useQueryClient } from "@tanstack/react-query";
-import { RefreshCcwIcon } from "lucide-react";
+import { RefreshCcw } from "lucide-react";
 import { useGetMCPItemQueryKey, useTool } from "../providers";
 
 export function ToolsTabs() {
@@ -23,7 +23,7 @@ export function ToolsTabs() {
   const queryState = queryClient.getQueryState(queryKey);
 
   const handleRefresh = eventHandler(() =>
-    queryClient.refetchQueries({ queryKey }),
+    queryClient.refetchQueries({ queryKey })
   );
 
   return (
@@ -52,7 +52,7 @@ export function ToolsTabs() {
               onKeyDown={handleRefresh}
               disabled={queryState?.status !== "success"}
             >
-              <RefreshCcwIcon className="size-4 stroke-2" />
+              <RefreshCcw className="size-4 stroke-2" />
             </Button>
           </TooltipTrigger>
           <TooltipContent>Refresh {activeTool.name}</TooltipContent>

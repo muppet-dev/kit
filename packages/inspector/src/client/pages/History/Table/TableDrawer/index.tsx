@@ -11,7 +11,7 @@ import { cn } from "@/client/lib/utils";
 import { useConnection } from "@/client/providers";
 import type { RequestHistory } from "@/client/providers/connection/manager";
 import { EmptyResultSchema } from "@modelcontextprotocol/sdk/types.js";
-import { ChevronDown, ChevronUp, RefreshCcw, XIcon } from "lucide-react";
+import { ChevronDown, ChevronUp, RefreshCcw, X } from "lucide-react";
 import { useState } from "react";
 import { useHistory } from "../../providers";
 import { UpdateRequestDialog } from "./UpdateRequestDialog";
@@ -159,7 +159,7 @@ export function TableDrawer({ traces }: TableDrawer) {
               onClick={handleCloseDrawer}
               onKeyDown={handleCloseDrawer}
             >
-              <XIcon />
+              <X />
             </Button>
           </TooltipTrigger>
           <TooltipContent>Close</TooltipContent>

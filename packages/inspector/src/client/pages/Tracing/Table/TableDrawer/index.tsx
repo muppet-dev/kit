@@ -9,7 +9,7 @@ import { eventHandler } from "@/client/lib/eventHandler";
 import { cn } from "@/client/lib/utils";
 import { type Trace, useConnection } from "@/client/providers";
 import { EmptyResultSchema } from "@modelcontextprotocol/sdk/types.js";
-import { ChevronDown, ChevronUp, RefreshCcw, XIcon } from "lucide-react";
+import { ChevronDown, ChevronUp, RefreshCcw, X } from "lucide-react";
 import { useState } from "react";
 import { useLogs } from "../../providers";
 import { UpdateRequestDialog } from "./UpdateRequestDialog";
@@ -154,7 +154,7 @@ export function TableDrawer({ traces }: TableDrawer) {
               onClick={handleCloseDrawer}
               onKeyDown={handleCloseDrawer}
             >
-              <XIcon />
+              <X />
             </Button>
           </TooltipTrigger>
           <TooltipContent>Close</TooltipContent>

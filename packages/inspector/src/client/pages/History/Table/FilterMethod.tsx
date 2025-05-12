@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/client/components/ui/dropdown-menu";
 import { eventHandler } from "@/client/lib/eventHandler";
-import { Check, FilterIcon } from "lucide-react";
+import { Check, Filter } from "lucide-react";
 import { useHistory } from "../providers";
 
 export function FilterMethod() {
@@ -36,7 +36,7 @@ export function FilterMethod() {
           variant="ghost"
           className="h-max has-[>svg]:px-1.5 py-1.5 cursor-pointer hover:bg-zinc-200 text-zinc-600 dark:hover:bg-zinc-700 dark:text-zinc-400 dark:hover:text-accent-foreground data-[state=open]:text-accent-foreground dark:data-[state=open]:text-accent-foreground data-[state=open]:bg-zinc-200 dark:data-[state=open]:bg-zinc-700"
         >
-          <FilterIcon className="size-4" />
+          <Filter className="size-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent side="left" align="start" alignOffset={-1}>
