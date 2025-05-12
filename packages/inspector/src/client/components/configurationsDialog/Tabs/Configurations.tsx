@@ -10,6 +10,7 @@ import { Button } from "../../ui/button";
 import { useConfigForm } from "../../ConfigForm/useConfigForm";
 import { Spinner } from "../../ui/spinner";
 import { useLocalStorage } from "@uidotdev/usehooks";
+import { Badge } from "../../ui/badge";
 
 export function Configurations() {
   const [selected, setSelected] = useState<ConnectionInfo>();
@@ -71,15 +72,30 @@ export function Configurations() {
                 selected?.id === item.id
                   ? "bg-accent/80 dark:bg-accent/50 border-primary/30"
                   : "hover:bg-accent/80 dark:hover:bg-accent/50 hover:border-primary/30 transition-all",
-                "border px-3 py-1.5 cursor-pointer flex items-center justify-between"
+                "border px-3 pt-1.5 pb-2 cursor-pointer flex items-center justify-between select-none"
               )}
             >
               <div>
-                <div className="flex items-center gap-2 mb-0.5">
-                  <h3>{(item.name?.length ?? 0) > 0 ? item.name : item.id}</h3>{" "}
-                  -<p>{item.transportType}</p>
+                <div className="flex items-center gap-1.5 mb-0.5">
+                  <h3>{(item.name?.length ?? 0) > 0 ? item.name : item.id}</h3>
+                  <Badge
+                    className={cn(
+                      "leading-tight py-0 px-1 font-semibold",
+                      item.transportType === Transport.HTTP
+                        ? "bg-green-500 dark:bg-green-300"
+                        : item.transportType === Transport.SSE
+                        ? "bg-yellow-500 dark:bg-yellow-300"
+                        : "bg-blue-500 dark:bg-blue-300"
+                    )}
+                  >
+                    {item.transportType === Transport.HTTP ? (
+                      "HTTP Streaming"
+                    ) : (
+                      <span className="uppercase">{item.transportType}</span>
+                    )}
+                  </Badge>
                 </div>
-                <p className="text-sm text-muted-foreground line-clamp-1">
+                <p className="text-sm leading-tight text-muted-foreground line-clamp-1">
                   {item.transportType === Transport.STDIO
                     ? item.command
                     : item.url}
