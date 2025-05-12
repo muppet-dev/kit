@@ -20,13 +20,13 @@ import {
   Trash,
 } from "lucide-react";
 import { type BaseSyntheticEvent, useState } from "react";
-import { useModels } from "../providers";
-import type { ModelProps } from "../type";
+import { useChats } from "../providers";
+import type { ChatProps } from "../type";
 
 export function ModelHeader(props: { chatId: string }) {
-  const { getModel, addModel, onConfigChange } = useModels();
+  const { getChat, addChat, onConfigChange } = useChats();
 
-  const model = getModel(props.chatId);
+  const model = getChat(props.chatId);
 
   if (!model) {
     throw new Error(`Unable to find model with id ${props.chatId}`);
@@ -37,7 +37,7 @@ export function ModelHeader(props: { chatId: string }) {
   const handleConfigChange = (id: string, sync?: boolean) =>
     eventHandler(() => onConfigChange(id, { sync }));
 
-  const handleAddModel = eventHandler(() => addModel());
+  const handleAddingChat = eventHandler(() => addChat());
 
   return (
     <div className="p-2 flex items-center gap-1 border-b border-zinc-300 dark:border-zinc-800 bg-background">
@@ -66,8 +66,8 @@ export function ModelHeader(props: { chatId: string }) {
         title="Add model for comparison"
         variant="ghost"
         className="has-[>svg]:px-1.5 py-1.5 h-max rounded-sm"
-        onClick={handleAddModel}
-        onKeyDown={handleAddModel}
+        onClick={handleAddingChat}
+        onKeyDown={handleAddingChat}
       >
         <Plus className="size-[18px] stroke-zinc-600 dark:stroke-zinc-300" />
       </Button>
@@ -76,10 +76,10 @@ export function ModelHeader(props: { chatId: string }) {
   );
 }
 
-function ModelSelect(props: { model: ModelProps }) {
+function ModelSelect(props: { model: ChatProps }) {
   const [value, setValue] = useState<string>(props.model.model);
 
-  const { onConfigChange } = useModels();
+  const { onConfigChange } = useChats();
 
   return (
     <ModelField
@@ -96,11 +96,11 @@ function ModelSelect(props: { model: ModelProps }) {
   );
 }
 
-function OptionsMenu(props: { model: ModelProps }) {
+function OptionsMenu(props: { model: ChatProps }) {
   const threadRuntime = useThreadRuntime();
-  const { moveRight, moveLeft, deleteModel, models } = useModels();
+  const { chats, moveRight, moveLeft, deleteChat } = useChats();
 
-  const index = models.findIndex((item) => item.id === props.model.id);
+  const index = chats.findIndex((chat) => chat.id === props.model.id);
 
   const handleClearChat = (event: BaseSyntheticEvent) => {
     if ("key" in event && event.key !== "Enter") return;
@@ -114,9 +114,9 @@ function OptionsMenu(props: { model: ModelProps }) {
     if ("key" in event && event.key !== "Enter") return;
     moveLeft(props.model.id);
   };
-  const handleDeleteModel = (event: BaseSyntheticEvent) => {
+  const handleDeletingChat = (event: BaseSyntheticEvent) => {
     if ("key" in event && event.key !== "Enter") return;
-    deleteModel(props.model.id);
+    deleteChat(props.model.id);
   };
 
   return (
@@ -137,7 +137,7 @@ function OptionsMenu(props: { model: ModelProps }) {
         <DropdownMenuItem
           onClick={handleMoveRight}
           onKeyDown={handleMoveRight}
-          disabled={models.length === 1 || index === models.length - 1}
+          disabled={chats.length === 1 || index === chats.length - 1}
         >
           <ArrowRight className="size-4 text-accent-foreground" />
           Move Right
@@ -145,7 +145,7 @@ function OptionsMenu(props: { model: ModelProps }) {
         <DropdownMenuItem
           onClick={handleMoveLeft}
           onKeyDown={handleMoveLeft}
-          disabled={models.length === 1 || index === 0}
+          disabled={chats.length === 1 || index === 0}
         >
           <ArrowLeft className="size-4 text-accent-foreground" />
           Move Left
@@ -153,9 +153,9 @@ function OptionsMenu(props: { model: ModelProps }) {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="text-destructive focus:text-destructive"
-          onClick={handleDeleteModel}
-          onKeyDown={handleDeleteModel}
-          disabled={models.length === 1}
+          onClick={handleDeletingChat}
+          onKeyDown={handleDeletingChat}
+          disabled={chats.length === 1}
         >
           <Trash className="size-4 text-destructive" />
           Delete Chat

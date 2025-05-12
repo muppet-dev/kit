@@ -2,7 +2,7 @@ import { useConfig } from "@/client/providers";
 import { Sparkles } from "lucide-react";
 import { useEffect } from "react";
 import { Chat } from "./Chat";
-import { ModelsProvider, useModels } from "./providers";
+import { ChatsProvider, useChats } from "./providers";
 
 export default function PlaygroundPage() {
   const { isModelsEnabled } = useConfig();
@@ -18,26 +18,26 @@ export default function PlaygroundPage() {
 
   return (
     <div className="flex gap-2 p-4 w-full overflow-x-auto">
-      <ModelsProvider>
+      <ChatsProvider>
         <ChatRenderer />
-      </ModelsProvider>
+      </ChatsProvider>
     </div>
   );
 }
 
 function ChatRenderer() {
-  const { models, addModel } = useModels();
+  const { chats, addChat } = useChats();
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Adding a model
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Adding a default chat
   useEffect(() => {
-    if (models.length === 0) {
-      addModel();
+    if (chats.length === 0) {
+      addChat();
     }
   }, []);
 
   return (
     <>
-      {models.map(({ id }) => (
+      {chats.map(({ id }) => (
         <Chat key={id} chatId={id} />
       ))}
     </>

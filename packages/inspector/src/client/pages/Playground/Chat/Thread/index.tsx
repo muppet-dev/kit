@@ -21,16 +21,16 @@ import {
   SendHorizontalIcon,
 } from "lucide-react";
 import { type FC, useEffect } from "react";
-import { useModels } from "../../providers";
+import { useChats } from "../../providers";
 import { MarkdownText } from "./MarkdownText";
 import { TooltipIconButton } from "./TooltipIconButton";
 
 export function Thread(props: { chatId: string } & ThreadWelcome) {
-  const { syncTextChange, getModel, onConfigChange } = useModels();
+  const { syncTextChange, getChat, onConfigChange } = useChats();
   const thread = useThreadRuntime();
   const composer = useThreadComposer();
 
-  const chat = getModel(props.chatId);
+  const chat = getChat(props.chatId);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: Only need to run once
   useEffect(() => {
@@ -243,7 +243,7 @@ const BranchPicker: FC<BranchPickerPrimitive.Root.Props> = ({
       hideWhenSingleBranch
       className={cn(
         "text-muted-foreground inline-flex items-center text-xs",
-        className
+        className,
       )}
       {...rest}
     >
