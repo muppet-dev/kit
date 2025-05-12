@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import toast, { Toaster } from "react-hot-toast";
 import App from "./App";
 import { ConfigProvider, ThemeProvider } from "./providers";
+import { BrowserRouter } from "react-router";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,11 +28,13 @@ const queryClient = new QueryClient({
 
 createRoot(document.getElementById("root")!).render(
   <QueryClientProvider client={queryClient}>
-    <ConfigProvider>
-      <ThemeProvider>
-        <App />
-        <Toaster position="bottom-right" />
-      </ThemeProvider>
-    </ConfigProvider>
-  </QueryClientProvider>,
+    <BrowserRouter>
+      <ConfigProvider>
+        <ThemeProvider>
+          <App />
+          <Toaster position="bottom-right" />
+        </ThemeProvider>
+      </ConfigProvider>
+    </BrowserRouter>
+  </QueryClientProvider>
 );

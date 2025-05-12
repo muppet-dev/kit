@@ -29,7 +29,7 @@ function ActionButton() {
   const mutation = useGenerate();
 
   const handleGenerate = eventHandler(() =>
-    mutation.mutateAsync(selectedItem!),
+    mutation.mutateAsync(selectedItem!)
   );
 
   return <GenerateButton onClick={handleGenerate} onKeyDown={handleGenerate} />;
@@ -38,14 +38,14 @@ function ActionButton() {
 function SettingsDialogButton() {
   const [isOpen, setOpen] = useState(false);
 
-  const handler = eventHandler(() => setOpen(true));
+  const handleOpenDialog = eventHandler(() => setOpen(true));
 
   return (
     <>
       <Button
         variant="secondary"
-        onClick={handler}
-        onKeyDown={handler}
+        onClick={handleOpenDialog}
+        onKeyDown={handleOpenDialog}
         className="size-max has-[>svg]:px-2.5 py-2.5"
       >
         <Settings className="size-4" />

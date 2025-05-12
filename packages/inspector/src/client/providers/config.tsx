@@ -12,7 +12,7 @@ import {
   useState,
 } from "react";
 import type { z } from "zod";
-import type { transportSchema } from "../validations";
+import type { configTransportSchema } from "../validations";
 import toast from "react-hot-toast";
 
 export const CONFIG_STORAGE_KEY = "muppet-config";
@@ -56,8 +56,8 @@ function useConfigManager(props: ConfigProvider) {
               }
             | false;
           configurations:
-            | z.infer<typeof transportSchema>
-            | z.infer<typeof transportSchema>[];
+            | z.infer<typeof configTransportSchema>
+            | z.infer<typeof configTransportSchema>[];
         }>;
       }),
   });
@@ -71,7 +71,7 @@ function useConfigManager(props: ConfigProvider) {
         url = await fetch(`${getMCPProxyAddress()}/tunnel`).then((res) => {
           if (!res.ok) {
             throw new Error(
-              "Failed to generate a new tunneling URL. Please try again.",
+              "Failed to generate a new tunneling URL. Please try again."
             );
           }
 
@@ -126,7 +126,6 @@ function useConfigManager(props: ConfigProvider) {
     getDefaultModel,
     connectionInfo,
     setConnectionInfo: (info: ConnectionInfo) => {
-      localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(info));
       setConnectionInfo(info);
     },
   };

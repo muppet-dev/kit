@@ -7,16 +7,16 @@ import {
 } from "@/client/components/ui/accordion";
 import { Input } from "@/client/components/ui/input";
 import { Label } from "@/client/components/ui/label";
-import type { transportSchema } from "@/client/validations";
+import type { configTransportSchema } from "@/client/validations";
 import { useFormContext, useWatch } from "react-hook-form";
 import type z from "zod";
 
 export function SSEFields() {
-  const { register } = useFormContext<z.infer<typeof transportSchema>>();
+  const { register } = useFormContext<z.infer<typeof configTransportSchema>>();
 
   return (
     <>
-      <div className="grid grid-cols-4 items-center gap-4">
+      <div className="grid grid-cols-4 w-full items-center gap-2">
         <Label htmlFor="url">URL</Label>
         <URLField />
       </div>
@@ -26,7 +26,7 @@ export function SSEFields() {
             Authentication
           </AccordionTrigger>
           <AccordionContent className="pt-2 pb-0 space-y-2">
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid grid-cols-4 w-full items-center gap-2">
               <Label htmlFor="bearerToken">Bearer Token</Label>
               <Input
                 className="col-span-3"
@@ -34,7 +34,7 @@ export function SSEFields() {
                 {...register("bearerToken")}
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid grid-cols-4 w-full items-center gap-2">
               <Label htmlFor="headerName">Header Name</Label>
               <Input
                 className="col-span-3"
@@ -51,7 +51,7 @@ export function SSEFields() {
 
 function URLField() {
   const { register, control } =
-    useFormContext<z.infer<typeof transportSchema>>();
+    useFormContext<z.infer<typeof configTransportSchema>>();
 
   const url = useWatch({ control, name: "url" });
 

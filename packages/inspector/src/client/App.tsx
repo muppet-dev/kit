@@ -10,7 +10,7 @@ import {
   useConfig,
 } from "@/client/providers";
 import { Transport } from "@muppet-kit/shared";
-import { BrowserRouter, Route, Routes } from "react-router";
+import { Route, Routes } from "react-router";
 import ExplorerPage from "./pages/Explorer";
 import HistoryPage from "./pages/History";
 import { HomePage } from "./pages/Home";
@@ -36,7 +36,7 @@ export default function App() {
   }
 
   if (!connectionInfo) {
-    return <ConfigurationsDialog onSubmit={setConnectionInfo} />;
+    return <ConfigurationsDialog />;
   }
 
   return (
@@ -45,7 +45,6 @@ export default function App() {
         <ConnectionProvider>
           <ShikiProvider>
             <SidebarProvider>
-              <BrowserRouter>
                 <Routes>
                   <Route path="/" element={<AppWrapper />}>
                     <Route index element={<HomePage />} />
@@ -57,7 +56,6 @@ export default function App() {
                   </Route>
                   <Route path="*" element={<NotFound />} />
                 </Routes>
-              </BrowserRouter>
             </SidebarProvider>
           </ShikiProvider>
         </ConnectionProvider>
