@@ -83,12 +83,12 @@ function TunnelLink() {
           <div className="w-[300px] flex relative items-center">
             <Input
               readOnly
-              value={createLink.data?.url}
+              value={createLink.data?.url.toString()}
               placeholder=""
               className="w-full h-max pr-8"
             />
             <CopyButton
-              data={createLink.data?.url}
+              data={createLink.data?.url.toString()}
               tooltipContent="Copy URL"
               disabled={createLink.isPending}
               className="absolute right-0"
@@ -121,7 +121,7 @@ function TunnelLink() {
             Local Tunnel
           </DropdownMenuItem>
           <DropdownMenuItem
-            disabled={isTunnelingEnabled || createLink.isPending}
+            disabled={!isTunnelingEnabled || createLink.isPending}
             onClick={handler("public")}
             onKeyDown={handler("public")}
           >

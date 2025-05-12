@@ -38,6 +38,10 @@ export const ConfigProvider = ({
 
 function useConfigManager(props: ConfigProvider) {
   const [connectionInfo, setConnectionInfo] = useState(props.connection);
+  const [connectionLink, setConnectionLink] = useState<{
+    url: URL;
+    headers: HeadersInit;
+  }>();
 
   const { data: config } = useQuery({
     queryKey: ["base-config"],
@@ -64,22 +68,36 @@ function useConfigManager(props: ConfigProvider) {
 
   const createLink = useMutation({
     mutationFn: async (linkType: "local" | "public") => {
-      let url: { url: string; id: string };
-      if (linkType === "local") {
-        url = { id: "local", url: getMCPProxyAddress() };
-      } else {
-        url = await fetch(`${getMCPProxyAddress()}/tunnel`).then((res) => {
-          if (!res.ok) {
-            throw new Error(
-              "Failed to generate a new tunneling URL. Please try again."
-            );
-          }
+      let tunnel: { id: string; url: URL; headers: HeadersInit };
 
-          return res.json() as Promise<{ id: string; url: string }>;
-        });
+      if (!connectionLink) return undefined;
+
+      if (linkType === "local") {
+        tunnel = { id: "local", ...connectionLink };
+      } else {
+        const { id, url } = await fetch(`${getMCPProxyAddress()}/tunnel`).then(
+          (res) => {
+            if (!res.ok) {
+              throw new Error(
+                "Failed to generate a new tunneling URL. Please try again.",
+              );
+            }
+
+            return res.json() as Promise<{ id: string; url: string }>;
+          },
+        );
+
+        const publicUrl = new URL(
+          connectionLink.url.pathname +
+            connectionLink.url.search +
+            connectionLink.url.hash,
+          url,
+        );
+
+        tunnel = { id, headers: connectionLink.headers, url: publicUrl };
       }
 
-      return url;
+      return tunnel;
     },
     onError: (err) => {
       toast.error(err.message);
@@ -118,6 +136,8 @@ function useConfigManager(props: ConfigProvider) {
   }
 
   return {
+    connectionLink,
+    setConnectionLink,
     getConfigurations,
     isTunnelingEnabled,
     createLink,
