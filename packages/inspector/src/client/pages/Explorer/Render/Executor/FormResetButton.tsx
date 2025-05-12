@@ -6,7 +6,7 @@ import { useFormContext } from "react-hook-form";
 export function FormResetButton() {
   const { reset } = useFormContext();
 
-  const handleResetForm = eventHandler(() => reset());
+  const handleResetForm = eventHandler(() => reset({}));
 
   return (
     <>
