@@ -1,0 +1,31 @@
+{
+  "name": "@muppet-kit/shared",
+  "version": "0.1.0",
+  "license": "MIT",
+  "type": "module",
+  "files": ["dist"],
+  "scripts": {
+    "build": "pkgroll --minify"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    "import": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "require": {
+      "types": "./dist/index.d.cts",
+      "default": "./dist/index.cjs"
+    }
+  },
+  "dependencies": {
+    "zod": "^3.24.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.17",
+    "ai": "^4.3.15",
+    "pkgroll": "^2.12.2"
+  }
+}

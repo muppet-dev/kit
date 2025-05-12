@@ -1,0 +1,118 @@
+import { eventHandler } from "@/client/lib/eventHandler";
+import { cn } from "@/client/lib/utils";
+import { CONFIG_STORAGE_KEY } from "@/client/providers";
+import type { ConnectionInfo } from "@/client/providers/connection/manager";
+import { DocumentSubmitType, SUBMIT_BUTTON_KEY } from "@/client/validations";
+import { Transport } from "@muppet-kit/shared";
+import { Trash } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Button } from "../../ui/button";
+import { useConfigForm } from "../../ConfigForm/useConfigForm";
+import { Spinner } from "../../ui/spinner";
+import { useLocalStorage } from "@uidotdev/usehooks";
+
+export function Configurations() {
+  const [selected, setSelected] = useState<ConnectionInfo>();
+  const [configurations, setConfigurations] = useLocalStorage<
+    ConnectionInfo[] | null
+  >(CONFIG_STORAGE_KEY);
+
+  const handleSelectItem = (value: ConnectionInfo) =>
+    eventHandler(() => {
+      const formattedData =
+        value?.transportType === Transport.STDIO
+          ? {
+              ...value,
+              env: value.env
+                ? typeof value.env === "string"
+                  ? Object.entries(JSON.parse(value.env)).map(
+                      ([key, value]) => ({
+                        key,
+                        value: String(value),
+                      })
+                    )
+                  : value.env
+                : undefined,
+            }
+          : value;
+
+      setSelected(formattedData);
+    });
+
+  const mutation = useConfigForm();
+
+  const handleConnect = eventHandler(() => {
+    if (selected)
+      mutation.mutateAsync({
+        ...selected,
+        [SUBMIT_BUTTON_KEY]: DocumentSubmitType.CONNECT,
+      });
+  });
+
+  const handleDeleteItem = (id?: string) =>
+    eventHandler(() => {
+      if (id) {
+        setConfigurations(
+          (prev) => prev?.filter((item) => item.id !== id) ?? []
+        );
+      }
+    });
+
+  return (
+    <div className="flex flex-col gap-6 justify-between h-full overflow-hidden -mr-4">
+      {configurations && configurations.length > 0 ? (
+        <div className="space-y-2 max-h-[364px] h-full overflow-y-auto pr-4">
+          {configurations.map((item) => (
+            <div
+              key={item.id}
+              onClick={handleSelectItem(item)}
+              onKeyDown={handleSelectItem(item)}
+              className={cn(
+                selected?.id === item.id
+                  ? "bg-accent/80 dark:bg-accent/50 border-primary/30"
+                  : "hover:bg-accent/80 dark:hover:bg-accent/50 hover:border-primary/30 transition-all",
+                "border px-3 py-1.5 cursor-pointer flex items-center justify-between"
+              )}
+            >
+              <div>
+                <div className="flex items-center gap-2 mb-0.5">
+                  <h3>{(item.name?.length ?? 0) > 0 ? item.name : item.id}</h3>{" "}
+                  -<p>{item.transportType}</p>
+                </div>
+                <p className="text-sm text-muted-foreground line-clamp-1">
+                  {item.transportType === Transport.STDIO
+                    ? item.command
+                    : item.url}
+                </p>
+              </div>
+              <Button
+                title="Delete item"
+                variant="ghost"
+                className="size-max has-[>svg]:px-1.5 py-1.5 dark:hover:bg-red-300/30 dark:text-red-300 text-red-500 hover:bg-red-300/90"
+                onClick={handleDeleteItem(item.id)}
+                onKeyDown={handleDeleteItem(item.id)}
+              >
+                <Trash className="stroke-2" />
+              </Button>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="flex items-center justify-center h-full text-sm text-muted-foreground border mr-4">
+          No saved connections found.
+        </div>
+      )}
+      <div className="flex items-center justify-end pr-4">
+        <Button
+          type="button"
+          disabled={!selected || mutation.isPending}
+          onClick={handleConnect}
+          onKeyDown={handleConnect}
+        >
+          {mutation.isPending && <Spinner className="size-4 min-w-4 min-h-4" />}
+          {mutation.isPending ? "Connecting" : "Connect"}
+        </Button>
+      </div>
+    </div>
+  );
+}
