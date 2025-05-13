@@ -5,6 +5,7 @@ const start = performance.now();
 
 await esbuild.build({
   entryPoints: ["./src/cli.ts"],
+  banner: { js: "#!/usr/bin/env node" },
   platform: "node",
   minify: true,
   outfile: "dist/cli.js",

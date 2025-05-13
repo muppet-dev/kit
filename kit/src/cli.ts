@@ -1,5 +1,5 @@
 import { program } from "commander";
-import pkg from "../package.json" assert { type: "json" };
+import pkg from "../package.json" with { type: "json" };
 import inspectorCommand from "./commands/inspector.js";
 
 program

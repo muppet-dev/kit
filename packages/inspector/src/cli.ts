@@ -5,7 +5,7 @@ import {
 } from "@muppet-kit/shared";
 import { loadConfig } from "c12";
 import { Option, program } from "commander";
-import pkg from "../package.json" assert { type: "json" };
+import pkg from "../package.json" with { type: "json" };
 import app from "./index.js";
 
 program
@@ -31,7 +31,8 @@ program
     const _config = defineInspectorConfig(config);
 
     serve({
-      fetch: app.fetch,
+      // @ts-expect-error The build output is different
+      fetch: app(_config).fetch,
       port: options?.port ?? _config.port,
       hostname: options?.host ?? _config.host,
     });

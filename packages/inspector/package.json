@@ -1,10 +1,12 @@
 {
   "name": "@muppet-kit/inspector",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "type": "module",
   "bin": "./dist/cli.js",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite",
     "build:client": "vite build --mode client",
