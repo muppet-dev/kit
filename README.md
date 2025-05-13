@@ -33,3 +33,7 @@ export default defineInspectorConfig({
   // The inspector will automatically load the config from the file
 });
 ```
+
+## Credits
+
+- The idea for this project was inspired by the official [MCP Inspector](https://github.com/modelcontextprotocol/inspector) and their amazing work.
