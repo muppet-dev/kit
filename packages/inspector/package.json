@@ -4,9 +4,7 @@
   "license": "MIT",
   "type": "module",
   "bin": "./dist/cli.js",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "dev": "vite",
     "build:client": "vite build --mode client",
@@ -95,7 +93,6 @@
     "c12": "^3.0.3",
     "commander": "^13.1.0",
     "dotenv": "^16.5.0",
-    "dotenv-expand": "^12.0.2",
     "spawn-rx": "^5.1.2"
   },
   "devDependencies": {

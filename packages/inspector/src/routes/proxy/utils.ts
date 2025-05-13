@@ -68,8 +68,6 @@ export async function createTransport<
       ...queryEnv,
     };
 
-    console.log(process.env);
-
     const { cmd, args } = findActualExecutable(
       query.command,
       query.args as string[],

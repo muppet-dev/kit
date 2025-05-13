@@ -28,6 +28,11 @@ export default defineConfig(({ mode }) => {
     ssr: {
       external: ["react", "react-dom", "@ngrok/ngrok"],
     },
+    environments: {
+      ssr: {
+        keepProcessEnv: true,
+      },
+    },
     plugins: [
       buildServer({
         entry: "src/index.ts",
@@ -107,7 +112,8 @@ const buildServer = (options: { entry: string }): Plugin => {
           .map((e) => `'${e}'`)
           .join(",");
 
-        return `import { Hono } from "hono";
+        return `import "dotenv/config";
+        import { Hono } from "hono";
         import { serveStatic } from "@hono/node-server/serve-static"
         import { join } from "node:path";
         import { RESPONSE_ALREADY_SENT } from '@hono/node-server/utils/response'  
