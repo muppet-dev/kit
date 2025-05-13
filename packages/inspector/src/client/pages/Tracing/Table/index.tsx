@@ -15,6 +15,8 @@ import Fuse from "fuse.js";
 import { MoveDown, MoveUp } from "lucide-react";
 import { useMemo, useState } from "react";
 import { SortingEnum, useLogs } from "../providers";
+import { FilterMethod } from "./FilterMethod";
+import { FilterSession } from "./FilterSession";
 import { TableDrawer } from "./TableDrawer";
 
 export function TracingTable() {
@@ -50,7 +52,12 @@ export function TracingTable() {
           <Table className="overflow-y-auto lg:table-fixed [&>thead>tr>th]:bg-accent [&>thead>tr>th]:sticky [&>thead>tr>th]:top-0 [&>thead>tr>th]:z-10">
             <TableHeader>
               <TableRow className="hover:bg-accent divide-x bg-accent">
-                <TableHead>Session ID</TableHead>
+                <TableHead>
+                  <div className="flex items-center justify-between">
+                    Session ID
+                    <FilterSession />
+                  </div>
+                </TableHead>
                 <TableHead
                   onClick={handleSortDate}
                   onKeyDown={handleSortDate}
@@ -71,6 +78,7 @@ export function TracingTable() {
                 <TableHead>
                   <div className="flex items-center justify-between">
                     Method
+                    <FilterMethod />
                   </div>
                 </TableHead>
               </TableRow>
