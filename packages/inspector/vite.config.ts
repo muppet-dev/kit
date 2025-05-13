@@ -1,4 +1,4 @@
-import path, { normalize } from "node:path";
+import path, { extname, normalize } from "node:path";
 import devServer from "@hono/vite-dev-server";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
@@ -78,6 +78,7 @@ const buildServer = (options: { entry: string }): Plugin => {
             resolve(config.root, config.build.outDir),
             {
               withFileTypes: true,
+              recursive: true,
             },
           );
           direntPaths.push(...buildOutDirPaths);
@@ -86,13 +87,16 @@ const buildServer = (options: { entry: string }): Plugin => {
         const uniqueStaticPaths = new Set<string>();
 
         for (const p of direntPaths) {
-          if (p.isDirectory()) {
-            uniqueStaticPaths.add(`/${p.name}/*`);
-          } else {
+          if (!p.isDirectory()) {
             if (p.name === output) {
               return;
             }
-            uniqueStaticPaths.add(`/${p.name}`);
+
+            const basepath = p.parentPath.split("dist/")[1];
+
+            uniqueStaticPaths.add(
+              basepath === "assets" ? `/assets/${p.name}` : `/${p.name}`,
+            );
           }
         }
 
@@ -105,6 +109,9 @@ const buildServer = (options: { entry: string }): Plugin => {
 
         return `import { Hono } from "hono";
         import { serveStatic } from "@hono/node-server/serve-static"
+        import { join } from "node:path";
+        import { RESPONSE_ALREADY_SENT } from '@hono/node-server/utils/response'  
+import { createReadStream } from 'node:fs'
 
         export default (config) => {
           const mainApp = new Hono()
@@ -163,7 +170,7 @@ const buildServer = (options: { entry: string }): Plugin => {
         build: {
           outDir: "./dist",
           emptyOutDir: false,
-          minify: true,
+          minify: false,
           ssr: true,
           rollupOptions: {
             external: [...builtinModules, /^node:/],
@@ -198,8 +205,50 @@ export const serveStaticHook = (
   options: ServeStaticHookOptions,
 ) => {
   let code = "";
-  for (const path of options.filePaths ?? []) {
-    code += `${appName}.use('${path}', serveStatic({ root: '${options.root ?? "./"}' }))\n`;
+
+  const filePaths = options.filePaths ?? [];
+
+  for (const path of filePaths) {
+    const _paths =
+      path === "/index.html"
+        ? ["/", "/explorer", "/history", "/tracing", "/settings", "/playground"]
+        : [path];
+
+    for (const _path of _paths) {
+      code += `${appName}.get('${_path}', (c) => {
+        const { outgoing } = c.env  
+      
+        const fileStream = createReadStream(join(import.meta.dirname, '${path}'))  
+          
+        outgoing.writeHead(200, {  
+          'Content-Type': '${getContentType(path)}',
+        })  
+          
+        fileStream.pipe(outgoing)  
+          
+        return RESPONSE_ALREADY_SENT  
+      })\n`;
+    }
   }
   return code;
 };
+
+function getContentType(path: string): string {
+  const ext = extname(path).toLowerCase();
+
+  const mimeTypes: Record<string, string> = {
+    ".html": "text/html; charset=utf-8",
+    ".css": "text/css; charset=utf-8",
+    ".js": "text/javascript; charset=utf-8",
+    ".json": "application/json; charset=utf-8",
+    ".png": "image/png",
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".gif": "image/gif",
+    ".svg": "image/svg+xml",
+    ".ico": "image/x-icon",
+    // Add more as needed
+  };
+
+  return mimeTypes[ext] || "application/octet-stream";
+}

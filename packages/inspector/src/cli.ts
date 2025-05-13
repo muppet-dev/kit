@@ -30,11 +30,19 @@ program
 
     const _config = defineInspectorConfig(config);
 
+    if (options?.port) {
+      _config.port = Number(options?.port);
+    }
+
+    if (options?.host) {
+      _config.host = options?.host;
+    }
+
     serve({
       // @ts-expect-error The build output is different
       fetch: app(_config).fetch,
-      port: options?.port ?? _config.port,
-      hostname: options?.host ?? _config.host,
+      port: _config.port,
+      hostname: _config.host,
     });
 
     console.log(

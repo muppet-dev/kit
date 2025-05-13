@@ -8,7 +8,7 @@ router.get("/config", (c) => {
   const config = c.get("config");
 
   return c.json({
-    tunneling: !!config.tunneling?.apiKey,
+    tunneling: !!config.tunneling,
     models: config.models
       ? {
           default: _generateModelKey(config.models.default),

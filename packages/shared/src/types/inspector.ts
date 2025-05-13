@@ -4,6 +4,12 @@ import type { transportSchema } from "../validations";
 
 type TransportConfig = { name?: string } & z.infer<typeof transportSchema>;
 
+export type TunnelHandler = {
+  generate: (options: { port: number }) => Promise<{
+    url: string | null;
+  }>;
+};
+
 export type InspectorConfig = {
   /**
    * The port to listen on.
@@ -23,12 +29,7 @@ export type InspectorConfig = {
    * For connecting your local MCP Server to any MCP Client. This will make the inspector the middleman between the MCP Client and the MCP Server.
    * This is useful for debugging and inspecting the requests and responses between the MCP Client and the MCP Server.
    */
-  tunneling?: {
-    /**
-     * We use the `ngrok` service to tunnel your local MCP Server to the internet. Pass the `ngrok` auth token here to authenticate your account.
-     */
-    apiKey: string;
-  };
+  tunneling?: TunnelHandler;
   /**
    * List all the models you wanna use in the inspector.
    */

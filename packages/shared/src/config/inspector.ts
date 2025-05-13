@@ -33,16 +33,9 @@ export function defineInspectorConfig(
     defaultModel = availableModels[Object.keys(availableModels)[0]];
   }
 
-  const tunnelingApiKey = tunneling?.apiKey ?? process.env.TUNNEL_API_KEY;
-
   return {
     host,
     port,
-    tunneling: tunnelingApiKey
-      ? {
-          apiKey: tunnelingApiKey,
-        }
-      : undefined,
     models: models
       ? {
           default: defaultModel!,
