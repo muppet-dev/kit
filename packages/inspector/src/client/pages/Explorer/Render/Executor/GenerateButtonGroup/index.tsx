@@ -1,12 +1,11 @@
-import { Button } from "@/client/components/ui/button";
 import { eventHandler } from "@/client/lib/eventHandler";
 import { useConfig } from "@/client/providers";
-import { Settings } from "lucide-react";
-import { useState } from "react";
 import { useMCPItem } from "../../../providers";
-import { GenerateButton } from "./GenerateButton";
 import { GenerateDialog } from "./GenerateDialog";
 import { GenerateProvider, useGenerate } from "./provider";
+import { Sparkles } from "lucide-react";
+import { Spinner } from "@/client/components/ui/spinner";
+import { Button } from "@/client/components/ui/button";
 
 export function GenerateButtonGroup() {
   const { isModelsEnabled } = useConfig();
@@ -17,7 +16,7 @@ export function GenerateButtonGroup() {
     <div className="flex items-center gap-0.5">
       <GenerateProvider>
         <ActionButton />
-        <SettingsDialogButton />
+        <GenerateDialog />
       </GenerateProvider>
     </div>
   );
@@ -29,28 +28,32 @@ function ActionButton() {
   const mutation = useGenerate();
 
   const handleGenerate = eventHandler(() =>
-    mutation.mutateAsync(selectedItem!),
+    mutation.mutateAsync(selectedItem!)
   );
-
-  return <GenerateButton onClick={handleGenerate} onKeyDown={handleGenerate} />;
-}
-
-function SettingsDialogButton() {
-  const [isOpen, setOpen] = useState(false);
-
-  const handleOpenDialog = eventHandler(() => setOpen(true));
 
   return (
     <>
       <Button
+        className="px-3 py-1.5 xl:flex hidden"
         variant="secondary"
-        onClick={handleOpenDialog}
-        onKeyDown={handleOpenDialog}
-        className="size-max has-[>svg]:px-2.5 py-2.5"
+        disabled={mutation.isPending}
+        onClick={handleGenerate}
+        onKeyDown={handleGenerate}
       >
-        <Settings className="size-4" />
+        <Sparkles className="size-4" />
+        {mutation.isPending ? "Generating" : "Generate"}
+        {mutation.isPending && <Spinner className="size-4 min-w-4 min-h-4" />}
       </Button>
-      <GenerateDialog onOpenChange={setOpen} open={isOpen} />
+      <Button
+        className="xl:hidden size-max has-[>svg]:px-2.5 py-2.5"
+        variant="secondary"
+        disabled={mutation.isPending}
+        onClick={handleGenerate}
+        onKeyDown={handleGenerate}
+      >
+        <Sparkles className="size-4" />
+        {mutation.isPending && <Spinner className="size-4 min-w-4 min-h-4" />}
+      </Button>
     </>
   );
 }
