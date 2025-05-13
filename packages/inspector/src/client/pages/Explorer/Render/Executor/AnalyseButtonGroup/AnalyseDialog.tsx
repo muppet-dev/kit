@@ -61,9 +61,11 @@ export function AnalyseDialog({ onOpenChange, open }: AnalyseDialog) {
           className="w-full space-y-4"
         >
           <Textarea {...register("context")} required />
-          <p className="text-sm text-red-500 dark:text-red-300 empty:hidden">
-            {errors.context?.message}
-          </p>
+          {errors.context && (
+            <p className="text-sm text-red-500 dark:text-red-300">
+              {errors.context.message}
+            </p>
+          )}
           <div className="flex items-center justify-end">
             <AnalyseButton type="submit" />
           </div>

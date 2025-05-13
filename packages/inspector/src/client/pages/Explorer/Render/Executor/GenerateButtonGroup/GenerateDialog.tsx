@@ -75,9 +75,11 @@ export function GenerateDialog({ onOpenChange, open }: GenerateDialog) {
               generated sample data.
             </p>
             <Textarea {...register("context")} required />
-            <p className="text-sm text-red-500 dark:text-red-300 empty:hidden">
-              {errors.context?.message}
-            </p>
+            {errors.context && (
+              <p className="text-sm text-red-500 dark:text-red-300">
+                {errors.context.message}
+              </p>
+            )}
           </div>
           <div className="space-y-1">
             <Label>Model</Label>
@@ -92,9 +94,11 @@ export function GenerateDialog({ onOpenChange, open }: GenerateDialog) {
                 />
               )}
             />
-            <p className="text-sm text-red-500 dark:text-red-300 empty:hidden">
-              {errors.model?.message}
-            </p>
+            {errors.model && (
+              <p className="text-sm text-red-500 dark:text-red-300">
+                {errors.model?.message}
+              </p>
+            )}
           </div>
           <div className="flex items-center justify-end">
             <GenerateButton type="submit" />

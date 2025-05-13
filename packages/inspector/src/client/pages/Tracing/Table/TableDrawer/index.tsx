@@ -46,7 +46,7 @@ export function TableDrawer({ traces }: TableDrawer) {
       }
 
       return prev;
-    }),
+    })
   );
   const handleGoToNextRequest = eventHandler(() =>
     setSelected((prev) => {
@@ -57,7 +57,7 @@ export function TableDrawer({ traces }: TableDrawer) {
       }
 
       return prev;
-    }),
+    })
   );
   const handleSendRequest = eventHandler(async () => {
     if (
@@ -83,7 +83,7 @@ export function TableDrawer({ traces }: TableDrawer) {
         method: selectedHistory.request?.method as any,
         params: selectedHistory.request?.params,
       },
-      EmptyResultSchema.passthrough(),
+      EmptyResultSchema.passthrough()
     );
 
     setResendDirectory((prev) => {
@@ -108,7 +108,9 @@ export function TableDrawer({ traces }: TableDrawer) {
         <p
           className={cn(
             "text-sm font-medium",
-            selectedHistory.response?.error ? "text-red-500" : "text-green-600",
+            selectedHistory.response?.error
+              ? "text-red-500 dark:text-red-300"
+              : "text-green-600 dark:text-green-400"
           )}
         >
           {selectedHistory.response?.error ? "Error" : "Success"}

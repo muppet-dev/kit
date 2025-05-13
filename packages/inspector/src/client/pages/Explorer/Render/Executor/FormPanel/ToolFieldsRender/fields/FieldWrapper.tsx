@@ -47,7 +47,7 @@ export function FieldWrapper({ children }: FieldWrapper) {
             htmlFor={componentId}
             className={cn(
               required &&
-                "after:ml-0.5 after:text-red-500 after:content-['*'] after:dark:text-red-400",
+                "after:ml-0.5 after:text-red-500 after:content-['*'] after:dark:text-red-300",
               "leading-snug capitalize"
             )}
           >
