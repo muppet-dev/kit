@@ -1,4 +1,4 @@
-import path, { extname, normalize } from "node:path";
+import path, { extname, join, normalize } from "node:path";
 import devServer from "@hono/vite-dev-server";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
@@ -92,10 +92,10 @@ const buildServer = (options: { entry: string }): Plugin => {
               return;
             }
 
-            const basepath = p.parentPath.split("dist/")[1];
+            const basepath = (p.parentPath ?? p.path).split("dist")[1];
 
             uniqueStaticPaths.add(
-              basepath === "assets" ? `/assets/${p.name}` : `/${p.name}`,
+              basepath?.endsWith("assets") ? `/assets/${p.name}` : `/${p.name}`,
             );
           }
         }
