@@ -1,12 +1,20 @@
 import { Button } from "@/client/components/ui/button";
 import { eventHandler } from "@/client/lib/eventHandler";
 import { ListRestart } from "lucide-react";
-import { useFormContext } from "react-hook-form";
+import { type FieldValues, useFormContext } from "react-hook-form";
 
 export function FormResetButton() {
   const { reset } = useFormContext();
 
-  const handleResetForm = eventHandler(() => reset({}));
+  const handleResetForm = eventHandler(() =>
+    reset((values) =>
+      Object.keys(values).reduce<FieldValues>((prev, cur) => {
+        prev[cur] = null;
+
+        return prev;
+      }, {})
+    )
+  );
 
   return (
     <>

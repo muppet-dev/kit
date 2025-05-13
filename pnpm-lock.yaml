@@ -192,9 +192,6 @@ importers:
       dotenv:
         specifier: ^16.5.0
         version: 16.5.0
-      duck-form:
-        specifier: ^0.1.4
-        version: 0.1.4(react@19.1.0)
       fetch-event-stream:
         specifier: ^0.1.5
         version: 0.1.5
@@ -4001,14 +3998,6 @@ packages:
   /dotenv@16.5.0:
     resolution: {integrity: sha512-m/C+AwOAr9/W1UOIZUo232ejMNnJAJtYQjUbHoNTBNTJSvqzzDh7vnrei3o3r3m9blf6ZoDkvcw0VmozNRFJxg==}
     engines: {node: '>=12'}
-
-  /duck-form@0.1.4(react@19.1.0):
-    resolution: {integrity: sha512-2NQk5Dg67G4+0k5LwuyM4KrejKw9OkbkvQpn34OrZUUX28TUmAHpb5geWqwkUlYuuqaFNCKQn3p4NTo+pWN7nw==}
-    peerDependencies:
-      react: ^18.3.1
-    dependencies:
-      react: 19.1.0
-    dev: false
 
   /dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}

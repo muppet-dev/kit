@@ -1,4 +1,5 @@
-import { Blueprint, DuckField, DuckForm } from "duck-form";
+import { DuckField } from "@/client/components/DuckForm";
+import { Blueprint, DuckForm } from "@/client/providers";
 import type { JSONSchema7 } from "json-schema";
 import type { ToolItemType } from "../../../../types";
 import { quackFields } from "./fields";
@@ -24,7 +25,7 @@ export function ToolFieldsRender(props: ToolItemType) {
 
 function transformSchema(
   schema: ToolItemType["schema"] = {},
-  requiredFields: string[] = [],
+  requiredFields: string[] = []
 ): JSONSchema7["properties"] {
   return Object.entries(schema).reduce<JSONSchema7["properties"]>(
     (prev, [key, value]) => {
@@ -41,7 +42,7 @@ function transformSchema(
       };
 
       if (value.type === "object") {
-        const subRequired = "required" in value ? (value.required ?? []) : [];
+        const subRequired = "required" in value ? value.required ?? [] : [];
         field.properties = transformSchema(value.properties, subRequired);
       }
 
@@ -54,8 +55,7 @@ function transformSchema(
           items.type === "object" &&
           "properties" in items
         ) {
-          const itemRequired =
-            "required" in items ? (items.required ?? []) : [];
+          const itemRequired = "required" in items ? items.required ?? [] : [];
           field.items = {
             ...items,
             properties: transformSchema(items.properties, itemRequired),
@@ -66,6 +66,6 @@ function transformSchema(
       tmp[key] = field;
       return tmp;
     },
-    {},
+    {}
   );
 }
