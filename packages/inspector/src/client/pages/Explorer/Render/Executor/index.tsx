@@ -51,10 +51,10 @@ export function Executor() {
   }, [selectedItem]);
 
   useEffect(() => {
-    setSelectedTab(
-      activeTool.name === Tool.STATIC_RESOURCES
-        ? RequestTab.SCORE
-        : RequestTab.FORM,
+    setSelectedTab((prev) =>
+      activeTool.name === Tool.STATIC_RESOURCES && prev === RequestTab.JSON
+        ? RequestTab.FORM
+        : prev
     );
   }, [activeTool]);
 
@@ -80,7 +80,6 @@ export function Executor() {
                   value={RequestTab.FORM}
                   label="Form"
                   icon={AlignJustify}
-                  disabled={activeTool.name === Tool.STATIC_RESOURCES}
                 />
                 <TabsTriggerComponent
                   value={RequestTab.JSON}
@@ -173,7 +172,7 @@ function TabsTriggerComponent({
       {...props}
       className={cn(
         "data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-2 xl:px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black",
-        className,
+        className
       )}
     >
       <p className="xl:flex hidden">{label}</p>

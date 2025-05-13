@@ -30,6 +30,9 @@ apiRouter.route("/", proxyRouter);
 const router = new Hono();
 
 router.route("/api", apiRouter);
-router.route("/", clientRouter);
+
+if (import.meta.env.DEV) {
+  router.route("/", clientRouter);
+}
 
 export default router;

@@ -36,6 +36,10 @@ export type Trace = {
 
 function useTracingManager() {
   const [traces, setTraces] = useState<Trace[]>([]);
+  const [filters, setFilters] = useState({
+    sessions: new Set<string>(),
+    methods: new Set<string>(),
+  });
 
   useEffect(() => {
     const abort = new AbortController();
@@ -48,38 +52,40 @@ function useTracingManager() {
       if (res.ok) {
         const stream = events(res, abort.signal);
         for await (const event of stream) {
+          const eventData = event.data;
+
+          if (!eventData) continue;
+
+          const { at, session, from, message } = JSON.parse(eventData);
+
+          if (from === "client")
+            setFilters((prev) => {
+              prev.methods.add(message.method);
+              prev.sessions.add(session);
+
+              return {
+                ...prev,
+              };
+            });
+
           setTraces((prev) => {
             const tmp = [...prev];
-            if (event.data) {
-              const data = JSON.parse(event.data);
-              const { at, session, from, message } = data;
 
-              if (from === "server") {
-                const index = tmp.findIndex(
-                  (log) => log.mid === message.id && log.session === session,
-                );
+            if (from === "server") {
+              const index = tmp.findIndex(
+                (log) => log.mid === message.id && log.session === session
+              );
 
-                if (index !== -1) {
-                  const exisiting = tmp[index];
-                  tmp[index] = {
-                    ...exisiting,
-                    timestamp: {
-                      ...exisiting.timestamp,
-                      latency: at - exisiting.timestamp.start,
-                    },
-                    response: message,
-                  };
-                } else {
-                  tmp.push({
-                    id: nanoid(),
-                    session,
-                    timestamp: {
-                      start: at,
-                    },
-                    mid: message.id,
-                    response: message,
-                  });
-                }
+              if (index !== -1) {
+                const exisiting = tmp[index];
+                tmp[index] = {
+                  ...exisiting,
+                  timestamp: {
+                    ...exisiting.timestamp,
+                    latency: at - exisiting.timestamp.start,
+                  },
+                  response: message,
+                };
               } else {
                 tmp.push({
                   id: nanoid(),
@@ -88,9 +94,19 @@ function useTracingManager() {
                     start: at,
                   },
                   mid: message.id,
-                  request: message,
+                  response: message,
                 });
               }
+            } else {
+              tmp.push({
+                id: nanoid(),
+                session,
+                timestamp: {
+                  start: at,
+                },
+                mid: message.id,
+                request: message,
+              });
             }
 
             return tmp;
@@ -112,6 +128,10 @@ function useTracingManager() {
 
   return {
     traces,
+    filters: {
+      methods: [...filters.methods],
+      sessions: [...filters.sessions],
+    },
     clearTraces,
   };
 }

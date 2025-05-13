@@ -8,7 +8,7 @@ const command = new Command("inspector")
   .addOption(new Option("-c, --config <config>", "Path to the config file"))
   .action(async (options) => {
     const _args = Object.entries(options).map(
-      ([key, value]) => `--${key} ${value}`,
+      ([key, value]) => `--${key}=${value}`,
     );
     await execa("npx", ["@muppet-kit/inspector@latest", "-y", ..._args]);
   });

@@ -1,3 +1,4 @@
+import { CopyButton } from "@/client/components/CopyButton";
 import { Input } from "@/client/components/ui/input";
 import {
   Table,
@@ -14,6 +15,8 @@ import Fuse from "fuse.js";
 import { MoveDown, MoveUp } from "lucide-react";
 import { useMemo, useState } from "react";
 import { SortingEnum, useLogs } from "../providers";
+import { FilterMethod } from "./FilterMethod";
+import { FilterSession } from "./FilterSession";
 import { TableDrawer } from "./TableDrawer";
 
 export function TracingTable() {
@@ -49,7 +52,12 @@ export function TracingTable() {
           <Table className="overflow-y-auto lg:table-fixed [&>thead>tr>th]:bg-accent [&>thead>tr>th]:sticky [&>thead>tr>th]:top-0 [&>thead>tr>th]:z-10">
             <TableHeader>
               <TableRow className="hover:bg-accent divide-x bg-accent">
-                <TableHead>Session ID</TableHead>
+                <TableHead>
+                  <div className="flex items-center justify-between">
+                    Session ID
+                    <FilterSession />
+                  </div>
+                </TableHead>
                 <TableHead
                   onClick={handleSortDate}
                   onKeyDown={handleSortDate}
@@ -70,6 +78,7 @@ export function TracingTable() {
                 <TableHead>
                   <div className="flex items-center justify-between">
                     Method
+                    <FilterMethod />
                   </div>
                 </TableHead>
               </TableRow>
@@ -94,13 +103,20 @@ export function TracingTable() {
                       key={`row.${index + 1}`}
                       className={cn(
                         "cursor-pointer divide-x",
-                        selected === trace.id && "bg-muted/50",
+                        selected === trace.id && "bg-muted/50"
                       )}
                       onClick={handleSelectData(trace.id)}
                       onKeyDown={handleSelectData(trace.id)}
                     >
-                      <TableCell className="truncate">
-                        {trace.session}
+                      <TableCell>
+                        <div className="flex justify-between items-center gap-1">
+                          <p className="truncate">{trace.session}</p>
+                          <CopyButton
+                            data={trace.session}
+                            tooltipContent="Copy Session ID"
+                            className="[&>svg]:size-3.5 p-1 has-[>svg]:px-1"
+                          />
+                        </div>
                       </TableCell>
                       <TableCell className="space-x-1 font-medium uppercase">
                         <span className="text-black/50 dark:text-white/50">
@@ -117,7 +133,7 @@ export function TracingTable() {
                             "border px-1.5 w-max",
                             isError
                               ? "text-red-500 dark:text-red-300 bg-red-200/40 dark:bg-red-300/10"
-                              : "text-green-600 dark:text-green-300 bg-green-200/40 dark:bg-green-300/10",
+                              : "text-green-600 dark:text-green-300 bg-green-200/40 dark:bg-green-300/10"
                           )}
                         >
                           {isError ? "Error" : "Success"}
@@ -128,7 +144,7 @@ export function TracingTable() {
                           ? latency > 1000
                             ? `${numberFormatter(
                                 Number((latency / 1000).toFixed(2)),
-                                "decimal",
+                                "decimal"
                               )} s`
                             : `${numberFormatter(latency, "decimal")} ms`
                           : "-"}

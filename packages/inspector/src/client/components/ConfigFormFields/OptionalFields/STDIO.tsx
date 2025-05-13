@@ -82,9 +82,9 @@ function EnvField() {
               <Input {...register(`env.${index}.key`)} placeholder="Key" />
               <Input {...register(`env.${index}.value`)} placeholder="Value" />
               <Button
-                title="Delete"
+                title="Delete Variable"
                 type="button"
-                className="h-max has-[>svg]:px-1.5 py-1.5 text-red-500 dark:text-red-300"
+                className="h-max has-[>svg]:px-1.5 py-1.5 text-red-500 dark:text-red-300 hover:text-red-500 hover:bg-red-100 dark:hover:bg-red-300/20"
                 variant="ghost"
                 onClick={handleDeleteItem(index)}
                 onKeyDown={handleDeleteItem(index)}

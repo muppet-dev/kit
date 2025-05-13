@@ -1,7 +1,6 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import routes from "./routes";
-import "dotenv/config";
 
 const app = new Hono().use(cors());
 

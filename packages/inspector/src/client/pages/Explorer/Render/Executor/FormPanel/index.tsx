@@ -15,7 +15,7 @@ export function FormPanel() {
       id="request-form"
       onSubmit={handleSubmit(
         (values) => mutation.mutateAsync(values),
-        console.error,
+        console.error
       )}
       className="h-full w-full flex flex-col gap-1.5 overflow-y-auto"
     >
@@ -44,4 +44,10 @@ function PanelRender() {
     selectedItem.type === Tool.DYNAMIC_RESOURCES
   )
     return <DynamicResourceFieldRender {...selectedItem} />;
+
+  return (
+    <div className="size-full flex items-center justify-center select-none text-sm text-muted-foreground">
+      <p>Static resources does not have fields</p>
+    </div>
+  );
 }

@@ -4,8 +4,9 @@ import { ConnectionStatus } from "@/client/providers/connection/manager";
 import { EmptyResultSchema } from "@modelcontextprotocol/sdk/types.js";
 import { Bell } from "lucide-react";
 import { useState } from "react";
-import { SidebarMenuButton } from "../ui/sidebar";
-import { Spinner } from "../ui/spinner";
+import { SidebarMenuButton, SidebarMenuItem } from "../../ui/sidebar";
+import { Spinner } from "../../ui/spinner";
+import { OptionsMenu } from "./OptionsMenu";
 
 export function PingButton() {
   // Show this loading state when the server is pinging
@@ -18,26 +19,29 @@ export function PingButton() {
       {
         method: "ping",
       },
-      EmptyResultSchema,
+      EmptyResultSchema
     );
     setIsLoading(false);
   });
 
   return (
-    <SidebarMenuButton
-      onClick={handlePingServer}
-      onKeyDown={handlePingServer}
-      disabled={connectionStatus !== ConnectionStatus.CONNECTED || isLoading}
-      tooltip="Ping Server"
-    >
-      <Bell />
-      Ping Server
-      {isLoading && (
-        <>
-          <div className="flex-1" />
-          <Spinner className="size-4 min-w-4 min-h-4" />
-        </>
-      )}
-    </SidebarMenuButton>
+    <SidebarMenuItem>
+      <SidebarMenuButton
+        onClick={handlePingServer}
+        onKeyDown={handlePingServer}
+        disabled={connectionStatus !== ConnectionStatus.CONNECTED || isLoading}
+        tooltip="Ping Server"
+      >
+        <Bell />
+        Ping Server
+        {isLoading && (
+          <>
+            <div className="flex-1" />
+            <Spinner className="size-4 min-w-4 min-h-4" />
+          </>
+        )}
+      </SidebarMenuButton>
+      <OptionsMenu />
+    </SidebarMenuItem>
   );
 }
