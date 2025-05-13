@@ -28,17 +28,18 @@ function usePingServerManager() {
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    if (timeInterval) {
-      const id = setInterval(async () => {
-        await makeRequest(
-          {
-            method: "ping",
-          },
-          EmptyResultSchema
-        );
-      }, timeInterval * 1000);
-      return () => clearInterval(id);
-    }
+    if (!timeInterval) return;
+
+    const id = setInterval(async () => {
+      await makeRequest(
+        {
+          method: "ping",
+        },
+        EmptyResultSchema
+      );
+    }, timeInterval * 1000);
+
+    return () => clearInterval(id);
   }, [timeInterval]);
 
   const clearTimeInterval = () => setTimeInterval(undefined);

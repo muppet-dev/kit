@@ -7,15 +7,20 @@ import {
 import { CustomTimeIntervalDialog } from "./Dialog";
 import { SidebarMenuAction } from "@/client/components/ui/sidebar";
 import { usePingServer } from "@/client/providers";
-import { Ellipsis } from "lucide-react";
+import { Ellipsis, X } from "lucide-react";
 import { useState, type BaseSyntheticEvent } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/client/components/ui/tooltip";
 
 export function OptionsMenu() {
   const [isCustomTimeDialogOpen, setCustomTimeDialogOpen] = useState(false);
   const { timeInterval, setTimeInterval, clearTimeInterval } = usePingServer();
 
   const handleSetTimeInterval =
-    (time: 10 | 60 | 300 | 600) => (event: BaseSyntheticEvent) => {
+    (time: 60 | 300 | 600) => (event: BaseSyntheticEvent) => {
       if ("key" in event && event.key !== "Enter") return;
       setTimeInterval(time);
     };
@@ -30,6 +35,22 @@ export function OptionsMenu() {
     setCustomTimeDialogOpen(true);
   };
 
+  if (timeInterval)
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <SidebarMenuAction
+            onClick={handleClearTimeInterval}
+            onKeyDown={handleClearTimeInterval}
+            className="text-red-500 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-800/40 peer-hover/menu-button:text-red-500 hover:text-red-500"
+          >
+            <X className="size-3.5" />
+          </SidebarMenuAction>
+        </TooltipTrigger>
+        <TooltipContent>Disable auto ping</TooltipContent>
+      </Tooltip>
+    );
+
   return (
     <>
       <DropdownMenu>
@@ -39,12 +60,6 @@ export function OptionsMenu() {
           </SidebarMenuAction>
         </DropdownMenuTrigger>
         <DropdownMenuContent side="right" align="start">
-          <DropdownMenuItem
-            onClick={handleSetTimeInterval(10)}
-            onKeyDown={handleSetTimeInterval(10)}
-          >
-            In every 10 sec
-          </DropdownMenuItem>
           <DropdownMenuItem
             onClick={handleSetTimeInterval(60)}
             onKeyDown={handleSetTimeInterval(60)}
@@ -69,14 +84,6 @@ export function OptionsMenu() {
           >
             Custom
           </DropdownMenuItem>
-          {timeInterval && (
-            <DropdownMenuItem
-              onClick={handleClearTimeInterval}
-              onKeyDown={handleClearTimeInterval}
-            >
-              Cancel time interval
-            </DropdownMenuItem>
-          )}
         </DropdownMenuContent>
       </DropdownMenu>
       <CustomTimeIntervalDialog

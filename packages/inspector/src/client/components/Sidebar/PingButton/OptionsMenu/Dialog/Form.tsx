@@ -1,15 +1,16 @@
 import { Button } from "@/client/components/ui/button";
 import { DialogClose, DialogFooter } from "@/client/components/ui/dialog";
 import { Input } from "@/client/components/ui/input";
+import { Label } from "@/client/components/ui/label";
 import { Spinner } from "@/client/components/ui/spinner";
 import { usePingServer } from "@/client/providers";
+import { Radio } from "lucide-react";
 import type { BaseSyntheticEvent } from "react";
 import { useForm } from "react-hook-form";
-import { Label } from "recharts";
 import z from "zod";
 
 const schema = z.object({
-  interval: z.number().min(0),
+  interval: z.number().min(5),
 });
 
 export function CustomTimeIntervalForm(props: { onSubmit: () => void }) {
@@ -19,7 +20,11 @@ export function CustomTimeIntervalForm(props: { onSubmit: () => void }) {
     register,
     formState: { isSubmitting, errors },
     reset,
-  } = useForm<z.infer<typeof schema>>();
+  } = useForm<z.infer<typeof schema>>({
+    defaultValues: {
+      interval: 10,
+    },
+  });
 
   const handleCloseDialog = (event: BaseSyntheticEvent) => {
     if ("key" in event && event.key !== "Enter") return;
@@ -42,7 +47,7 @@ export function CustomTimeIntervalForm(props: { onSubmit: () => void }) {
         </p>
         <Input
           type="number"
-          min={0}
+          min={5}
           {...register("interval", { valueAsNumber: true })}
         />
         {errors.interval && (
@@ -63,8 +68,8 @@ export function CustomTimeIntervalForm(props: { onSubmit: () => void }) {
           </Button>
         </DialogClose>
         <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting && <Spinner className="size-4 min-w-4 min-h-4" />}
-          {isSubmitting ? "Saving" : "Save"}
+          Start
+          <Radio />
         </Button>
       </DialogFooter>
     </form>

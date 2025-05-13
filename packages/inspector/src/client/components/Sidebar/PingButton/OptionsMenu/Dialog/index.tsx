@@ -9,6 +9,7 @@ import {
 import { CustomTimeIntervalForm } from "./Form";
 import type { ComponentProps, FC } from "react";
 import type { DialogProps } from "@radix-ui/react-dialog";
+import { RadioTower } from "lucide-react";
 
 export function CustomTimeIntervalDialog(
   props: ComponentProps<FC<DialogProps>>
@@ -18,7 +19,10 @@ export function CustomTimeIntervalDialog(
       <DialogOverlay />
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Custom Time Duration</DialogTitle>
+          <div className="flex items-center gap-2">
+            <RadioTower className="size-5" />
+            <DialogTitle>Auto Ping</DialogTitle>
+          </div>
           <DialogDescription>
             Add custom time duration to ping the server
           </DialogDescription>
