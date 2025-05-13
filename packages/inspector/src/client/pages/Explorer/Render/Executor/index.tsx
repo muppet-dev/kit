@@ -54,7 +54,7 @@ export function Executor() {
     setSelectedTab((prev) =>
       activeTool.name === Tool.STATIC_RESOURCES && prev === RequestTab.JSON
         ? RequestTab.FORM
-        : prev
+        : prev,
     );
   }, [activeTool]);
 
@@ -172,7 +172,7 @@ function TabsTriggerComponent({
       {...props}
       className={cn(
         "data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-2 xl:px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black",
-        className
+        className,
       )}
     >
       <p className="xl:flex hidden">{label}</p>

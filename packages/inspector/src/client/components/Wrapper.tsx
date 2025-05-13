@@ -4,9 +4,9 @@ import { ConnectionStatus } from "@/client/providers/connection/manager";
 import { RotateCcw, Unplug, XCircle } from "lucide-react";
 import type { PropsWithChildren } from "react";
 import { Outlet, useLocation } from "react-router";
-import { Spinner } from "./ui/spinner";
-import { Button } from "./ui/button";
 import { eventHandler } from "../lib/eventHandler";
+import { Button } from "./ui/button";
+import { Spinner } from "./ui/spinner";
 
 export function AppWrapper() {
   return (

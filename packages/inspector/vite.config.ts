@@ -1,16 +1,16 @@
+import { readdirSync } from "node:fs";
+import { builtinModules } from "node:module";
 import path, { extname, join, normalize } from "node:path";
+import { resolve } from "node:path";
 import devServer from "@hono/vite-dev-server";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import {
-  defineConfig,
   type Plugin,
   type ResolvedConfig,
   type UserConfig,
+  defineConfig,
 } from "vite";
-import { builtinModules } from "node:module";
-import { readdirSync } from "node:fs";
-import { resolve } from "node:path";
 
 export default defineConfig(({ mode }) => {
   if (mode === "client")
@@ -26,7 +26,7 @@ export default defineConfig(({ mode }) => {
 
   return {
     ssr: {
-      external: ["react", "react-dom", "@ngrok/ngrok"],
+      external: ["react", "react-dom"],
     },
     environments: {
       ssr: {
@@ -114,7 +114,6 @@ const buildServer = (options: { entry: string }): Plugin => {
 
         return `import "dotenv/config";
         import { Hono } from "hono";
-        import { serveStatic } from "@hono/node-server/serve-static"
         import { join } from "node:path";
         import { RESPONSE_ALREADY_SENT } from '@hono/node-server/utils/response'  
 import { createReadStream } from 'node:fs'

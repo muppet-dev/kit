@@ -1,3 +1,4 @@
+import { DuckField } from "@/client/components/DuckForm";
 import { Button } from "@/client/components/ui/button";
 import { eventHandler } from "@/client/lib/eventHandler";
 import { useBlueprint, useDuckForm, useField } from "@/client/providers";
@@ -6,7 +7,6 @@ import { useId, useMemo } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import type { FieldType } from "./constants";
 import type { FieldProps } from "./types";
-import { DuckField } from "@/client/components/DuckForm";
 
 export type ArrayProps = {
   type: FieldType.ARRAY;
@@ -21,7 +21,7 @@ export function ArrayField() {
   const autoId = useId();
   const customId = useMemo(
     () => generateId?.(schema, props),
-    [generateId, schema, props]
+    [generateId, schema, props],
   );
 
   const componentId = customId ?? autoId;

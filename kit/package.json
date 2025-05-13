@@ -1,12 +1,10 @@
 {
   "name": "muppet-kit",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "MIT",
   "type": "module",
   "bin": "./dist/cli.js",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "build": "pkgroll --minify"
   },
@@ -26,28 +24,24 @@
     },
     "./tunnel": {
       "import": {
-        "types": "./dist/tunnel.d.ts",
-        "default": "./dist/tunnel.js"
+        "types": "./dist/tunnel/index.d.ts",
+        "default": "./dist/tunnel/index.js"
       },
       "require": {
-        "types": "./dist/tunnel.d.cts",
-        "default": "./dist/tunnel.cjs"
+        "types": "./dist/tunnel/index.d.cts",
+        "default": "./dist/tunnel/index.cjs"
       }
     }
   },
   "peerDependencies": {
-    "@hono/node-server": "^1.14.1",
-    "@muppet-kit/inspector": "workspace:*",
-    "@muppet-kit/shared": "workspace:*",
+    "@muppet-kit/inspector": "workspace:^",
+    "@muppet-kit/shared": "workspace:^",
     "@ngrok/ngrok": "^1.5.1",
-    "c12": "^3.0.3",
     "commander": "^13.1.0",
-    "hono": "^4.7.9",
     "untun": "^0.1.3"
   },
   "devDependencies": {
     "@types/node": "^22.15.17",
-    "ai": "^4.3.13",
     "pkgroll": "^2.12.2"
   }
 }

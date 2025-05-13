@@ -1,11 +1,11 @@
+import { Button } from "@/client/components/ui/button";
+import { Spinner } from "@/client/components/ui/spinner";
 import { eventHandler } from "@/client/lib/eventHandler";
 import { useConfig } from "@/client/providers";
+import { Sparkles } from "lucide-react";
 import { useMCPItem } from "../../../providers";
 import { GenerateDialog } from "./GenerateDialog";
 import { GenerateProvider, useGenerate } from "./provider";
-import { Sparkles } from "lucide-react";
-import { Spinner } from "@/client/components/ui/spinner";
-import { Button } from "@/client/components/ui/button";
 
 export function GenerateButtonGroup() {
   const { isModelsEnabled } = useConfig();
@@ -28,7 +28,7 @@ function ActionButton() {
   const mutation = useGenerate();
 
   const handleGenerate = eventHandler(() =>
-    mutation.mutateAsync(selectedItem!)
+    mutation.mutateAsync(selectedItem!),
   );
 
   return (

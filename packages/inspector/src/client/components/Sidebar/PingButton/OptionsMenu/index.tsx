@@ -4,16 +4,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/client/components/ui/dropdown-menu";
-import { CustomTimeIntervalDialog } from "./Dialog";
 import { SidebarMenuAction } from "@/client/components/ui/sidebar";
-import { usePingServer } from "@/client/providers";
-import { Ellipsis, X } from "lucide-react";
-import { useState, type BaseSyntheticEvent } from "react";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/client/components/ui/tooltip";
+import { usePingServer } from "@/client/providers";
+import { Ellipsis, X } from "lucide-react";
+import { type BaseSyntheticEvent, useState } from "react";
+import { CustomTimeIntervalDialog } from "./Dialog";
 
 export function OptionsMenu() {
   const [isCustomTimeDialogOpen, setCustomTimeDialogOpen] = useState(false);

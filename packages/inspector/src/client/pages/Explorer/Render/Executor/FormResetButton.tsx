@@ -9,7 +9,7 @@ export function FormResetButton() {
   const handleResetForm = eventHandler(() =>
     reset({
       __reset: true,
-    })
+    }),
   );
 
   return (

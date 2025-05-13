@@ -6,11 +6,11 @@
     "format": "biome check --write ."
   },
   "devDependencies": {
-    "nx": "^20.8.1",
     "@biomejs/biome": "^1.9.4",
     "husky": "^9.1.7",
     "is-ci": "^4.1.0",
-    "nano-staged": "^0.8.0"
+    "nano-staged": "^0.8.0",
+    "nx": "^20.8.1"
   },
   "nx": {
     "targets": {
@@ -19,5 +19,5 @@
       }
     }
   },
-  "packageManager": "pnpm@8.14.0+sha256.9cebf61abd83f68177b29484da72da9751390eaad46dfc3072d266bfbb1ba7bf"
+  "packageManager": "pnpm@10.0.0"
 }

@@ -9,8 +9,8 @@ import {
 } from "@/client/components/ui/dialog";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { Settings, SparklesIcon } from "lucide-react";
-import { GenerateForm } from "./Form";
 import { useState } from "react";
+import { GenerateForm } from "./Form";
 
 export function GenerateDialog() {
   const [isOpen, setOpen] = useState(false);

@@ -8,7 +8,6 @@ export function defineInspectorConfig(
     host = process.env.HOST ?? "localhost",
     port = Number(process.env.PORT ?? 3553),
     models,
-    tunneling,
     ..._config
   } = config;
 

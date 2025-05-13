@@ -1,11 +1,11 @@
 import { Button } from "@/client/components/ui/button";
+import { Label } from "@/client/components/ui/label";
 import { Textarea } from "@/client/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { useMCPItem } from "../../../../providers";
 import { useAnalyse } from "../provider";
-import { Label } from "@/client/components/ui/label";
 
 const schema = z.object({
   context: z.string(),

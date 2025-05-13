@@ -15,7 +15,7 @@ export function FormPanel() {
       id="request-form"
       onSubmit={handleSubmit(
         (values) => mutation.mutateAsync(values),
-        console.error
+        console.error,
       )}
       className="h-full w-full flex flex-col gap-1.5 overflow-y-auto"
     >

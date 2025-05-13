@@ -1,5 +1,4 @@
 import type { EnvWithConfig } from "@/types";
-import { disconnect, forward } from "@ngrok/ngrok";
 import { Hono } from "hono";
 
 const router = new Hono<EnvWithConfig>();

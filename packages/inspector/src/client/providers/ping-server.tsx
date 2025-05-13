@@ -35,7 +35,7 @@ function usePingServerManager() {
         {
           method: "ping",
         },
-        EmptyResultSchema
+        EmptyResultSchema,
       );
     }, timeInterval * 1000);
 

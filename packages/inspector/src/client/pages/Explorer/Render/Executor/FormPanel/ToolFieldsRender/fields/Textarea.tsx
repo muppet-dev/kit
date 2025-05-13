@@ -20,7 +20,7 @@ export function TextareaField() {
   const autoId = useId();
   const customId = useMemo(
     () => generateId?.(schema, props),
-    [generateId, schema, props]
+    [generateId, schema, props],
   );
 
   const componentId = customId ?? autoId;

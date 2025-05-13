@@ -6,13 +6,13 @@ import {
   DialogOverlay,
   DialogTitle,
 } from "@/client/components/ui/dialog";
-import { CustomTimeIntervalForm } from "./Form";
-import type { ComponentProps, FC } from "react";
 import type { DialogProps } from "@radix-ui/react-dialog";
 import { RadioTower } from "lucide-react";
+import type { ComponentProps, FC } from "react";
+import { CustomTimeIntervalForm } from "./Form";
 
 export function CustomTimeIntervalDialog(
-  props: ComponentProps<FC<DialogProps>>
+  props: ComponentProps<FC<DialogProps>>,
 ) {
   return (
     <Dialog {...props}>

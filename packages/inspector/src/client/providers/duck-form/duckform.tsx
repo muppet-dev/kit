@@ -10,11 +10,11 @@ type DuckFormContextType<T> = {
   readonly components: Record<string, () => ReactNode>;
   readonly generateId?: (
     schema: Record<string, T>,
-    props: Record<string, unknown>
+    props: Record<string, unknown>,
   ) => string | undefined;
   readonly resolver: (
     schema: Record<string, T>,
-    props: Record<string, unknown>
+    props: Record<string, unknown>,
   ) => T | undefined;
 };
 
@@ -52,7 +52,7 @@ export function useDuckForm<T>() {
 
 function defaultResolver<T>(
   schema: Record<string, T>,
-  props: Record<string, unknown>
+  props: Record<string, unknown>,
 ): T {
   return {
     ...schema[String(props.id)],

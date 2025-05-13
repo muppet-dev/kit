@@ -19,7 +19,7 @@ export function PingButton() {
       {
         method: "ping",
       },
-      EmptyResultSchema
+      EmptyResultSchema,
     );
     setIsLoading(false);
   });
