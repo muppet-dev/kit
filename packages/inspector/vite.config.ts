@@ -175,7 +175,7 @@ import { createReadStream } from 'node:fs'
         build: {
           outDir: "./dist",
           emptyOutDir: false,
-          minify: false,
+          minify: true,
           ssr: true,
           rollupOptions: {
             external: [...builtinModules, /^node:/],
@@ -216,7 +216,15 @@ export const serveStaticHook = (
   for (const path of filePaths) {
     const _paths =
       path === "/index.html"
-        ? ["/", "/explorer", "/history", "/tracing", "/settings", "/playground"]
+        ? [
+            "/",
+            "/explorer",
+            "/history",
+            "/tracing",
+            "/settings",
+            "/playground",
+            "/oauth/callback",
+          ]
         : [path];
 
     for (const _path of _paths) {
