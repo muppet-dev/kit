@@ -30,7 +30,7 @@ export function Configurations() {
                       ([key, value]) => ({
                         key,
                         value: String(value),
-                      })
+                      }),
                     )
                   : value.env
                 : undefined,
@@ -54,7 +54,7 @@ export function Configurations() {
     eventHandler(() => {
       if (name) {
         setConfigurations(
-          (prev) => prev?.filter((item) => item.name !== name) ?? []
+          (prev) => prev?.filter((item) => item.name !== name) ?? [],
         );
       }
     });
@@ -80,7 +80,7 @@ export function Configurations() {
                   selected?.name === item.name
                     ? "bg-accent/80 dark:bg-accent/50 border-primary/30"
                     : "hover:bg-accent/80 dark:hover:bg-accent/50 hover:border-primary/30 transition-all",
-                  "relative border pl-3 pr-[54px] pt-1.5 pb-2 cursor-pointer flex items-center justify-between select-none w-full"
+                  "relative border pl-3 pr-[54px] pt-1.5 pb-2 cursor-pointer flex items-center justify-between select-none w-full",
                 )}
               >
                 <div className="w-full flex flex-col">
@@ -92,8 +92,8 @@ export function Configurations() {
                         item.transportType === Transport.HTTP
                           ? "bg-green-500 dark:bg-green-300"
                           : item.transportType === Transport.SSE
-                          ? "bg-yellow-500 dark:bg-yellow-300"
-                          : "bg-blue-500 dark:bg-blue-300"
+                            ? "bg-yellow-500 dark:bg-yellow-300"
+                            : "bg-blue-500 dark:bg-blue-300",
                       )}
                     >
                       {item.transportType === Transport.HTTP ? (
@@ -131,9 +131,8 @@ export function Configurations() {
       <div className="flex items-center justify-between">
         <Button
           type="button"
-          variant="secondary"
+          variant="ghost"
           title="Clear all configurations"
-          className="bg-red-500 hover:bg-red-600/90 dark:bg-red-300 dark:hover:bg-red-400 text-white dark:text-black"
           onClick={handleAllDelete}
           onKeyDown={handleAllDelete}
         >

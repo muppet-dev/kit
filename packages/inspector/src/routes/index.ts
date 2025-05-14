@@ -5,6 +5,7 @@ import clientRouter from "./client";
 import modelRouter from "./models";
 import proxyRouter from "./proxy";
 import tunnelRouter from "./tunnel";
+import scanningRouter from "./scanning";
 import utilsRouter from "./utils";
 
 const apiRouter = new Hono<EnvWithConfig>().use(async (c, next) => {
@@ -26,6 +27,7 @@ apiRouter.route("/", utilsRouter);
 apiRouter.route("/", modelRouter);
 apiRouter.route("/tunnel", tunnelRouter);
 apiRouter.route("/", proxyRouter);
+apiRouter.route("/scanning", scanningRouter);
 
 const router = new Hono();
 

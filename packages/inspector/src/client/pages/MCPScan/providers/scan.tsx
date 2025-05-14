@@ -33,22 +33,6 @@ type MCPScanResultPayload = MCPScanPayload & {
   errors?: string[];
 };
 
-function transformKey(key: string) {
-  // Replace all parentheses with square brackets
-  const transformed = key.replaceAll(/\(/g, "[").replaceAll(/\)/g, "]");
-
-  // Create a function that will safely evaluate the string as array access
-  const keyFn = new Function(`return ${transformed}[1][0]`);
-
-  // Execute the function
-  try {
-    return keyFn();
-  } catch (error) {
-    console.error("Error accessing nested value:", error);
-    return undefined;
-  }
-}
-
 function useMCPScanManager() {
   const { serverCapabilities, makeRequest } = useConnection();
 
@@ -68,11 +52,11 @@ function useMCPScanManager() {
                       type: "tool",
                       name: tool.name,
                       description: tool.description,
-                    } satisfies MCPScanPayload)
-                )
+                    }) satisfies MCPScanPayload,
+                ),
               );
-            }
-          )
+            },
+          ),
         );
       }
 
@@ -87,11 +71,11 @@ function useMCPScanManager() {
                       type: "prompt",
                       name: prompt.name,
                       description: prompt.description,
-                    } satisfies MCPScanPayload)
-                )
+                    }) satisfies MCPScanPayload,
+                ),
               );
-            }
-          )
+            },
+          ),
         );
       }
 
@@ -99,7 +83,7 @@ function useMCPScanManager() {
         promises.push(
           makeRequest(
             { method: "resources/list" },
-            ListResourcesResultSchema
+            ListResourcesResultSchema,
           ).then(({ resources }) => {
             entries.push(
               ...resources.map(
@@ -108,15 +92,15 @@ function useMCPScanManager() {
                     type: "resource",
                     name: resource.name,
                     description: resource.description,
-                  } satisfies MCPScanPayload)
-              )
+                  }) satisfies MCPScanPayload,
+              ),
             );
           }),
           makeRequest(
             {
               method: "resources/templates/list",
             },
-            ListResourceTemplatesResultSchema
+            ListResourceTemplatesResultSchema,
           ).then(({ resourceTemplates }) =>
             entries.push(
               ...resourceTemplates.map(
@@ -125,63 +109,32 @@ function useMCPScanManager() {
                     type: "resource",
                     name: resource.name,
                     description: resource.description,
-                  } satisfies MCPScanPayload)
-              )
-            )
-          )
+                  }) satisfies MCPScanPayload,
+              ),
+            ),
+          ),
         );
       }
 
       await Promise.all(promises);
 
-      const messages = entries.map((entry) => ({
-        role: "system",
-        content: `${capitalizeFirstLetter(entry.type)} Name:${
-          entry.name
-        }\n${capitalizeFirstLetter(entry.type)} Description:${
-          entry.description
-        }`,
-      }));
-
-      const response = await fetch(
-        "https://mcp.invariantlabs.ai/api/v1/public/mcp",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ messages }),
-        }
-      );
+      const response = await fetch("/scanning", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(entries),
+      });
 
       if (!response.ok) {
         throw new Error(
           `Verification API error: ${
             response.status
-          } - ${await response.text()}`
+          } - ${await response.text()}`,
         );
       }
 
-      const data = await response.json();
-
-      if (!data.success) {
-        throw new Error(`Verification API error: ${data.error_message}`);
-      }
-
-      const newEntries: MCPScanResultPayload[] = [];
-
-      for (const error of data.errors ?? []) {
-        const index = transformKey(error.key);
-
-        if (index !== undefined) {
-          newEntries.push({
-            ...entries[index],
-            errors: error.error_message,
-          });
-        }
-      }
-
-      return newEntries;
+      return await response.json();
     },
     onError: (err) => {
       console.error(err);
@@ -200,7 +153,3 @@ export const useMCPScan = () => {
 
   return context;
 };
-
-function capitalizeFirstLetter(word: string) {
-  return word.charAt(0).toUpperCase() + word.slice(1);
-}
