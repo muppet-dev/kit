@@ -75,7 +75,7 @@ router.post(
     "json",
     z.object({
       name: z.string(),
-      description: z.string(),
+      description: z.string().optional(),
       schema: z.record(z.string(), z.any()),
       context: z.string().optional(),
     }),
@@ -112,7 +112,7 @@ router.post(
     "json",
     z.object({
       name: z.string(),
-      description: z.string(),
+      description: z.string().optional(),
       schema: z.record(z.string(), z.any()),
       context: z.string().optional(),
     }),
