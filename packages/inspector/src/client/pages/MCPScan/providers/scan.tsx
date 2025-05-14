@@ -7,6 +7,7 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import { useMutation } from "@tanstack/react-query";
 import { type PropsWithChildren, createContext, useContext } from "react";
+import toast from "react-hot-toast";
 
 type MCPScanContextType = ReturnType<typeof useMCPScanManager>;
 
@@ -67,11 +68,11 @@ function useMCPScanManager() {
                       type: "tool",
                       name: tool.name,
                       description: tool.description,
-                    }) satisfies MCPScanPayload,
-                ),
+                    } satisfies MCPScanPayload)
+                )
               );
-            },
-          ),
+            }
+          )
         );
       }
 
@@ -86,11 +87,11 @@ function useMCPScanManager() {
                       type: "prompt",
                       name: prompt.name,
                       description: prompt.description,
-                    }) satisfies MCPScanPayload,
-                ),
+                    } satisfies MCPScanPayload)
+                )
               );
-            },
-          ),
+            }
+          )
         );
       }
 
@@ -98,7 +99,7 @@ function useMCPScanManager() {
         promises.push(
           makeRequest(
             { method: "resources/list" },
-            ListResourcesResultSchema,
+            ListResourcesResultSchema
           ).then(({ resources }) => {
             entries.push(
               ...resources.map(
@@ -107,15 +108,15 @@ function useMCPScanManager() {
                     type: "resource",
                     name: resource.name,
                     description: resource.description,
-                  }) satisfies MCPScanPayload,
-              ),
+                  } satisfies MCPScanPayload)
+              )
             );
           }),
           makeRequest(
             {
               method: "resources/templates/list",
             },
-            ListResourceTemplatesResultSchema,
+            ListResourceTemplatesResultSchema
           ).then(({ resourceTemplates }) =>
             entries.push(
               ...resourceTemplates.map(
@@ -124,10 +125,10 @@ function useMCPScanManager() {
                     type: "resource",
                     name: resource.name,
                     description: resource.description,
-                  }) satisfies MCPScanPayload,
-              ),
-            ),
-          ),
+                  } satisfies MCPScanPayload)
+              )
+            )
+          )
         );
       }
 
@@ -135,7 +136,11 @@ function useMCPScanManager() {
 
       const messages = entries.map((entry) => ({
         role: "system",
-        content: `${capitalizeFirstLetter(entry.type)} Name:${entry.name}\n${capitalizeFirstLetter(entry.type)} Description:${entry.description}`,
+        content: `${capitalizeFirstLetter(entry.type)} Name:${
+          entry.name
+        }\n${capitalizeFirstLetter(entry.type)} Description:${
+          entry.description
+        }`,
       }));
 
       const response = await fetch(
@@ -146,12 +151,14 @@ function useMCPScanManager() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ messages }),
-        },
+        }
       );
 
       if (!response.ok) {
         throw new Error(
-          `Verification API error: ${response.status} - ${await response.text()}`,
+          `Verification API error: ${
+            response.status
+          } - ${await response.text()}`
         );
       }
 
@@ -173,6 +180,13 @@ function useMCPScanManager() {
           });
         }
       }
+
+      return newEntries;
+    },
+    onError: (err) => {
+      console.error(err);
+
+      toast.error(err.message);
     },
   });
 
@@ -182,7 +196,7 @@ function useMCPScanManager() {
 export const useMCPScan = () => {
   const context = useContext(MCPScanContext);
 
-  if (!context) throw new Error("Missing ModelContext.Provider in the tree!");
+  if (!context) throw new Error("Missing MCPScanContext.Provider in the tree!");
 
   return context;
 };
