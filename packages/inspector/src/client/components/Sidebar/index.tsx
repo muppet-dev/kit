@@ -23,9 +23,10 @@ import { ThemeSelector } from "../ThemeSelector";
 import { ConnectStatus } from "./ConnectStatus";
 import { PingButton } from "./PingButton";
 import { SidebarItem } from "./SidebarItem";
+import { useConnection } from "@/client/providers";
 
 const data = {
-  navPlayground: [
+  panels: [
     {
       name: "Explorer",
       url: "/explorer",
@@ -52,7 +53,7 @@ const data = {
       icon: History,
     },
   ],
-  projects: [
+  configuration: [
     {
       name: "Settings",
       url: "/settings",
@@ -81,14 +82,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </Link>
       </SidebarHeader>
       <SidebarContent>
+        <ServerInfoSection />
         <SidebarGroup>
           <SidebarMenu>
-            <ConnectStatus />
             <PingButton />
           </SidebarMenu>
         </SidebarGroup>
-        <SidebarItem items={data.navPlayground} />
-        <SidebarItem items={data.projects} />
+        <SidebarItem items={data.panels} />
+        <SidebarItem items={data.configuration} />
       </SidebarContent>
       <SidebarFooter
         className={cn(open && "flex-row items-center justify-between")}
@@ -98,5 +99,30 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
+  );
+}
+
+function ServerInfoSection() {
+  const { mcpClient } = useConnection();
+  const { open } = useSidebar();
+
+  const serverInfo = mcpClient?.getServerVersion();
+
+  return (
+    <SidebarGroup>
+      <SidebarMenu>
+        {open ? (
+          <div className="p-2 flex gap-1 flex-col w-full border bg-background dark:bg-background/50">
+            <div className="pl-1 flex justify-between items-center text-sm select-none">
+              <p className="font-semibold">{serverInfo?.name}</p>
+              <p className="text-muted-foreground">v{serverInfo?.version}</p>
+            </div>
+            <ConnectStatus />
+          </div>
+        ) : (
+          <ConnectStatus />
+        )}
+      </SidebarMenu>
+    </SidebarGroup>
   );
 }
