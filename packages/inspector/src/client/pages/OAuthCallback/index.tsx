@@ -13,6 +13,7 @@ import {
   generateOAuthErrorDescription,
   parseOAuthCallbackParams,
 } from "./utils";
+import { useNavigate } from "react-router";
 
 type OAuthCallbackProps = {
   onConnect: (serverUrl: string) => void;
@@ -20,6 +21,7 @@ type OAuthCallbackProps = {
 
 export default function OAuthCallback({ onConnect }: OAuthCallbackProps) {
   const hasProcessedRef = useRef(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleCallback = async () => {
@@ -68,7 +70,7 @@ export default function OAuthCallback({ onConnect }: OAuthCallbackProps) {
     };
 
     handleCallback().finally(() => {
-      window.history.replaceState({}, document.title, "/");
+      navigate("/");
     });
   }, [onConnect]);
 
