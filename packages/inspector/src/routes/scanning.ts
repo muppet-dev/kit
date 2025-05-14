@@ -29,12 +29,12 @@ router.post("/", sValidator("json", z.array(schema)), async (c) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ messages }),
-    },
+    }
   );
 
   if (!response.ok) {
     throw new Error(
-      `Verification API error: ${response.status} - ${await response.text()}`,
+      `Verification API error: ${response.status} - ${await response.text()}`
     );
   }
 

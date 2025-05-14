@@ -33,9 +33,12 @@ function useMCPScanManager() {
   const { serverCapabilities, makeRequest } = useConnection();
 
   const mutation = useMutation({
+    mutationKey: ["mcp-scan"],
     mutationFn: async () => {
       const entries: MCPScanPayload[] = [];
       const promises = [];
+
+      const start = performance.now();
 
       if (serverCapabilities?.tools) {
         promises.push(
@@ -130,7 +133,13 @@ function useMCPScanManager() {
         );
       }
 
-      return response.json() as Promise<MCPScanPayload & { errors: string[] }>;
+      return {
+        duration: performance.now() - start,
+        tools: (await response.json()) as (Omit<
+          MCPScanPayload,
+          "description"
+        > & { errors: string[] })[],
+      };
     },
     onError: (err) => {
       console.error(err);
