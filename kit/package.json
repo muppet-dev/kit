@@ -1,15 +1,28 @@
 {
   "name": "muppet-kit",
+  "description": "A collection of tools for building MCP servers.",
   "version": "0.1.2",
   "license": "MIT",
+  "types": "./index.d.ts",
+  "main": "./index.js",
   "type": "module",
   "bin": "./dist/cli.js",
   "files": ["dist"],
+  "keywords": ["mcp", "kit", "tools", "server", "inspector", "proxy", "tunnel"],
   "scripts": {
     "build": "pkgroll --minify"
   },
+  "homepage": "https://github.com/muppet-dev/kit",
   "publishConfig": {
     "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/muppet-dev/kit.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/muppet-dev/kit/issues"
   },
   "exports": {
     ".": {

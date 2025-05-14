@@ -1,16 +1,27 @@
 {
   "name": "@muppet-kit/shared",
+  "description": "Shared utilities and types for Muppet Kit.",
   "version": "0.1.4",
   "license": "MIT",
+  "types": "./index.d.ts",
+  "main": "./index.js",
   "type": "module",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
+  "keywords": ["mcp", "kit", "tools", "server", "inspector", "proxy", "shared"],
   "scripts": {
     "build": "pkgroll --minify"
   },
+  "homepage": "https://github.com/muppet-dev/kit",
   "publishConfig": {
     "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/muppet-dev/kit.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/muppet-dev/kit/issues"
   },
   "exports": {
     ".": {

@@ -1,11 +1,22 @@
 {
   "name": "@muppet-kit/inspector",
+  "description": "MCP inspector for debugging and inspecting MCP servers.",
   "version": "0.1.7",
   "license": "MIT",
+  "types": "./index.d.ts",
+  "main": "./index.js",
   "type": "module",
   "bin": "./dist/cli.js",
-  "files": [
-    "dist"
+  "files": ["dist"],
+  "keywords": [
+    "mcp",
+    "inspector",
+    "debugging",
+    "debugger",
+    "muppet",
+    "kit",
+    "tools",
+    "server"
   ],
   "scripts": {
     "dev": "vite",
@@ -14,8 +25,17 @@
     "build:cli": "node build.mjs",
     "build": "pnpm run build:client && pnpm run build:server && pnpm run build:cli"
   },
+  "homepage": "https://github.com/muppet-dev/kit",
   "publishConfig": {
     "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/muppet-dev/kit.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/muppet-dev/kit/issues"
   },
   "exports": {
     "import": {
