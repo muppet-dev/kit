@@ -23,7 +23,7 @@ export async function inspectorAction({
         }
       : { name: "muppet" }),
     defaultConfig: {
-      port: 3000,
+      port: 3553,
       host: "localhost",
     },
   });
