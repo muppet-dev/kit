@@ -19,6 +19,7 @@ import OAuthCallbackPage from "./pages/OAuthCallback";
 import PlaygroundPage from "./pages/Playground";
 import SettingsPage from "./pages/Settings";
 import TracingPage from "./pages/Tracing";
+import MCPScanPage from "./pages/MCPScan";
 
 export default function App() {
   const { connectionInfo, setConnectionInfo } = useConfig();
@@ -52,6 +53,7 @@ export default function App() {
                     <Route index element={<HomePage />} />
                     <Route path="/explorer" element={<ExplorerPage />} />
                     {/* <Route path="/playground" element={<PlaygroundPage />} /> */}
+                    <Route path="/mcp-scan" element={<MCPScanPage />} />
                     <Route path="/history" element={<HistoryPage />} />
                     <Route path="/tracing" element={<TracingPage />} />
                     <Route path="/settings" element={<SettingsPage />} />

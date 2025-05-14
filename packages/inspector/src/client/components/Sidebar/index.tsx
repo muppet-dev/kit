@@ -15,6 +15,7 @@ import {
   Logs,
   PieChart,
   Settings2,
+  Shield,
   SquareTerminal,
 } from "lucide-react";
 import { Link } from "react-router";
@@ -29,6 +30,11 @@ const data = {
       name: "Explorer",
       url: "/explorer",
       icon: SquareTerminal,
+    },
+    {
+      name: "MCP Scan",
+      url: "/mcp-scan",
+      icon: Shield,
     },
     // {
     //   name: "Playground",
