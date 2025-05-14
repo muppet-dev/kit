@@ -241,9 +241,6 @@ importers:
         specifier: ^3.24.4
         version: 3.24.4
     devDependencies:
-      '@hono/vite-build':
-        specifier: ^1.6.1
-        version: 1.6.1(hono@4.7.9)
       '@hono/vite-dev-server':
         specifier: ^0.19.0
         version: 0.19.0(hono@4.7.9)
@@ -706,12 +703,6 @@ packages:
     peerDependencies:
       '@standard-schema/spec': 1.0.0
       hono: '>=3.9.0'
-
-  '@hono/vite-build@1.6.1':
-    resolution: {integrity: sha512-M60p0cAWgEbYiGa+1j35Ljqcef8s2N5EhpQMWrH1N6fSid5jKD2+D2t1+AntI8HZbgC5VDdpk4QzcEuLMPCgsA==}
-    engines: {node: '>=18.14.1'}
-    peerDependencies:
-      hono: '*'
 
   '@hono/vite-dev-server@0.19.0':
     resolution: {integrity: sha512-myMc4Nm0nFQSPaeE6I/a1ODyDR5KpQ4EHodX4Tu/7qlB31GfUemhUH/WsO91HJjDEpRRpsT4Zbg+PleMlpTljw==}
@@ -3685,10 +3676,6 @@ snapshots:
   '@hono/standard-validator@0.1.2(@standard-schema/spec@1.0.0)(hono@4.7.9)':
     dependencies:
       '@standard-schema/spec': 1.0.0
-      hono: 4.7.9
-
-  '@hono/vite-build@1.6.1(hono@4.7.9)':
-    dependencies:
       hono: 4.7.9
 
   '@hono/vite-dev-server@0.19.0(hono@4.7.9)':

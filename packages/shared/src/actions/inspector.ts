@@ -4,7 +4,7 @@ import type { Hono } from "hono";
 import type { SanitizedInspectorConfig } from "../types";
 
 type InspectorActionOptions = {
-  options: any;
+  options?: Record<string, string>;
   app: (config: SanitizedInspectorConfig) => Hono;
 };
 
@@ -22,6 +22,10 @@ export async function inspectorAction({
           configFile: options?.config,
         }
       : { name: "muppet" }),
+    defaultConfig: {
+      port: 3000,
+      host: "localhost",
+    },
   });
 
   if (options?.port) {
