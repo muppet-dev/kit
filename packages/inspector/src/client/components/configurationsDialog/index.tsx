@@ -10,7 +10,7 @@ import { ConfigTabs } from "./Tabs";
 export function ConfigurationsDialog() {
   return (
     <Dialog open={true}>
-      <DialogContent className="h-[580px] flex flex-col">
+      <DialogContent isClosable={false} className="h-[580px] flex flex-col">
         <DialogHeader className="gap-0 h-max">
           <DialogTitle>Configure Transport</DialogTitle>
           <DialogDescription>
