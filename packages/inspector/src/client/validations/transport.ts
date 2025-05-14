@@ -3,7 +3,6 @@ import {
   stdioTransportSchema,
 } from "@muppet-kit/shared";
 import z from "zod";
-import { generateName } from "../lib/utils";
 
 export const SUBMIT_BUTTON_KEY = "__submit_btn";
 
@@ -13,7 +12,7 @@ export enum DocumentSubmitType {
 }
 
 const extraPropValidation = z.object({
-  name: z.string().default(generateName).optional(),
+  name: z.string().optional(),
   [SUBMIT_BUTTON_KEY]: z.nativeEnum(DocumentSubmitType).optional(),
 });
 

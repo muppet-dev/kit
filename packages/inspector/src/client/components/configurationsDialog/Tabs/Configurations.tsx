@@ -59,6 +59,8 @@ export function Configurations() {
       }
     });
 
+  const handleAllDelete = eventHandler(() => setConfigurations(null));
+
   return (
     <div className="flex flex-col gap-6 justify-between h-full w-full overflow-hidden">
       {configurations && configurations.length > 0 ? (
@@ -124,11 +126,21 @@ export function Configurations() {
           })}
         </div>
       ) : (
-        <div className="flex items-center justify-center h-full text-sm text-muted-foreground border mr-4">
+        <div className="flex items-center justify-center h-full text-sm text-muted-foreground border">
           No saved connections found.
         </div>
       )}
-      <div className="flex items-center justify-end">
+      <div className="flex items-center justify-between">
+        <Button
+          type="button"
+          variant="secondary"
+          title="Clear all configurations"
+          className="bg-red-500 hover:bg-red-600/90 dark:bg-red-300 dark:hover:bg-red-400 text-white dark:text-black"
+          onClick={handleAllDelete}
+          onKeyDown={handleAllDelete}
+        >
+          Clear All
+        </Button>
         <Button
           type="button"
           disabled={!selected || mutation.isPending}

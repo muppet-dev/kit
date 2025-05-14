@@ -32,7 +32,7 @@ export function ConfigForm(props: ConfigForm) {
     },
   });
 
-  const { handleSubmit, reset } = methods;
+  const { handleSubmit } = methods;
 
   return (
     <FormProvider {...methods}>
@@ -40,7 +40,7 @@ export function ConfigForm(props: ConfigForm) {
         className="flex flex-col h-full gap-2 flex-1"
         onSubmit={handleSubmit(
           (values) => mutation.mutateAsync(values),
-          console.error,
+          console.error
         )}
       >
         {props.children}
