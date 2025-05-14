@@ -5,7 +5,6 @@ import { DocumentSubmitType, SUBMIT_BUTTON_KEY } from "@/client/validations";
 import { Transport } from "@muppet-kit/shared";
 import { useMutation } from "@tanstack/react-query";
 import { useLocalStorage } from "@uidotdev/usehooks";
-import { nanoid } from "nanoid";
 
 export function useConfigForm() {
   const { setConnectionInfo } = useConfig();
@@ -17,7 +16,6 @@ export function useConfigForm() {
     mutationFn: async (values: ConnectionInfo) => {
       const _values = {
         ...values,
-        id: values.id ?? nanoid(),
         name:
           values.name && values.name.trim().length > 0
             ? values.name
@@ -47,7 +45,7 @@ export function useConfigForm() {
       if (submit_type_value === DocumentSubmitType.SAVE_AND_CONNECT) {
         setConfigurations((prev) => {
           const tmp = prev ? [...prev] : [];
-          const index = tmp.findIndex((item) => item.id === values.id);
+          const index = tmp.findIndex((item) => item.name === values.name);
 
           if (index !== -1) {
             tmp[index] = values;

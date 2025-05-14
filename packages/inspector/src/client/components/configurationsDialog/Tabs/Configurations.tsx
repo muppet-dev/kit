@@ -6,7 +6,7 @@ import { DocumentSubmitType, SUBMIT_BUTTON_KEY } from "@/client/validations";
 import { Transport } from "@muppet-kit/shared";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { Trash } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useConfigForm } from "../../ConfigForm/useConfigForm";
 import { Badge } from "../../ui/badge";
 import { Button } from "../../ui/button";
@@ -50,11 +50,11 @@ export function Configurations() {
       });
   });
 
-  const handleDeleteItem = (id?: string) =>
+  const handleDeleteItem = (name?: string) =>
     eventHandler(() => {
-      if (id) {
+      if (name) {
         setConfigurations(
-          (prev) => prev?.filter((item) => item.id !== id) ?? []
+          (prev) => prev?.filter((item) => item.name !== name) ?? []
         );
       }
     });
@@ -73,11 +73,11 @@ export function Configurations() {
 
             return (
               <div
-                key={item.id}
+                key={item.name}
                 onClick={handleSelectItem(item)}
                 onKeyDown={handleSelectItem(item)}
                 className={cn(
-                  selected?.id === item.id
+                  selected?.name === item.name
                     ? "bg-accent/80 dark:bg-accent/50 border-primary/30"
                     : "hover:bg-accent/80 dark:hover:bg-accent/50 hover:border-primary/30 transition-all",
                   "relative border pl-3 pr-[54px] pt-1.5 pb-2 cursor-pointer flex items-center justify-between select-none w-full"
@@ -85,9 +85,7 @@ export function Configurations() {
               >
                 <div className="w-full flex flex-col">
                   <div className="flex items-center gap-1.5 mb-0.5 w-full">
-                    <h3>
-                      {(item.name?.length ?? 0) > 0 ? item.name : item.id}
-                    </h3>
+                    <h3>{item.name}</h3>
                     <Badge
                       className={cn(
                         "leading-tight py-0 px-1 font-semibold",
@@ -116,8 +114,8 @@ export function Configurations() {
                   title="Delete item"
                   variant="ghost"
                   className="absolute right-3 size-max has-[>svg]:px-1.5 py-1.5 text-red-500 dark:text-red-300 hover:text-red-500 hover:bg-red-100 dark:hover:bg-red-300/20"
-                  onClick={handleDeleteItem(item.id)}
-                  onKeyDown={handleDeleteItem(item.id)}
+                  onClick={handleDeleteItem(item.name)}
+                  onKeyDown={handleDeleteItem(item.name)}
                 >
                   <Trash className="stroke-2" />
                 </Button>
