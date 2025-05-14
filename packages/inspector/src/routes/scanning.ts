@@ -16,9 +16,9 @@ router.post("/", sValidator("json", z.array(schema)), async (c) => {
 
   const messages = entries.map((entry) => ({
     role: "system",
-    content: `${capitalizeFirstLetter[entry.type]} Name:${
-      entry.name
-    }\n${capitalizeFirstLetter[entry.type]} Description:${entry.description}`,
+    content: `${capitalizeFirstLetter[entry.type]} Name:${entry.name}\n${
+      capitalizeFirstLetter[entry.type]
+    } Description:${entry.description}`,
   }));
 
   const response = await fetch(
@@ -29,12 +29,12 @@ router.post("/", sValidator("json", z.array(schema)), async (c) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ messages }),
-    },
+    }
   );
 
   if (!response.ok) {
     throw new Error(
-      `Verification API error: ${response.status} - ${await response.text()}`,
+      `Verification API error: ${response.status} - ${await response.text()}`
     );
   }
 
@@ -52,7 +52,7 @@ router.post("/", sValidator("json", z.array(schema)), async (c) => {
     if (index !== undefined) {
       newEntries.push({
         ...entries[index],
-        errors: error.error_message,
+        errors: error.args,
       });
     }
   }
