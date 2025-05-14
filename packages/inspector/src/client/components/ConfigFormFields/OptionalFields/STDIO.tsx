@@ -35,7 +35,7 @@ export function STDIOFields() {
           {...register("args")}
         />
       </div>
-      <Accordion type="single" collapsible className="h-full flex flex-col">
+      <Accordion type="single" collapsible className="flex flex-col">
         <AccordionItem
           value="1"
           className="border-b-0 h-full flex flex-col [&>div]:data-[state=open]:h-full [&>div]:data-[state=open]:flex"
@@ -76,7 +76,7 @@ function EnvField() {
           <p className="text-sm select-none">No variables added</p>
         </div>
       ) : (
-        <div className="max-h-[110px] overflow-y-auto space-y-1">
+        <div className="space-y-1">
           {fields.map((item, index) => (
             <div key={item.id} className="flex w-full items-center gap-2">
               <Input {...register(`env.${index}.key`)} placeholder="Key" />

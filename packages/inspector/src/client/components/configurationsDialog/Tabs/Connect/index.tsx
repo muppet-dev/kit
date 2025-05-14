@@ -6,7 +6,6 @@ export function Connect() {
   return (
     <ConfigForm>
       <FormFields />
-      <div className="flex-1" />
       <FormFooter />
     </ConfigForm>
   );

@@ -13,6 +13,9 @@ export enum DocumentSubmitType {
 
 const extraPropValidation = z.object({
   name: z.string().optional(),
+  request_timeout: z.number().optional(),
+  progress: z.boolean().optional(),
+  total_timeout: z.number().optional(),
   [SUBMIT_BUTTON_KEY]: z.nativeEnum(DocumentSubmitType).optional(),
 });
 

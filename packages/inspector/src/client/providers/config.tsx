@@ -43,6 +43,20 @@ function useConfigManager(props: ConfigProvider) {
     headers: HeadersInit;
   }>();
 
+  const { data: version } = useQuery({
+    queryKey: ["version"],
+    queryFn: () =>
+      fetch("/version").then((res) => {
+        if (!res.ok) {
+          throw new Error(
+            "Failed to fetch version data. Please check your network connection or try again later."
+          );
+        }
+
+        return res.text() as Promise<string>;
+      }),
+  });
+
   const { data: config } = useQuery({
     queryKey: ["base-config"],
     queryFn: () =>
@@ -79,19 +93,19 @@ function useConfigManager(props: ConfigProvider) {
           (res) => {
             if (!res.ok) {
               throw new Error(
-                "Failed to generate a new tunneling URL. Please try again.",
+                "Failed to generate a new tunneling URL. Please try again."
               );
             }
 
             return res.json() as Promise<{ id: string; url: string }>;
-          },
+          }
         );
 
         const publicUrl = new URL(
           connectionLink.url.pathname +
             connectionLink.url.search +
             connectionLink.url.hash,
-          url,
+          url
         );
 
         tunnel = { id, headers: connectionLink.headers, url: publicUrl };
@@ -136,6 +150,7 @@ function useConfigManager(props: ConfigProvider) {
   }
 
   return {
+    version,
     connectionLink,
     setConnectionLink,
     getConfigurations,

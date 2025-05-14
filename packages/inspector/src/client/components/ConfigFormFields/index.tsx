@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { ConfigurationField } from "./ConfigurationField";
 import { OptionalFields } from "./OptionalFields";
 
 export function ConfigFormFields() {
@@ -37,6 +38,7 @@ export function ConfigFormFields() {
         />
       </div>
       <OptionalFields />
+      <ConfigurationField />
     </>
   );
 }

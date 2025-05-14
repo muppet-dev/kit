@@ -9,7 +9,7 @@ export function FormFields() {
   const { register } = useFormContext<z.output<typeof schema>>();
 
   return (
-    <>
+    <div className="flex flex-col gap-2 overflow-y-auto h-[380px] pr-2">
       <div className="w-full grid grid-cols-4 gap-2">
         <Label htmlFor="transportType">Name</Label>
         <Input
@@ -19,6 +19,6 @@ export function FormFields() {
         />
       </div>
       <ConfigFormFields />
-    </>
+    </div>
   );
 }
