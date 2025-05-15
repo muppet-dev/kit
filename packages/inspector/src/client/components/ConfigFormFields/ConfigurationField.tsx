@@ -72,6 +72,12 @@ export function ConfigurationField() {
               valueAsNumber: true,
             })}
           />
+          <Label htmlFor="proxy">Inspector Proxy Address</Label>
+          <p className="text-xs text-muted-foreground">
+            Set this if you are running the MCP Inspector Proxy on a non-default
+            address. Example: http://10.1.1.22:5577
+          </p>
+          <Input id="proxy" {...register("proxy")} />
         </AccordionContent>
       </AccordionItem>
     </Accordion>

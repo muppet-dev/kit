@@ -1,26 +1,23 @@
-import {
-  type ConnectionInfo,
-  getMCPProxyAddress,
-} from "@/client/providers/connection/manager";
+import { useConfig } from "@/client/providers";
+import type { ConnectionInfo } from "@/client/providers/connection/manager";
 import { AssistantRuntimeProvider } from "@assistant-ui/react";
 import { useChatRuntime } from "@assistant-ui/react-ai-sdk";
 import { useChats } from "../providers";
 import { ModelHeader } from "./Header";
 import { Thread } from "./Thread";
-import { useConfig } from "@/client/providers";
 
 export type Chat = {
   chatId: string;
 };
 
 export function Chat(props: Chat) {
-  const { connectionInfo } = useConfig();
+  const { connectionInfo, proxyAddress } = useConfig();
   const { getChat } = useChats();
 
   const chat = getChat(props.chatId);
 
   const runtime = useChatRuntime({
-    api: `${getMCPProxyAddress()}/chat${
+    api: `${proxyAddress}/api/chat${
       chat?.model
         ? `?modelId=${chat.model}&${connectionInfoSerializer(connectionInfo)}`
         : ""

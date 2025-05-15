@@ -69,7 +69,7 @@ export type RequestHistory = {
 
 export function useConnectionManager(props: UseConnectionOptions) {
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(
-    ConnectionStatus.DISCONNECTED,
+    ConnectionStatus.DISCONNECTED
   );
   const [serverCapabilities, setServerCapabilities] =
     useState<ServerCapabilities | null>(null);
@@ -81,7 +81,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
   const pushHistory = (
     timestamp: number,
     request: object,
-    response?: object,
+    response?: object
   ) => {
     setRequestHistory((prev) => [
       ...prev,
@@ -100,7 +100,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
   const makeRequest = async <T extends z.ZodType>(
     request: ClientRequest,
     schema: T,
-    options?: RequestOptions & { suppressToast?: boolean },
+    options?: RequestOptions & { suppressToast?: boolean }
   ): Promise<z.output<T>> => {
     if (!mcpClient) {
       throw new Error("MCP client not connected");
@@ -157,7 +157,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
     ref: ResourceReference | PromptReference,
     argName: string,
     value: string,
-    signal?: AbortSignal,
+    signal?: AbortSignal
   ): Promise<string[]> => {
     if (!mcpClient || !completionsSupported) {
       return [];
@@ -262,7 +262,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
             listChanged: true,
           },
         },
-      },
+      }
     );
 
     try {
@@ -283,7 +283,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
         if (props.env)
           mcpProxyServerUrl.searchParams.append(
             "env",
-            JSON.stringify(props.env),
+            JSON.stringify(props.env)
           );
         break;
 
@@ -324,7 +324,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
         eventSourceInit: {
           fetch: (
             url: string | URL | globalThis.Request,
-            init: RequestInit | undefined,
+            init: RequestInit | undefined
           ) => fetch(url, { ...init, headers }),
         },
         requestInit: {
@@ -356,7 +356,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
         ]) {
           client.setNotificationHandler(
             notificationSchema,
-            props.onNotification,
+            props.onNotification
           );
         }
 
@@ -369,7 +369,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
       if (props.onStdErrNotification) {
         client.setNotificationHandler(
           StdErrNotificationSchema,
-          props.onStdErrNotification,
+          props.onStdErrNotification
         );
       }
 
@@ -390,7 +390,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
       } catch (error) {
         console.error(
           `Failed to connect to MCP Server via the MCP Inspector Proxy: ${mcpProxyServerUrl}:`,
-          error,
+          error
         );
         const shouldRetry = await handleAuthError(error);
         if (shouldRetry) {
@@ -455,10 +455,4 @@ export function useConnectionManager(props: UseConnectionOptions) {
     connect,
     disconnect,
   };
-}
-
-export function getMCPProxyAddress(proxy?: string) {
-  if (proxy) return proxy;
-
-  return `${window.location.protocol}//${window.location.hostname}:${window.location.port}/api`;
 }

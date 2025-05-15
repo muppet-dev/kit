@@ -1,5 +1,5 @@
 import type { MCPItemType } from "@/client/pages/Explorer/types";
-import { getMCPProxyAddress } from "@/client/providers/connection/manager";
+import { useConfig } from "@/client/providers";
 import { useMutation } from "@tanstack/react-query";
 import { type PropsWithChildren, createContext, useContext } from "react";
 import toast from "react-hot-toast";
@@ -34,9 +34,11 @@ export type AnalyseDataType = {
 };
 
 function useAnalyseManager() {
+  const { proxyAddress } = useConfig();
+
   return useMutation({
     mutationFn: async (values: MCPItemType & { context?: string }) =>
-      fetch(`${getMCPProxyAddress()}/analyse`, {
+      fetch(`${proxyAddress}/api/analyse`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
