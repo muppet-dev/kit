@@ -15,6 +15,7 @@ import {
   BookText,
   History,
   Logs,
+  Construction,
   Settings2,
   Shield,
   SquareTerminal,
@@ -39,11 +40,11 @@ const data = {
       url: "/mcp-scan",
       icon: Shield,
     },
-    // {
-    //   name: "Playground",
-    //   url: "/playground",
-    //   icon: PieChart,
-    // },
+    {
+      name: "Playground",
+      url: "/playground",
+      icon: Construction,
+    },
     {
       name: "Tracing",
       url: "/tracing",
