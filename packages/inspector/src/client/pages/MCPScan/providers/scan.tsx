@@ -24,7 +24,7 @@ export const MCPScanProvider = (props: PropsWithChildren) => {
   );
 };
 
-type MCPScanPayload = {
+export type MCPScanPayload = {
   type: "tool" | "resource" | "prompt";
   name: string;
   description?: string;
@@ -136,10 +136,9 @@ function useMCPScanManager() {
 
       return {
         duration: performance.now() - start,
-        tools: (await response.json()) as (Omit<
-          MCPScanPayload,
-          "description"
-        > & { errors: string[] })[],
+        tools: (await response.json()) as (MCPScanPayload & {
+          errors: string[];
+        })[],
       };
     },
     onError: (err) => {
