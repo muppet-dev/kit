@@ -40,12 +40,7 @@ import { InspectorOAuthClientProvider } from "./auth";
 export type ConnectionInfo = z.infer<typeof configTransportSchema>;
 
 export type UseConnectionOptions = ConnectionInfo & {
-  requestConfig?: {
-    timeout?: number;
-    timeoutResetOnProgress?: boolean;
-    maxTotalTimeout?: number;
-    proxy?: string;
-  };
+  proxy: string;
   onNotification?: (notification: Notification) => void;
   onStdErrNotification?: (notification: Notification) => void;
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -117,11 +112,9 @@ export function useConnectionManager(props: UseConnectionOptions) {
       const mcpRequestOptions: RequestOptions = {
         signal: options?.signal ?? abortController.signal,
         resetTimeoutOnProgress:
-          options?.resetTimeoutOnProgress ??
-          props.requestConfig?.timeoutResetOnProgress,
-        timeout: options?.timeout ?? props.requestConfig?.timeout,
-        maxTotalTimeout:
-          options?.maxTotalTimeout ?? props.requestConfig?.maxTotalTimeout,
+          options?.resetTimeoutOnProgress ?? props.progress,
+        timeout: options?.timeout ?? props.request_timeout,
+        maxTotalTimeout: options?.maxTotalTimeout ?? props.total_timeout,
       };
 
       if (mcpRequestOptions.resetTimeoutOnProgress) {
@@ -225,9 +218,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
 
   const checkProxyHealth = async () => {
     try {
-      const proxyHealthUrl = new URL(
-        `${getMCPProxyAddress(props.requestConfig?.proxy)}/health`,
-      );
+      const proxyHealthUrl = new URL(`${props.proxy}/api/health`);
       const proxyHealthResponse = await fetch(proxyHealthUrl);
       const proxyHealth = await proxyHealthResponse.json();
       if (proxyHealth?.status !== "ok") {
@@ -283,9 +274,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
     let mcpProxyServerUrl: URL;
     switch (props.type) {
       case Transport.STDIO:
-        mcpProxyServerUrl = new URL(
-          `${getMCPProxyAddress(props.requestConfig?.proxy)}/stdio`,
-        );
+        mcpProxyServerUrl = new URL(`${props.proxy}/api/stdio`);
         mcpProxyServerUrl.searchParams.append("command", props.command);
 
         if (props.args)
@@ -299,16 +288,12 @@ export function useConnectionManager(props: UseConnectionOptions) {
         break;
 
       case Transport.SSE:
-        mcpProxyServerUrl = new URL(
-          `${getMCPProxyAddress(props.requestConfig?.proxy)}/sse`,
-        );
+        mcpProxyServerUrl = new URL(`${props.proxy}/api/sse`);
         mcpProxyServerUrl.searchParams.append("url", props.url);
         break;
 
       case Transport.HTTP:
-        mcpProxyServerUrl = new URL(
-          `${getMCPProxyAddress(props.requestConfig?.proxy)}/mcp`,
-        );
+        mcpProxyServerUrl = new URL(`${props.proxy}/api/mcp`);
         mcpProxyServerUrl.searchParams.append("url", props.url);
         break;
     }

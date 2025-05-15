@@ -13,12 +13,13 @@ type ConnectionContextType = ReturnType<typeof useConnectionManager>;
 const ConnectionContext = createContext<ConnectionContextType | null>(null);
 
 export const ConnectionProvider = ({ children }: PropsWithChildren) => {
-  const { connectionInfo } = useConfig();
+  const { connectionInfo, proxyAddress } = useConfig();
   const { addNotification, addStdErrNotification } = useNotification();
   const values = useConnectionManager({
     ...connectionInfo!,
     onNotification: addNotification,
     onStdErrNotification: addStdErrNotification,
+    proxy: proxyAddress,
   });
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
