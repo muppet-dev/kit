@@ -109,7 +109,25 @@ function ExperimentalBadge() {
           <Info className="size-[15px] mt-0.5" />
         </div>
       </TooltipTrigger>
-      <TooltipContent>This is an experimental feature</TooltipContent>
+      <TooltipContent>
+        This interface uses Vercel's AI SDK with experimental Model Context
+        Protocol (MCP) tools support. Please be aware of the following
+        limitations:
+        <ul>
+          <li>Only basic tool functionality is supported at this time</li>
+          <li>Some advanced MCP features may not work as expected</li>
+        </ul>
+        For production applications, consider implementing fallback mechanisms
+        or monitoring for potential issues. Check the{" "}
+        <a
+          href="https://ai-sdk.dev/cookbook/node/mcp-tools"
+          target="_blank"
+          rel="noreferrer"
+        >
+          AI SDK documentation
+        </a>{" "}
+        for the latest updates
+      </TooltipContent>
     </Tooltip>
   );
 }
