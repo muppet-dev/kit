@@ -50,15 +50,16 @@ function useConfigManager(props: ConfigProvider) {
   const { data: version } = useQuery({
     queryKey: ["version"],
     queryFn: () =>
-      fetch("/version").then((res) => {
+      fetch(`${proxyAddress}/version`).then((res) => {
         if (!res.ok) {
           throw new Error(
-            "Failed to fetch version data. Please check your network connection or try again later."
+            "Failed to fetch version data. Please check your network connection or try again later.",
           );
         }
 
         return res.text() as Promise<string>;
       }),
+    enabled: !!connectionInfo,
   });
 
   const { data: config } = useQuery({
@@ -84,6 +85,12 @@ function useConfigManager(props: ConfigProvider) {
       }),
   });
 
+  const proxyAddress = useMemo(() => {
+    // if (connectionInfo?.proxy) return connectionInfo.proxy;
+
+    return `${window.location.protocol}//${window.location.hostname}:${window.location.port}`;
+  }, []);
+
   const createLink = useMutation({
     mutationFn: async (linkType: "local" | "public") => {
       let tunnel: { id: string; url: URL; headers: HeadersInit };
@@ -97,19 +104,19 @@ function useConfigManager(props: ConfigProvider) {
           (res) => {
             if (!res.ok) {
               throw new Error(
-                "Failed to generate a new tunneling URL. Please try again."
+                "Failed to generate a new tunneling URL. Please try again.",
               );
             }
 
             return res.json() as Promise<{ id: string; url: string }>;
-          }
+          },
         );
 
         const publicUrl = new URL(
           connectionLink.url.pathname +
             connectionLink.url.search +
             connectionLink.url.hash,
-          url
+          url,
         );
 
         tunnel = { id, headers: connectionLink.headers, url: publicUrl };
@@ -155,7 +162,7 @@ function useConfigManager(props: ConfigProvider) {
   const deleteConfiguration = (name?: string) => {
     if (name) {
       setConfigurations(
-        (prev) => prev?.filter((item) => item.name !== name) ?? []
+        (prev) => prev?.filter((item) => item.name !== name) ?? [],
       );
     }
   };
@@ -193,6 +200,7 @@ function useConfigManager(props: ConfigProvider) {
     setConnectionInfo: (info: ConnectionInfo) => {
       setConnectionInfo(info);
     },
+    proxyAddress,
     configurations: [
       ...getDeafultConfigurations(),
       ...(localSavedConfigs ?? []),
