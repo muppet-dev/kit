@@ -52,7 +52,7 @@ export default function App() {
                   <Route path="/" element={<AppWrapper />}>
                     <Route index element={<HomePage />} />
                     <Route path="/explorer" element={<ExplorerPage />} />
-                    {/* <Route path="/playground" element={<PlaygroundPage />} /> */}
+                    <Route path="/playground" element={<PlaygroundPage />} />
                     <Route path="/mcp-scan" element={<MCPScanPage />} />
                     <Route path="/history" element={<HistoryPage />} />
                     <Route path="/tracing" element={<TracingPage />} />

@@ -73,7 +73,7 @@ importers:
         specifier: ^5.0.1
         version: 5.0.1(react-hook-form@7.56.3(react@19.1.0))
       '@modelcontextprotocol/sdk':
-        specifier: ^1.11.0
+        specifier: ^1.11.2
         version: 1.11.2
       '@monaco-editor/react':
         specifier: ^4.7.0
