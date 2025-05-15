@@ -11,8 +11,9 @@ export function FormFields() {
   return (
     <div className="flex flex-col gap-2 overflow-y-auto h-[380px] pr-2">
       <div className="w-full grid grid-cols-4 gap-2">
-        <Label htmlFor="transportType">Name</Label>
+        <Label htmlFor="name">Name</Label>
         <Input
+          id="name"
           {...register("name")}
           placeholder="Enter Name"
           className="col-span-3"

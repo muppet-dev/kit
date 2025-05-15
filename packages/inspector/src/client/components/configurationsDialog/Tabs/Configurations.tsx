@@ -23,7 +23,7 @@ export function Configurations() {
   const handleSelectItem = (value: ConnectionInfo) =>
     eventHandler(() => {
       const formattedData =
-        value?.transportType === Transport.STDIO
+        value?.type === Transport.STDIO
           ? {
               ...value,
               env: value.env
@@ -32,7 +32,7 @@ export function Configurations() {
                       ([key, value]) => ({
                         key,
                         value: String(value),
-                      })
+                      }),
                     )
                   : value.env
                 : undefined,
@@ -65,7 +65,7 @@ export function Configurations() {
         <div className="flex flex-col gap-2 h-full overflow-y-auto w-full">
           {configurations.map((item) => {
             const content =
-              item.transportType === Transport.STDIO
+              item.type === Transport.STDIO
                 ? `${item.command} ${item.args}`
                 : item.url;
 
@@ -78,7 +78,7 @@ export function Configurations() {
                   selected?.name === item.name
                     ? "bg-accent/80 dark:bg-accent/50 border-primary/30"
                     : "hover:bg-accent/80 dark:hover:bg-accent/50 hover:border-primary/30 transition-all",
-                  "relative border pl-3 pr-[54px] pt-1.5 pb-2 cursor-pointer flex items-center justify-between select-none w-full"
+                  "relative border pl-3 pr-[54px] pt-1.5 pb-2 cursor-pointer flex items-center justify-between select-none w-full",
                 )}
               >
                 <div className="w-full flex flex-col">
@@ -87,17 +87,17 @@ export function Configurations() {
                     <Badge
                       className={cn(
                         "leading-tight py-0 px-1 font-semibold",
-                        item.transportType === Transport.HTTP
+                        item.type === Transport.HTTP
                           ? "bg-green-500 dark:bg-green-300"
-                          : item.transportType === Transport.SSE
-                          ? "bg-yellow-500 dark:bg-yellow-300"
-                          : "bg-blue-500 dark:bg-blue-300"
+                          : item.type === Transport.SSE
+                            ? "bg-yellow-500 dark:bg-yellow-300"
+                            : "bg-blue-500 dark:bg-blue-300",
                       )}
                     >
-                      {item.transportType === Transport.HTTP ? (
+                      {item.type === Transport.HTTP ? (
                         "HTTP Streaming"
                       ) : (
-                        <span className="uppercase">{item.transportType}</span>
+                        <span className="uppercase">{item.type}</span>
                       )}
                     </Badge>
                   </div>

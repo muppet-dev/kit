@@ -74,7 +74,7 @@ export type RequestHistory = {
 
 export function useConnectionManager(props: UseConnectionOptions) {
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(
-    ConnectionStatus.DISCONNECTED
+    ConnectionStatus.DISCONNECTED,
   );
   const [serverCapabilities, setServerCapabilities] =
     useState<ServerCapabilities | null>(null);
@@ -86,7 +86,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
   const pushHistory = (
     timestamp: number,
     request: object,
-    response?: object
+    response?: object,
   ) => {
     setRequestHistory((prev) => [
       ...prev,
@@ -105,7 +105,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
   const makeRequest = async <T extends z.ZodType>(
     request: ClientRequest,
     schema: T,
-    options?: RequestOptions & { suppressToast?: boolean }
+    options?: RequestOptions & { suppressToast?: boolean },
   ): Promise<z.output<T>> => {
     if (!mcpClient) {
       throw new Error("MCP client not connected");
@@ -164,7 +164,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
     ref: ResourceReference | PromptReference,
     argName: string,
     value: string,
-    signal?: AbortSignal
+    signal?: AbortSignal,
   ): Promise<string[]> => {
     if (!mcpClient || !completionsSupported) {
       return [];
@@ -226,7 +226,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
   const checkProxyHealth = async () => {
     try {
       const proxyHealthUrl = new URL(
-        `${getMCPProxyAddress(props.requestConfig?.proxy)}/health`
+        `${getMCPProxyAddress(props.requestConfig?.proxy)}/health`,
       );
       const proxyHealthResponse = await fetch(proxyHealthUrl);
       const proxyHealth = await proxyHealthResponse.json();
@@ -241,7 +241,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
 
   const handleAuthError = async (error: unknown) => {
     if (error instanceof SseError && error.code === 401) {
-      const sseUrl = props.transportType !== Transport.STDIO ? props.url : null;
+      const sseUrl = props.type !== Transport.STDIO ? props.url : null;
 
       if (!sseUrl) {
         throw new Error("No SSE URL provided for authentication");
@@ -271,7 +271,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
             listChanged: true,
           },
         },
-      }
+      },
     );
 
     try {
@@ -281,10 +281,10 @@ export function useConnectionManager(props: UseConnectionOptions) {
       return;
     }
     let mcpProxyServerUrl: URL;
-    switch (props.transportType) {
+    switch (props.type) {
       case Transport.STDIO:
         mcpProxyServerUrl = new URL(
-          `${getMCPProxyAddress(props.requestConfig?.proxy)}/stdio`
+          `${getMCPProxyAddress(props.requestConfig?.proxy)}/stdio`,
         );
         mcpProxyServerUrl.searchParams.append("command", props.command);
 
@@ -294,33 +294,33 @@ export function useConnectionManager(props: UseConnectionOptions) {
         if (props.env)
           mcpProxyServerUrl.searchParams.append(
             "env",
-            JSON.stringify(props.env)
+            JSON.stringify(props.env),
           );
         break;
 
       case Transport.SSE:
         mcpProxyServerUrl = new URL(
-          `${getMCPProxyAddress(props.requestConfig?.proxy)}/sse`
+          `${getMCPProxyAddress(props.requestConfig?.proxy)}/sse`,
         );
         mcpProxyServerUrl.searchParams.append("url", props.url);
         break;
 
       case Transport.HTTP:
         mcpProxyServerUrl = new URL(
-          `${getMCPProxyAddress(props.requestConfig?.proxy)}/mcp`
+          `${getMCPProxyAddress(props.requestConfig?.proxy)}/mcp`,
         );
         mcpProxyServerUrl.searchParams.append("url", props.url);
         break;
     }
 
-    mcpProxyServerUrl.searchParams.append("transportType", props.transportType);
+    mcpProxyServerUrl.searchParams.append("type", props.type);
 
     try {
       // Inject auth manually instead of using SSEClientTransport, because we're
       // proxying through the inspector server first.
       const headers: HeadersInit = {};
 
-      if (props.transportType !== Transport.STDIO) {
+      if (props.type !== Transport.STDIO) {
         // Create an auth provider with the current server URL
         const serverAuthProvider = new InspectorOAuthClientProvider(props.url);
 
@@ -339,7 +339,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
         eventSourceInit: {
           fetch: (
             url: string | URL | globalThis.Request,
-            init: RequestInit | undefined
+            init: RequestInit | undefined,
           ) => fetch(url, { ...init, headers }),
         },
         requestInit: {
@@ -354,7 +354,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
       });
 
       const clientTransport =
-        props.transportType === Transport.HTTP
+        props.type === Transport.HTTP
           ? new StreamableHTTPClientTransport(mcpProxyServerUrl as URL, {
               sessionId: undefined,
             })
@@ -371,7 +371,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
         ]) {
           client.setNotificationHandler(
             notificationSchema,
-            props.onNotification
+            props.onNotification,
           );
         }
 
@@ -384,7 +384,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
       if (props.onStdErrNotification) {
         client.setNotificationHandler(
           StdErrNotificationSchema,
-          props.onStdErrNotification
+          props.onStdErrNotification,
         );
       }
 
@@ -405,7 +405,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
       } catch (error) {
         console.error(
           `Failed to connect to MCP Server via the MCP Inspector Proxy: ${mcpProxyServerUrl}:`,
-          error
+          error,
         );
         const shouldRetry = await handleAuthError(error);
         if (shouldRetry) {
@@ -446,7 +446,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
   const disconnect = async () => {
     await mcpClient?.close();
 
-    if (props.transportType !== Transport.STDIO) {
+    if (props.type !== Transport.STDIO) {
       const authProvider = new InspectorOAuthClientProvider(props.url);
       authProvider.clear();
     }

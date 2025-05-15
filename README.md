@@ -17,7 +17,8 @@ npx muppet-kit inspector
 ### Features
 
 - Explorer - Explore the MCP server's capabilities, while leveraging AI to assist you.
-- Playground - Test the MCP server with different LLMs and configurations. (Coming soon)
+- Playground - Test the MCP server with different LLMs and configurations.
+- MCP Scan - Scan the MCP server for vulnerabilities and security issues.
 - Tracing - Trace the requests and responses between the client and server. Tunneling is also supported for connecting to remote clients.
 - History - View the history of requests and responses between the client and server for the current session.
 

@@ -1,4 +1,5 @@
 import { useConnection } from "@/client/providers";
+import { getMCPProxyAddress } from "@/client/providers/connection/manager";
 import {
   ListPromptsResultSchema,
   ListResourcesResultSchema,
@@ -51,11 +52,11 @@ function useMCPScanManager() {
                       type: "tool",
                       name: tool.name,
                       description: tool.description,
-                    } satisfies MCPScanPayload)
-                )
+                    }) satisfies MCPScanPayload,
+                ),
               );
-            }
-          )
+            },
+          ),
         );
       }
 
@@ -70,11 +71,11 @@ function useMCPScanManager() {
                       type: "prompt",
                       name: prompt.name,
                       description: prompt.description,
-                    } satisfies MCPScanPayload)
-                )
+                    }) satisfies MCPScanPayload,
+                ),
               );
-            }
-          )
+            },
+          ),
         );
       }
 
@@ -82,7 +83,7 @@ function useMCPScanManager() {
         promises.push(
           makeRequest(
             { method: "resources/list" },
-            ListResourcesResultSchema
+            ListResourcesResultSchema,
           ).then(({ resources }) => {
             entries.push(
               ...resources.map(
@@ -91,15 +92,15 @@ function useMCPScanManager() {
                     type: "resource",
                     name: resource.name,
                     description: resource.description,
-                  } satisfies MCPScanPayload)
-              )
+                  }) satisfies MCPScanPayload,
+              ),
             );
           }),
           makeRequest(
             {
               method: "resources/templates/list",
             },
-            ListResourceTemplatesResultSchema
+            ListResourceTemplatesResultSchema,
           ).then(({ resourceTemplates }) =>
             entries.push(
               ...resourceTemplates.map(
@@ -108,16 +109,16 @@ function useMCPScanManager() {
                     type: "resource",
                     name: resource.name,
                     description: resource.description,
-                  } satisfies MCPScanPayload)
-              )
-            )
-          )
+                  }) satisfies MCPScanPayload,
+              ),
+            ),
+          ),
         );
       }
 
       await Promise.all(promises);
 
-      const response = await fetch("/api/scanning", {
+      const response = await fetch(`${getMCPProxyAddress()}/scanning`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -129,7 +130,7 @@ function useMCPScanManager() {
         throw new Error(
           `Verification API error: ${
             response.status
-          } - ${await response.text()}`
+          } - ${await response.text()}`,
         );
       }
 

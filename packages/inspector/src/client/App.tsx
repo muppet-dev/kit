@@ -29,7 +29,7 @@ export default function App() {
       <OAuthCallbackPage
         onConnect={(url) => {
           setConnectionInfo({
-            transportType: Transport.SSE,
+            type: Transport.SSE,
             url,
           });
         }}
