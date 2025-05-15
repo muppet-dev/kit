@@ -1,13 +1,15 @@
 {
   "name": "@muppet-kit/inspector",
   "description": "MCP inspector for debugging and inspecting MCP servers.",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "license": "MIT",
   "types": "./dist/index.d.ts",
   "main": "./dist/index.js",
   "type": "module",
   "bin": "./dist/cli.js",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "keywords": [
     "mcp",
     "inspector",
