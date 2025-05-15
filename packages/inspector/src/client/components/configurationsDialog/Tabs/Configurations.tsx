@@ -1,10 +1,9 @@
 import { eventHandler } from "@/client/lib/eventHandler";
 import { cn } from "@/client/lib/utils";
-import { CONFIG_STORAGE_KEY } from "@/client/providers";
+import { useConfig } from "@/client/providers";
 import type { ConnectionInfo } from "@/client/providers/connection/manager";
 import { DocumentSubmitType, SUBMIT_BUTTON_KEY } from "@/client/validations";
 import { Transport } from "@muppet-kit/shared";
-import { useLocalStorage } from "@uidotdev/usehooks";
 import { Trash } from "lucide-react";
 import { useState } from "react";
 import { useConfigForm } from "../../ConfigForm/useConfigForm";
@@ -14,9 +13,12 @@ import { Spinner } from "../../ui/spinner";
 
 export function Configurations() {
   const [selected, setSelected] = useState<ConnectionInfo>();
-  const [configurations, setConfigurations] = useLocalStorage<
-    ConnectionInfo[] | null
-  >(CONFIG_STORAGE_KEY);
+  const {
+    clearAllConfigurations,
+    deleteConfiguration,
+    configurations,
+    localSavedConfigs,
+  } = useConfig();
 
   const handleSelectItem = (value: ConnectionInfo) =>
     eventHandler(() => {
@@ -52,14 +54,10 @@ export function Configurations() {
 
   const handleDeleteItem = (name?: string) =>
     eventHandler(() => {
-      if (name) {
-        setConfigurations(
-          (prev) => prev?.filter((item) => item.name !== name) ?? []
-        );
-      }
+      deleteConfiguration(name);
     });
 
-  const handleAllDelete = eventHandler(() => setConfigurations(null));
+  const handleAllDelete = eventHandler(() => clearAllConfigurations());
 
   return (
     <div className="flex flex-col gap-6 justify-between h-full w-full overflow-hidden">
@@ -129,15 +127,19 @@ export function Configurations() {
         </div>
       )}
       <div className="flex items-center justify-between">
-        <Button
-          type="button"
-          variant="ghost"
-          title="Clear all configurations"
-          onClick={handleAllDelete}
-          onKeyDown={handleAllDelete}
-        >
-          Clear All
-        </Button>
+        {localSavedConfigs != null && localSavedConfigs.length !== 0 ? (
+          <Button
+            type="button"
+            variant="ghost"
+            title="Clear all configurations"
+            onClick={handleAllDelete}
+            onKeyDown={handleAllDelete}
+          >
+            Clear Local Configs
+          </Button>
+        ) : (
+          <span />
+        )}
         <Button
           type="button"
           disabled={!selected || mutation.isPending}

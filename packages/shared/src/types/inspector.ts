@@ -2,7 +2,7 @@ import type { LanguageModelV1 } from "ai";
 import type z from "zod";
 import type { transportSchema } from "../validations";
 
-type TransportConfig = { name?: string } & z.infer<typeof transportSchema>;
+type TransportConfig = { name: string } & z.infer<typeof transportSchema>;
 
 export type TunnelHandler = {
   generate: (options: { port: number }) => Promise<{

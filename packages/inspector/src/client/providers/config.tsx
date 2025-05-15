@@ -3,6 +3,7 @@ import {
   getMCPProxyAddress,
 } from "@/client/providers/connection/manager";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { useLocalStorage } from "@uidotdev/usehooks";
 import {
   type PropsWithChildren,
   createContext,
@@ -42,6 +43,9 @@ function useConfigManager(props: ConfigProvider) {
     url: URL;
     headers: HeadersInit;
   }>();
+  const [localSavedConfigs, setConfigurations] = useLocalStorage<
+    ConnectionInfo[] | null
+  >(CONFIG_STORAGE_KEY);
 
   const { data: version } = useQuery({
     queryKey: ["version"],
@@ -138,22 +142,48 @@ function useConfigManager(props: ConfigProvider) {
     return models.length > 0;
   }, [getAvailableModels]);
 
-  function getConfigurations() {
-    if (!config?.configurations) return undefined;
+  function getDeafultConfigurations() {
+    if (!config?.configurations) return [];
 
     if (Array.isArray(config.configurations)) {
-      // TODO: Add support for multiple configurations
-      return config.configurations[0];
+      return config.configurations;
     }
 
-    return config.configurations;
+    return [config.configurations];
   }
+
+  const deleteConfiguration = (name?: string) => {
+    if (name) {
+      setConfigurations(
+        (prev) => prev?.filter((item) => item.name !== name) ?? []
+      );
+    }
+  };
+
+  const addConfigurations = (values: ConnectionInfo | ConnectionInfo[]) => {
+    setConfigurations((prev) => {
+      const tmp = prev ? [...prev] : [];
+      const configurations = Array.isArray(values) ? values : [values];
+
+      for (const configuration of configurations) {
+        const index = tmp.findIndex((item) => item.name === configuration.name);
+        if (index !== -1) {
+          tmp[index] = configuration;
+        } else {
+          tmp.push(configuration);
+        }
+      }
+
+      return tmp;
+    });
+  };
+
+  const clearAllConfigurations = () => setConfigurations(null);
 
   return {
     version,
     connectionLink,
     setConnectionLink,
-    getConfigurations,
     isTunnelingEnabled,
     createLink,
     isModelsEnabled,
@@ -163,6 +193,14 @@ function useConfigManager(props: ConfigProvider) {
     setConnectionInfo: (info: ConnectionInfo) => {
       setConnectionInfo(info);
     },
+    configurations: [
+      ...getDeafultConfigurations(),
+      ...(localSavedConfigs ?? []),
+    ],
+    localSavedConfigs,
+    addConfigurations,
+    deleteConfiguration,
+    clearAllConfigurations,
   };
 }
 

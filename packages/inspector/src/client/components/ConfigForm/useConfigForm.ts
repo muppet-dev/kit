@@ -1,16 +1,12 @@
 import { generateName } from "@/client/lib/utils";
-import { CONFIG_STORAGE_KEY, useConfig } from "@/client/providers";
+import { useConfig } from "@/client/providers";
 import type { ConnectionInfo } from "@/client/providers/connection/manager";
 import { DocumentSubmitType, SUBMIT_BUTTON_KEY } from "@/client/validations";
 import { Transport } from "@muppet-kit/shared";
 import { useMutation } from "@tanstack/react-query";
-import { useLocalStorage } from "@uidotdev/usehooks";
 
 export function useConfigForm() {
-  const { setConnectionInfo } = useConfig();
-  const [_, setConfigurations] = useLocalStorage<ConnectionInfo[] | null>(
-    CONFIG_STORAGE_KEY
-  );
+  const { setConnectionInfo, addConfigurations } = useConfig();
 
   return useMutation({
     mutationFn: async (values: ConnectionInfo) => {
@@ -43,18 +39,7 @@ export function useConfigForm() {
       const submit_type_value = formData[SUBMIT_BUTTON_KEY];
 
       if (submit_type_value === DocumentSubmitType.SAVE_AND_CONNECT) {
-        setConfigurations((prev) => {
-          const tmp = prev ? [...prev] : [];
-          const index = tmp.findIndex((item) => item.name === values.name);
-
-          if (index !== -1) {
-            tmp[index] = values;
-          } else {
-            tmp.push(values);
-          }
-
-          return tmp;
-        });
+        addConfigurations(values);
       }
     },
   });
