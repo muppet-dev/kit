@@ -19,11 +19,14 @@ export function STDIOFields() {
   return (
     <>
       <div className="grid grid-cols-4 w-full items-center gap-2">
-        <Label htmlFor="command">Command</Label>
+        <Label htmlFor="command" required>
+          Command
+        </Label>
         <Input
           id="command"
           className="col-span-3"
           placeholder="Enter command"
+          required
           {...register("command")}
         />
       </div>

@@ -17,7 +17,9 @@ export function SSEFields() {
   return (
     <>
       <div className="grid grid-cols-4 w-full items-center gap-2">
-        <Label htmlFor="url">URL</Label>
+        <Label htmlFor="url" required>
+          URL
+        </Label>
         <URLField />
       </div>
       <Accordion type="single" collapsible>
