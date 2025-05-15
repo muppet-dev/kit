@@ -20,6 +20,7 @@ import PlaygroundPage from "./pages/Playground";
 import SettingsPage from "./pages/Settings";
 import TracingPage from "./pages/Tracing";
 import MCPScanPage from "./pages/MCPScan";
+import RootsPage from "./pages/Roots";
 
 export default function App() {
   const { connectionInfo, setConnectionInfo } = useConfig();
@@ -56,6 +57,7 @@ export default function App() {
                     <Route path="/mcp-scan" element={<MCPScanPage />} />
                     <Route path="/history" element={<HistoryPage />} />
                     <Route path="/tracing" element={<TracingPage />} />
+                    <Route path="/roots" element={<RootsPage />} />
                     <Route path="/settings" element={<SettingsPage />} />
                   </Route>
                   <Route path="*" element={<NotFound />} />

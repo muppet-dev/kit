@@ -11,7 +11,14 @@ import {
 } from "@/client/components/ui/sidebar";
 import { cn } from "@/client/lib/utils";
 import { useConfig, useConnection } from "@/client/providers";
-import { History, Logs, Settings2, Shield, SquareTerminal } from "lucide-react";
+import {
+  FolderTree,
+  History,
+  Logs,
+  Settings2,
+  Shield,
+  SquareTerminal,
+} from "lucide-react";
 import { Link } from "react-router";
 import { ThemeSelector } from "../ThemeSelector";
 import { Badge } from "../ui/badge";
@@ -45,6 +52,11 @@ const data = {
       name: "History",
       url: "/history",
       icon: History,
+    },
+    {
+      name: "Roots",
+      url: "/roots",
+      icon: FolderTree,
     },
   ],
   configuration: [
