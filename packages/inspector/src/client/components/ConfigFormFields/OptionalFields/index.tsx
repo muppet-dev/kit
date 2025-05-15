@@ -7,8 +7,8 @@ import { STDIOFields } from "./STDIO";
 
 export function OptionalFields() {
   const { control } = useFormContext<z.infer<typeof configTransportSchema>>();
-  const transportType = useWatch({ control, name: "transportType" });
+  const type = useWatch({ control, name: "type" });
 
-  if (transportType === Transport.STDIO) return <STDIOFields />;
+  if (type === Transport.STDIO) return <STDIOFields />;
   return <SSEFields />;
 }

@@ -2,7 +2,6 @@ import {
   remoteTransportSchema,
   stdioTransportSchema,
 } from "@muppet-kit/shared";
-import { nanoid } from "nanoid";
 import z from "zod";
 
 export const SUBMIT_BUTTON_KEY = "__submit_btn";
@@ -13,7 +12,11 @@ export enum DocumentSubmitType {
 }
 
 const extraPropValidation = z.object({
-  name: z.string().default(nanoid(6)).optional(),
+  name: z.string().optional(),
+  request_timeout: z.number().optional(),
+  progress: z.boolean().optional(),
+  total_timeout: z.number().optional(),
+  proxy: z.string().optional(),
   [SUBMIT_BUTTON_KEY]: z.nativeEnum(DocumentSubmitType).optional(),
 });
 

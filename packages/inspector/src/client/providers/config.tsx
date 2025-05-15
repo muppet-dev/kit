@@ -1,8 +1,6 @@
-import {
-  type ConnectionInfo,
-  getMCPProxyAddress,
-} from "@/client/providers/connection/manager";
+import type { ConnectionInfo } from "@/client/providers/connection/manager";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { useLocalStorage } from "@uidotdev/usehooks";
 import {
   type PropsWithChildren,
   createContext,
@@ -42,11 +40,29 @@ function useConfigManager(props: ConfigProvider) {
     url: URL;
     headers: HeadersInit;
   }>();
+  const [localSavedConfigs, setConfigurations] = useLocalStorage<
+    ConnectionInfo[] | null
+  >(CONFIG_STORAGE_KEY);
+
+  const { data: version } = useQuery({
+    queryKey: ["version"],
+    queryFn: () =>
+      fetch(`${proxyAddress}/version`).then((res) => {
+        if (!res.ok) {
+          throw new Error(
+            "Failed to fetch version data. Please check your network connection or try again later."
+          );
+        }
+
+        return res.text() as Promise<string>;
+      }),
+    enabled: !!connectionInfo,
+  });
 
   const { data: config } = useQuery({
     queryKey: ["base-config"],
     queryFn: () =>
-      fetch(`${getMCPProxyAddress()}/config`).then((res) => {
+      fetch(`${proxyAddress}/api/config`).then((res) => {
         if (!res.ok) {
           throw new Error("Failed to fetch config data. Please try again.");
         }
@@ -66,6 +82,13 @@ function useConfigManager(props: ConfigProvider) {
       }),
   });
 
+  const proxyAddress = useMemo(() => {
+    if (connectionInfo?.proxy && connectionInfo.proxy !== "")
+      return connectionInfo.proxy;
+
+    return `${window.location.protocol}//${window.location.hostname}:${window.location.port}`;
+  }, [connectionInfo]);
+
   const createLink = useMutation({
     mutationFn: async (linkType: "local" | "public") => {
       let tunnel: { id: string; url: URL; headers: HeadersInit };
@@ -75,23 +98,23 @@ function useConfigManager(props: ConfigProvider) {
       if (linkType === "local") {
         tunnel = { id: "local", ...connectionLink };
       } else {
-        const { id, url } = await fetch(`${getMCPProxyAddress()}/tunnel`).then(
+        const { id, url } = await fetch(`${proxyAddress}/api/tunnel`).then(
           (res) => {
             if (!res.ok) {
               throw new Error(
-                "Failed to generate a new tunneling URL. Please try again.",
+                "Failed to generate a new tunneling URL. Please try again."
               );
             }
 
             return res.json() as Promise<{ id: string; url: string }>;
-          },
+          }
         );
 
         const publicUrl = new URL(
           connectionLink.url.pathname +
             connectionLink.url.search +
             connectionLink.url.hash,
-          url,
+          url
         );
 
         tunnel = { id, headers: connectionLink.headers, url: publicUrl };
@@ -124,21 +147,48 @@ function useConfigManager(props: ConfigProvider) {
     return models.length > 0;
   }, [getAvailableModels]);
 
-  function getConfigurations() {
-    if (!config?.configurations) return undefined;
+  function getDeafultConfigurations() {
+    if (!config?.configurations) return [];
 
     if (Array.isArray(config.configurations)) {
-      // TODO: Add support for multiple configurations
-      return config.configurations[0];
+      return config.configurations;
     }
 
-    return config.configurations;
+    return [config.configurations];
   }
 
+  const deleteConfiguration = (name?: string) => {
+    if (name) {
+      setConfigurations(
+        (prev) => prev?.filter((item) => item.name !== name) ?? []
+      );
+    }
+  };
+
+  const addConfigurations = (values: ConnectionInfo | ConnectionInfo[]) => {
+    setConfigurations((prev) => {
+      const tmp = prev ? [...prev] : [];
+      const configurations = Array.isArray(values) ? values : [values];
+
+      for (const configuration of configurations) {
+        const index = tmp.findIndex((item) => item.name === configuration.name);
+        if (index !== -1) {
+          tmp[index] = configuration;
+        } else {
+          tmp.push(configuration);
+        }
+      }
+
+      return tmp;
+    });
+  };
+
+  const clearAllConfigurations = () => setConfigurations(null);
+
   return {
+    version,
     connectionLink,
     setConnectionLink,
-    getConfigurations,
     isTunnelingEnabled,
     createLink,
     isModelsEnabled,
@@ -148,6 +198,15 @@ function useConfigManager(props: ConfigProvider) {
     setConnectionInfo: (info: ConnectionInfo) => {
       setConnectionInfo(info);
     },
+    proxyAddress,
+    configurations: [
+      ...getDeafultConfigurations(),
+      ...(localSavedConfigs ?? []),
+    ],
+    localSavedConfigs,
+    addConfigurations,
+    deleteConfiguration,
+    clearAllConfigurations,
   };
 }
 

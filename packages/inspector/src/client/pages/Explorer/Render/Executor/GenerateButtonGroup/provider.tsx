@@ -1,5 +1,5 @@
 import type { MCPItemType } from "@/client/pages/Explorer/types";
-import { getMCPProxyAddress } from "@/client/providers/connection/manager";
+import { useConfig } from "@/client/providers";
 import { useMutation } from "@tanstack/react-query";
 import { type PropsWithChildren, createContext, useContext } from "react";
 import { useFormContext } from "react-hook-form";
@@ -21,12 +21,13 @@ export const GenerateProvider = (props: PropsWithChildren) => {
 
 function useGenerateManager() {
   const { reset } = useFormContext();
+  const { proxyAddress } = useConfig();
 
   return useMutation({
     mutationFn: async (
-      values: MCPItemType & { context?: string; modelId?: string },
+      values: MCPItemType & { context?: string; modelId?: string }
     ) =>
-      await fetch(`${getMCPProxyAddress()}/generate`, {
+      await fetch(`${proxyAddress}/api/generate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,11 +1,24 @@
 {
   "name": "@muppet-kit/inspector",
-  "version": "0.1.7",
+  "description": "MCP inspector for debugging and inspecting MCP servers.",
+  "version": "0.1.8",
   "license": "MIT",
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
   "type": "module",
   "bin": "./dist/cli.js",
   "files": [
     "dist"
+  ],
+  "keywords": [
+    "mcp",
+    "inspector",
+    "debugging",
+    "debugger",
+    "muppet",
+    "kit",
+    "tools",
+    "server"
   ],
   "scripts": {
     "dev": "vite",
@@ -14,8 +27,17 @@
     "build:cli": "node build.mjs",
     "build": "pnpm run build:client && pnpm run build:server && pnpm run build:cli"
   },
+  "homepage": "https://github.com/muppet-dev/kit",
   "publishConfig": {
     "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/muppet-dev/kit.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/muppet-dev/kit/issues"
   },
   "exports": {
     "import": {
@@ -35,7 +57,7 @@
     "@hono/standard-validator": "^0.1.2",
     "@hookform/error-message": "^2.0.1",
     "@hookform/resolvers": "^5.0.1",
-    "@modelcontextprotocol/sdk": "^1.11.0",
+    "@modelcontextprotocol/sdk": "^1.11.2",
     "@monaco-editor/react": "^4.7.0",
     "@radix-ui/react-accordion": "^1.2.4",
     "@radix-ui/react-alert-dialog": "^1.1.7",

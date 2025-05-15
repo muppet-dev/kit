@@ -1,4 +1,5 @@
-import { getMCPProxyAddress } from "@/client/providers/connection/manager";
+import { useConfig } from "@/client/providers";
+import type { ConnectionInfo } from "@/client/providers/connection/manager";
 import { AssistantRuntimeProvider } from "@assistant-ui/react";
 import { useChatRuntime } from "@assistant-ui/react-ai-sdk";
 import { useChats } from "../providers";
@@ -10,13 +11,16 @@ export type Chat = {
 };
 
 export function Chat(props: Chat) {
+  const { connectionInfo, proxyAddress } = useConfig();
   const { getChat } = useChats();
 
   const chat = getChat(props.chatId);
 
   const runtime = useChatRuntime({
-    api: `${getMCPProxyAddress()}/chat${
-      chat?.model ? `?modelId=${chat.model}` : ""
+    api: `${proxyAddress}/api/chat${
+      chat?.model
+        ? `?modelId=${chat.model}&${connectionInfoSerializer(connectionInfo)}`
+        : ""
     }`,
   });
 
@@ -32,4 +36,19 @@ export function Chat(props: Chat) {
       </div>
     </AssistantRuntimeProvider>
   );
+}
+
+function connectionInfoSerializer(connectionInfo?: ConnectionInfo): string {
+  const params = new URLSearchParams();
+
+  if (connectionInfo)
+    for (const [key, value] of Object.entries(connectionInfo)) {
+      if (key === "env") {
+        params.set(key, JSON.stringify(value));
+      } else {
+        params.set(key, String(value));
+      }
+    }
+
+  return params.toString();
 }

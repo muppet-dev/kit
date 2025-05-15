@@ -9,7 +9,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 export function ConnectStatus() {
   const { connectionStatus, disconnect, connect } = useConnection();
-  const { state } = useSidebar();
+  const { state, open } = useSidebar();
 
   const connectionTitle = getConnectionStatusTitle(connectionStatus);
 
@@ -17,22 +17,29 @@ export function ConnectStatus() {
   const handleDisconnect = eventHandler(() => disconnect());
 
   return (
-    <div className="py-2 pl-2 flex gap-2 w-full items-center text-sm h-8">
+    <div
+      className={cn(
+        "flex gap-2 w-full items-end text-sm h-8",
+        !open && "py-2 pl-2"
+      )}
+    >
       <Tooltip>
         <TooltipTrigger>
           <div
             className={cn(
               "rounded-full",
-              state !== "collapsed" ? "size-2 ml-1" : "size-2.5 ml-[3px]",
+              state !== "collapsed"
+                ? "size-2 ml-1 mb-1.5"
+                : "size-2.5 ml-[3px]",
               connectionStatus === ConnectionStatus.CONNECTED
                 ? "bg-green-500 dark:bg-green-300"
                 : connectionStatus === ConnectionStatus.ERROR ||
-                    connectionStatus ===
-                      ConnectionStatus.ERROR_CONNECTING_TO_PROXY
-                  ? "bg-red-500 dark:bg-red-300"
-                  : connectionStatus === ConnectionStatus.CONNECTING
-                    ? "bg-yellow-500 dark:bg-yellow-300"
-                    : "bg-gray-500 dark:bg-gray-300",
+                  connectionStatus ===
+                    ConnectionStatus.ERROR_CONNECTING_TO_PROXY
+                ? "bg-red-500 dark:bg-red-300"
+                : connectionStatus === ConnectionStatus.CONNECTING
+                ? "bg-yellow-500 dark:bg-yellow-300"
+                : "bg-gray-500 dark:bg-gray-300"
             )}
           />
         </TooltipTrigger>

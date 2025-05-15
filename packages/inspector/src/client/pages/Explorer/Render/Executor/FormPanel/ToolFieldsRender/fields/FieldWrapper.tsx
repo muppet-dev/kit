@@ -45,11 +45,8 @@ export function FieldWrapper({ children }: FieldWrapper) {
         {label && (
           <Label
             htmlFor={componentId}
-            className={cn(
-              required &&
-                "after:ml-0.5 after:text-red-500 after:content-['*'] after:dark:text-red-300",
-              "leading-snug capitalize",
-            )}
+            className="leading-snug capitalize"
+            required={required}
           >
             {label}
           </Label>

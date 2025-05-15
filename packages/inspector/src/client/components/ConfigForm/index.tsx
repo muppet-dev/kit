@@ -27,17 +27,20 @@ export function ConfigForm(props: ConfigForm) {
   const methods = useForm<z.output<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: props.data ?? {
-      transportType: Transport.STDIO,
+      request_timeout: 10000,
+      progress: true,
+      total_timeout: 60000,
+      type: Transport.STDIO,
       ...params,
     },
   });
 
-  const { handleSubmit, reset } = methods;
+  const { handleSubmit } = methods;
 
   return (
     <FormProvider {...methods}>
       <form
-        className="flex flex-col h-full gap-2 flex-1"
+        className="flex flex-col h-full gap-4 flex-1"
         onSubmit={handleSubmit(
           (values) => mutation.mutateAsync(values),
           console.error,

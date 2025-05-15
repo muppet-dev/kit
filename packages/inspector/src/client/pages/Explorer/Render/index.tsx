@@ -30,8 +30,8 @@ export function ExplorerRender() {
   }, [search, items]);
 
   return (
-    <div className="size-full grid grid-cols-1 lg:grid-cols-2 overflow-y-auto bg-muted/40">
-      <div className="overflow-y-auto flex flex-col gap-2 w-full">
+    <div className="size-full grid grid-cols-1 lg:grid-cols-5 overflow-y-auto bg-muted/40">
+      <div className="overflow-y-auto flex flex-col gap-2 w-full lg:col-span-2">
         <ToolsTabs />
         {(items?.length ?? 0) >= 5 && (
           <SearchField value={search} onValueChange={setSearch} />

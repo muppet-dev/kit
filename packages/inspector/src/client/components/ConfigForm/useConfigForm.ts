@@ -1,28 +1,25 @@
-import { CONFIG_STORAGE_KEY, useConfig } from "@/client/providers";
+import { generateName } from "@/client/lib/utils";
+import { useConfig } from "@/client/providers";
 import type { ConnectionInfo } from "@/client/providers/connection/manager";
 import { DocumentSubmitType, SUBMIT_BUTTON_KEY } from "@/client/validations";
 import { Transport } from "@muppet-kit/shared";
 import { useMutation } from "@tanstack/react-query";
-import { useLocalStorage } from "@uidotdev/usehooks";
-import { nanoid } from "nanoid";
 
 export function useConfigForm() {
-  const id = nanoid(6);
-  const { setConnectionInfo } = useConfig();
-  const [_, setConfigurations] = useLocalStorage<ConnectionInfo[] | null>(
-    CONFIG_STORAGE_KEY,
-  );
+  const { setConnectionInfo, addConfigurations } = useConfig();
 
   return useMutation({
     mutationFn: async (values: ConnectionInfo) => {
-      const data = {
+      const _values = {
         ...values,
+        name:
+          values.name && values.name.trim().length > 0
+            ? values.name
+            : generateName(),
         [SUBMIT_BUTTON_KEY]: undefined,
       };
 
-      const _values = data;
-
-      if (_values.transportType === Transport.STDIO && _values.env) {
+      if (_values.type === Transport.STDIO && _values.env) {
         // @ts-expect-error: converting data from array of object to string in order to store it in local storage
         _values.env =
           _values.env.length > 0
@@ -34,14 +31,15 @@ export function useConfigForm() {
             : undefined;
       }
 
-      setConnectionInfo(_values.id ? _values : { id, ..._values });
+      setConnectionInfo(_values);
+
+      return _values;
     },
-    onSuccess: (_, values) => {
-      const submit_type_value = values[SUBMIT_BUTTON_KEY];
+    onSuccess: (values, formData) => {
+      const submit_type_value = formData[SUBMIT_BUTTON_KEY];
 
       if (submit_type_value === DocumentSubmitType.SAVE_AND_CONNECT) {
-        const newItem = values.id ? values : { ...values, id };
-        setConfigurations((prev) => (prev ? [...prev, newItem] : [newItem]));
+        addConfigurations(values);
       }
     },
   });

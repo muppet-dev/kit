@@ -1,8 +1,8 @@
-import type { LanguageModelV1 } from "ai";
+import type { LanguageModel } from "ai";
 import type z from "zod";
 import type { transportSchema } from "../validations";
 
-type TransportConfig = { name?: string } & z.infer<typeof transportSchema>;
+type TransportConfig = { name: string } & z.infer<typeof transportSchema>;
 
 export type TunnelHandler = {
   generate: (options: { port: number }) => Promise<{
@@ -34,9 +34,9 @@ export type InspectorConfig = {
    * List all the models you wanna use in the inspector.
    */
   models?: Array<
-    | LanguageModelV1
+    | LanguageModel
     | {
-        model: LanguageModelV1;
+        model: LanguageModel;
         /**
          * This will mark the model to be used for generating sample data, scoring, and other tasks. If not specified, the first model will be used.
          */
@@ -47,7 +47,7 @@ export type InspectorConfig = {
 
 export type SanitizedInspectorConfig = Omit<InspectorConfig, "models"> & {
   models?: {
-    default: LanguageModelV1;
-    available: Record<string, LanguageModelV1>;
+    default: LanguageModel;
+    available: Record<string, LanguageModel>;
   };
 };
