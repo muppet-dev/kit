@@ -100,13 +100,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarItem items={data.panels} />
         <SidebarItem items={data.configuration} />
       </SidebarContent>
-      <SidebarFooter
-        className={cn(open && "flex-row items-center justify-between")}
-      >
-        <SidebarTrigger />
+      <SidebarFooter className={cn(open && "flex-row items-center")}>
         <GithubLinkButton />
         <DocumentationLinkButton />
         <ThemeSelector />
+        {open && <div className="flex-1" />}
+        <SidebarTrigger />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

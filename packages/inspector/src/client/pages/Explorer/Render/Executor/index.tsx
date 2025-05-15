@@ -54,13 +54,13 @@ export function Executor() {
     setSelectedTab((prev) =>
       activeTool.name === Tool.STATIC_RESOURCES && prev === RequestTab.JSON
         ? RequestTab.FORM
-        : prev,
+        : prev
     );
   }, [activeTool]);
 
   if (!selectedItem)
     return (
-      <div className="bg-background flex items-center justify-center size-full select-none text-muted-foreground">
+      <div className="bg-background flex items-center justify-center size-full select-none text-muted-foreground lg:col-span-3">
         <p className="text-sm">Select a {activeTool.label}</p>
       </div>
     );
@@ -72,7 +72,7 @@ export function Executor() {
           <Tabs
             value={selectedTab}
             onValueChange={(val) => setSelectedTab(val as RequestTab)}
-            className="lg:pl-4 overflow-y-auto flex flex-col w-full bg-background lg:border-l lg:pt-4 pt-2"
+            className="lg:pl-4 overflow-y-auto flex flex-col w-full bg-background lg:border-l lg:pt-4 pt-2 lg:col-span-3"
           >
             <div className="flex items-center justify-between gap-2 overflow-x-auto">
               <TabsList>
@@ -172,7 +172,7 @@ function TabsTriggerComponent({
       {...props}
       className={cn(
         "data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-2 xl:px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black",
-        className,
+        className
       )}
     >
       <p className="xl:flex hidden">{label}</p>

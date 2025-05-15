@@ -7,12 +7,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/client/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/client/components/ui/tooltip";
 import { eventHandler } from "@/client/lib/eventHandler";
 import { useThreadRuntime } from "@assistant-ui/react";
 import {
   ArrowLeft,
   ArrowRight,
   Ellipsis,
+  Info,
   Plus,
   RefreshCcw,
   ToggleLeft,
@@ -43,11 +49,8 @@ export function ModelHeader(props: { chatId: string }) {
     <div className="p-2 flex items-center gap-1 border-b border-zinc-300 dark:border-zinc-800 bg-background">
       <ModelSelect model={model} />
       <div className="flex-1" />
-      {model.sync && (
-        <div className="rounded-full select-none px-3.5 pt-0.5 pb-1 text-sm text-zinc-500 dark:text-zinc-400 bg-zinc-200/70 dark:bg-zinc-800/70 font-semibold mr-2">
-          Synced
-        </div>
-      )}
+      <ExperimentalBadge />
+      {model.sync && <SyncedBadge />}
       <Button
         title="Sync chat messages with other models"
         variant="ghost"
@@ -94,6 +97,28 @@ function ModelSelect(props: { model: ChatProps }) {
         }
       }}
     />
+  );
+}
+
+function ExperimentalBadge() {
+  return (
+    <Tooltip>
+      <TooltipTrigger>
+        <div className="px-1 pb-0.5 bg-yellow-500 dark:bg-yellow-300 text-white dark:text-black flex items-center gap-1">
+          <p className="text-sm">Experimental</p>
+          <Info className="size-[15px] mt-0.5" />
+        </div>
+      </TooltipTrigger>
+      <TooltipContent>This is an experimental feature</TooltipContent>
+    </Tooltip>
+  );
+}
+
+function SyncedBadge() {
+  return (
+    <div className="rounded-full select-none px-3.5 pt-0.5 pb-1 text-sm text-zinc-500 dark:text-zinc-400 bg-zinc-200/70 dark:bg-zinc-800/70 font-semibold mr-2">
+      Synced
+    </div>
   );
 }
 
