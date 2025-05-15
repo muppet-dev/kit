@@ -54,7 +54,10 @@ export function MCPItem(props: MCPItem) {
       </CardHeader>
       {props.description && (
         <CardContent className="px-4">
-          <CardDescription className="line-clamp-1 leading-tight tracking-tight">
+          <CardDescription
+            title={props.description}
+            className="line-clamp-2 leading-tight tracking-tight"
+          >
             {props.description}
           </CardDescription>
         </CardContent>
