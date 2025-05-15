@@ -60,7 +60,7 @@ export function ReponsePanel() {
         {isSubmitting ? (
           <Skeleton className="size-full" />
         ) : (
-          <div className="overflow-y-auto flex-1">
+          <div className="overflow-y-auto flex-1 space-y-2">
             {dataFormat === "raw" && (
               <CodeHighlighter
                 content={JSON.stringify(data?.content, null, 2)}
