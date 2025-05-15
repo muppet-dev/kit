@@ -1,17 +1,24 @@
 import { CodeHighlighter } from "@/client/components/Hightlighter";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+} from "@/client/components/ui/select";
 import { Skeleton } from "@/client/components/ui/skeleton";
 import { numberFormatter } from "@/client/lib/utils";
+import { useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { useCustomForm } from "./provider";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/client/components/ui/tabs";
 import { JSONRender } from "./JSONRender";
+import { useCustomForm } from "./provider";
+
+enum Format {
+  JSON = "json",
+  RAW = "raw",
+}
 
 export function ReponsePanel() {
+  const [dataFormat, setDataFormat] = useState<Format>(Format.JSON);
   const {
     formState: { isSubmitting, isSubmitSuccessful },
   } = useFormContext();
@@ -21,29 +28,22 @@ export function ReponsePanel() {
 
   if (isSubmitting || isSubmitSuccessful)
     return (
-      <Tabs
-        className="h-full flex flex-col gap-2 overflow-y-auto pt-2 border-t"
-        defaultValue="json"
-      >
+      <div className="h-full flex flex-col gap-2 overflow-y-auto pt-2 border-t">
         <div className="flex items-center gap-2">
           <h2 className="text-sm font-semibold">Response</h2>
-          <TabsList className="h-max">
-            <TabsTrigger
-              value="json"
-              disabled={isSubmitting}
-              className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-0.5 text-sm px-2 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black"
-            >
-              JSON
-            </TabsTrigger>
-            <TabsTrigger
-              value="raw"
-              disabled={isSubmitting}
-              className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-0.5 text-sm px-2 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black"
-            >
-              Raw
-            </TabsTrigger>
-          </TabsList>
           <div className="flex-1" />
+          <Select
+            onValueChange={(val) => setDataFormat(val as Format)}
+            disabled={isSubmitting}
+          >
+            <SelectTrigger size="sm">
+              {dataFormat === Format.JSON ? "JSON" : "Raw"}
+            </SelectTrigger>
+            <SelectContent align="end">
+              <SelectItem value={Format.JSON}>JSON</SelectItem>
+              <SelectItem value={Format.RAW}>Raw</SelectItem>
+            </SelectContent>
+          </Select>
           <span className="text-xs text-green-600 font-medium dark:text-green-400">
             {isSubmitting ? (
               <Skeleton className="w-14 h-5" />
@@ -60,17 +60,15 @@ export function ReponsePanel() {
         {isSubmitting ? (
           <Skeleton className="size-full" />
         ) : (
-          <>
-            <TabsContent value="raw">
+          <div className="overflow-y-auto flex-1">
+            {dataFormat === "raw" && (
               <CodeHighlighter
                 content={JSON.stringify(data?.content, null, 2)}
               />
-            </TabsContent>
-            <TabsContent value="json">
-              <JSONRender content={data?.content} />
-            </TabsContent>
-          </>
+            )}
+            {dataFormat === "json" && <JSONRender content={data?.content} />}
+          </div>
         )}
-      </Tabs>
+      </div>
     );
 }

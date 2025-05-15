@@ -1,22 +1,23 @@
 import { CodeHighlighter } from "@/client/components/Hightlighter";
 
 export type JSONRender = {
-  content: {
+  content?: {
     content: { type: "text"; text: string }[];
   };
 };
 
 export function JSONRender(props: JSONRender) {
-  return (
-    <>
-      {props.content.content.map((item, index) => {
-        if (item.type === "text") {
-          return <TextRender key={`item-${index}`} content={item.text} />;
-        }
-        return <p key={`item-${index}`}>Unable to parse value</p>;
-      })}
-    </>
-  );
+  if (props.content)
+    return (
+      <>
+        {props.content.content.map((item, index) => {
+          if (item.type === "text") {
+            return <TextRender key={`item-${index + 1}`} content={item.text} />;
+          }
+          return <p key={`item-${index + 1}`}>Unable to parse value</p>;
+        })}
+      </>
+    );
 }
 
 function TextRender({ content }: { content: string }) {
