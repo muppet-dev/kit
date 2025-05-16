@@ -15,7 +15,9 @@ export function ConfigurationsDialog() {
   return (
     <Dialog open={true}>
       <DialogOverlay>
-        <div className="absolute bottom-2 right-2">{version}</div>
+        <div className="absolute bottom-2 right-2">
+          <p>{version}</p>
+        </div>
       </DialogOverlay>
       <DialogContent isClosable={false} className="h-[580px] flex flex-col">
         <DialogHeader className="gap-0 h-max">

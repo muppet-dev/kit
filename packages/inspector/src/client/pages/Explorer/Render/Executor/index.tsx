@@ -139,7 +139,7 @@ export function Executor() {
                     <JSONPanel />
                   </div>
                 )}
-                <ReponsePanel isExpend={isExpend} setExpend={setExpend} />
+                <ReponsePanel isExpend={isExpend} onExpandChange={setExpend} />
               </div>
             )}
             <TabsContent

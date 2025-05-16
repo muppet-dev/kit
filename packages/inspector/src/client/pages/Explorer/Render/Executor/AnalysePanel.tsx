@@ -47,7 +47,9 @@ export function AnalysePanel() {
           {isPending ? (
             <Skeleton className="h-12 w-8" />
           ) : (
-            <p className="text-5xl font-semibold">{data ? data.score : "-"}</p>
+            <p className="text-5xl">
+              {data ? <span className="font-semibold">{data.score}</span> : "-"}
+            </p>
           )}
           {isPending ? (
             <Skeleton className="h-7 w-16" />
@@ -94,23 +96,25 @@ export function AnalysePanel() {
           <p className="text-end">10</p>
         </div>
       </div>
-      {!isPending && (!data || data.recommendations.length === 0) ? (
-        <div className="flex items-center justify-center w-full h-full text-muted-foreground">
-          No recommendations available
-        </div>
-      ) : (
-        <div className="flex flex-col gap-[inherit] h-full overflow-y-auto">
-          <p className="text-sm text-muted-foreground">Recommendations</p>
-          {isPending
-            ? Array.from({ length: 4 }).map((_, i) => (
-                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-                <Skeleton key={i} className="h-[54px] w-full mb-2" />
-              ))
-            : data?.recommendations.map((item, index) => (
-                <ScoreItem key={`${index + 1}-${item.category}`} {...item} />
-              ))}
-        </div>
-      )}
+      <div className="flex flex-col gap-[inherit] h-full overflow-y-auto">
+        <p className="text-sm text-muted-foreground">Recommendations</p>
+        {isPending ? (
+          Array.from({ length: 4 }).map((_, i) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+            <Skeleton key={i} className="h-[54px] w-full mb-2" />
+          ))
+        ) : !data || data.recommendations.length === 0 ? (
+          <div className="border h-full w-full flex items-center justify-center select-none">
+            <p className="text-sm text-muted-foreground">
+              No recommendation available
+            </p>
+          </div>
+        ) : (
+          data.recommendations.map((item, index) => (
+            <ScoreItem key={`${index + 1}-${item.category}`} {...item} />
+          ))
+        )}
+      </div>
     </div>
   );
 }

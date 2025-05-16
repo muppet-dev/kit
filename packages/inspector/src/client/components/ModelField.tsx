@@ -107,7 +107,7 @@ export function ModelField({ onChange, value, className }: ModelField) {
                 return (
                   <CommandItem
                     key={item.id}
-                    value={value}
+                    value={item.id}
                     onSelect={() => {
                       onChange(item.id);
                       setIsOpen(false);

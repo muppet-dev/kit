@@ -23,10 +23,10 @@ export function PageRender() {
       <div className="mx-auto max-w-2xl lg:max-w-7xl w-full flex gap-4 lg:gap-6">
         <div className="bg-muted/50 border p-4 lg:p-6 size-full flex flex-col gap-2 lg:gap-3">
           {mutation.isPending ? (
-            Array.from({ length: 3 }).map((_, index) => (
+            Array.from({ length: 5 }).map((_, index) => (
               <Skeleton
                 key={`vulnerability-${index + 1}`}
-                className="w-full h-[161px]"
+                className="w-full h-[120px]"
               />
             ))
           ) : mutation.data ? (
@@ -60,9 +60,10 @@ export function PageRender() {
               </div>
             )
           ) : (
-            <div className="flex flex-col items-center justify-center w-full gap-2 lg:gap-4 h-[525px]">
-              <h2 className="text-balance font-medium tracking-tight text-2xl max-w-2xl text-center text-muted-foreground">
-                Check for potential security vulnerabilities
+            <div className="flex flex-col items-center justify-center w-full gap-3 lg:gap-5 h-[525px]">
+              <h2 className="text-balance font-medium tracking-tight text-2xl max-w-lg text-center text-muted-foreground">
+                Check for Potential
+                <br /> Security Vulnerabilities
               </h2>
               <ScanButton className="text-base [&>svg]:size-4 [&>svg]:min-h-4 [&>svg]:min-w-4" />
             </div>
