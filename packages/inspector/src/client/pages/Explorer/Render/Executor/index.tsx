@@ -28,6 +28,7 @@ import { AnalyseProvider } from "./AnalyseButtonGroup/provider";
 import { AnalysePanel } from "./AnalysePanel";
 import { FormPanel } from "./FormPanel";
 import { FormResetButton } from "./FormResetButton";
+import { FormWrapper } from "./FormWrapper";
 import { GenerateButtonGroup } from "./GenerateButtonGroup";
 import { JSONPanel } from "./JSONPanel";
 import { ReponsePanel } from "./Reponse";
@@ -40,6 +41,7 @@ export function Executor() {
   const { isModelsEnabled } = useConfig();
   const { activeTool } = useTool();
   const { selectedItem } = useMCPItem();
+  const [isExpend, setExpend] = useState(false);
 
   const methods = useForm();
 
@@ -72,7 +74,7 @@ export function Executor() {
           <Tabs
             value={selectedTab}
             onValueChange={(val) => setSelectedTab(val as RequestTab)}
-            className="lg:pl-4 overflow-y-auto flex flex-col w-full bg-background lg:border-l lg:pt-4 pt-2 lg:col-span-3"
+            className="lg:pl-4 overflow-y-auto flex flex-col w-full bg-background lg:border-l lg:py-4 py-2 lg:col-span-3"
           >
             <div className="flex items-center justify-between gap-2 overflow-x-auto">
               <TabsList>
@@ -119,16 +121,26 @@ export function Executor() {
               selectedTab === RequestTab.JSON) && (
               <div className="flex-1 h-full flex flex-col overflow-y-auto">
                 {selectedTab === RequestTab.FORM && (
-                  <div className="flex-1 min-h-1/2 h-full flex overflow-y-auto">
+                  <div
+                    className={cn(
+                      "flex-1 flex overflow-y-auto",
+                      !isExpend && "min-h-1/2 h-full"
+                    )}
+                  >
                     <FormPanel />
                   </div>
                 )}
                 {selectedTab === RequestTab.JSON && (
-                  <div className="flex-1 min-h-1/2 h-full flex flex-col gap-1.5 overflow-y-auto">
+                  <FormWrapper
+                    className={cn(
+                      "flex-1 flex flex-col gap-1.5 overflow-y-auto",
+                      !isExpend && "min-h-1/2 h-full"
+                    )}
+                  >
                     <JSONPanel />
-                  </div>
+                  </FormWrapper>
                 )}
-                <ReponsePanel />
+                <ReponsePanel isExpend={isExpend} onExpandChange={setExpend} />
               </div>
             )}
             <TabsContent

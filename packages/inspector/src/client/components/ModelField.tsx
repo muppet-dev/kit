@@ -75,7 +75,7 @@ export function ModelField({ onChange, value, className }: ModelField) {
           variant="outline"
           className={cn(
             "w-[300px] justify-start rounded-sm data-[state=closed]:hover:[&>svg]:opacity-100 data-[state=open]:[&>svg]:opacity-100 transition-all ease-in-out [&>svg]:transition-all [&>svg]:ease-in-out",
-            className,
+            className
           )}
           ref={triggerRef}
         >
@@ -107,9 +107,9 @@ export function ModelField({ onChange, value, className }: ModelField) {
                 return (
                   <CommandItem
                     key={item.id}
-                    value={value}
-                    onSelect={(select) => {
-                      onChange(select);
+                    value={item.id}
+                    onSelect={() => {
+                      onChange(item.id);
                       setIsOpen(false);
                     }}
                   >
@@ -121,7 +121,7 @@ export function ModelField({ onChange, value, className }: ModelField) {
                     <Check
                       className={cn(
                         "size-4",
-                        item.id === value ? "opacity-100" : "opacity-0",
+                        item.id === value ? "opacity-100" : "opacity-0"
                       )}
                     />
                   </CommandItem>

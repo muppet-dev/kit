@@ -1,3 +1,4 @@
+import { Skeleton } from "@/client/components/ui/skeleton";
 import { cn } from "@/client/lib/utils";
 import { useTool } from "../../providers";
 import {
@@ -31,17 +32,10 @@ const scoreBgColor = {
 };
 
 export function AnalysePanel() {
-  const { data } = useAnalyse();
+  const { data, isPending } = useAnalyse();
   const { activeTool } = useTool();
 
-  if (!data)
-    return (
-      <div className="flex items-center justify-center w-full h-full text-muted-foreground">
-        No analysis data available
-      </div>
-    );
-
-  const scoreRemark = getScoreRemark(data.score);
+  const scoreRemark = data ? getScoreRemark(data.score) : undefined;
 
   return (
     <div className="w-full h-full overflow-y-auto flex flex-col gap-2">
@@ -50,16 +44,26 @@ export function AnalysePanel() {
           {activeTool.label} Score
         </p>
         <div className="mt-1 px-2 flex w-full items-center justify-between">
-          <p className="text-5xl font-semibold">{data.score}</p>
-          <p
-            className={cn(
-              "text-lg font-semibold",
-              // @ts-expect-error: it does not give undefined value
-              scoreTextColor[scoreRemark],
-            )}
-          >
-            {scoreRemark}
-          </p>
+          {isPending ? (
+            <Skeleton className="h-12 w-8" />
+          ) : (
+            <p className="text-5xl">
+              {data ? <span className="font-semibold">{data.score}</span> : "-"}
+            </p>
+          )}
+          {isPending ? (
+            <Skeleton className="h-7 w-16" />
+          ) : (
+            <p
+              className={cn(
+                "text-lg font-semibold",
+                // @ts-expect-error: it does not give undefined value
+                scoreTextColor[scoreRemark]
+              )}
+            >
+              {scoreRemark}
+            </p>
+          )}
         </div>
         <div className="grid grid-cols-5 w-full">
           {Object.entries(Score).map(([key, value]) => (
@@ -67,7 +71,7 @@ export function AnalysePanel() {
               <p
                 className={cn(
                   "text-xs text-center select-none opacity-0 group-hover:opacity-100 transition-all ease-in-out duration-150",
-                  scoreTextColor[value],
+                  scoreTextColor[value]
                 )}
               >
                 {value}
@@ -77,7 +81,7 @@ export function AnalysePanel() {
                   scoreBgColor[value],
                   scoreRemark === value
                     ? "h-4"
-                    : "h-2 group-hover:h-4 transition-all ease-in-out",
+                    : "h-2 group-hover:h-4 transition-all ease-in-out"
                 )}
               />
             </div>
@@ -92,14 +96,25 @@ export function AnalysePanel() {
           <p className="text-end">10</p>
         </div>
       </div>
-      {data.recommendations.length !== 0 && (
-        <div className="flex flex-col gap-[inherit]">
-          <p className="text-sm text-muted-foreground">Recommendations</p>
-          {data.recommendations.map((item, index) => (
+      <div className="flex flex-col gap-[inherit] h-full overflow-y-auto">
+        <p className="text-sm text-muted-foreground">Recommendations</p>
+        {isPending ? (
+          Array.from({ length: 4 }).map((_, i) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+            <Skeleton key={i} className="h-[54px] w-full mb-2" />
+          ))
+        ) : !data || data.recommendations.length === 0 ? (
+          <div className="border h-full w-full flex items-center justify-center select-none">
+            <p className="text-sm text-muted-foreground">
+              No recommendation available
+            </p>
+          </div>
+        ) : (
+          data.recommendations.map((item, index) => (
             <ScoreItem key={`${index + 1}-${item.category}`} {...item} />
-          ))}
-        </div>
-      )}
+          ))
+        )}
+      </div>
     </div>
   );
 }
@@ -115,8 +130,8 @@ function ScoreItem(props: AnalyseDataType["recommendations"][0]) {
             props.severity === AnalyseSeverity.LOW
               ? "text-blue-500 dark:text-blue-300 bg-blue-200/40 dark:bg-blue-300/10"
               : props.severity === AnalyseSeverity.MEDIUM
-                ? "text-yellow-500 dark:text-yellow-300 bg-yellow-200/40 dark:bg-yellow-300/10"
-                : "text-red-500 dark:text-red-300 bg-red-200/40 dark:bg-red-300/10",
+              ? "text-yellow-500 dark:text-yellow-300 bg-yellow-200/40 dark:bg-yellow-300/10"
+              : "text-red-500 dark:text-red-300 bg-red-200/40 dark:bg-red-300/10"
           )}
         >
           {props.severity}

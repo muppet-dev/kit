@@ -1,16 +1,38 @@
 import { DuckField } from "@/client/components/DuckForm";
 import { Blueprint, DuckForm } from "@/client/providers";
 import type { JSONSchema7 } from "json-schema";
+import { useEffect, useMemo } from "react";
+import { useFormContext } from "react-hook-form";
 import type { ToolItemType } from "../../../../types";
 import { quackFields } from "./fields";
 import { FieldWrapper } from "./fields/FieldWrapper";
 
 export function ToolFieldsRender(props: ToolItemType) {
+  const { reset } = useFormContext();
   if (!props.schema) return <></>;
 
-  const inputSchema = props.inputSchema as any;
+  const { schema, defaultValue } = useMemo(() => {
+    const inputSchema = props.inputSchema as any;
+    const schema = transformSchema(props.schema, inputSchema?.required);
 
-  const schema = transformSchema(props.schema, inputSchema?.required);
+    const defaultValue = getDefaultValues(props.schema as Record<string, any>);
+
+    return {
+      schema,
+      defaultValue,
+    };
+  }, [props.schema, props.inputSchema]);
+
+  useEffect(() => {
+    if (defaultValue) reset(defaultValue);
+  }, [defaultValue, reset]);
+
+  if (!schema || Object.keys(schema).length === 0)
+    return (
+      <div className="size-full flex items-center justify-center text-muted-foreground select-none text-sm">
+        No fields to display
+      </div>
+    );
 
   return (
     <DuckForm
@@ -18,8 +40,9 @@ export function ToolFieldsRender(props: ToolItemType) {
       generateId={(_, props) => (props.id ? String(props.id) : undefined)}
     >
       <Blueprint wrapper={FieldWrapper} schema={schema}>
-        {schema &&
-          Object.keys(schema).map((key) => <DuckField key={key} id={key} />)}
+        {Object.keys(schema).map((key) => (
+          <DuckField key={key} id={key} />
+        ))}
       </Blueprint>
     </DuckForm>
   );
@@ -70,4 +93,37 @@ function transformSchema(
     },
     {}
   );
+}
+
+function getDefaultValues(schema: Record<string, any>) {
+  const defaults: Record<string, any> = {};
+
+  for (const [key, value] of Object.entries(schema ?? {})) {
+    if (value && typeof value === "object") {
+      if ("default" in value) defaults[key] = value.default;
+
+      if (value.type === "object" && value.properties) {
+        const nestedDefaults = getDefaultValues(value.properties);
+        if (nestedDefaults !== undefined) {
+          defaults[key] = {
+            ...value.default,
+            ...nestedDefaults,
+          };
+        }
+      }
+
+      if (value.type === "array" && value.items) {
+        if ("default" in value.items) defaults[key] = [value.items.default];
+
+        if (value.items.type === "object" && value.items.properties) {
+          const nestedDefaults = getDefaultValues(value.items.properties);
+          if (nestedDefaults !== undefined) {
+            defaults[key] = [nestedDefaults];
+          }
+        }
+      }
+    }
+  }
+
+  return Object.keys(defaults).length > 0 ? defaults : undefined;
 }
