@@ -56,7 +56,6 @@ function useConfigManager(props: ConfigProvider) {
 
         return res.text() as Promise<string>;
       }),
-    enabled: !!connectionInfo,
   });
 
   const { data: config } = useQuery({
