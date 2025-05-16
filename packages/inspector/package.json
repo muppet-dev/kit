@@ -1,7 +1,7 @@
 {
   "name": "@muppet-kit/inspector",
   "description": "MCP inspector for debugging and inspecting MCP servers.",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "license": "MIT",
   "types": "./dist/index.d.ts",
   "main": "./dist/index.js",
