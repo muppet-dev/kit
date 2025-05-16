@@ -2,7 +2,7 @@ import { CodeHighlighter } from "@/client/components/Hightlighter";
 
 export type JSONRender = {
   content?: {
-    content: { type: "text"; text: string }[];
+    contents: { type: "text"; text: string }[];
   };
 };
 
@@ -10,8 +10,8 @@ export function JSONRender(props: JSONRender) {
   if (props.content)
     return (
       <>
-        {props.content.content.map((item, index) => {
-          if (item.type === "text") {
+        {props.content.contents.map((item, index) => {
+          if ("text" in item) {
             return <TextRender key={`item-${index + 1}`} content={item.text} />;
           }
           return <p key={`item-${index + 1}`}>Unable to parse value</p>;

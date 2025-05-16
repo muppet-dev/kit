@@ -4,6 +4,7 @@ import { Check, Copy } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { useCopyToClipboard } from "@uidotdev/usehooks";
 
 export type CopyButton = {
   data?: string;
@@ -20,24 +21,9 @@ export function CopyButton({
   tooltipSide,
   disabled,
 }: CopyButton) {
-  const [isCopied, setIsCopied] = useState(false);
+  const [isCopied, copyToClipboard] = useCopyToClipboard();
 
-  useEffect(() => {
-    if (!isCopied) return;
-
-    const timeoutId = setTimeout(() => {
-      setIsCopied(false);
-    }, 1500);
-
-    return () => clearTimeout(timeoutId);
-  }, [isCopied]);
-
-  const handleCopyData = eventHandler(() => {
-    if (data) {
-      navigator.clipboard.writeText(data);
-      setIsCopied(true);
-    }
-  });
+  const handleCopyToClipboard = eventHandler(() => copyToClipboard(data ?? ""));
 
   const Icon = isCopied ? Check : Copy;
 
@@ -48,13 +34,13 @@ export function CopyButton({
       variant="ghost"
       disabled={!data || disabled}
       className={cn("size-max has-[>svg]:px-1.5 py-1.5", className)}
-      onClick={handleCopyData}
-      onKeyDown={handleCopyData}
+      onClick={handleCopyToClipboard}
+      onKeyDown={handleCopyToClipboard}
     >
       <Icon
         className={cn(
           "size-4 stroke-2",
-          isCopied && "stroke-green-500 dark:stroke-green-300"
+          isCopied && "stroke-green-500 dark:stroke-green-300",
         )}
       />
     </Button>
@@ -66,7 +52,7 @@ export function CopyButton({
     <Tooltip>
       <TooltipTrigger asChild>{button}</TooltipTrigger>
       <TooltipContent hidden={!data} side={tooltipSide}>
-        {isCopied ? "Copied" : tooltipContent ?? "Copy Code"}
+        {isCopied ? "Copied" : (tooltipContent ?? "Copy Code")}
       </TooltipContent>
     </Tooltip>
   );

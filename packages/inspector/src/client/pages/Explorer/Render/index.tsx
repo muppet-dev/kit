@@ -25,7 +25,9 @@ export function ExplorerRender() {
 
     return fuse.search(search).map(({ item, matches }) => ({
       ...item,
-      matches: matches?.flatMap((match) => match.indices),
+      matches: matches
+        ?.flatMap((match) => (match.key === "name" ? match.indices : undefined))
+        .filter(Boolean),
     }));
   }, [search, items]);
 

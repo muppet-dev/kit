@@ -110,7 +110,7 @@ router.post(
   async (c) => {
     const { name, description, schema, context } = c.req.valid("json");
 
-    let prompt = `Generate sample data for the tool "${name}" with the description "${description}". The input schema is ${JSON.stringify(
+    let prompt = `Generate sample data for the tool "${name}"${description ? ' with the description "${description}"' : ""}. The input schema is ${JSON.stringify(
       schema,
     )}. The sample data should be a JSON object that matches the input schema. This is a MCP (Model Context Protocol) tool.`;
 
@@ -147,7 +147,7 @@ router.post(
   async (c) => {
     const { name, description, schema, context } = c.req.valid("json");
 
-    let prompt = `Generate a score and recommendations for the MCP (Model Context Protocol) tool "${name}" with the description "${description}". The input schema is ${JSON.stringify(
+    let prompt = `Generate a score and recommendations for the MCP (Model Context Protocol) tool "${name}"${description ? ' with the description "${description}"' : ""}. The input schema is ${JSON.stringify(
       schema,
     )}. The score should be between 0 and 10, with 10 being the best. The recommendations should include a category, description, and severity (low, medium, high). The output should be a JSON object that includes the score and an array of recommendations. The recommendations should be actionable and specific to the tool's description and schema.`;
 
