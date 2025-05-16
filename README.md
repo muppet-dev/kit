@@ -28,10 +28,14 @@ You can configure the inspector by creating a `muppet.config.js`/`muppet.config.
 
 ```ts
 import { defineInspectorConfig } from "muppet-kit";
+import { ngrok } from "muppet-kit/tunnel";
+import { openai } from "@ai-sdk/openai";
 
 export default defineInspectorConfig({
   // ...
-  // The inspector will automatically load the config from the file
+  models: [openai("gpt-4.1-nano")],
+  // You can either pass the API key here or have it in .env as NGROK_API_KEY
+  tunneling: ngrok(),
 });
 ```
 
