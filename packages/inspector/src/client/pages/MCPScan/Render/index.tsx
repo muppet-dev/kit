@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useMCPScan } from "../providers";
 import { Skeleton } from "@/client/components/ui/skeleton";
-import { Shield, ShieldAlert, ShieldCheck } from "lucide-react";
+import { ShieldAlert, ShieldCheck } from "lucide-react";
 import { ScanButton } from "../ScanButton";
 import { StatusPanel } from "./StatusPanel";
 import { VulnerabilityItem } from "./VulnerabilityItem";
@@ -52,20 +52,19 @@ export function PageRender() {
                 )}
               </>
             ) : (
-              <div className="flex flex-col items-center justify-center h-[500px] gap-4 lg:gap-6">
+              <div className="flex flex-col items-center justify-center w-full gap-2 lg:gap-4 h-[525px]">
                 <ShieldCheck className="size-32 text-green-500 dark:text-green-300" />
-                <h2 className="text-2xl font-semibold mb-2 lg:mb-3 max-w-2xl text-center">
+                <h2 className="text-balance font-medium tracking-tight text-2xl max-w-2xl text-center text-muted-foreground">
                   No Vulnerabilities Detected
                 </h2>
               </div>
             )
           ) : (
-            <div className="flex flex-col items-center w-full gap-3 lg:gap-5">
-              <Shield className="size-32" />
-              <h2 className="text-balance text-4xl font-semibold tracking-tight sm:text-5xl max-w-2xl mx-auto text-center">
+            <div className="flex flex-col items-center justify-center w-full gap-2 lg:gap-4 h-[525px]">
+              <h2 className="text-balance font-medium tracking-tight text-2xl max-w-2xl text-center text-muted-foreground">
                 Check for potential security vulnerabilities
               </h2>
-              <ScanButton className="text-lg [&>svg]:size-5 [&>svg]:min-h-5 [&>svg]:min-w-5 py-2 has-[>svg]:px-4 mt-2" />
+              <ScanButton className="text-base [&>svg]:size-4 [&>svg]:min-h-4 [&>svg]:min-w-4" />
             </div>
           )}
         </div>
