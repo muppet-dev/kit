@@ -7,7 +7,7 @@ export default function ExplorerPage() {
     <SidebarInset>
       <ToolProvider>
         <MCPItemProvider>
-          <div className="size-full p-4 pt-0">
+          <div className="size-full px-4">
             <ExplorerRender />
           </div>
         </MCPItemProvider>

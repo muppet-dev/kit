@@ -72,7 +72,7 @@ export function Executor() {
           <Tabs
             value={selectedTab}
             onValueChange={(val) => setSelectedTab(val as RequestTab)}
-            className="lg:pl-4 overflow-y-auto flex flex-col w-full bg-background lg:border-l lg:pt-4 pt-2 lg:col-span-3"
+            className="lg:pl-4 overflow-y-auto flex flex-col w-full bg-background lg:border-l lg:py-4 py-2 lg:col-span-3"
           >
             <div className="flex items-center justify-between gap-2 overflow-x-auto">
               <TabsList>
