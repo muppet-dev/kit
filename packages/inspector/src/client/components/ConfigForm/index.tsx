@@ -43,7 +43,7 @@ export function ConfigForm(props: ConfigForm) {
         className="flex flex-col h-full gap-4 flex-1"
         onSubmit={handleSubmit(
           (values) => mutation.mutateAsync(values),
-          console.error,
+          console.error
         )}
       >
         {props.children}

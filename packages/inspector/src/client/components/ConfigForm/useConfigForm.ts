@@ -25,8 +25,8 @@ export function useConfigForm() {
           _values.env.length > 0
             ? JSON.stringify(
                 Object.fromEntries(
-                  _values.env.map((item) => [item.key, item.value]),
-                ),
+                  _values.env.map((item) => [item.key, item.value])
+                )
               )
             : undefined;
       }
