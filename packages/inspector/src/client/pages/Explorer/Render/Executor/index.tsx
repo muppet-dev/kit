@@ -40,6 +40,7 @@ export function Executor() {
   const { isModelsEnabled } = useConfig();
   const { activeTool } = useTool();
   const { selectedItem } = useMCPItem();
+  const [isExpend, setExpend] = useState(false);
 
   const methods = useForm();
 
@@ -119,16 +120,26 @@ export function Executor() {
               selectedTab === RequestTab.JSON) && (
               <div className="flex-1 h-full flex flex-col overflow-y-auto">
                 {selectedTab === RequestTab.FORM && (
-                  <div className="flex-1 min-h-1/2 h-full flex overflow-y-auto">
+                  <div
+                    className={cn(
+                      "flex-1 flex overflow-y-auto",
+                      !isExpend && "min-h-1/2 h-full"
+                    )}
+                  >
                     <FormPanel />
                   </div>
                 )}
                 {selectedTab === RequestTab.JSON && (
-                  <div className="flex-1 min-h-1/2 h-full flex flex-col gap-1.5 overflow-y-auto">
+                  <div
+                    className={cn(
+                      "flex-1 flex flex-col gap-1.5 overflow-y-auto",
+                      !isExpend && "min-h-1/2 h-full"
+                    )}
+                  >
                     <JSONPanel />
                   </div>
                 )}
-                <ReponsePanel />
+                <ReponsePanel isExpend={isExpend} setExpend={setExpend} />
               </div>
             )}
             <TabsContent
