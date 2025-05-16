@@ -1,4 +1,4 @@
-import { useConnection } from "@/client/providers";
+import { useConfig, useConnection } from "@/client/providers";
 import {
   ListPromptsResultSchema,
   ListResourcesResultSchema,
