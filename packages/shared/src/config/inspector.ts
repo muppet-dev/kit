@@ -1,4 +1,4 @@
-import type { LanguageModel, LanguageModelV1 } from "ai";
+import type { LanguageModel } from "ai";
 import type { InspectorConfig, SanitizedInspectorConfig } from "../types";
 
 export function defineInspectorConfig(
@@ -11,8 +11,8 @@ export function defineInspectorConfig(
     ..._config
   } = config;
 
-  let defaultModel: LanguageModelV1 | undefined;
-  const availableModels: Record<string, LanguageModelV1> = {};
+  let defaultModel: LanguageModel | undefined;
+  const availableModels: Record<string, LanguageModel> = {};
 
   if (models) {
     for (const entry of models) {

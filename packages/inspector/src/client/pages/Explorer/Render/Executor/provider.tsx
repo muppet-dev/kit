@@ -27,7 +27,7 @@ function useCustomFormManager() {
       const result = await callItem(selectedItem!, values);
       return {
         duration: performance.now() - startTime,
-        content: result,
+        content: result as { content: { type: "text"; text: string }[] },
       };
     },
     onError: (error) => {

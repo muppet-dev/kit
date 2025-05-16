@@ -30,7 +30,7 @@ export function ConfigForm(props: ConfigForm) {
       request_timeout: 10000,
       progress: true,
       total_timeout: 60000,
-      transportType: Transport.STDIO,
+      type: Transport.STDIO,
       ...params,
     },
   });

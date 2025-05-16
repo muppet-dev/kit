@@ -40,6 +40,7 @@ export function Executor() {
   const { isModelsEnabled } = useConfig();
   const { activeTool } = useTool();
   const { selectedItem } = useMCPItem();
+  const [isExpend, setExpend] = useState(false);
 
   const methods = useForm();
 
@@ -54,13 +55,13 @@ export function Executor() {
     setSelectedTab((prev) =>
       activeTool.name === Tool.STATIC_RESOURCES && prev === RequestTab.JSON
         ? RequestTab.FORM
-        : prev,
+        : prev
     );
   }, [activeTool]);
 
   if (!selectedItem)
     return (
-      <div className="bg-background flex items-center justify-center size-full select-none text-muted-foreground">
+      <div className="bg-background flex items-center justify-center size-full select-none text-muted-foreground lg:col-span-3">
         <p className="text-sm">Select a {activeTool.label}</p>
       </div>
     );
@@ -72,7 +73,7 @@ export function Executor() {
           <Tabs
             value={selectedTab}
             onValueChange={(val) => setSelectedTab(val as RequestTab)}
-            className="lg:pl-4 overflow-y-auto flex flex-col w-full bg-background lg:border-l lg:pt-4 pt-2"
+            className="lg:pl-4 overflow-y-auto flex flex-col w-full bg-background lg:border-l lg:py-4 py-2 lg:col-span-3"
           >
             <div className="flex items-center justify-between gap-2 overflow-x-auto">
               <TabsList>
@@ -119,16 +120,26 @@ export function Executor() {
               selectedTab === RequestTab.JSON) && (
               <div className="flex-1 h-full flex flex-col overflow-y-auto">
                 {selectedTab === RequestTab.FORM && (
-                  <div className="flex-1 min-h-1/2 h-full flex overflow-y-auto">
+                  <div
+                    className={cn(
+                      "flex-1 flex overflow-y-auto",
+                      !isExpend && "min-h-1/2 h-full"
+                    )}
+                  >
                     <FormPanel />
                   </div>
                 )}
                 {selectedTab === RequestTab.JSON && (
-                  <div className="flex-1 min-h-1/2 h-full flex flex-col gap-1.5 overflow-y-auto">
+                  <div
+                    className={cn(
+                      "flex-1 flex flex-col gap-1.5 overflow-y-auto",
+                      !isExpend && "min-h-1/2 h-full"
+                    )}
+                  >
                     <JSONPanel />
                   </div>
                 )}
-                <ReponsePanel />
+                <ReponsePanel isExpend={isExpend} onExpandChange={setExpend} />
               </div>
             )}
             <TabsContent
@@ -172,7 +183,7 @@ function TabsTriggerComponent({
       {...props}
       className={cn(
         "data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-2 xl:px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black",
-        className,
+        className
       )}
     >
       <p className="xl:flex hidden">{label}</p>

@@ -41,28 +41,32 @@ export function CopyButton({
 
   const Icon = isCopied ? Check : Copy;
 
+  const button = (
+    <Button
+      size="icon"
+      aria-label="copy"
+      variant="ghost"
+      disabled={!data || disabled}
+      className={cn("size-max has-[>svg]:px-1.5 py-1.5", className)}
+      onClick={handleCopyData}
+      onKeyDown={handleCopyData}
+    >
+      <Icon
+        className={cn(
+          "size-4 stroke-2",
+          isCopied && "stroke-green-500 dark:stroke-green-300"
+        )}
+      />
+    </Button>
+  );
+
+  if (tooltipContent === "") return button;
+
   return (
     <Tooltip>
-      <TooltipTrigger asChild>
-        <Button
-          size="icon"
-          aria-label="copy"
-          variant="ghost"
-          disabled={!data || disabled}
-          className={cn("size-max has-[>svg]:px-1.5 py-1.5", className)}
-          onClick={handleCopyData}
-          onKeyDown={handleCopyData}
-        >
-          <Icon
-            className={cn(
-              "size-4 stroke-2",
-              isCopied && "stroke-green-500 dark:stroke-green-300",
-            )}
-          />
-        </Button>
-      </TooltipTrigger>
+      <TooltipTrigger asChild>{button}</TooltipTrigger>
       <TooltipContent hidden={!data} side={tooltipSide}>
-        {isCopied ? "Copied" : (tooltipContent ?? "Copy Code")}
+        {isCopied ? "Copied" : tooltipContent ?? "Copy Code"}
       </TooltipContent>
     </Tooltip>
   );

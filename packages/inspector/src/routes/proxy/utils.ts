@@ -21,7 +21,7 @@ const STREAMABLE_HTTP_HEADERS_PASSTHROUGH = [
 export const transportSchema = z.union([
   stdioTransportSchema
     .pick({
-      transportType: true,
+      type: true,
       command: true,
     })
     .extend({
@@ -35,7 +35,7 @@ export const transportSchema = z.union([
         .transform((val) => (val ? JSON.parse(val) : {})),
     }),
   remoteTransportSchema.pick({
-    transportType: true,
+    type: true,
     url: true,
   }),
 ]);
@@ -60,7 +60,7 @@ export async function createTransport<
 >(c: Context<E, P, I>) {
   const query = c.req.valid("query");
 
-  if (query.transportType === MuppetTransport.STDIO) {
+  if (query.type === MuppetTransport.STDIO) {
     const queryEnv = query.env ?? {};
 
     const env = {
@@ -88,7 +88,7 @@ export async function createTransport<
     return transport;
   }
 
-  if (query.transportType === MuppetTransport.SSE) {
+  if (query.type === MuppetTransport.SSE) {
     const headers: HeadersInit = {
       Accept: "text/event-stream",
     };
@@ -122,7 +122,7 @@ export async function createTransport<
     return transport;
   }
 
-  if (query.transportType === MuppetTransport.HTTP) {
+  if (query.type === MuppetTransport.HTTP) {
     const headers: HeadersInit = {
       Accept: "text/event-stream, application/json",
     };
@@ -153,6 +153,6 @@ export async function createTransport<
     return transport;
   }
 
-  console.error(`Invalid transport type: ${query.transportType}`);
+  console.error(`Invalid transport type: ${query.type}`);
   throw new Error("Invalid transport type specified");
 }

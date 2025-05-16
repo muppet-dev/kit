@@ -2,7 +2,7 @@ import z from "zod";
 import { Transport } from "../utils";
 
 export const stdioTransportSchema = z.object({
-  transportType: z.literal(Transport.STDIO),
+  type: z.literal(Transport.STDIO),
   command: z.string(),
   args: z.string().optional(),
   env: z
@@ -16,7 +16,7 @@ export const stdioTransportSchema = z.object({
 });
 
 export const remoteTransportSchema = z.object({
-  transportType: z.union([z.literal(Transport.SSE), z.literal(Transport.HTTP)]),
+  type: z.union([z.literal(Transport.SSE), z.literal(Transport.HTTP)]),
   url: z.string().url(),
   headerName: z.string().optional(),
   bearerToken: z.string().optional(),

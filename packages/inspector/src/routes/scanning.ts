@@ -53,6 +53,7 @@ router.post("/", sValidator("json", z.array(schema)), async (c) => {
       newEntries.push({
         type: entries[index].type,
         name: entries[index].name,
+        description: entries[index].description,
         errors: error.args,
       });
     }

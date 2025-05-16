@@ -19,9 +19,9 @@ export function ConfigFormFields() {
   return (
     <>
       <div className="grid grid-cols-4 w-full items-center gap-2">
-        <Label htmlFor="transportType">Transport Type</Label>
+        <Label htmlFor="type">Transport Type</Label>
         <Controller
-          name="transportType"
+          name="type"
           control={control}
           render={({ field: { value, onChange } }) => (
             <Select value={value} onValueChange={onChange}>

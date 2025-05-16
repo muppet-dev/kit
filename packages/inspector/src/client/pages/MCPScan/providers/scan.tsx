@@ -23,13 +23,14 @@ export const MCPScanProvider = (props: PropsWithChildren) => {
   );
 };
 
-type MCPScanPayload = {
+export type MCPScanPayload = {
   type: "tool" | "resource" | "prompt";
   name: string;
   description?: string;
 };
 
 function useMCPScanManager() {
+  const { proxyAddress } = useConfig();
   const { serverCapabilities, makeRequest } = useConnection();
 
   const mutation = useMutation({
@@ -117,7 +118,7 @@ function useMCPScanManager() {
 
       await Promise.all(promises);
 
-      const response = await fetch("/api/scanning", {
+      const response = await fetch(`${proxyAddress}/api/scanning`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -135,10 +136,9 @@ function useMCPScanManager() {
 
       return {
         duration: performance.now() - start,
-        tools: (await response.json()) as (Omit<
-          MCPScanPayload,
-          "description"
-        > & { errors: string[] })[],
+        tools: (await response.json()) as (MCPScanPayload & {
+          errors: string[];
+        })[],
       };
     },
     onError: (err) => {

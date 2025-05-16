@@ -1,7 +1,4 @@
-import {
-  type ConnectionInfo,
-  getMCPProxyAddress,
-} from "@/client/providers/connection/manager";
+import type { ConnectionInfo } from "@/client/providers/connection/manager";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import {
@@ -50,7 +47,7 @@ function useConfigManager(props: ConfigProvider) {
   const { data: version } = useQuery({
     queryKey: ["version"],
     queryFn: () =>
-      fetch("/version").then((res) => {
+      fetch(`${proxyAddress}/version`).then((res) => {
         if (!res.ok) {
           throw new Error(
             "Failed to fetch version data. Please check your network connection or try again later."
@@ -64,7 +61,7 @@ function useConfigManager(props: ConfigProvider) {
   const { data: config } = useQuery({
     queryKey: ["base-config"],
     queryFn: () =>
-      fetch(`${getMCPProxyAddress()}/config`).then((res) => {
+      fetch(`${proxyAddress}/api/config`).then((res) => {
         if (!res.ok) {
           throw new Error("Failed to fetch config data. Please try again.");
         }
@@ -84,6 +81,13 @@ function useConfigManager(props: ConfigProvider) {
       }),
   });
 
+  const proxyAddress = useMemo(() => {
+    if (connectionInfo?.proxy && connectionInfo.proxy !== "")
+      return connectionInfo.proxy;
+
+    return `${window.location.protocol}//${window.location.hostname}:${window.location.port}`;
+  }, [connectionInfo]);
+
   const createLink = useMutation({
     mutationFn: async (linkType: "local" | "public") => {
       let tunnel: { id: string; url: URL; headers: HeadersInit };
@@ -93,7 +97,7 @@ function useConfigManager(props: ConfigProvider) {
       if (linkType === "local") {
         tunnel = { id: "local", ...connectionLink };
       } else {
-        const { id, url } = await fetch(`${getMCPProxyAddress()}/tunnel`).then(
+        const { id, url } = await fetch(`${proxyAddress}/api/tunnel`).then(
           (res) => {
             if (!res.ok) {
               throw new Error(
@@ -193,6 +197,7 @@ function useConfigManager(props: ConfigProvider) {
     setConnectionInfo: (info: ConnectionInfo) => {
       setConnectionInfo(info);
     },
+    proxyAddress,
     configurations: [
       ...getDeafultConfigurations(),
       ...(localSavedConfigs ?? []),

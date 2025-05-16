@@ -40,12 +40,7 @@ import { InspectorOAuthClientProvider } from "./auth";
 export type ConnectionInfo = z.infer<typeof configTransportSchema>;
 
 export type UseConnectionOptions = ConnectionInfo & {
-  requestConfig?: {
-    timeout?: number;
-    timeoutResetOnProgress?: boolean;
-    maxTotalTimeout?: number;
-    proxy?: string;
-  };
+  proxy: string;
   onNotification?: (notification: Notification) => void;
   onStdErrNotification?: (notification: Notification) => void;
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -117,11 +112,9 @@ export function useConnectionManager(props: UseConnectionOptions) {
       const mcpRequestOptions: RequestOptions = {
         signal: options?.signal ?? abortController.signal,
         resetTimeoutOnProgress:
-          options?.resetTimeoutOnProgress ??
-          props.requestConfig?.timeoutResetOnProgress,
-        timeout: options?.timeout ?? props.requestConfig?.timeout,
-        maxTotalTimeout:
-          options?.maxTotalTimeout ?? props.requestConfig?.maxTotalTimeout,
+          options?.resetTimeoutOnProgress ?? props.progress,
+        timeout: options?.timeout ?? props.request_timeout,
+        maxTotalTimeout: options?.maxTotalTimeout ?? props.total_timeout,
       };
 
       if (mcpRequestOptions.resetTimeoutOnProgress) {
@@ -225,9 +218,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
 
   const checkProxyHealth = async () => {
     try {
-      const proxyHealthUrl = new URL(
-        `${getMCPProxyAddress(props.requestConfig?.proxy)}/health`
-      );
+      const proxyHealthUrl = new URL(`${props.proxy}/api/health`);
       const proxyHealthResponse = await fetch(proxyHealthUrl);
       const proxyHealth = await proxyHealthResponse.json();
       if (proxyHealth?.status !== "ok") {
@@ -241,7 +232,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
 
   const handleAuthError = async (error: unknown) => {
     if (error instanceof SseError && error.code === 401) {
-      const sseUrl = props.transportType !== Transport.STDIO ? props.url : null;
+      const sseUrl = props.type !== Transport.STDIO ? props.url : null;
 
       if (!sseUrl) {
         throw new Error("No SSE URL provided for authentication");
@@ -281,11 +272,9 @@ export function useConnectionManager(props: UseConnectionOptions) {
       return;
     }
     let mcpProxyServerUrl: URL;
-    switch (props.transportType) {
+    switch (props.type) {
       case Transport.STDIO:
-        mcpProxyServerUrl = new URL(
-          `${getMCPProxyAddress(props.requestConfig?.proxy)}/stdio`
-        );
+        mcpProxyServerUrl = new URL(`${props.proxy}/api/stdio`);
         mcpProxyServerUrl.searchParams.append("command", props.command);
 
         if (props.args)
@@ -299,28 +288,24 @@ export function useConnectionManager(props: UseConnectionOptions) {
         break;
 
       case Transport.SSE:
-        mcpProxyServerUrl = new URL(
-          `${getMCPProxyAddress(props.requestConfig?.proxy)}/sse`
-        );
+        mcpProxyServerUrl = new URL(`${props.proxy}/api/sse`);
         mcpProxyServerUrl.searchParams.append("url", props.url);
         break;
 
       case Transport.HTTP:
-        mcpProxyServerUrl = new URL(
-          `${getMCPProxyAddress(props.requestConfig?.proxy)}/mcp`
-        );
+        mcpProxyServerUrl = new URL(`${props.proxy}/api/mcp`);
         mcpProxyServerUrl.searchParams.append("url", props.url);
         break;
     }
 
-    mcpProxyServerUrl.searchParams.append("transportType", props.transportType);
+    mcpProxyServerUrl.searchParams.append("type", props.type);
 
     try {
       // Inject auth manually instead of using SSEClientTransport, because we're
       // proxying through the inspector server first.
       const headers: HeadersInit = {};
 
-      if (props.transportType !== Transport.STDIO) {
+      if (props.type !== Transport.STDIO) {
         // Create an auth provider with the current server URL
         const serverAuthProvider = new InspectorOAuthClientProvider(props.url);
 
@@ -354,7 +339,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
       });
 
       const clientTransport =
-        props.transportType === Transport.HTTP
+        props.type === Transport.HTTP
           ? new StreamableHTTPClientTransport(mcpProxyServerUrl as URL, {
               sessionId: undefined,
             })
@@ -446,7 +431,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
   const disconnect = async () => {
     await mcpClient?.close();
 
-    if (props.transportType !== Transport.STDIO) {
+    if (props.type !== Transport.STDIO) {
       const authProvider = new InspectorOAuthClientProvider(props.url);
       authProvider.clear();
     }
@@ -470,10 +455,4 @@ export function useConnectionManager(props: UseConnectionOptions) {
     connect,
     disconnect,
   };
-}
-
-export function getMCPProxyAddress(proxy?: string) {
-  if (proxy) return proxy;
-
-  return `${window.location.protocol}//${window.location.hostname}:${window.location.port}/api`;
 }

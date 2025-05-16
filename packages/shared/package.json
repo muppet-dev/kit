@@ -1,13 +1,23 @@
 {
   "name": "@muppet-kit/shared",
   "description": "Shared utilities and types for Muppet Kit.",
-  "version": "0.1.4",
+  "version": "0.1.9",
   "license": "MIT",
-  "types": "./index.d.ts",
-  "main": "./index.js",
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
   "type": "module",
-  "files": ["dist"],
-  "keywords": ["mcp", "kit", "tools", "server", "inspector", "proxy", "shared"],
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "mcp",
+    "kit",
+    "tools",
+    "server",
+    "inspector",
+    "proxy",
+    "shared"
+  ],
   "scripts": {
     "build": "pkgroll --minify"
   },

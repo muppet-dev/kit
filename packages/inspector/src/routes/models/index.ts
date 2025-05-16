@@ -1,6 +1,9 @@
 import type { EnvWithDefaultModel } from "@/types/index.js";
 import { sValidator } from "@hono/standard-validator";
+import { transportSchema } from "@muppet-kit/shared";
 import { generateObject, streamText } from "ai";
+import { experimental_createMCPClient } from "ai";
+import { Experimental_StdioMCPTransport } from "ai/mcp-stdio";
 import { Hono } from "hono";
 import { createFactory } from "hono/factory";
 import { stream } from "hono/streaming";
@@ -39,7 +42,7 @@ const handlers = factory.createHandlers(
       ? modelsConfig.available[modelId]
       : modelsConfig.default;
 
-    c.set("defaultModel", model);
+    c.set("modelToBeUsed", model);
 
     await next();
   },
@@ -48,6 +51,7 @@ const handlers = factory.createHandlers(
 router.post(
   "/chat",
   ...handlers,
+  sValidator("query", transportSchema),
   sValidator(
     "json",
     z.object({
@@ -55,10 +59,33 @@ router.post(
     }),
   ),
   async (c) => {
+    const transport = c.req.valid("query");
     const { messages } = c.req.valid("json");
 
+    let tools = {};
+
+    try {
+      let _transport: any = transport;
+      if (_transport.type === "stdio") {
+        _transport = new Experimental_StdioMCPTransport({
+          command: _transport.command,
+          args: _transport.args,
+          env: _transport.env,
+        });
+      }
+
+      const mcpClient = await experimental_createMCPClient({
+        transport: _transport,
+      });
+
+      tools = await mcpClient.tools();
+    } catch (error) {
+      console.log("Unable to create MCP client transport", error);
+    }
+
     const result = streamText({
-      model: c.get("defaultModel"),
+      model: c.get("modelToBeUsed"),
+      tools,
       messages,
     });
 
@@ -92,7 +119,7 @@ router.post(
     }
 
     const result = await generateObject({
-      model: c.get("defaultModel"),
+      model: c.get("modelToBeUsed"),
       prompt,
       schemaName: name,
       schemaDescription: description,
@@ -129,7 +156,7 @@ router.post(
     }
 
     const result = await generateObject({
-      model: c.get("defaultModel"),
+      model: c.get("modelToBeUsed"),
       prompt,
       schemaName: "mcp-tool-scoring",
       schemaDescription:

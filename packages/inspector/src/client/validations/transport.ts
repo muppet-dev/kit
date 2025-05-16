@@ -16,6 +16,7 @@ const extraPropValidation = z.object({
   request_timeout: z.number().optional(),
   progress: z.boolean().optional(),
   total_timeout: z.number().optional(),
+  proxy: z.string().optional(),
   [SUBMIT_BUTTON_KEY]: z.nativeEnum(DocumentSubmitType).optional(),
 });
 

@@ -1,4 +1,3 @@
-import { getMCPProxyAddress } from "@/client/providers/connection/manager";
 import type { Request } from "@modelcontextprotocol/sdk/types.js";
 import { events } from "fetch-event-stream";
 import { nanoid } from "nanoid";
@@ -9,6 +8,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { useConfig } from "./config";
 
 type TracingContextType = ReturnType<typeof useTracingManager>;
 
@@ -40,12 +40,13 @@ function useTracingManager() {
     sessions: new Set<string>(),
     methods: new Set<string>(),
   });
+  const { proxyAddress } = useConfig();
 
   useEffect(() => {
     const abort = new AbortController();
 
     const handler = async () => {
-      const res = await fetch(`${getMCPProxyAddress()}/subscribe`, {
+      const res = await fetch(`${proxyAddress}/api/subscribe`, {
         signal: abort.signal,
       });
 
@@ -73,7 +74,7 @@ function useTracingManager() {
 
             if (from === "server") {
               const index = tmp.findIndex(
-                (log) => log.mid === message.id && log.session === session,
+                (log) => log.mid === message.id && log.session === session
               );
 
               if (index !== -1) {
@@ -120,7 +121,7 @@ function useTracingManager() {
     // return () => {
     //   abort.abort();
     // };
-  }, []);
+  }, [proxyAddress]);
 
   function clearTraces() {
     setTraces([]);

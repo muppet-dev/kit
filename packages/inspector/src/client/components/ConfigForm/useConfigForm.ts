@@ -19,7 +19,7 @@ export function useConfigForm() {
         [SUBMIT_BUTTON_KEY]: undefined,
       };
 
-      if (_values.transportType === Transport.STDIO && _values.env) {
+      if (_values.type === Transport.STDIO && _values.env) {
         // @ts-expect-error: converting data from array of object to string in order to store it in local storage
         _values.env =
           _values.env.length > 0

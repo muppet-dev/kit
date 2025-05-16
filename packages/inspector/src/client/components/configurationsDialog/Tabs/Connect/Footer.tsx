@@ -11,7 +11,7 @@ export function FormFooter() {
 
   const handleResetForm = eventHandler(() =>
     reset({
-      transportType: Transport.STDIO,
+      type: Transport.STDIO,
     }),
   );
 

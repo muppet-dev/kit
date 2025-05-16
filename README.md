@@ -17,7 +17,8 @@ npx muppet-kit inspector
 ### Features
 
 - Explorer - Explore the MCP server's capabilities, while leveraging AI to assist you.
-- Playground - Test the MCP server with different LLMs and configurations. (Coming soon)
+- Playground - Test the MCP server with different LLMs and configurations.
+- MCP Scan - Scan the MCP server for vulnerabilities and security issues.
 - Tracing - Trace the requests and responses between the client and server. Tunneling is also supported for connecting to remote clients.
 - History - View the history of requests and responses between the client and server for the current session.
 
@@ -27,13 +28,17 @@ You can configure the inspector by creating a `muppet.config.js`/`muppet.config.
 
 ```ts
 import { defineInspectorConfig } from "muppet-kit";
+import { ngrok } from "muppet-kit/tunnel";
+import { openai } from "@ai-sdk/openai";
 
 export default defineInspectorConfig({
-  // ... inspector config
-  // The inspector will automatically load the config from the file
+  // ...
+  models: [openai("gpt-4.1-nano")],
+  // You can either pass the API key here or have it in .env as NGROK_API_KEY
+  tunneling: ngrok(),
 });
 ```
 
 ## Credits
 
-- The idea for this project was inspired by the official [MCP Inspector](https://github.com/modelcontextprotocol/inspector) and their amazing work.
+The idea for this project was inspired by the official [MCP Inspector](https://github.com/modelcontextprotocol/inspector) and their amazing work.
