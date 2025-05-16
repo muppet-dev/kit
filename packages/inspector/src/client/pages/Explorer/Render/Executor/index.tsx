@@ -28,6 +28,7 @@ import { AnalyseProvider } from "./AnalyseButtonGroup/provider";
 import { AnalysePanel } from "./AnalysePanel";
 import { FormPanel } from "./FormPanel";
 import { FormResetButton } from "./FormResetButton";
+import { FormWrapper } from "./FormWrapper";
 import { GenerateButtonGroup } from "./GenerateButtonGroup";
 import { JSONPanel } from "./JSONPanel";
 import { ReponsePanel } from "./Reponse";
@@ -130,14 +131,14 @@ export function Executor() {
                   </div>
                 )}
                 {selectedTab === RequestTab.JSON && (
-                  <div
+                  <FormWrapper
                     className={cn(
                       "flex-1 flex flex-col gap-1.5 overflow-y-auto",
                       !isExpend && "min-h-1/2 h-full"
                     )}
                   >
                     <JSONPanel />
-                  </div>
+                  </FormWrapper>
                 )}
                 <ReponsePanel isExpend={isExpend} onExpandChange={setExpend} />
               </div>

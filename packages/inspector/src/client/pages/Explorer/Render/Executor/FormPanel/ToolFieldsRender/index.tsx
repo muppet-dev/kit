@@ -27,14 +27,22 @@ export function ToolFieldsRender(props: ToolItemType) {
     if (defaultValue) reset(defaultValue);
   }, [defaultValue, reset]);
 
+  if (!schema || Object.keys(schema).length === 0)
+    return (
+      <div className="size-full flex items-center justify-center text-muted-foreground select-none text-sm">
+        No fields to display
+      </div>
+    );
+
   return (
     <DuckForm
       components={quackFields}
       generateId={(_, props) => (props.id ? String(props.id) : undefined)}
     >
       <Blueprint wrapper={FieldWrapper} schema={schema}>
-        {schema &&
-          Object.keys(schema).map((key) => <DuckField key={key} id={key} />)}
+        {Object.keys(schema).map((key) => (
+          <DuckField key={key} id={key} />
+        ))}
       </Blueprint>
     </DuckForm>
   );
