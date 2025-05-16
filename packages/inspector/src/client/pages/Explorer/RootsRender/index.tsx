@@ -1,9 +1,9 @@
 import { FolderTree } from "lucide-react";
 import { RootsForm } from "./Form";
 
-export default function RootsPage() {
+export function RootsRender() {
   return (
-    <div className="p-4 size-full flex flex-col gap-5">
+    <div className="px-4 size-full flex flex-col gap-5">
       <div className="flex items-center gap-2">
         <FolderTree className="size-5" />
         <h2 className="text-2xl font-bold">Roots</h2>

@@ -19,11 +19,9 @@ import {
   Settings2,
   Shield,
   SquareTerminal,
-  FolderTree,
 } from "lucide-react";
 import { Link } from "react-router";
 import { ThemeSelector } from "../ThemeSelector";
-import { Badge } from "../ui/badge";
 import { ConnectStatus } from "./ConnectStatus";
 import { PingButton } from "./PingButton";
 import { SidebarItem } from "./SidebarItem";
@@ -56,11 +54,6 @@ const data = {
       name: "History",
       url: "/history",
       icon: History,
-    },
-    {
-      name: "Roots",
-      url: "/roots",
-      icon: FolderTree,
     },
   ],
   configuration: [
