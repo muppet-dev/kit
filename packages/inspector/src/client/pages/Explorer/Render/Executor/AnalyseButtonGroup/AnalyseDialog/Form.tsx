@@ -8,6 +8,7 @@ import { useMCPItem } from "../../../../providers";
 import { useAnalyse } from "../provider";
 import { useConfig } from "@/client/providers";
 import { ModelField } from "@/client/components/ModelField";
+import { Spinner } from "@/client/components/ui/spinner";
 
 const schema = z.object({
   context: z.string(),
@@ -26,7 +27,7 @@ export function AnalyseForm(props: AnalyseForm) {
   const {
     handleSubmit,
     register,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     control,
     reset,
   } = useForm<z.infer<typeof schema>>({
@@ -80,7 +81,10 @@ export function AnalyseForm(props: AnalyseForm) {
         )}
       </div>
       <div className="flex items-center justify-end">
-        <Button type="submit">Analyse</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting && <Spinner />}
+          {isSubmitting ? "Analysing" : "Analyse"}
+        </Button>
       </div>
     </form>
   );
