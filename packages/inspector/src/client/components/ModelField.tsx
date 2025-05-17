@@ -15,7 +15,7 @@ import {
 } from "@/client/components/ui/popover";
 import { cn } from "@/client/lib/utils";
 import { useConfig } from "@/client/providers";
-import Fuse from "fuse.js";
+import Fuse, { type FuseResultMatch } from "fuse.js";
 import { Check, ChevronDown } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -36,7 +36,13 @@ export function ModelField({ onChange, value, className }: ModelField) {
   const [provider, name] = value?.split(":") ?? "";
   const SelectedModelIcon = PROVIDER_ICONS[provider];
 
-  const searchResults = useMemo(() => {
+  const searchResults = useMemo<
+    {
+      id: string;
+      provider: string;
+      name: string;
+    }[]
+  >(() => {
     const _models = getAvailableModels();
     const items = _models.map((item) => {
       const [provider, name] = item.split(":");
@@ -52,15 +58,9 @@ export function ModelField({ onChange, value, className }: ModelField) {
 
     const fuse = new Fuse(items, {
       keys: ["provider", "name"],
-      includeMatches: true,
     });
 
-    return fuse.search(search).map(({ item, matches }) => ({
-      ...item,
-      matches: matches
-        ?.flatMap((match) => (match.key === "name" ? match.indices : undefined))
-        .filter(Boolean),
-    }));
+    return fuse.search(search).map(({ item }) => item);
   }, [getAvailableModels, search]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -77,7 +77,7 @@ export function ModelField({ onChange, value, className }: ModelField) {
           variant="outline"
           className={cn(
             "w-[300px] justify-start rounded-sm data-[state=closed]:hover:[&>svg]:opacity-100 data-[state=open]:[&>svg]:opacity-100 transition-all ease-in-out [&>svg]:transition-all [&>svg]:ease-in-out",
-            className,
+            className
           )}
           ref={triggerRef}
         >
@@ -123,7 +123,7 @@ export function ModelField({ onChange, value, className }: ModelField) {
                     <Check
                       className={cn(
                         "size-4",
-                        item.id === value ? "opacity-100" : "opacity-0",
+                        item.id === value ? "opacity-100" : "opacity-0"
                       )}
                     />
                   </CommandItem>

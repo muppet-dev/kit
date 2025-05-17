@@ -1,6 +1,6 @@
 import { Input } from "@/client/components/ui/input";
 import { Spinner } from "@/client/components/ui/spinner";
-import Fuse, { type RangeTuple } from "fuse.js";
+import Fuse, { type FuseResultMatch } from "fuse.js";
 import { CircleX } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useMCPItem, useTool } from "../providers";
@@ -14,7 +14,7 @@ export function ExplorerRender() {
   const { items, isLoading } = useMCPItem();
 
   const parsedItems = useMemo<
-    (MCPItemType & { matches?: RangeTuple[] })[] | undefined
+    (MCPItemType & { matches?: FuseResultMatch[] })[] | undefined
   >(() => {
     if (!search.trim() || !items || items.length === 0) return items;
 
@@ -25,9 +25,7 @@ export function ExplorerRender() {
 
     return fuse.search(search).map(({ item, matches }) => ({
       ...item,
-      matches: matches
-        ?.flatMap((match) => (match.key === "name" ? match.indices : undefined))
-        .filter(Boolean),
+      matches,
     }));
   }, [search, items]);
 
@@ -69,7 +67,7 @@ function SearchField(props: SearchField) {
 
 type CardsRender = {
   data?: (MCPItemType & {
-    matches?: RangeTuple[];
+    matches?: FuseResultMatch[];
   })[];
   isLoading: boolean;
   isEmpty: boolean;
