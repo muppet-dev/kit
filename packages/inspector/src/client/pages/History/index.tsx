@@ -8,6 +8,7 @@ import {
 import { eventHandler } from "@/client/lib/eventHandler";
 import { useConnection, useNotification } from "@/client/providers";
 import { ListX } from "lucide-react";
+import { DownloadButton } from "./DownloadButton";
 import { TracingTable } from "./Table";
 import { HistoryProvider, HistoryTab, useHistory } from "./providers";
 
@@ -80,7 +81,8 @@ function PageHeader() {
   });
 
   return (
-    <div className="flex items-center">
+    <div className="flex gap-2 items-center">
+      <DownloadButton />
       <Tooltip>
         <TooltipTrigger asChild>
           <Button

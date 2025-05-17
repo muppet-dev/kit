@@ -28,6 +28,7 @@ import { useConfig } from "@/client/providers";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { ListX, Logs, Pickaxe } from "lucide-react";
 import type { BaseSyntheticEvent } from "react";
+import { DownloadButton } from "./DownloadButton";
 import { TracingTable } from "./Table";
 import { LogsProvider } from "./providers";
 
@@ -50,6 +51,7 @@ export default function TracingPage() {
 }
 
 function PageHeader() {
+  // TODO: Please update this function
   const onClear = eventHandler(() => {
     console.log("Clear logs");
   });
@@ -57,6 +59,7 @@ function PageHeader() {
   return (
     <div className="flex items-center gap-2">
       <TunnelLink />
+      <DownloadButton />
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
