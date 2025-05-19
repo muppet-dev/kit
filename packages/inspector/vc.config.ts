@@ -1,6 +1,7 @@
+// Vite Cloudflare config
 import { readdirSync } from "node:fs";
 import { builtinModules } from "node:module";
-import path, { extname } from "node:path";
+import path from "node:path";
 import { resolve } from "node:path";
 import devServer from "@hono/vite-dev-server";
 import tailwindcss from "@tailwindcss/vite";
@@ -107,18 +108,10 @@ const buildServer = (options: { entry: string }): Plugin => {
 
         staticPaths.push(...Array.from(uniqueStaticPaths));
 
-        return `import "dotenv/config";
-        import { Hono } from "hono";
-        import { join } from "node:path";
-        import { RESPONSE_ALREADY_SENT } from '@hono/node-server/utils/response'  
-import { createReadStream } from 'node:fs'
+        return `import { Hono } from "hono";
+        import config from "./muppet.config";
 
-        export default (config) => {
           const mainApp = new Hono()
-
-        ${serveStaticHook("mainApp", {
-          filePaths: staticPaths,
-        })}
 
           const modules = import.meta.glob(['${options.entry}'], { import: 'default', eager: true })
       let added = false
@@ -150,8 +143,9 @@ import { createReadStream } from 'node:fs'
         throw new Error("Can't import modules from '${options.entry}'")
       }
 
-      return mainApp;
-        }`;
+      export default {
+        fetch: mainApp.fetch,
+      }`;
       }
     },
     apply: (_config, { command, mode }) => {
@@ -168,7 +162,7 @@ import { createReadStream } from 'node:fs'
           target: "webworker",
         },
         build: {
-          outDir: "./dist",
+          outDir: "./dist-server",
           emptyOutDir: false,
           minify: true,
           ssr: true,
@@ -184,69 +178,3 @@ import { createReadStream } from 'node:fs'
     },
   };
 };
-
-type ServeStaticHookOptions = {
-  filePaths?: string[];
-  root?: string;
-};
-
-export const serveStaticHook = (
-  appName: string,
-  options: ServeStaticHookOptions,
-) => {
-  let code = "";
-
-  const filePaths = options.filePaths ?? [];
-
-  for (const path of filePaths) {
-    const _paths =
-      path === "/index.html"
-        ? [
-            "/",
-            "/explorer",
-            "/history",
-            "/tracing",
-            "/settings",
-            "/playground",
-            "/oauth/callback",
-          ]
-        : [path];
-
-    for (const _path of _paths) {
-      code += `${appName}.get('${_path}', (c) => {
-        const { outgoing } = c.env  
-      
-        const fileStream = createReadStream(join(import.meta.dirname, '${path}'))  
-          
-        outgoing.writeHead(200, {  
-          'Content-Type': '${getContentType(path)}',
-        })  
-          
-        fileStream.pipe(outgoing)  
-          
-        return RESPONSE_ALREADY_SENT  
-      })\n`;
-    }
-  }
-  return code;
-};
-
-function getContentType(path: string): string {
-  const ext = extname(path).toLowerCase();
-
-  const mimeTypes: Record<string, string> = {
-    ".html": "text/html; charset=utf-8",
-    ".css": "text/css; charset=utf-8",
-    ".js": "text/javascript; charset=utf-8",
-    ".json": "application/json; charset=utf-8",
-    ".png": "image/png",
-    ".jpg": "image/jpeg",
-    ".jpeg": "image/jpeg",
-    ".gif": "image/gif",
-    ".svg": "image/svg+xml",
-    ".ico": "image/x-icon",
-    // Add more as needed
-  };
-
-  return mimeTypes[ext] || "application/octet-stream";
-}

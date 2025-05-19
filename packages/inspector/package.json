@@ -22,10 +22,8 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build:client": "vite build --mode client",
-    "build:server": "vite build",
-    "build:cli": "node build.mjs",
-    "build": "pnpm run build:client && pnpm run build:server && pnpm run build:cli"
+    "build": "vite build --mode client && vite build && node build.mjs",
+    "deploy": "vite build --mode client --config vc.config.ts && vite build --config vc.config.ts && wrangler deploy dist-server/index.js"
   },
   "homepage": "https://github.com/muppet-dev/kit",
   "publishConfig": {
@@ -50,7 +48,6 @@
     }
   },
   "dependencies": {
-    "@ai-sdk/openai": "^1.3.21",
     "@assistant-ui/react": "^0.10.5",
     "@assistant-ui/react-ai-sdk": "^0.10.6",
     "@assistant-ui/react-markdown": "^0.10.3",
@@ -108,6 +105,7 @@
     "spawn-rx": "^5.1.2"
   },
   "devDependencies": {
+    "@ai-sdk/openai": "^1.3.21",
     "@hono/vite-dev-server": "^0.19.0",
     "@tailwindcss/vite": "^4.1.4",
     "@types/json-schema": "^7.0.15",
@@ -120,6 +118,7 @@
     "esbuild": "^0.25.4",
     "tailwindcss": "^4.1.4",
     "typescript": "^5.8.3",
-    "vite": "^6.3.1"
+    "vite": "^6.3.1",
+    "wrangler": "^4.15.2"
   }
 }
