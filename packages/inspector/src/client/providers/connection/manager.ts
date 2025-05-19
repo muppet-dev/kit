@@ -69,7 +69,7 @@ export type RequestHistory = {
 
 export function useConnectionManager(props: UseConnectionOptions) {
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(
-    ConnectionStatus.DISCONNECTED
+    ConnectionStatus.DISCONNECTED,
   );
   const [serverCapabilities, setServerCapabilities] =
     useState<ServerCapabilities | null>(null);
@@ -81,7 +81,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
   const pushHistory = (
     timestamp: number,
     request: object,
-    response?: object
+    response?: object,
   ) => {
     setRequestHistory((prev) => [
       ...prev,
@@ -100,7 +100,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
   const makeRequest = async <T extends z.ZodType>(
     request: ClientRequest,
     schema: T,
-    options?: RequestOptions & { suppressToast?: boolean }
+    options?: RequestOptions & { suppressToast?: boolean },
   ): Promise<z.output<T>> => {
     if (!mcpClient) {
       throw new Error("MCP client not connected");
@@ -157,7 +157,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
     ref: ResourceReference | PromptReference,
     argName: string,
     value: string,
-    signal?: AbortSignal
+    signal?: AbortSignal,
   ): Promise<string[]> => {
     if (!mcpClient || !completionsSupported) {
       return [];
@@ -252,7 +252,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
     setConnectionStatus(ConnectionStatus.CONNECTING);
     const client = new Client<Request, Notification, Result>(
       {
-        name: "mcp-inspector",
+        name: "muppet-inspector",
         version: "0.1.0",
       },
       {
@@ -262,7 +262,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
             listChanged: true,
           },
         },
-      }
+      },
     );
 
     try {
@@ -283,7 +283,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
         if (props.env)
           mcpProxyServerUrl.searchParams.append(
             "env",
-            JSON.stringify(props.env)
+            JSON.stringify(props.env),
           );
         break;
 
@@ -324,7 +324,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
         eventSourceInit: {
           fetch: (
             url: string | URL | globalThis.Request,
-            init: RequestInit | undefined
+            init: RequestInit | undefined,
           ) => fetch(url, { ...init, headers }),
         },
         requestInit: {
@@ -356,7 +356,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
         ]) {
           client.setNotificationHandler(
             notificationSchema,
-            props.onNotification
+            props.onNotification,
           );
         }
 
@@ -369,7 +369,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
       if (props.onStdErrNotification) {
         client.setNotificationHandler(
           StdErrNotificationSchema,
-          props.onStdErrNotification
+          props.onStdErrNotification,
         );
       }
 
@@ -390,7 +390,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
       } catch (error) {
         console.error(
           `Failed to connect to MCP Server via the MCP Inspector Proxy: ${mcpProxyServerUrl}:`,
-          error
+          error,
         );
         const shouldRetry = await handleAuthError(error);
         if (shouldRetry) {
@@ -406,17 +406,19 @@ export function useConnectionManager(props: UseConnectionOptions) {
       setServerCapabilities(capabilities ?? null);
       setCompletionsSupported(true); // Reset completions support on new connection
 
-      if (props.onPendingRequest) {
+      const onPendingRequest = props.onPendingRequest;
+      if (onPendingRequest) {
         client.setRequestHandler(CreateMessageRequestSchema, (request) => {
           return new Promise((resolve, reject) => {
-            props.onPendingRequest?.(request, resolve, reject);
+            onPendingRequest(request, resolve, reject);
           });
         });
       }
 
-      if (props.getRoots) {
+      const getRoots = props.getRoots;
+      if (getRoots) {
         client.setRequestHandler(ListRootsRequestSchema, async () => {
-          return { roots: props.getRoots?.() };
+          return { roots: getRoots() };
         });
       }
 
