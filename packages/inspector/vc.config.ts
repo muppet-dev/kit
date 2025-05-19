@@ -1,11 +1,8 @@
 // Vite Cloudflare config
-import { readdirSync } from "node:fs";
-import { builtinModules } from "node:module";
-import path from "node:path";
-import { resolve } from "node:path";
-import devServer from "@hono/vite-dev-server";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
+import { builtinModules } from "node:module";
+import path from "node:path";
 import {
   type Plugin,
   type ResolvedConfig,
@@ -34,25 +31,22 @@ export default defineConfig(({ mode }) => {
         keepProcessEnv: true,
       },
     },
-    plugins: [
-      buildServer({
-        entry: "/src/index.ts",
-      }),
-      devServer({
-        entry: "/src/index.ts",
-      }),
-      tailwindcss(),
-    ],
+    plugins: [buildServer(), tailwindcss()],
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),
         "@/client": path.resolve(__dirname, "./src/client"),
       },
     },
+    build: {
+      rollupOptions: {
+        external: ["cloudflare:workers"],
+      },
+    },
   };
 });
 
-const buildServer = (options: { entry: string }): Plugin => {
+const buildServer = (): Plugin => {
   const virtualEntryId = "virtual:build-entry-module";
   const resolvedVirtualEntryId = `\0${virtualEntryId}`;
   let config: ResolvedConfig;
@@ -70,82 +64,33 @@ const buildServer = (options: { entry: string }): Plugin => {
     },
     async load(id) {
       if (id === resolvedVirtualEntryId) {
-        const staticPaths: string[] = [];
-        const direntPaths = [];
-        try {
-          const publicDirPaths = readdirSync(
-            resolve(config.root, config.publicDir),
-            {
-              withFileTypes: true,
-            },
-          );
-          direntPaths.push(...publicDirPaths);
-          const buildOutDirPaths = readdirSync(
-            resolve(config.root, config.build.outDir),
-            {
-              withFileTypes: true,
-              recursive: true,
-            },
-          );
-          direntPaths.push(...buildOutDirPaths);
-        } catch {}
+        return `import { Hono } from "hono";
+        import { DurableObject } from "cloudflare:workers";
+        import app from "./src/index.ts";
+        import config from "./muppet.config";
 
-        const uniqueStaticPaths = new Set<string>();
+        export class MuppetInspector extends DurableObject {
+          _app = new Hono().use(async (c, next) => {
+          c.set("config", config);
+          await next();
+        }).route("/", app);
 
-        for (const p of direntPaths) {
-          if (!p.isDirectory()) {
-            if (p.name === output) {
-              return;
-            }
+          constructor(ctx, env) {
+            super(ctx, env);
+          }
 
-            const basepath = (p.parentPath ?? p.path).split("dist")[1];
-
-            uniqueStaticPaths.add(
-              basepath?.endsWith("assets") ? `/assets/${p.name}` : `/${p.name}`,
-            );
+          async fetch(request) {
+            return this._app.fetch(request, this.env);
           }
         }
 
-        staticPaths.push(...Array.from(uniqueStaticPaths));
-
-        return `import { Hono } from "hono";
-        import config from "./muppet.config";
-
-          const mainApp = new Hono()
-
-          const modules = import.meta.glob(['${options.entry}'], { import: 'default', eager: true })
-      let added = false
-      for (const [, app] of Object.entries(modules)) {
-        if (app) {
-          const _app = new Hono().use(async (c, next) => {
-            c.set("config", config);
-            await next();
-          }).route("/", app);
-
-          mainApp.all((c) => {
-            let executionCtx
-            try {
-              executionCtx = c.executionCtx
-            } catch {}
-            return _app.fetch(c.req.raw, c.env, executionCtx)
-          })
-          mainApp.notFound((c) => {
-            let executionCtx
-            try {
-              executionCtx = c.executionCtx
-            } catch {}
-            return _app.fetch(c.req.raw, c.env, executionCtx)
-          })
-          added = true
-        }
-      }
-      if (!added) {
-        throw new Error("Can't import modules from '${options.entry}'")
-      }
-
-      export default {
-        fetch: mainApp.fetch,
-      }`;
+        export default {
+          fetch: (request, env) => {
+            const id = env.Inspector.idFromName("main");
+            const stub = env.Inspector.get(id);
+            return stub.fetch(request);
+          }
+        }`;
       }
     },
     apply: (_config, { command, mode }) => {
@@ -163,7 +108,7 @@ const buildServer = (options: { entry: string }): Plugin => {
         },
         build: {
           outDir: "./dist-server",
-          emptyOutDir: false,
+          emptyOutDir: true,
           minify: true,
           copyPublicDir: false,
           ssr: true,
