@@ -90,10 +90,9 @@ export function TracingTable() {
                 parsedTraces.map((trace, index) => {
                   const isError = Boolean(trace.response?.error);
 
-                  const requestWasSentOn = trace.timestamp.start;
-                  const monthWithDay = dayjs(requestWasSentOn).format("MMM DD");
-                  const time = dayjs(requestWasSentOn).format("hh:mm:ss");
-                  const millisecond = dayjs(requestWasSentOn).format("SSS");
+                  const time = dayjs(trace.timestamp.start)
+                    .format("MMM DD|hh:mm:ss|SSS")
+                    .split("|");
 
                   const latency =
                     "latency" in trace.timestamp
@@ -105,18 +104,16 @@ export function TracingTable() {
                       key={`row.${index + 1}`}
                       className={cn(
                         "cursor-pointer divide-x",
-                        selected === trace.id && "bg-muted/50",
+                        selected === trace.id && "bg-muted/50"
                       )}
                       onClick={handleSelectData(trace.id)}
                       onKeyDown={handleSelectData(trace.id)}
                     >
                       <TableCell className="space-x-1 font-medium uppercase">
-                        <span className="text-black/50 dark:text-white/50">
-                          {monthWithDay}
-                        </span>
-                        {time}
-                        <span className="text-black/50 dark:text-white/50">
-                          .{millisecond}
+                        <span className="text-muted-foreground">{time[0]}</span>
+                        {time[1]}
+                        <span className="text-muted-foreground">
+                          .{time[2]}
                         </span>
                       </TableCell>
                       {latency && (
@@ -127,7 +124,7 @@ export function TracingTable() {
                                 "border px-1.5 w-max",
                                 isError
                                   ? "text-red-500 dark:text-red-300 bg-red-200/40 dark:bg-red-300/10"
-                                  : "text-green-600 dark:text-green-300 bg-green-200/40 dark:bg-green-300/10",
+                                  : "text-green-600 dark:text-green-300 bg-green-200/40 dark:bg-green-300/10"
                               )}
                             >
                               {isError ? "Error" : "Success"}
@@ -137,7 +134,7 @@ export function TracingTable() {
                             {latency > 1000
                               ? `${numberFormatter(
                                   Number((latency / 1000).toFixed(2)),
-                                  "decimal",
+                                  "decimal"
                                 )} s`
                               : `${numberFormatter(latency, "decimal")} ms`}
                           </TableCell>

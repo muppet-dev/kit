@@ -6,7 +6,7 @@ import {
   remoteTransportSchema,
   stdioTransportSchema,
 } from "@muppet-kit/shared";
-import { type PropsWithChildren, useEffect } from "react";
+import type { PropsWithChildren } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useSearchParams } from "react-router";
 import z from "zod";
@@ -43,7 +43,7 @@ export function ConfigForm(props: ConfigForm) {
         className="flex flex-col h-full gap-4 flex-1"
         onSubmit={handleSubmit(
           (values) => mutation.mutateAsync(values),
-          console.error,
+          console.error
         )}
       >
         {props.children}

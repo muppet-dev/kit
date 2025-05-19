@@ -88,10 +88,9 @@ export function TracingTable() {
                 parsedTraces.map((trace, index) => {
                   const isError = Boolean(trace.response?.error);
 
-                  const requestWasSentOn = trace.timestamp.start;
-                  const monthWithDay = dayjs(requestWasSentOn).format("MMM DD");
-                  const time = dayjs(requestWasSentOn).format("hh:mm:ss");
-                  const millisecond = dayjs(requestWasSentOn).format("SSS");
+                  const time = dayjs(trace.timestamp.start)
+                    .format("MMM DD|hh:mm:ss|SSS")
+                    .split("|");
 
                   const latency =
                     "latency" in trace.timestamp
@@ -119,12 +118,10 @@ export function TracingTable() {
                         </div>
                       </TableCell>
                       <TableCell className="space-x-1 font-medium uppercase">
-                        <span className="text-black/50 dark:text-white/50">
-                          {monthWithDay}
-                        </span>
-                        {time}
-                        <span className="text-black/50 dark:text-white/50">
-                          .{millisecond}
+                        <span className="text-muted-foreground">{time[0]}</span>
+                        {time[1]}
+                        <span className="text-muted-foreground">
+                          .{time[2]}
                         </span>
                       </TableCell>
                       <TableCell>

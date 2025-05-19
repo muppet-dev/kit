@@ -10,7 +10,7 @@ import {
   useState,
 } from "react";
 import toast from "react-hot-toast";
-import type { z } from "zod";
+import type z from "zod";
 import type { configTransportSchema } from "../validations";
 
 export const CONFIG_STORAGE_KEY = "muppet-config";
