@@ -15,7 +15,7 @@ import {
 } from "@/client/components/ui/popover";
 import { cn } from "@/client/lib/utils";
 import { useConfig } from "@/client/providers";
-import Fuse, { type FuseResultMatch } from "fuse.js";
+import Fuse from "fuse.js";
 import { Check, ChevronDown } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
