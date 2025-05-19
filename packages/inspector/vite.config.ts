@@ -1,10 +1,9 @@
-import { readdirSync } from "node:fs";
-import { builtinModules } from "node:module";
-import path, { extname, join, normalize } from "node:path";
-import { resolve } from "node:path";
 import devServer from "@hono/vite-dev-server";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
+import { readdirSync } from "node:fs";
+import { builtinModules } from "node:module";
+import path, { extname, resolve } from "node:path";
 import {
   type Plugin,
   type ResolvedConfig,
@@ -35,10 +34,10 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       buildServer({
-        entry: "src/index.ts",
+        entry: "/src/index.ts",
       }),
       devServer({
-        entry: "src/index.ts",
+        entry: "/src/index.ts",
       }),
       tailwindcss(),
     ],
@@ -107,11 +106,6 @@ const buildServer = (options: { entry: string }): Plugin => {
 
         staticPaths.push(...Array.from(uniqueStaticPaths));
 
-        const entry = options.entry;
-        const globStr = normalizePaths([entry])
-          .map((e) => `'${e}'`)
-          .join(",");
-
         return `import "dotenv/config";
         import { Hono } from "hono";
         import { join } from "node:path";
@@ -125,7 +119,7 @@ import { createReadStream } from 'node:fs'
           filePaths: staticPaths,
         })}
 
-          const modules = import.meta.glob([${globStr}], { import: 'default', eager: true })
+          const modules = import.meta.glob(['${options.entry}'], { import: 'default', eager: true })
       let added = false
       for (const [, app] of Object.entries(modules)) {
         if (app) {
@@ -134,7 +128,7 @@ import { createReadStream } from 'node:fs'
             await next();
           }).route("/", app);
 
-          mainApp.all('*', (c) => {
+          mainApp.all((c) => {
             let executionCtx
             try {
               executionCtx = c.executionCtx
@@ -152,7 +146,7 @@ import { createReadStream } from 'node:fs'
         }
       }
       if (!added) {
-        throw new Error("Can't import modules from [${globStr}]")
+        throw new Error("Can't import modules from '${options.entry}'")
       }
 
       return mainApp;
@@ -177,6 +171,7 @@ import { createReadStream } from 'node:fs'
           emptyOutDir: false,
           minify: true,
           ssr: true,
+          copyPublicDir: false,
           rollupOptions: {
             external: [...builtinModules, /^node:/],
             input: virtualEntryId,
@@ -188,16 +183,6 @@ import { createReadStream } from 'node:fs'
       };
     },
   };
-};
-
-const normalizePaths = (paths: string[]) => {
-  return paths.map((p) => {
-    let normalizedPath = normalize(p).replace(/\\/g, "/");
-    if (normalizedPath.startsWith("./")) {
-      normalizedPath = normalizedPath.substring(2);
-    }
-    return `/${normalizedPath}`;
-  });
 };
 
 type ServeStaticHookOptions = {
