@@ -1,5 +1,5 @@
 import { cn } from "@/client/lib/utils";
-import { type Theme, useTheme } from "@/client/providers";
+import { Theme, useTheme } from "@/client/providers";
 import { Moon, Sun, Tv } from "lucide-react";
 import type { BaseSyntheticEvent } from "react";
 import { Button } from "./ui/button";
@@ -11,15 +11,17 @@ import {
 } from "./ui/dropdown-menu";
 import { useSidebar } from "./ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { useLocalStorage } from "@uidotdev/usehooks";
 
 const THEMES = {
-  light: Sun,
-  dark: Moon,
-  system: Tv,
+  [Theme.LIGHT]: Sun,
+  [Theme.DARK]: Moon,
+  [Theme.SYSTEM]: Tv,
 };
 
 export function ThemeSelector() {
-  const { theme, setTheme } = useTheme();
+  const { themeStorageKey, setTheme } = useTheme();
+  const [theme] = useLocalStorage(themeStorageKey);
   const { state } = useSidebar();
 
   const ThemeTriggerIcon = THEMES[theme as keyof typeof THEMES];
@@ -57,7 +59,7 @@ export function ThemeSelector() {
               key={name}
               className={cn(
                 isSelected && "bg-secondary focus:bg-secondary",
-                "capitalize group",
+                "capitalize group"
               )}
               onClick={handleChangeTheme(name as Theme)}
               onKeyDown={handleChangeTheme(name as Theme)}
@@ -65,7 +67,7 @@ export function ThemeSelector() {
               <Icon
                 className={cn(
                   isSelected && "text-black dark:text-white",
-                  "stroke-2 size-4",
+                  "stroke-2 size-4"
                 )}
               />
               {name}
