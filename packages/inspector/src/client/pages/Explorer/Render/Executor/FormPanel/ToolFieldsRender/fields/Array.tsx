@@ -1,4 +1,4 @@
-import { DuckField } from "../../../../../../../components/DuckForm";
+import { DuckField } from "../../../../../../../components/DuckField";
 import { Button } from "../../../../../../../components/ui/button";
 import { eventHandler } from "../../../../../../../lib/eventHandler";
 import {

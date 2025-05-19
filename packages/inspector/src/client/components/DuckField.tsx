@@ -1,4 +1,4 @@
-import { FieldProvider, useBlueprint, useDuckForm } from "../../providers";
+import { FieldProvider, useBlueprint, useDuckForm } from "../providers";
 import { Fragment } from "react/jsx-runtime";
 
 export type DuckField<

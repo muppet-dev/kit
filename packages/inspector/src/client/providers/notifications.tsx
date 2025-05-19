@@ -1,4 +1,3 @@
-import type { ConnectionInfo } from "./connection/manager";
 import type { ServerNotification } from "@modelcontextprotocol/sdk/types.js";
 import { nanoid } from "nanoid";
 import {
@@ -14,24 +13,17 @@ type NotificationContextType = ReturnType<typeof useNotificationManager>;
 
 const NotificationContext = createContext<NotificationContextType | null>(null);
 
-export type NotificationProvider = {
-  connection?: ConnectionInfo;
-};
-
-export const NotificationProvider = ({
-  children,
-  ...props
-}: PropsWithChildren<NotificationProvider>) => {
-  const values = useNotificationManager(props);
+export const NotificationProvider = (props: PropsWithChildren) => {
+  const values = useNotificationManager();
 
   return (
     <NotificationContext.Provider value={values}>
-      {children}
+      {props.children}
     </NotificationContext.Provider>
   );
 };
 
-function useNotificationManager(props: NotificationProvider) {
+function useNotificationManager() {
   const [notifications, setNotifications] = useState<
     (ServerNotification & { id: string; timestamp: { start: number } })[]
   >([]);

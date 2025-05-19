@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { generateName } from "../../lib/utils";
 import { useConfig } from "../../providers";
 import type { ConnectionInfo } from "../../providers/connection/manager";
@@ -40,7 +41,13 @@ export function useConfigForm() {
 
       if (submit_type_value === DocumentSubmitType.SAVE_AND_CONNECT) {
         addConfigurations(values);
+        toast.success("Configuration saved successfully!");
       }
+    },
+    onError: (error) => {
+      console.error(error);
+
+      toast.error(error.message);
     },
   });
 }

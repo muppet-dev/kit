@@ -1,4 +1,4 @@
-import { DuckField } from "../../../../../../components/DuckForm";
+import { DuckField } from "../../../../../../components/DuckField";
 import { Blueprint, DuckForm } from "../../../../../../providers";
 import type { JSONSchema7 } from "json-schema";
 import { useEffect, useMemo } from "react";

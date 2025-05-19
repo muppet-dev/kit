@@ -1,4 +1,4 @@
-import { ComponentNotFound } from "../../components/DuckForm/ComponentNotFound";
+import { DuckFieldComponentNotFound } from "../../components/DuckFieldNotFound";
 import {
   type PropsWithChildren,
   type ReactNode,
@@ -30,7 +30,7 @@ export function DuckForm<T>({
   generateId,
 }: DuckForm<T>) {
   const value = {
-    components: { default: ComponentNotFound, ...components },
+    components: { default: DuckFieldComponentNotFound, ...components },
     resolver,
     generateId,
   };
