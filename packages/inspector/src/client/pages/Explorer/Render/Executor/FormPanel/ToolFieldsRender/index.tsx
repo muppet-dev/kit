@@ -1,7 +1,7 @@
 import { DuckField } from "@/client/components/DuckForm";
 import { Blueprint, DuckForm } from "@/client/providers";
 import type { JSONSchema7 } from "json-schema";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 import type { ToolItemType } from "../../../../types";
 import { quackFields } from "./fields";
@@ -11,17 +11,21 @@ export function ToolFieldsRender(props: ToolItemType) {
   const { reset } = useFormContext();
   if (!props.schema) return <></>;
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  const schema = useMemo(() => {
+  const { schema, defaultValue } = useMemo(() => {
     const inputSchema = props.inputSchema as any;
     const schema = transformSchema(props.schema, inputSchema?.required);
 
     const defaultValue = getDefaultValues(props.schema as Record<string, any>);
 
-    if (defaultValue) reset(defaultValue, { keepIsSubmitSuccessful: true });
-
-    return schema;
+    return {
+      schema,
+      defaultValue,
+    };
   }, [props.schema, props.inputSchema]);
+
+  useEffect(() => {
+    if (defaultValue) reset(defaultValue, { keepIsSubmitSuccessful: true });
+  }, [defaultValue, reset]);
 
   if (!schema || Object.keys(schema).length === 0)
     return (

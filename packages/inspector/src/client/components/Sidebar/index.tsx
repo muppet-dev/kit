@@ -27,6 +27,7 @@ import { PingButton } from "./PingButton";
 import { SidebarItem } from "./SidebarItem";
 import { Button } from "../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { Logo } from "./Logo";
 
 const data = {
   panels: [
@@ -73,16 +74,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="flex-row items-center justify-between">
         <Link to="/" className="w-max">
-          <img
-            src={open ? "/logo.png" : "/logo-small.png"}
-            alt="Muppet"
-            className={cn("dark:hidden", open ? "w-32" : "size-8")}
-          />
-          <img
-            src={open ? "/logo-dark.png" : "/logo-small-dark.png"}
-            alt="Muppet"
-            className={cn("dark:block hidden", open ? "w-32" : "size-8")}
-          />
+          <Logo />
         </Link>
         {open && (
           <p className="text-sm font-semibold text-muted-foreground">
