@@ -29,7 +29,7 @@ import { Button } from "../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { Logo } from "./Logo";
 
-const data = {
+const SIDEBAR_ITEMS = {
   panels: [
     {
       name: "Explorer",
@@ -73,7 +73,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="flex-row items-center justify-between">
-        <Link to="/" className="w-max">
+        <Link to="/" className={cn("w-max", open ? "py-1" : "py-0.5")}>
           <Logo />
         </Link>
         {open && (
@@ -89,8 +89,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <PingButton />
           </SidebarMenu>
         </SidebarGroup>
-        <SidebarItem items={data.panels} />
-        <SidebarItem items={data.configuration} />
+        <SidebarItem items={SIDEBAR_ITEMS.panels} />
+        <SidebarItem items={SIDEBAR_ITEMS.configuration} />
       </SidebarContent>
       <SidebarFooter className={cn(open && "flex-row items-center")}>
         <GithubLinkButton />
