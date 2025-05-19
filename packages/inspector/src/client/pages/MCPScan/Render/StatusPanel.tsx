@@ -1,6 +1,6 @@
-import { Skeleton } from "@/client/components/ui/skeleton";
-import { eventHandler } from "@/client/lib/eventHandler";
-import { cn, numberFormatter } from "@/client/lib/utils";
+import { Skeleton } from "../../../components/ui/skeleton";
+import { eventHandler } from "../../../lib/eventHandler";
+import { cn, numberFormatter } from "../../../lib/utils";
 import { Clock, type LucideProps, TriangleAlert } from "lucide-react";
 import type {
   ForwardRefExoticComponent,

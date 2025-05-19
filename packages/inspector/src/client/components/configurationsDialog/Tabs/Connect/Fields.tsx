@@ -1,4 +1,4 @@
-import type { configTransportSchema as schema } from "@/client/validations";
+import type { configTransportSchema as schema } from "../../../../validations";
 import { useFormContext } from "react-hook-form";
 import type z from "zod";
 import { ConfigFormFields } from "../../../ConfigFormFields";

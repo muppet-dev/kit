@@ -1,6 +1,6 @@
-import { useField } from "@/client/providers";
+import { useField } from "../providers";
 
-export function ComponentNotFound() {
+export function DuckFieldComponentNotFound() {
   const options = useField();
 
   if (options.type === "default")

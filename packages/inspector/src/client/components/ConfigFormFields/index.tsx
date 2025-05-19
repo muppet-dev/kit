@@ -1,4 +1,4 @@
-import type { configTransportSchema as schema } from "@/client/validations";
+import type { configTransportSchema as schema } from "../../validations";
 import { Transport } from "@muppet-kit/shared";
 import { Controller, useFormContext } from "react-hook-form";
 import type z from "zod";

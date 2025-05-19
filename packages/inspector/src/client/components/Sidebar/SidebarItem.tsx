@@ -4,8 +4,8 @@ import {
   SidebarMenuItem,
   sidebarMenuButtonVariants,
   useSidebar,
-} from "@/client/components/ui/sidebar";
-import { cn } from "@/client/lib/utils";
+} from "../ui/sidebar";
+import { cn } from "../../lib/utils";
 import type { LucideIcon } from "lucide-react";
 import type { PropsWithChildren } from "react";
 import { NavLink } from "react-router";
@@ -46,7 +46,7 @@ export function SidebarItem({ items }: SidebarItem) {
                   cn(
                     sidebarMenuButtonVariants(),
                     isActive &&
-                      "bg-primary hover:bg-primary text-primary-foreground hover:text-primary-foreground",
+                      "bg-primary hover:bg-primary text-primary-foreground hover:text-primary-foreground"
                   )
                 }
               >

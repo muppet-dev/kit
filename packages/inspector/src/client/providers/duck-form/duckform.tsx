@@ -1,4 +1,4 @@
-import { ComponentNotFound } from "@/client/components/DuckForm/ComponentNotFound";
+import { DuckFieldComponentNotFound } from "../../components/DuckFieldNotFound";
 import {
   type PropsWithChildren,
   type ReactNode,
@@ -10,11 +10,11 @@ type DuckFormContextType<T> = {
   readonly components: Record<string, () => ReactNode>;
   readonly generateId?: (
     schema: Record<string, T>,
-    props: Record<string, unknown>,
+    props: Record<string, unknown>
   ) => string | undefined;
   readonly resolver: (
     schema: Record<string, T>,
-    props: Record<string, unknown>,
+    props: Record<string, unknown>
   ) => T | undefined;
 };
 
@@ -30,7 +30,7 @@ export function DuckForm<T>({
   generateId,
 }: DuckForm<T>) {
   const value = {
-    components: { default: ComponentNotFound, ...components },
+    components: { default: DuckFieldComponentNotFound, ...components },
     resolver,
     generateId,
   };
@@ -52,7 +52,7 @@ export function useDuckForm<T>() {
 
 function defaultResolver<T>(
   schema: Record<string, T>,
-  props: Record<string, unknown>,
+  props: Record<string, unknown>
 ): T {
   return {
     ...schema[String(props.id)],

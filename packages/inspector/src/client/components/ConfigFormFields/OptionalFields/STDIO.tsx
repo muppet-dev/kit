@@ -3,12 +3,12 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/client/components/ui/accordion";
-import { Button } from "@/client/components/ui/button";
-import { Input } from "@/client/components/ui/input";
-import { Label } from "@/client/components/ui/label";
-import { eventHandler } from "@/client/lib/eventHandler";
-import type { configTransportSchema } from "@/client/validations";
+} from "../../ui/accordion";
+import { Button } from "../../ui/button";
+import { Input } from "../../ui/input";
+import { Label } from "../../ui/label";
+import { eventHandler } from "../../../lib/eventHandler";
+import type { configTransportSchema } from "../../../validations";
 import { Trash } from "lucide-react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import type z from "zod";

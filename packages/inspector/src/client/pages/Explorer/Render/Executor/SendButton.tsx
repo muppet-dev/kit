@@ -1,5 +1,5 @@
-import { Button } from "@/client/components/ui/button";
-import { Spinner } from "@/client/components/ui/spinner";
+import { Button } from "../../../../components/ui/button";
+import { Spinner } from "../../../../components/ui/spinner";
 import { SendHorizonal } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 

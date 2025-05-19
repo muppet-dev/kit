@@ -1,18 +1,22 @@
-import { DuckField } from "@/client/components/DuckForm";
-import { useBlueprint, useDuckForm, useField } from "@/client/providers";
+import { DuckField } from "../../../../../../../components/DuckField";
+import {
+  useBlueprint,
+  useDuckForm,
+  useField,
+} from "../../../../../../../providers";
 import { useId, useMemo } from "react";
 import type { FieldType } from "./constants";
 import type { FieldProps } from "./types";
 
 export interface ObjectProps<
-  T extends Record<string, FieldProps> = Record<string, FieldProps>,
+  T extends Record<string, FieldProps> = Record<string, FieldProps>
 > {
   type: FieldType.OBJECT;
   properties: T;
 }
 
 export function ObjectField<
-  T extends Record<string, FieldProps> = Record<string, FieldProps>,
+  T extends Record<string, FieldProps> = Record<string, FieldProps>
 >() {
   // @ts-expect-error: <explaination
   const props = useField() as ObjectProps<T>;
@@ -23,7 +27,7 @@ export function ObjectField<
   const customId = useMemo(
     // @ts-expect-error: <explaination>
     () => generateId?.(schema, props),
-    [generateId, schema, props],
+    [generateId, schema, props]
   );
 
   const componentId = customId ?? autoId;

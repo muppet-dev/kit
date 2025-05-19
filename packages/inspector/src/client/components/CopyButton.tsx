@@ -1,7 +1,6 @@
-import { eventHandler } from "@/client/lib/eventHandler";
-import { cn } from "@/client/lib/utils";
+import { eventHandler } from "../lib/eventHandler";
+import { cn } from "../lib/utils";
 import { Check, Copy } from "lucide-react";
-import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { useCopyToClipboard } from "@uidotdev/usehooks";
@@ -40,7 +39,7 @@ export function CopyButton({
       <Icon
         className={cn(
           "size-4 stroke-2",
-          isCopied && "stroke-green-500 dark:stroke-green-300",
+          isCopied && "stroke-green-500 dark:stroke-green-300"
         )}
       />
     </Button>
@@ -52,7 +51,7 @@ export function CopyButton({
     <Tooltip>
       <TooltipTrigger asChild>{button}</TooltipTrigger>
       <TooltipContent hidden={!data} side={tooltipSide}>
-        {isCopied ? "Copied" : (tooltipContent ?? "Copy Code")}
+        {isCopied ? "Copied" : tooltipContent ?? "Copy Code"}
       </TooltipContent>
     </Tooltip>
   );

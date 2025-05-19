@@ -1,8 +1,6 @@
-import { cn } from "@/client/lib/utils";
-/* eslint-disable react-hooks/rules-of-hooks */
-import { useTheme } from "@/client/providers";
-import { useShiki } from "@/client/providers";
 import { useEffect, useState } from "react";
+import { cn } from "../lib/utils";
+import { Theme, useShiki, useTheme } from "../providers";
 import { CopyButton } from "./CopyButton";
 import { Skeleton } from "./ui/skeleton";
 
@@ -11,7 +9,7 @@ export type CodeHighlighter = { content: string; className?: string };
 export function CodeHighlighter({ content, className }: CodeHighlighter) {
   const highlighter = useShiki();
   const [html, setHtml] = useState("");
-  const { resolvedTheme } = useTheme();
+  const { theme } = useTheme();
 
   if (!highlighter)
     return (
@@ -30,19 +28,19 @@ export function CodeHighlighter({ content, className }: CodeHighlighter) {
       .codeToHtml(content, {
         lang: "json",
         theme:
-          resolvedTheme === "light"
+          theme === Theme.LIGHT
             ? "github-light-default"
             : "github-dark-default",
       })
       .then((val) => setHtml(val));
-  }, [content, resolvedTheme]);
+  }, [content, theme]);
 
   return (
     <div className="relative size-full">
       <div
         className={cn(
           "p-2 bg-white border relative h-full overflow-y-auto dark:bg-[#0d1117]",
-          className,
+          className
         )}
       >
         <div

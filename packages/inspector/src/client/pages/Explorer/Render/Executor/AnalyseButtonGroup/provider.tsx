@@ -1,5 +1,5 @@
-import type { MCPItemType } from "@/client/pages/Explorer/types";
-import { useConfig } from "@/client/providers";
+import type { MCPItemType } from "../../../../../pages/Explorer/types";
+import { useConfig } from "../../../../../providers";
 import { useMutation } from "@tanstack/react-query";
 import { type PropsWithChildren, createContext, useContext } from "react";
 import toast from "react-hot-toast";

@@ -1,8 +1,8 @@
-import { eventHandler } from "@/client/lib/eventHandler";
-import { cn } from "@/client/lib/utils";
-import { useConfig } from "@/client/providers";
-import type { ConnectionInfo } from "@/client/providers/connection/manager";
-import { DocumentSubmitType, SUBMIT_BUTTON_KEY } from "@/client/validations";
+import { eventHandler } from "../../../lib/eventHandler";
+import { cn } from "../../../lib/utils";
+import { useConfig } from "../../../providers";
+import type { ConnectionInfo } from "../../../providers/connection/manager";
+import { DocumentSubmitType, SUBMIT_BUTTON_KEY } from "../../../validations";
 import { Transport } from "@muppet-kit/shared";
 import { Trash } from "lucide-react";
 import { useState } from "react";
@@ -32,7 +32,7 @@ export function Configurations() {
                       ([key, value]) => ({
                         key,
                         value: String(value),
-                      }),
+                      })
                     )
                   : value.env
                 : undefined,
@@ -78,7 +78,7 @@ export function Configurations() {
                   selected?.name === item.name
                     ? "bg-accent/80 dark:bg-accent/50 border-primary/30"
                     : "hover:bg-accent/80 dark:hover:bg-accent/50 hover:border-primary/30 transition-all",
-                  "relative border pl-3 pr-[54px] pt-1.5 pb-2 cursor-pointer flex items-center justify-between select-none w-full",
+                  "relative border pl-3 pr-[54px] pt-1.5 pb-2 cursor-pointer flex items-center justify-between select-none w-full"
                 )}
               >
                 <div className="w-full flex flex-col">
@@ -90,8 +90,8 @@ export function Configurations() {
                         item.type === Transport.HTTP
                           ? "bg-green-500 dark:bg-green-300"
                           : item.type === Transport.SSE
-                            ? "bg-yellow-500 dark:bg-yellow-300"
-                            : "bg-blue-500 dark:bg-blue-300",
+                          ? "bg-yellow-500 dark:bg-yellow-300"
+                          : "bg-blue-500 dark:bg-blue-300"
                       )}
                     >
                       {item.type === Transport.HTTP ? (

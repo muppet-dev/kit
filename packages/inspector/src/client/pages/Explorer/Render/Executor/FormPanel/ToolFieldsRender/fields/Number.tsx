@@ -1,5 +1,9 @@
-import { Input } from "@/client/components/ui/input";
-import { useBlueprint, useDuckForm, useField } from "@/client/providers";
+import { Input } from "../../../../../../../components/ui/input";
+import {
+  useBlueprint,
+  useDuckForm,
+  useField,
+} from "../../../../../../../providers";
 import { useId, useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 import type { FieldType } from "./constants";
@@ -20,7 +24,7 @@ export function NumberField() {
   const autoId = useId();
   const customId = useMemo(
     () => generateId?.(schema, props),
-    [generateId, schema, props],
+    [generateId, schema, props]
   );
 
   const componentId = customId ?? autoId;

@@ -1,12 +1,12 @@
 "use client";
 
-import { cn } from "@/client/lib/utils";
+import { cn } from "../../lib/utils";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { ChevronDown } from "lucide-react";
 import type * as React from "react";
 
 function Accordion(
-  props: React.ComponentProps<typeof AccordionPrimitive.Root>,
+  props: React.ComponentProps<typeof AccordionPrimitive.Root>
 ) {
   return <AccordionPrimitive.Root data-slot="accordion" {...props} />;
 }
@@ -35,7 +35,7 @@ function AccordionTrigger({
         data-slot="accordion-trigger"
         className={cn(
           "flex flex-1 items-center justify-between py-4 text-sm font-medium transition-all hover:underline text-left [&[data-state=open]>svg]:rotate-180",
-          className,
+          className
         )}
         {...props}
       >

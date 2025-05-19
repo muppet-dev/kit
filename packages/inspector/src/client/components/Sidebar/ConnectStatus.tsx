@@ -1,7 +1,7 @@
-import { eventHandler } from "@/client/lib/eventHandler";
-import { cn } from "@/client/lib/utils";
-import { useConnection } from "@/client/providers";
-import { ConnectionStatus } from "@/client/providers/connection/manager";
+import { eventHandler } from "../../lib/eventHandler";
+import { cn } from "../../lib/utils";
+import { useConnection } from "../../providers";
+import { ConnectionStatus } from "../../providers/connection/manager";
 import { RotateCcw, Unplug } from "lucide-react";
 import { Button } from "../ui/button";
 import { useSidebar } from "../ui/sidebar";
