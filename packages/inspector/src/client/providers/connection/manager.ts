@@ -1,5 +1,5 @@
-import { type Notification, StdErrNotificationSchema } from "@/client/types";
-import type { configTransportSchema } from "@/client/validations";
+import { type Notification, StdErrNotificationSchema } from "../../types";
+import type { configTransportSchema } from "../../validations";
 import { auth } from "@modelcontextprotocol/sdk/client/auth.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import {

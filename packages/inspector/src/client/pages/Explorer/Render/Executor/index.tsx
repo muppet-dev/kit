@@ -3,9 +3,9 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@/client/components/ui/tabs";
-import { cn } from "@/client/lib/utils";
-import { useConfig } from "@/client/providers";
+} from "../../../../components/ui/tabs";
+import { cn } from "../../../../lib/utils";
+import { useConfig } from "../../../../providers";
 import type * as TabsPrimitive from "@radix-ui/react-tabs";
 import {
   AlignJustify,

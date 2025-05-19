@@ -1,13 +1,12 @@
 import type { EnvWithDefaultModel } from "@/types/index.js";
 import { sValidator } from "@hono/standard-validator";
 import { transportSchema } from "@muppet-kit/shared";
-import { generateObject, streamText } from "ai";
-import { experimental_createMCPClient } from "ai";
+import { generateObject, streamText, experimental_createMCPClient } from "ai";
 import { Experimental_StdioMCPTransport } from "ai/mcp-stdio";
 import { Hono } from "hono";
 import { createFactory } from "hono/factory";
 import { stream } from "hono/streaming";
-import { z } from "zod";
+import z from "zod";
 
 const router = new Hono<EnvWithDefaultModel>();
 
@@ -31,7 +30,7 @@ const handlers = factory.createHandlers(
     "query",
     z.object({
       modelId: z.string().min(1).optional(),
-    }),
+    })
   ),
   async (c, next) => {
     const { modelId } = c.req.valid("query");
@@ -45,7 +44,7 @@ const handlers = factory.createHandlers(
     c.set("modelToBeUsed", model);
 
     await next();
-  },
+  }
 );
 
 router.post(
@@ -56,7 +55,7 @@ router.post(
     "json",
     z.object({
       messages: z.array(z.any()),
-    }),
+    })
   ),
   async (c) => {
     const transport = c.req.valid("query");
@@ -92,7 +91,7 @@ router.post(
     c.header("Content-Type", "text/plain; charset=utf-8");
 
     return stream(c, (stream) => stream.pipe(result.toDataStream()));
-  },
+  }
 );
 
 router.post(
@@ -105,13 +104,15 @@ router.post(
       description: z.string().optional(),
       schema: z.record(z.string(), z.any()),
       context: z.string().optional(),
-    }),
+    })
   ),
   async (c) => {
     const { name, description, schema, context } = c.req.valid("json");
 
-    let prompt = `Generate sample data for the tool "${name}"${description ? ' with the description "${description}"' : ""}. The input schema is ${JSON.stringify(
-      schema,
+    let prompt = `Generate sample data for the tool "${name}"${
+      description ? ' with the description "${description}"' : ""
+    }. The input schema is ${JSON.stringify(
+      schema
     )}. The sample data should be a JSON object that matches the input schema. This is a MCP (Model Context Protocol) tool.`;
 
     if (context) {
@@ -129,7 +130,7 @@ router.post(
     c.header("Content-Type", "text/plain; charset=utf-8");
 
     return c.json(result.object);
-  },
+  }
 );
 
 router.post(
@@ -142,13 +143,15 @@ router.post(
       description: z.string().optional(),
       schema: z.record(z.string(), z.any()),
       context: z.string().optional(),
-    }),
+    })
   ),
   async (c) => {
     const { name, description, schema, context } = c.req.valid("json");
 
-    let prompt = `Generate a score and recommendations for the MCP (Model Context Protocol) tool "${name}"${description ? ' with the description "${description}"' : ""}. The input schema is ${JSON.stringify(
-      schema,
+    let prompt = `Generate a score and recommendations for the MCP (Model Context Protocol) tool "${name}"${
+      description ? ' with the description "${description}"' : ""
+    }. The input schema is ${JSON.stringify(
+      schema
     )}. The score should be between 0 and 10, with 10 being the best. The recommendations should include a category, description, and severity (low, medium, high). The output should be a JSON object that includes the score and an array of recommendations. The recommendations should be actionable and specific to the tool's description and schema.`;
 
     if (context) {
@@ -175,12 +178,12 @@ router.post(
             description: z
               .string()
               .describe(
-                "The description of the recommendation and how to improve.",
+                "The description of the recommendation and how to improve."
               ),
             severity: z
               .enum(["low", "medium", "high"])
               .describe("The severity of the recommendation."),
-          }),
+          })
         ),
       }),
     });
@@ -188,7 +191,7 @@ router.post(
     c.header("Content-Type", "text/plain; charset=utf-8");
 
     return c.json(result.object);
-  },
+  }
 );
 
 export default router;

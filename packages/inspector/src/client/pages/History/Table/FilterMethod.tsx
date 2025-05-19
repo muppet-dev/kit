@@ -1,12 +1,12 @@
-import { Button } from "@/client/components/ui/button";
+import { Button } from "../../../components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/client/components/ui/dropdown-menu";
-import { eventHandler } from "@/client/lib/eventHandler";
+} from "../../../components/ui/dropdown-menu";
+import { eventHandler } from "../../../lib/eventHandler";
 import { Check, Filter } from "lucide-react";
 import { useHistory } from "../providers";
 

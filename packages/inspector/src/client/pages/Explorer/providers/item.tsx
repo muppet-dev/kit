@@ -1,4 +1,4 @@
-import { useConfig, useConnection } from "@/client/providers";
+import { useConfig, useConnection } from "../../../providers";
 import {
   CallToolResultSchema,
   GetPromptResultSchema,
@@ -41,16 +41,10 @@ export const MCPItemProvider = (props: PropsWithChildren) => {
   );
 };
 
-export function useGetMCPItemQueryKey() {
-  const { connectionInfo } = useConfig();
-  const { activeTool } = useTool();
-
-  return [connectionInfo, "explorer", activeTool.name];
-}
-
 function useMCPItemManager() {
   const { activeTool } = useTool();
   const { makeRequest, mcpClient } = useConnection();
+  const { connectionInfo } = useConfig();
   const [selectedItemName, setSelectedItemName] = useState<string | null>(null);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -62,9 +56,14 @@ function useMCPItemManager() {
     setSelectedItemName(name);
   }
 
-  const queryKey = useGetMCPItemQueryKey();
+  const queryKey = [connectionInfo, "explorer", activeTool.name];
 
-  const { data: items, isLoading } = useQuery({
+  const {
+    data: items,
+    isLoading,
+    refetch,
+    isFetching,
+  } = useQuery({
     queryKey,
     queryFn: async () => {
       let handler: Promise<MCPItemType[]> | undefined;
@@ -73,7 +72,7 @@ function useMCPItemManager() {
         case Tool.TOOLS:
           handler = makeRequest(
             { method: "tools/list" },
-            ListToolsResultSchema,
+            ListToolsResultSchema
           ).then(({ tools }) =>
             tools.map(
               (tool) =>
@@ -83,8 +82,8 @@ function useMCPItemManager() {
                   description: tool.description,
                   schema: tool.inputSchema.properties as ToolItemType["schema"],
                   inputSchema: tool.inputSchema,
-                }) satisfies ToolItemType,
-            ),
+                } satisfies ToolItemType)
+            )
           );
           break;
         case Tool.PROMPTS:
@@ -92,7 +91,7 @@ function useMCPItemManager() {
             {
               method: "prompts/list",
             },
-            ListPromptsResultSchema,
+            ListPromptsResultSchema
           ).then(({ prompts }) =>
             prompts.map(
               (prompt) =>
@@ -101,8 +100,8 @@ function useMCPItemManager() {
                   name: prompt.name,
                   description: prompt.description,
                   schema: prompt.arguments,
-                }) satisfies PromptItemType,
-            ),
+                } satisfies PromptItemType)
+            )
           );
           break;
         case Tool.STATIC_RESOURCES:
@@ -110,15 +109,15 @@ function useMCPItemManager() {
             {
               method: "resources/list",
             },
-            ListResourcesResultSchema,
+            ListResourcesResultSchema
           ).then(({ resources }) =>
             resources.map(
               (resource) =>
                 ({
                   ...resource,
                   type: Tool.STATIC_RESOURCES,
-                }) satisfies StaticResourceItemType,
-            ),
+                } satisfies StaticResourceItemType)
+            )
           );
           break;
         case Tool.DYNAMIC_RESOURCES:
@@ -126,15 +125,15 @@ function useMCPItemManager() {
             {
               method: "resources/templates/list",
             },
-            ListResourceTemplatesResultSchema,
+            ListResourceTemplatesResultSchema
           ).then(({ resourceTemplates }) =>
             resourceTemplates.map(
               (resource) =>
                 ({
                   ...resource,
                   type: Tool.DYNAMIC_RESOURCES,
-                }) satisfies DynamicResourceItemType,
-            ),
+                } satisfies DynamicResourceItemType)
+            )
           );
           break;
       }
@@ -146,7 +145,7 @@ function useMCPItemManager() {
 
   const selectedItem = useMemo(
     () => items?.find((item) => item.name === selectedItemName),
-    [items, selectedItemName],
+    [items, selectedItemName]
   );
 
   async function callItem(item: MCPItemType, values: FieldValues) {
@@ -162,7 +161,7 @@ function useMCPItemManager() {
               arguments: values,
             },
           },
-          CallToolResultSchema,
+          CallToolResultSchema
         );
         break;
       case Tool.PROMPTS:
@@ -174,7 +173,7 @@ function useMCPItemManager() {
               arguments: values,
             },
           },
-          GetPromptResultSchema,
+          GetPromptResultSchema
         );
         break;
       case Tool.STATIC_RESOURCES:
@@ -185,7 +184,7 @@ function useMCPItemManager() {
               uri: item.uri,
             },
           },
-          ReadResourceResultSchema,
+          ReadResourceResultSchema
         );
         break;
       case Tool.DYNAMIC_RESOURCES:
@@ -196,7 +195,7 @@ function useMCPItemManager() {
               uri: fillTemplate(item.uriTemplate, values),
             },
           },
-          ReadResourceResultSchema,
+          ReadResourceResultSchema
         );
         break;
     }
@@ -213,6 +212,8 @@ function useMCPItemManager() {
     isLoading,
     selectedItem,
     changeSelectedItem,
+    refetch,
+    isFetching,
     callItem,
   };
 }
@@ -227,7 +228,7 @@ export const useMCPItem = () => {
 
 const fillTemplate = (
   template: string,
-  values: Record<string, string>,
+  values: Record<string, string>
 ): string => {
   return template.replace(/{([^}]+)}/g, (_, key) => values[key] || `{${key}}`);
 };

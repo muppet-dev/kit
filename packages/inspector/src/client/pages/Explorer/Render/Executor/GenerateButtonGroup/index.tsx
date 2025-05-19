@@ -1,7 +1,7 @@
-import { Button } from "@/client/components/ui/button";
-import { Spinner } from "@/client/components/ui/spinner";
-import { eventHandler } from "@/client/lib/eventHandler";
-import { useConfig } from "@/client/providers";
+import { Button } from "../../../../../components/ui/button";
+import { Spinner } from "../../../../../components/ui/spinner";
+import { eventHandler } from "../../../../../lib/eventHandler";
+import { useConfig } from "../../../../../providers";
 import { Sparkles } from "lucide-react";
 import { useMCPItem } from "../../../providers";
 import { GenerateDialog } from "./GenerateDialog";
@@ -28,7 +28,7 @@ function ActionButton() {
   const mutation = useGenerate();
 
   const handleGenerate = eventHandler(() =>
-    mutation.mutateAsync(selectedItem!),
+    mutation.mutateAsync(selectedItem!)
   );
 
   return (

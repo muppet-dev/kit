@@ -1,4 +1,4 @@
-import { cn } from "@/client/lib/utils";
+import { cn } from "../../lib/utils";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 import type * as React from "react";

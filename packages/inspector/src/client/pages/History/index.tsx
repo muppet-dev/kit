@@ -1,12 +1,12 @@
-import { Button } from "@/client/components/ui/button";
-import { Tabs, TabsList, TabsTrigger } from "@/client/components/ui/tabs";
+import { Button } from "../../components/ui/button";
+import { Tabs, TabsList, TabsTrigger } from "../../components/ui/tabs";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/client/components/ui/tooltip";
-import { eventHandler } from "@/client/lib/eventHandler";
-import { useConnection, useNotification } from "@/client/providers";
+} from "../../components/ui/tooltip";
+import { eventHandler } from "../../lib/eventHandler";
+import { useConnection, useNotification } from "../../providers";
 import { ListX } from "lucide-react";
 import { DownloadButton } from "./DownloadButton";
 import { TracingTable } from "./Table";

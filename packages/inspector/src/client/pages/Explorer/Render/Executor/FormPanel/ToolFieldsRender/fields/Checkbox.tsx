@@ -1,5 +1,9 @@
-import { Checkbox } from "@/client/components/ui/checkbox";
-import { useBlueprint, useDuckForm, useField } from "@/client/providers";
+import { Checkbox } from "../../../../../../../components/ui/checkbox";
+import {
+  useBlueprint,
+  useDuckForm,
+  useField,
+} from "../../../../../../../providers";
 import { useId, useMemo } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import type { FieldType } from "./constants";
@@ -19,7 +23,7 @@ export function CheckboxField() {
   const autoId = useId();
   const customId = useMemo(
     () => generateId?.(schema, props),
-    [generateId, schema, props],
+    [generateId, schema, props]
   );
 
   const componentId = customId ?? autoId;

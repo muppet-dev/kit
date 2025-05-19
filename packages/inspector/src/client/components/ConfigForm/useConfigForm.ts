@@ -1,7 +1,8 @@
-import { generateName } from "@/client/lib/utils";
-import { useConfig } from "@/client/providers";
-import type { ConnectionInfo } from "@/client/providers/connection/manager";
-import { DocumentSubmitType, SUBMIT_BUTTON_KEY } from "@/client/validations";
+import toast from "react-hot-toast";
+import { generateName } from "../../lib/utils";
+import { useConfig } from "../../providers";
+import type { ConnectionInfo } from "../../providers/connection/manager";
+import { DocumentSubmitType, SUBMIT_BUTTON_KEY } from "../../validations";
 import { Transport } from "@muppet-kit/shared";
 import { useMutation } from "@tanstack/react-query";
 
@@ -25,8 +26,8 @@ export function useConfigForm() {
           _values.env.length > 0
             ? JSON.stringify(
                 Object.fromEntries(
-                  _values.env.map((item) => [item.key, item.value]),
-                ),
+                  _values.env.map((item) => [item.key, item.value])
+                )
               )
             : undefined;
       }
@@ -40,7 +41,13 @@ export function useConfigForm() {
 
       if (submit_type_value === DocumentSubmitType.SAVE_AND_CONNECT) {
         addConfigurations(values);
+        toast.success("Configuration saved successfully!");
       }
+    },
+    onError: (error) => {
+      console.error(error);
+
+      toast.error(error.message);
     },
   });
 }

@@ -1,6 +1,6 @@
-import { CopyButton } from "@/client/components/CopyButton";
-import { CodeHighlighter } from "@/client/components/Hightlighter";
-import { Button } from "@/client/components/ui/button";
+import { CopyButton } from "../../components/CopyButton";
+import { CodeHighlighter } from "../../components/Hightlighter";
+import { Button } from "../../components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -8,23 +8,23 @@ import {
   DialogHeader,
   DialogOverlay,
   DialogTitle,
-} from "@/client/components/ui/dialog";
+} from "../../components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/client/components/ui/dropdown-menu";
-import { Input } from "@/client/components/ui/input";
-import { Label } from "@/client/components/ui/label";
-import { Skeleton } from "@/client/components/ui/skeleton";
+} from "../../components/ui/dropdown-menu";
+import { Input } from "../../components/ui/input";
+import { Label } from "../../components/ui/label";
+import { Skeleton } from "../../components/ui/skeleton";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/client/components/ui/tooltip";
-import { eventHandler } from "@/client/lib/eventHandler";
-import { useConfig } from "@/client/providers";
+} from "../../components/ui/tooltip";
+import { eventHandler } from "../../lib/eventHandler";
+import { useConfig } from "../../providers";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { ListX, Logs, Pickaxe } from "lucide-react";
 import type { BaseSyntheticEvent } from "react";

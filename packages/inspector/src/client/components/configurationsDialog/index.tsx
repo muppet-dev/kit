@@ -1,4 +1,4 @@
-import { useConfig } from "@/client/providers";
+import { useConfig } from "../../providers";
 import {
   Dialog,
   DialogContent,

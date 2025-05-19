@@ -1,5 +1,5 @@
-import { Input } from "@/client/components/ui/input";
-import { Spinner } from "@/client/components/ui/spinner";
+import { Input } from "../../../components/ui/input";
+import { Spinner } from "../../../components/ui/spinner";
 import Fuse, { type FuseResultMatch } from "fuse.js";
 import { CircleX } from "lucide-react";
 import { useMemo, useState } from "react";

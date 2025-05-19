@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useMCPScan } from "../providers";
-import { Skeleton } from "@/client/components/ui/skeleton";
+import { Skeleton } from "../../../components/ui/skeleton";
 import { ShieldAlert, ShieldCheck } from "lucide-react";
 import { ScanButton } from "../ScanButton";
 import { StatusPanel } from "./StatusPanel";

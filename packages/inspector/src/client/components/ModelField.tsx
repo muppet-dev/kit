@@ -1,5 +1,10 @@
-import { PROVIDER_ICONS } from "@/client/components/icons";
-import { Button } from "@/client/components/ui/button";
+import Fuse from "fuse.js";
+import { Check, ChevronDown } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { cn } from "../lib/utils";
+import { useConfig } from "../providers";
+import { PROVIDER_ICONS } from "./icons";
+import { Button } from "./ui/button";
 import {
   Command,
   CommandEmpty,
@@ -7,17 +12,8 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/client/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/client/components/ui/popover";
-import { cn } from "@/client/lib/utils";
-import { useConfig } from "@/client/providers";
-import Fuse, { type FuseResultMatch } from "fuse.js";
-import { Check, ChevronDown } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+} from "./ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 export type ModelField = {
   value?: string;

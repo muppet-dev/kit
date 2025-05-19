@@ -1,4 +1,4 @@
-import { useConnection, useNotification } from "@/client/providers";
+import { useConnection, useNotification } from "../../../providers";
 import {
   type PropsWithChildren,
   createContext,
@@ -65,15 +65,15 @@ function useHistoryManager() {
 
   const [methodFilters, setMethodFilters] = useState<string[] | null>(null);
   const [timestampSort, setTimestampSort] = useState<SortingEnum>(
-    SortingEnum.ASCENDING,
+    SortingEnum.ASCENDING
   );
 
   const rawTraces = useMemo(() => {
     return tab.value === HistoryTab.HISTORY
       ? requestHistory
       : tab.value === HistoryTab.NOTIFICATIONS
-        ? notifications
-        : stdErrNotifications;
+      ? notifications
+      : stdErrNotifications;
   }, [tab, requestHistory, notifications, stdErrNotifications]);
 
   const traces = useMemo(() => {
@@ -82,8 +82,8 @@ function useHistoryManager() {
     let results = rawTraces.filter(
       (item) =>
         _methodFilters?.includes(
-          "request" in item ? JSON.parse(item.request).method : item.method,
-        ) ?? true,
+          "request" in item ? JSON.parse(item.request).method : item.method
+        ) ?? true
     );
 
     results = results.sort((a, b) => {

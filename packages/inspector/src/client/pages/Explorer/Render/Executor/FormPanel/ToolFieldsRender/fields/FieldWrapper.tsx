@@ -1,6 +1,10 @@
-import { Label } from "@/client/components/ui/label";
-import { cn } from "@/client/lib/utils";
-import { useBlueprint, useDuckForm, useField } from "@/client/providers";
+import { Label } from "../../../../../../../components/ui/label";
+import { cn } from "../../../../../../../lib/utils";
+import {
+  useBlueprint,
+  useDuckForm,
+  useField,
+} from "../../../../../../../providers";
 import { ErrorMessage } from "@hookform/error-message";
 import { type PropsWithChildren, useEffect, useId, useMemo } from "react";
 
@@ -21,7 +25,7 @@ export function FieldWrapper({ children }: FieldWrapper) {
   const autoId = useId();
   const customId = useMemo(
     () => generateId?.(schema, props),
-    [generateId, schema, props],
+    [generateId, schema, props]
   );
 
   const { required, label, onChange, type, description } = props;
@@ -39,7 +43,7 @@ export function FieldWrapper({ children }: FieldWrapper) {
           "flex",
           type === "boolean"
             ? "flex-row-reverse w-max gap-2 items-center"
-            : "flex-col",
+            : "flex-col"
         )}
       >
         {label && (

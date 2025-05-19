@@ -1,4 +1,4 @@
-import { CodeHighlighter } from "@/client/components/Hightlighter";
+import { CodeHighlighter } from "../../../../components/Hightlighter";
 import { Tool, useMCPItem } from "../../providers";
 
 export function SchemaPanel() {

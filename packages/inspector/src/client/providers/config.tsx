@@ -1,4 +1,4 @@
-import type { ConnectionInfo } from "@/client/providers/connection/manager";
+import type { ConnectionInfo } from "./connection/manager";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import {
@@ -10,7 +10,7 @@ import {
   useState,
 } from "react";
 import toast from "react-hot-toast";
-import type { z } from "zod";
+import type z from "zod";
 import type { configTransportSchema } from "../validations";
 
 export const CONFIG_STORAGE_KEY = "muppet-config";

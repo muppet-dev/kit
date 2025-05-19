@@ -1,24 +1,24 @@
-import { CodeHighlighter } from "@/client/components/Hightlighter";
+import { CodeHighlighter } from "../../../../components/Hightlighter";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-} from "@/client/components/ui/select";
-import { Skeleton } from "@/client/components/ui/skeleton";
-import { numberFormatter } from "@/client/lib/utils";
+} from "../../../../components/ui/select";
+import { Skeleton } from "../../../../components/ui/skeleton";
+import { numberFormatter } from "../../../../lib/utils";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { JSONRender } from "./JSONRender";
 import { useCustomForm } from "./provider";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { Button } from "@/client/components/ui/button";
-import { eventHandler } from "@/client/lib/eventHandler";
+import { Button } from "../../../../components/ui/button";
+import { eventHandler } from "../../../../lib/eventHandler";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/client/components/ui/tooltip";
+} from "../../../../components/ui/tooltip";
 
 enum Format {
   JSON = "json",

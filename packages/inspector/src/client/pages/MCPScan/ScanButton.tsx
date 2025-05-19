@@ -1,9 +1,9 @@
 import type { ComponentProps } from "react";
 import { useMCPScan } from "./providers";
-import { eventHandler } from "@/client/lib/eventHandler";
-import { Button } from "@/client/components/ui/button";
-import { cn } from "@/client/lib/utils";
-import { Spinner } from "@/client/components/ui/spinner";
+import { eventHandler } from "../../lib/eventHandler";
+import { Button } from "../../components/ui/button";
+import { cn } from "../../lib/utils";
+import { Spinner } from "../../components/ui/spinner";
 import { Play, RotateCcw } from "lucide-react";
 
 export function ScanButton({ className, ...props }: ComponentProps<"button">) {

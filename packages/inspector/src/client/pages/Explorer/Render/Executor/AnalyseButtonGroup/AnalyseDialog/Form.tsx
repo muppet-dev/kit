@@ -1,14 +1,14 @@
-import { Button } from "@/client/components/ui/button";
-import { Label } from "@/client/components/ui/label";
-import { Textarea } from "@/client/components/ui/textarea";
+import { Button } from "../../../../../../components/ui/button";
+import { Label } from "../../../../../../components/ui/label";
+import { Textarea } from "../../../../../../components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 import { useMCPItem } from "../../../../providers";
 import { useAnalyse } from "../provider";
-import { useConfig } from "@/client/providers";
-import { ModelField } from "@/client/components/ModelField";
-import { Spinner } from "@/client/components/ui/spinner";
+import { useConfig } from "../../../../../../providers";
+import { ModelField } from "../../../../../../components/ModelField";
+import { Spinner } from "../../../../../../components/ui/spinner";
 
 const schema = z.object({
   context: z.string(),
