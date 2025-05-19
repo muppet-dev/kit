@@ -8,9 +8,9 @@ import {
   SidebarRail,
   SidebarTrigger,
   useSidebar,
-} from "@/client/components/ui/sidebar";
-import { cn } from "@/client/lib/utils";
-import { useConfig, useConnection } from "@/client/providers";
+} from "../ui/sidebar";
+import { cn } from "../../lib/utils";
+import { useConfig, useConnection } from "../../providers";
 import {
   BookText,
   History,
@@ -27,7 +27,8 @@ import { PingButton } from "./PingButton";
 import { SidebarItem } from "./SidebarItem";
 import { Button } from "../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import { Logo } from "./Logo";
+import { Logo } from "../Logo";
+import { SmallLogo } from "../SmallLogo";
 
 const SIDEBAR_ITEMS = {
   panels: [
@@ -73,8 +74,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="flex-row items-center justify-between">
-        <Link to="/" className={cn("w-max", open ? "py-1" : "py-0.5")}>
-          <Logo />
+        <Link to="/" className={cn("w-max", open ? "py-0.5" : "py-1.5")}>
+          {open ? (
+            <Logo className="w-28" />
+          ) : (
+            <SmallLogo className="h-[15.53px] w-max" />
+          )}
         </Link>
         {open && (
           <p className="text-sm font-semibold text-muted-foreground">
