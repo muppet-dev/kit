@@ -131,14 +131,14 @@ export function Executor() {
                   </div>
                 )}
                 {selectedTab === RequestTab.JSON && (
-                  <FormWrapper
+                  <div
                     className={cn(
                       "flex-1 flex flex-col gap-1.5 overflow-y-auto",
                       !isExpend && "min-h-1/2 h-full"
                     )}
                   >
                     <JSONPanel />
-                  </FormWrapper>
+                  </div>
                 )}
                 <ReponsePanel isExpend={isExpend} onExpandChange={setExpend} />
               </div>

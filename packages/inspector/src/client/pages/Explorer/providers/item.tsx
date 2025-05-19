@@ -140,7 +140,7 @@ function useMCPItemManager() {
 
       return await handler;
     },
-    enabled: !!mcpClient,
+    enabled: !!mcpClient && activeTool.name !== Tool.ROOTS,
   });
 
   const selectedItem = useMemo(

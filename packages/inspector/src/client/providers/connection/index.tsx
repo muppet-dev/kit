@@ -6,6 +6,7 @@ import {
 } from "react";
 import { useConfig } from "../config";
 import { useNotification } from "../notifications";
+import { useRoots } from "../roots";
 import { useConnectionManager } from "./manager";
 
 type ConnectionContextType = ReturnType<typeof useConnectionManager>;
@@ -15,11 +16,15 @@ const ConnectionContext = createContext<ConnectionContextType | null>(null);
 export const ConnectionProvider = ({ children }: PropsWithChildren) => {
   const { connectionInfo, proxyAddress } = useConfig();
   const { addNotification, addStdErrNotification } = useNotification();
+
+  const roots = useRoots();
+
   const values = useConnectionManager({
     ...connectionInfo!,
     onNotification: addNotification,
     onStdErrNotification: addStdErrNotification,
     proxy: proxyAddress,
+    getRoots: () => roots.current ?? [],
   });
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>

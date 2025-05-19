@@ -10,9 +10,8 @@ import {
   TooltipTrigger,
 } from "../../../components/ui/tooltip";
 import { eventHandler } from "../../../lib/eventHandler";
-import { cn } from "../../../lib/utils";
 import { RefreshCcw } from "lucide-react";
-import { useMCPItem, useTool } from "../providers";
+import { Tool, useMCPItem, useTool } from "../providers";
 
 export function ToolsTabs() {
   const { tools, activeTool, changeTool } = useTool();
@@ -37,22 +36,22 @@ export function ToolsTabs() {
             {tab.label}
           </TabsTrigger>
         ))}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant="ghost"
-              className="size-max has-[>svg]:px-1.5 py-1.5 ml-auto mr-2"
-              onClick={handleRefresh}
-              onKeyDown={handleRefresh}
-              disabled={isFetching}
-            >
-              <RefreshCcw
-                className={cn("size-4 stroke-2", isFetching && "animate-spin")}
-              />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Refresh {activeTool.name}</TooltipContent>
-        </Tooltip>
+        {activeTool.name !== Tool.ROOTS && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                className="size-max has-[>svg]:px-1.5 py-1.5 ml-auto mr-2"
+                onClick={handleRefresh}
+                onKeyDown={handleRefresh}
+                disabled={isFetching}
+              >
+                <RefreshCcw className="size-4 stroke-2" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Refresh {activeTool.name}</TooltipContent>
+          </Tooltip>
+        )}
       </TabsList>
     </TabsPrimitive>
   );
