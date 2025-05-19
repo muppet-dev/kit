@@ -165,6 +165,7 @@ const buildServer = (options: { entry: string }): Plugin => {
           outDir: "./dist-server",
           emptyOutDir: false,
           minify: true,
+          copyPublicDir: false,
           ssr: true,
           rollupOptions: {
             external: [...builtinModules, /^node:/],

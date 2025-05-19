@@ -172,6 +172,7 @@ import { createReadStream } from 'node:fs'
           emptyOutDir: false,
           minify: true,
           ssr: true,
+          copyPublicDir: false,
           rollupOptions: {
             external: [...builtinModules, /^node:/],
             input: virtualEntryId,
