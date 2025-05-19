@@ -36,7 +36,13 @@ export function ModelField({ onChange, value, className }: ModelField) {
   const [provider, name] = value?.split(":") ?? "";
   const SelectedModelIcon = PROVIDER_ICONS[provider];
 
-  const searchResults = useMemo(() => {
+  const searchResults = useMemo<
+    {
+      id: string;
+      provider: string;
+      name: string;
+    }[]
+  >(() => {
     const _models = getAvailableModels();
     const items = _models.map((item) => {
       const [provider, name] = item.split(":");
@@ -52,13 +58,9 @@ export function ModelField({ onChange, value, className }: ModelField) {
 
     const fuse = new Fuse(items, {
       keys: ["provider", "name"],
-      includeMatches: true,
     });
 
-    return fuse.search(search).map(({ item, matches }) => ({
-      ...item,
-      matches: matches?.flatMap((match) => match.indices),
-    }));
+    return fuse.search(search).map(({ item }) => item);
   }, [getAvailableModels, search]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>

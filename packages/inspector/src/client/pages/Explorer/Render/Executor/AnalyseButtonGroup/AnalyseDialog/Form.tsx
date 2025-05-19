@@ -2,13 +2,17 @@ import { Button } from "@/client/components/ui/button";
 import { Label } from "@/client/components/ui/label";
 import { Textarea } from "@/client/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 import { useMCPItem } from "../../../../providers";
 import { useAnalyse } from "../provider";
+import { useConfig } from "@/client/providers";
+import { ModelField } from "@/client/components/ModelField";
+import { Spinner } from "@/client/components/ui/spinner";
 
 const schema = z.object({
   context: z.string(),
+  model: z.string().optional(),
 });
 
 export type AnalyseForm = {
@@ -17,14 +21,20 @@ export type AnalyseForm = {
 
 export function AnalyseForm(props: AnalyseForm) {
   const { selectedItem } = useMCPItem();
+  const { getDefaultModel } = useConfig();
+  const model = getDefaultModel();
 
   const {
     handleSubmit,
     register,
-    formState: { errors },
+    formState: { errors, isSubmitting },
+    control,
     reset,
   } = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
+    defaultValues: {
+      model,
+    },
   });
 
   const mutation = useAnalyse();
@@ -55,8 +65,26 @@ export function AnalyseForm(props: AnalyseForm) {
           </p>
         )}
       </div>
+      <div className="space-y-1">
+        <Label>Model</Label>
+        <Controller
+          name="model"
+          control={control}
+          render={({ field: { value, onChange } }) => (
+            <ModelField value={value} onChange={onChange} className="w-full" />
+          )}
+        />
+        {errors.model && (
+          <p className="text-sm text-red-500 dark:text-red-300">
+            {errors.model?.message}
+          </p>
+        )}
+      </div>
       <div className="flex items-center justify-end">
-        <Button type="submit">Analyse</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting && <Spinner />}
+          {isSubmitting ? "Analysing" : "Analyse"}
+        </Button>
       </div>
     </form>
   );

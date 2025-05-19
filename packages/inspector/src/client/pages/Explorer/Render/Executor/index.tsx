@@ -28,6 +28,7 @@ import { AnalyseProvider } from "./AnalyseButtonGroup/provider";
 import { AnalysePanel } from "./AnalysePanel";
 import { FormPanel } from "./FormPanel";
 import { FormResetButton } from "./FormResetButton";
+import { FormWrapper } from "./FormWrapper";
 import { GenerateButtonGroup } from "./GenerateButtonGroup";
 import { JSONPanel } from "./JSONPanel";
 import { ReponsePanel } from "./Reponse";

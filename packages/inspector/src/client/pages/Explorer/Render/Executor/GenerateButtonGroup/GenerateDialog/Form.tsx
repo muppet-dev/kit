@@ -8,6 +8,7 @@ import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 import { useMCPItem } from "../../../../providers";
 import { useGenerate } from "../provider";
+import { Spinner } from "@/client/components/ui/spinner";
 
 const schema = z.object({
   context: z.string(),
@@ -26,7 +27,7 @@ export function GenerateForm(props: GenerateForm) {
   const {
     handleSubmit,
     register,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     control,
     reset,
   } = useForm<z.infer<typeof schema>>({
@@ -81,7 +82,10 @@ export function GenerateForm(props: GenerateForm) {
         )}
       </div>
       <div className="flex items-center justify-end">
-        <Button type="submit">Generate</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting && <Spinner />}
+          {isSubmitting ? "Generating" : "Generate"}
+        </Button>
       </div>
     </form>
   );

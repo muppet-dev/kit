@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { type PropsWithChildren, createContext, useContext } from "react";
 import { useFormContext } from "react-hook-form";
 import toast from "react-hot-toast";
+import { Tool } from "../../../providers";
 
 type GenerateContextType = ReturnType<typeof useGenerateManager>;
 
@@ -25,9 +26,31 @@ function useGenerateManager() {
 
   return useMutation({
     mutationFn: async (
-      values: MCPItemType & { context?: string; modelId?: string }
-    ) =>
-      await fetch(`${proxyAddress}/api/generate`, {
+      values: MCPItemType & { context?: string; modelId?: string },
+    ) => {
+      const schema =
+        values.type === Tool.TOOLS || values.type === Tool.PROMPTS
+          ? values.schema
+          : undefined;
+
+      let hasSchema = false;
+
+      if (schema) {
+        if (
+          (typeof schema === "object" &&
+            !Array.isArray(schema) &&
+            Object.keys(schema).length > 0) ||
+          (Array.isArray(schema) && schema.length > 0)
+        ) {
+          hasSchema = true;
+        }
+      }
+
+      if (!hasSchema) {
+        throw new Error("No schema found for this tool.");
+      }
+
+      return fetch(`${proxyAddress}/api/generate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -39,7 +62,8 @@ function useGenerateManager() {
         }
 
         return res.json();
-      }),
+      });
+    },
     onSuccess: (data) => {
       reset(data);
       toast.success("Data generated successfully!");

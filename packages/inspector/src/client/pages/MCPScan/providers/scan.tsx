@@ -52,11 +52,11 @@ function useMCPScanManager() {
                       type: "tool",
                       name: tool.name,
                       description: tool.description,
-                    } satisfies MCPScanPayload)
-                )
+                    }) satisfies MCPScanPayload,
+                ),
               );
-            }
-          )
+            },
+          ),
         );
       }
 
@@ -71,11 +71,11 @@ function useMCPScanManager() {
                       type: "prompt",
                       name: prompt.name,
                       description: prompt.description,
-                    } satisfies MCPScanPayload)
-                )
+                    }) satisfies MCPScanPayload,
+                ),
               );
-            }
-          )
+            },
+          ),
         );
       }
 
@@ -83,7 +83,7 @@ function useMCPScanManager() {
         promises.push(
           makeRequest(
             { method: "resources/list" },
-            ListResourcesResultSchema
+            ListResourcesResultSchema,
           ).then(({ resources }) => {
             entries.push(
               ...resources.map(
@@ -92,15 +92,15 @@ function useMCPScanManager() {
                     type: "resource",
                     name: resource.name,
                     description: resource.description,
-                  } satisfies MCPScanPayload)
-              )
+                  }) satisfies MCPScanPayload,
+              ),
             );
           }),
           makeRequest(
             {
               method: "resources/templates/list",
             },
-            ListResourceTemplatesResultSchema
+            ListResourceTemplatesResultSchema,
           ).then(({ resourceTemplates }) =>
             entries.push(
               ...resourceTemplates.map(
@@ -109,10 +109,10 @@ function useMCPScanManager() {
                     type: "resource",
                     name: resource.name,
                     description: resource.description,
-                  } satisfies MCPScanPayload)
-              )
-            )
-          )
+                  }) satisfies MCPScanPayload,
+              ),
+            ),
+          ),
         );
       }
 
@@ -130,15 +130,24 @@ function useMCPScanManager() {
         throw new Error(
           `Verification API error: ${
             response.status
-          } - ${await response.text()}`
+          } - ${await response.text()}`,
         );
       }
 
       return {
         duration: performance.now() - start,
-        tools: (await response.json()) as (MCPScanPayload & {
-          errors: string[];
-        })[],
+        tools: (
+          (await response.json()) as (MCPScanPayload & {
+            errors: string[];
+          })[]
+        ).map((tool) => ({
+          ...tool,
+          errors: tool.errors.map(
+            (error) =>
+              // Captialize the first letter of the error message
+              error.charAt(0).toUpperCase() + error.slice(1),
+          ),
+        })),
       };
     },
     onError: (err) => {
