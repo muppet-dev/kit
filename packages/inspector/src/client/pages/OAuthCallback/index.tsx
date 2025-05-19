@@ -1,8 +1,8 @@
-import { Spinner } from "@/client/components/ui/spinner";
+import { Spinner } from "../../components/ui/spinner";
 import {
   InspectorOAuthClientProvider,
   SESSION_KEYS,
-} from "@/client/providers/connection/auth";
+} from "../../providers/connection/auth";
 import {
   type AuthResult,
   auth,
@@ -23,6 +23,7 @@ export default function OAuthCallback({ onConnect }: OAuthCallbackProps) {
   const hasProcessedRef = useRef(false);
   const navigate = useNavigate();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     const handleCallback = async () => {
       // Skip if we've already processed this callback
@@ -60,7 +61,7 @@ export default function OAuthCallback({ onConnect }: OAuthCallbackProps) {
 
       if (result !== "AUTHORIZED") {
         return notifyError(
-          `Expected to be authorized after providing auth code, got: ${result}`,
+          `Expected to be authorized after providing auth code, got: ${result}`
         );
       }
 

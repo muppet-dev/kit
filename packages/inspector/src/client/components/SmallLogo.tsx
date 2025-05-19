@@ -1,4 +1,4 @@
-import { cn } from "@/client/lib/utils";
+import { cn } from "../lib/utils";
 import type { ComponentProps } from "react";
 
 export type SmallLogo = ComponentProps<"svg">;

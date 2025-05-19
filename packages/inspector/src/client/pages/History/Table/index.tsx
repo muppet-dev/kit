@@ -1,4 +1,4 @@
-import { Input } from "@/client/components/ui/input";
+import { Input } from "../../../components/ui/input";
 import {
   Table,
   TableBody,
@@ -6,9 +6,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/client/components/ui/table";
-import { eventHandler } from "@/client/lib/eventHandler";
-import { cn, numberFormatter } from "@/client/lib/utils";
+} from "../../../components/ui/table";
+import { eventHandler } from "../../../lib/eventHandler";
+import { cn, numberFormatter } from "../../../lib/utils";
 import dayjs from "dayjs";
 import Fuse from "fuse.js";
 import { MoveDown, MoveUp } from "lucide-react";

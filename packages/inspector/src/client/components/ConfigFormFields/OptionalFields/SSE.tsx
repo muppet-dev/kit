@@ -1,13 +1,13 @@
-import { CopyButton } from "@/client/components/CopyButton";
+import { CopyButton } from "../../CopyButton";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/client/components/ui/accordion";
-import { Input } from "@/client/components/ui/input";
-import { Label } from "@/client/components/ui/label";
-import type { configTransportSchema } from "@/client/validations";
+} from "../../ui/accordion";
+import { Input } from "../../ui/input";
+import { Label } from "../../ui/label";
+import type { configTransportSchema } from "../../../validations";
 import { useFormContext, useWatch } from "react-hook-form";
 import type z from "zod";
 

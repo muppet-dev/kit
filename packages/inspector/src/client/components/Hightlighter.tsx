@@ -1,8 +1,6 @@
-import { cn } from "@/client/lib/utils";
-/* eslint-disable react-hooks/rules-of-hooks */
-import { Theme, useTheme } from "@/client/providers";
-import { useShiki } from "@/client/providers";
 import { useEffect, useState } from "react";
+import { cn } from "../lib/utils";
+import { Theme, useShiki, useTheme } from "../providers";
 import { CopyButton } from "./CopyButton";
 import { Skeleton } from "./ui/skeleton";
 

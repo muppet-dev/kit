@@ -1,7 +1,7 @@
 "use client";
 
-import { eventHandler } from "@/client/lib/eventHandler";
-import { cn } from "@/client/lib/utils";
+import { eventHandler } from "../../../../lib/eventHandler";
+import { cn } from "../../../../lib/utils";
 import {
   type CodeHeaderProps,
   MarkdownTextPrimitive,

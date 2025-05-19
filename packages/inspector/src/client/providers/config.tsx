@@ -1,4 +1,4 @@
-import type { ConnectionInfo } from "@/client/providers/connection/manager";
+import type { ConnectionInfo } from "./connection/manager";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import {

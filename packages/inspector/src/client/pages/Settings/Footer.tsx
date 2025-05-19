@@ -1,13 +1,13 @@
-import { Button } from "@/client/components/ui/button";
-import { Spinner } from "@/client/components/ui/spinner";
-import { eventHandler } from "@/client/lib/eventHandler";
-import { useConfig, useConnection } from "@/client/providers";
-import { ConnectionStatus } from "@/client/providers/connection/manager";
+import { Button } from "../../components/ui/button";
+import { Spinner } from "../../components/ui/spinner";
+import { eventHandler } from "../../lib/eventHandler";
+import { useConfig, useConnection } from "../../providers";
+import { ConnectionStatus } from "../../providers/connection/manager";
 import {
   DocumentSubmitType,
   SUBMIT_BUTTON_KEY,
   type configTransportSchema,
-} from "@/client/validations";
+} from "../../validations";
 import _ from "lodash";
 import type { BaseSyntheticEvent } from "react";
 import { useFormContext, useWatch } from "react-hook-form";

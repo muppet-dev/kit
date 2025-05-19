@@ -1,4 +1,4 @@
-import { Button } from "@/client/components/ui/button";
+import { Button } from "../../../../../components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -6,12 +6,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/client/components/ui/dialog";
+} from "../../../../../components/ui/dialog";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/client/components/ui/tooltip";
+} from "../../../../../components/ui/tooltip";
 import { Pencil } from "lucide-react";
 import { useState } from "react";
 import { UpdateRequestForm } from "./Form";

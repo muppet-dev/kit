@@ -1,5 +1,5 @@
-import { useConfig } from "@/client/providers";
-import type { ConnectionInfo } from "@/client/providers/connection/manager";
+import { useConfig } from "../../../providers";
+import type { ConnectionInfo } from "../../../providers/connection/manager";
 import { AssistantRuntimeProvider } from "@assistant-ui/react";
 import { useChatRuntime } from "@assistant-ui/react-ai-sdk";
 import { useChats } from "../providers";

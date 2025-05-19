@@ -1,7 +1,7 @@
-import { generateName } from "@/client/lib/utils";
-import { useConfig } from "@/client/providers";
-import type { ConnectionInfo } from "@/client/providers/connection/manager";
-import { DocumentSubmitType, SUBMIT_BUTTON_KEY } from "@/client/validations";
+import { generateName } from "../../lib/utils";
+import { useConfig } from "../../providers";
+import type { ConnectionInfo } from "../../providers/connection/manager";
+import { DocumentSubmitType, SUBMIT_BUTTON_KEY } from "../../validations";
 import { Transport } from "@muppet-kit/shared";
 import { useMutation } from "@tanstack/react-query";
 
@@ -25,8 +25,8 @@ export function useConfigForm() {
           _values.env.length > 0
             ? JSON.stringify(
                 Object.fromEntries(
-                  _values.env.map((item) => [item.key, item.value]),
-                ),
+                  _values.env.map((item) => [item.key, item.value])
+                )
               )
             : undefined;
       }

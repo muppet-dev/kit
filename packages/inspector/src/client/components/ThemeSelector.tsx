@@ -1,7 +1,8 @@
-import { cn } from "@/client/lib/utils";
-import { Theme, useTheme } from "@/client/providers";
+import { useLocalStorage } from "@uidotdev/usehooks";
 import { Moon, Sun, Tv } from "lucide-react";
 import type { BaseSyntheticEvent } from "react";
+import { cn } from "../lib/utils";
+import { Theme, useTheme } from "../providers";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -11,7 +12,6 @@ import {
 } from "./ui/dropdown-menu";
 import { useSidebar } from "./ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
-import { useLocalStorage } from "@uidotdev/usehooks";
 
 const THEMES = {
   [Theme.LIGHT]: Sun,

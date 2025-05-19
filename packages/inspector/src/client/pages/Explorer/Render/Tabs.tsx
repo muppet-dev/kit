@@ -1,16 +1,16 @@
-import { Button } from "@/client/components/ui/button";
+import { Button } from "../../../components/ui/button";
 import {
   TabsList,
   Tabs as TabsPrimitive,
   TabsTrigger,
-} from "@/client/components/ui/tabs";
+} from "../../../components/ui/tabs";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/client/components/ui/tooltip";
-import { eventHandler } from "@/client/lib/eventHandler";
-import { cn } from "@/client/lib/utils";
+} from "../../../components/ui/tooltip";
+import { eventHandler } from "../../../lib/eventHandler";
+import { cn } from "../../../lib/utils";
 import { RefreshCcw } from "lucide-react";
 import { useMCPItem, useTool } from "../providers";
 

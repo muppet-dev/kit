@@ -1,4 +1,4 @@
-import { Button } from "@/client/components/ui/button";
+import { Button } from "../../../../../../components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -6,7 +6,7 @@ import {
   DialogOverlay,
   DialogTitle,
   DialogTrigger,
-} from "@/client/components/ui/dialog";
+} from "../../../../../../components/ui/dialog";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { Settings, SparklesIcon } from "lucide-react";
 import { useState } from "react";

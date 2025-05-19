@@ -1,5 +1,5 @@
-import type { ConnectionInfo } from "@/client/providers/connection/manager";
-import { configTransportSchema as schema } from "@/client/validations";
+import type { ConnectionInfo } from "../../providers/connection/manager";
+import { configTransportSchema as schema } from "../../validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Transport,

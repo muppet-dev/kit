@@ -1,7 +1,7 @@
-import { CodeEditor } from "@/client/components/CodeEditor";
-import { Button } from "@/client/components/ui/button";
-import { eventHandler } from "@/client/lib/eventHandler";
-import { useConnection } from "@/client/providers";
+import { CodeEditor } from "../../../../../components/CodeEditor";
+import { Button } from "../../../../../components/ui/button";
+import { eventHandler } from "../../../../../lib/eventHandler";
+import { useConnection } from "../../../../../providers";
 import {
   type ClientRequest,
   EmptyResultSchema,

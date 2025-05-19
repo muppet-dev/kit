@@ -1,4 +1,4 @@
-import type { ConnectionInfo } from "@/client/providers/connection/manager";
+import type { ConnectionInfo } from "./connection/manager";
 import type { ServerNotification } from "@modelcontextprotocol/sdk/types.js";
 import { nanoid } from "nanoid";
 import {

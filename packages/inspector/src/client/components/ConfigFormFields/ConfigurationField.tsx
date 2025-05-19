@@ -1,4 +1,4 @@
-import type { configTransportSchema } from "@/client/validations";
+import type { configTransportSchema } from "../../validations";
 import { Info } from "lucide-react";
 import { Controller, useFormContext } from "react-hook-form";
 import type z from "zod";

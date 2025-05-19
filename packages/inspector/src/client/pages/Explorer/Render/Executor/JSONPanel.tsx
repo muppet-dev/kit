@@ -1,4 +1,4 @@
-import { CodeEditor } from "@/client/components/CodeEditor";
+import { CodeEditor } from "../../../../components/CodeEditor";
 import { useFormContext, useWatch } from "react-hook-form";
 
 export function JSONPanel() {

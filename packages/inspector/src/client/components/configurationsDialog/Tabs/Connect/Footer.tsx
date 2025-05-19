@@ -1,5 +1,5 @@
-import { eventHandler } from "@/client/lib/eventHandler";
-import { DocumentSubmitType, SUBMIT_BUTTON_KEY } from "@/client/validations";
+import { eventHandler } from "../../../../lib/eventHandler";
+import { DocumentSubmitType, SUBMIT_BUTTON_KEY } from "../../../../validations";
 import { Transport } from "@muppet-kit/shared";
 import type { BaseSyntheticEvent } from "react";
 import { useFormContext } from "react-hook-form";
@@ -12,7 +12,7 @@ export function FormFooter() {
   const handleResetForm = eventHandler(() =>
     reset({
       type: Transport.STDIO,
-    }),
+    })
   );
 
   const handleSaveAndConnect = (event: BaseSyntheticEvent) => {

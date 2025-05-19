@@ -1,4 +1,4 @@
-import { useField } from "@/client/providers";
+import { useField } from "../../providers";
 
 export function ComponentNotFound() {
   const options = useField();

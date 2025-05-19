@@ -1,4 +1,4 @@
-import { CodeHighlighter } from "@/client/components/Hightlighter";
+import { CodeHighlighter } from "../../../../components/Hightlighter";
 
 export type JSONRender = {
   content?:

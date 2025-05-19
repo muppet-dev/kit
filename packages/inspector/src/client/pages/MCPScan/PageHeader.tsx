@@ -2,7 +2,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/client/components/ui/tooltip";
+} from "../../components/ui/tooltip";
 import { Shield } from "lucide-react";
 import { ScanButton } from "./ScanButton";
 

@@ -1,4 +1,4 @@
-import type { DuckField } from "@/client/components/DuckForm";
+import type { DuckField } from "../../components/DuckForm";
 import { type PropsWithChildren, createContext, useContext } from "react";
 
 // biome-ignore lint/suspicious/noExplicitAny: Context is generic

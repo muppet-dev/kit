@@ -1,5 +1,5 @@
-import { DuckField } from "@/client/components/DuckForm";
-import { Blueprint, DuckForm } from "@/client/providers";
+import { DuckField } from "../../../../../../components/DuckForm";
+import { Blueprint, DuckForm } from "../../../../../../providers";
 import type { JSONSchema7 } from "json-schema";
 import { useEffect, useMemo } from "react";
 import { useFormContext } from "react-hook-form";

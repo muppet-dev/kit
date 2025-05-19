@@ -1,6 +1,6 @@
-import { eventHandler } from "@/client/lib/eventHandler";
-import { useConnection } from "@/client/providers";
-import { ConnectionStatus } from "@/client/providers/connection/manager";
+import { eventHandler } from "../../../lib/eventHandler";
+import { useConnection } from "../../../providers";
+import { ConnectionStatus } from "../../../providers/connection/manager";
 import { EmptyResultSchema } from "@modelcontextprotocol/sdk/types.js";
 import { Bell } from "lucide-react";
 import { useState } from "react";
@@ -19,7 +19,7 @@ export function PingButton() {
       {
         method: "ping",
       },
-      EmptyResultSchema,
+      EmptyResultSchema
     );
     setIsLoading(false);
   });

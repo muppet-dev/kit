@@ -1,5 +1,5 @@
-import { Skeleton } from "@/client/components/ui/skeleton";
-import { cn } from "@/client/lib/utils";
+import { Skeleton } from "../../../../components/ui/skeleton";
+import { cn } from "../../../../lib/utils";
 import { useTool } from "../../providers";
 import {
   type AnalyseDataType,

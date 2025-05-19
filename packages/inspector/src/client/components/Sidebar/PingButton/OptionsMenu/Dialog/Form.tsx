@@ -1,9 +1,8 @@
-import { Button } from "@/client/components/ui/button";
-import { DialogClose, DialogFooter } from "@/client/components/ui/dialog";
-import { Input } from "@/client/components/ui/input";
-import { Label } from "@/client/components/ui/label";
-import { Spinner } from "@/client/components/ui/spinner";
-import { usePingServer } from "@/client/providers";
+import { Button } from "../../../../ui/button";
+import { DialogClose, DialogFooter } from "../../../../ui/dialog";
+import { Input } from "../../../../ui/input";
+import { Label } from "../../../../ui/label";
+import { usePingServer } from "../../../../../providers";
 import { Radio } from "lucide-react";
 import type { BaseSyntheticEvent } from "react";
 import { useForm } from "react-hook-form";
