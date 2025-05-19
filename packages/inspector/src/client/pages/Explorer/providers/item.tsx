@@ -1,4 +1,4 @@
-import { useConfig, useConnection } from "@/client/providers";
+import { useConfig, useConnection } from "../../../providers";
 import {
   CallToolResultSchema,
   GetPromptResultSchema,
@@ -41,16 +41,10 @@ export const MCPItemProvider = (props: PropsWithChildren) => {
   );
 };
 
-export function useGetMCPItemQueryKey() {
-  const { connectionInfo } = useConfig();
-  const { activeTool } = useTool();
-
-  return [connectionInfo, "explorer", activeTool.name];
-}
-
 function useMCPItemManager() {
   const { activeTool } = useTool();
   const { makeRequest, mcpClient } = useConnection();
+  const { connectionInfo } = useConfig();
   const [selectedItemName, setSelectedItemName] = useState<string | null>(null);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -62,9 +56,14 @@ function useMCPItemManager() {
     setSelectedItemName(name);
   }
 
-  const queryKey = useGetMCPItemQueryKey();
+  const queryKey = [connectionInfo, "explorer", activeTool.name];
 
-  const { data: items, isLoading } = useQuery({
+  const {
+    data: items,
+    isLoading,
+    refetch,
+    isFetching,
+  } = useQuery({
     queryKey,
     queryFn: async () => {
       let handler: Promise<MCPItemType[]> | undefined;
@@ -213,6 +212,8 @@ function useMCPItemManager() {
     isLoading,
     selectedItem,
     changeSelectedItem,
+    refetch,
+    isFetching,
     callItem,
   };
 }

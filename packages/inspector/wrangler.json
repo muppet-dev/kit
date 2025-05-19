@@ -1,0 +1,28 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "muppet-inspector",
+  "compatibility_date": "2025-05-19",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "./src/index.ts",
+  "durable_objects": {
+    "bindings": [
+      {
+        "class_name": "MuppetInspector",
+        "name": "Inspector"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_classes": ["MuppetInspector"]
+    }
+  ],
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}

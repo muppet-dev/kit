@@ -8,9 +8,9 @@ import {
   SidebarRail,
   SidebarTrigger,
   useSidebar,
-} from "@/client/components/ui/sidebar";
-import { cn } from "@/client/lib/utils";
-import { useConfig, useConnection } from "@/client/providers";
+} from "../ui/sidebar";
+import { cn } from "../../lib/utils";
+import { useConfig, useConnection } from "../../providers";
 import {
   BookText,
   History,
@@ -27,8 +27,10 @@ import { PingButton } from "./PingButton";
 import { SidebarItem } from "./SidebarItem";
 import { Button } from "../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { Logo } from "../Logo";
+import { SmallLogo } from "../SmallLogo";
 
-const data = {
+const SIDEBAR_ITEMS = {
   panels: [
     {
       name: "Explorer",
@@ -72,17 +74,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="flex-row items-center justify-between">
-        <Link to="/" className="w-max">
-          <img
-            src={open ? "/logo.png" : "/logo-small.png"}
-            alt="Muppet"
-            className={cn("dark:hidden", open ? "w-32" : "size-8")}
-          />
-          <img
-            src={open ? "/logo-dark.png" : "/logo-small-dark.png"}
-            alt="Muppet"
-            className={cn("dark:block hidden", open ? "w-32" : "size-8")}
-          />
+        <Link to="/" className={cn("w-max", open ? "py-0.5" : "py-1.5")}>
+          {open ? (
+            <Logo className="w-28" />
+          ) : (
+            <SmallLogo className="h-[15.53px] w-max" />
+          )}
         </Link>
         {open && (
           <p className="text-sm font-semibold text-muted-foreground">
@@ -97,8 +94,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <PingButton />
           </SidebarMenu>
         </SidebarGroup>
-        <SidebarItem items={data.panels} />
-        <SidebarItem items={data.configuration} />
+        <SidebarItem items={SIDEBAR_ITEMS.panels} />
+        <SidebarItem items={SIDEBAR_ITEMS.configuration} />
       </SidebarContent>
       <SidebarFooter className={cn(open && "flex-row items-center")}>
         <GithubLinkButton />

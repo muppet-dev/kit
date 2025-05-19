@@ -1,5 +1,4 @@
 import type { EnvWithConfig } from "@/types";
-import { defineInspectorConfig } from "@muppet-kit/shared";
 import { Hono } from "hono";
 import clientRouter from "./client";
 import modelRouter from "./models";
@@ -11,14 +10,11 @@ import pkg from "../../package.json";
 
 const apiRouter = new Hono<EnvWithConfig>().use(async (c, next) => {
   if (import.meta.env.MODE === "development") {
-    const openai = await import("@ai-sdk/openai").then((mod) => mod.openai);
-
-    c.set(
-      "config",
-      defineInspectorConfig({
-        models: [openai("gpt-4.1-nano")],
-      }),
+    const config = await import("../../muppet.config").then(
+      (mod) => mod.default,
     );
+
+    c.set("config", config);
   }
 
   await next();

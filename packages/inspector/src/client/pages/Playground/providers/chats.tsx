@@ -1,4 +1,4 @@
-import { useConfig } from "@/client/providers";
+import { useConfig } from "../../../providers";
 import { nanoid } from "nanoid";
 import {
   type PropsWithChildren,

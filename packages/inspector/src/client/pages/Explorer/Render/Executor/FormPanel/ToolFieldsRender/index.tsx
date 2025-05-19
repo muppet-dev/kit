@@ -1,5 +1,5 @@
-import { DuckField } from "@/client/components/DuckForm";
-import { Blueprint, DuckForm } from "@/client/providers";
+import { DuckField } from "../../../../../../components/DuckField";
+import { Blueprint, DuckForm } from "../../../../../../providers";
 import type { JSONSchema7 } from "json-schema";
 import { useEffect, useMemo } from "react";
 import { useFormContext } from "react-hook-form";
@@ -24,7 +24,7 @@ export function ToolFieldsRender(props: ToolItemType) {
   }, [props.schema, props.inputSchema]);
 
   useEffect(() => {
-    if (defaultValue) reset(defaultValue);
+    if (defaultValue) reset(defaultValue, { keepIsSubmitSuccessful: true });
   }, [defaultValue, reset]);
 
   if (!schema || Object.keys(schema).length === 0)

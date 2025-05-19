@@ -1,8 +1,8 @@
-import { Combobox } from "@/client/components/ui/combobox";
-import { Label } from "@/client/components/ui/label";
-import { useCompletionState } from "@/client/hooks/use-completion-state";
-import { cn } from "@/client/lib/utils";
-import { useConnection } from "@/client/providers";
+import { Combobox } from "../../../../../components/ui/combobox";
+import { Label } from "../../../../../components/ui/label";
+import { useCompletionState } from "../../../../../hooks/use-completion-state";
+import { cn } from "../../../../../lib/utils";
+import { useConnection } from "../../../../../providers";
 import { useEffect } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import type { PromptItemType } from "../../../types";
@@ -33,7 +33,7 @@ export function PromptFieldRender({
           name: selectedPromptName,
         },
         argName,
-        value,
+        value
       );
     }
   };
@@ -46,7 +46,7 @@ export function PromptFieldRender({
           className={cn(
             item.required &&
               "after:ml-0.5 after:text-red-500 after:content-['*'] after:dark:text-red-400",
-            "leading-snug capitalize",
+            "leading-snug capitalize"
           )}
         >
           {item.name}

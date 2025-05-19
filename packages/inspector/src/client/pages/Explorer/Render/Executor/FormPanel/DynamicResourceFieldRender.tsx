@@ -1,7 +1,7 @@
-import { Combobox } from "@/client/components/ui/combobox";
-import { Label } from "@/client/components/ui/label";
-import { useCompletionState } from "@/client/hooks/use-completion-state";
-import { useConnection } from "@/client/providers";
+import { Combobox } from "../../../../../components/ui/combobox";
+import { Label } from "../../../../../components/ui/label";
+import { useCompletionState } from "../../../../../hooks/use-completion-state";
+import { useConnection } from "../../../../../providers";
 import { useEffect } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import type { DynamicResourceItemType } from "../../../types";
@@ -29,7 +29,7 @@ export function DynamicResourceFieldRender({
           uri: uriTemplate,
         },
         key,
-        value,
+        value
       );
     }
   };

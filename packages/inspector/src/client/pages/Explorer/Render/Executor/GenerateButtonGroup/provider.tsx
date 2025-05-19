@@ -1,5 +1,5 @@
-import type { MCPItemType } from "@/client/pages/Explorer/types";
-import { useConfig } from "@/client/providers";
+import type { MCPItemType } from "../../../types";
+import { useConfig } from "../../../../../providers";
 import { useMutation } from "@tanstack/react-query";
 import { type PropsWithChildren, createContext, useContext } from "react";
 import { useFormContext } from "react-hook-form";
@@ -26,7 +26,7 @@ function useGenerateManager() {
 
   return useMutation({
     mutationFn: async (
-      values: MCPItemType & { context?: string; modelId?: string },
+      values: MCPItemType & { context?: string; modelId?: string }
     ) => {
       const schema =
         values.type === Tool.TOOLS || values.type === Tool.PROMPTS

@@ -1,4 +1,4 @@
-import { useConnection } from "@/client/providers";
+import { useConnection } from "../../../providers";
 import {
   type PropsWithChildren,
   createContext,

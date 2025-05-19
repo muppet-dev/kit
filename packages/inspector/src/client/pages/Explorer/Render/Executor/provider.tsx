@@ -30,6 +30,9 @@ function useCustomFormManager() {
         content: result as { content: { type: "text"; text: string }[] },
       };
     },
+    onSuccess: () => {
+      toast.success("Request sent successfully!");
+    },
     onError: (error) => {
       console.error("Request failed:", error);
 

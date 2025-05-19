@@ -1,13 +1,13 @@
-import { CodeHighlighter } from "@/client/components/Hightlighter";
-import { Button } from "@/client/components/ui/button";
+import { CodeHighlighter } from "../../../../components/Hightlighter";
+import { Button } from "../../../../components/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/client/components/ui/tooltip";
-import { eventHandler } from "@/client/lib/eventHandler";
-import { cn } from "@/client/lib/utils";
-import { type Trace, useConnection } from "@/client/providers";
+} from "../../../../components/ui/tooltip";
+import { eventHandler } from "../../../../lib/eventHandler";
+import { cn } from "../../../../lib/utils";
+import { type Trace, useConnection } from "../../../../providers";
 import { EmptyResultSchema } from "@modelcontextprotocol/sdk/types.js";
 import { ChevronDown, ChevronUp, RefreshCcw, X } from "lucide-react";
 import { useState } from "react";
@@ -46,7 +46,7 @@ export function TableDrawer({ traces }: TableDrawer) {
       }
 
       return prev;
-    }),
+    })
   );
   const handleGoToNextRequest = eventHandler(() =>
     setSelected((prev) => {
@@ -57,7 +57,7 @@ export function TableDrawer({ traces }: TableDrawer) {
       }
 
       return prev;
-    }),
+    })
   );
   const handleSendRequest = eventHandler(async () => {
     if (
@@ -83,7 +83,7 @@ export function TableDrawer({ traces }: TableDrawer) {
         method: selectedHistory.request?.method as any,
         params: selectedHistory.request?.params,
       },
-      EmptyResultSchema.passthrough(),
+      EmptyResultSchema.passthrough()
     );
 
     setResendDirectory((prev) => {
@@ -110,7 +110,7 @@ export function TableDrawer({ traces }: TableDrawer) {
             "text-sm font-medium",
             selectedHistory.response?.error
               ? "text-red-500 dark:text-red-300"
-              : "text-green-600 dark:text-green-400",
+              : "text-green-600 dark:text-green-400"
           )}
         >
           {selectedHistory.response?.error ? "Error" : "Success"}

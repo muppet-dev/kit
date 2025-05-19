@@ -3,14 +3,10 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/client/components/ui/dropdown-menu";
-import { SidebarMenuAction } from "@/client/components/ui/sidebar";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/client/components/ui/tooltip";
-import { usePingServer } from "@/client/providers";
+} from "../../../ui/dropdown-menu";
+import { SidebarMenuAction } from "../../../ui/sidebar";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../../../ui/tooltip";
+import { usePingServer } from "../../../../providers";
 import { Ellipsis, X } from "lucide-react";
 import { type BaseSyntheticEvent, useState } from "react";
 import { CustomTimeIntervalDialog } from "./Dialog";

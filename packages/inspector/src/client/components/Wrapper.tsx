@@ -1,10 +1,10 @@
-import { AppSidebar } from "@/client/components/Sidebar";
-import { useConnection } from "@/client/providers";
-import { ConnectionStatus } from "@/client/providers/connection/manager";
 import { RotateCcw, Unplug, XCircle } from "lucide-react";
 import type { PropsWithChildren } from "react";
 import { Outlet, useLocation } from "react-router";
 import { eventHandler } from "../lib/eventHandler";
+import { useConnection } from "../providers";
+import { ConnectionStatus } from "../providers/connection/manager";
+import { AppSidebar } from "./Sidebar";
 import { Button } from "./ui/button";
 import { Spinner } from "./ui/spinner";
 

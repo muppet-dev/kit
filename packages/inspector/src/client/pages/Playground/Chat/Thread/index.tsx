@@ -1,6 +1,6 @@
-import { PROVIDER_ICONS } from "@/client/components/icons";
-import { Button } from "@/client/components/ui/button";
-import { cn } from "@/client/lib/utils";
+import { PROVIDER_ICONS } from "../../../../components/icons";
+import { Button } from "../../../../components/ui/button";
+import { cn } from "../../../../lib/utils";
 import {
   ActionBarPrimitive,
   BranchPickerPrimitive,
@@ -243,7 +243,7 @@ const BranchPicker: FC<BranchPickerPrimitive.Root.Props> = ({
       hideWhenSingleBranch
       className={cn(
         "text-muted-foreground inline-flex items-center text-xs",
-        className,
+        className
       )}
       {...rest}
     >

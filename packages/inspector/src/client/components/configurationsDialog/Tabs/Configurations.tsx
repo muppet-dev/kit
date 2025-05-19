@@ -1,8 +1,8 @@
-import { eventHandler } from "@/client/lib/eventHandler";
-import { cn } from "@/client/lib/utils";
-import { useConfig } from "@/client/providers";
-import type { ConnectionInfo } from "@/client/providers/connection/manager";
-import { DocumentSubmitType, SUBMIT_BUTTON_KEY } from "@/client/validations";
+import { eventHandler } from "../../../lib/eventHandler";
+import { cn } from "../../../lib/utils";
+import { useConfig } from "../../../providers";
+import type { ConnectionInfo } from "../../../providers/connection/manager";
+import { DocumentSubmitType, SUBMIT_BUTTON_KEY } from "../../../validations";
 import { Transport } from "@muppet-kit/shared";
 import { Trash } from "lucide-react";
 import { useState } from "react";

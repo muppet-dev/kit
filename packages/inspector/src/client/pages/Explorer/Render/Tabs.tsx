@@ -1,30 +1,23 @@
-import { Button } from "@/client/components/ui/button";
+import { Button } from "../../../components/ui/button";
 import {
   TabsList,
   Tabs as TabsPrimitive,
   TabsTrigger,
-} from "@/client/components/ui/tabs";
+} from "../../../components/ui/tabs";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/client/components/ui/tooltip";
-import { eventHandler } from "@/client/lib/eventHandler";
-import { useQueryClient } from "@tanstack/react-query";
+} from "../../../components/ui/tooltip";
+import { eventHandler } from "../../../lib/eventHandler";
 import { RefreshCcw } from "lucide-react";
-import { Tool, useGetMCPItemQueryKey, useTool } from "../providers";
+import { Tool, useMCPItem, useTool } from "../providers";
 
 export function ToolsTabs() {
   const { tools, activeTool, changeTool } = useTool();
-  const queryClient = useQueryClient();
+  const { refetch, isFetching } = useMCPItem();
 
-  const queryKey = useGetMCPItemQueryKey();
-
-  const queryState = queryClient.getQueryState(queryKey);
-
-  const handleRefresh = eventHandler(() =>
-    queryClient.refetchQueries({ queryKey })
-  );
+  const handleRefresh = eventHandler(() => refetch());
 
   return (
     <TabsPrimitive
@@ -51,7 +44,7 @@ export function ToolsTabs() {
                 className="size-max has-[>svg]:px-1.5 py-1.5 ml-auto mr-2"
                 onClick={handleRefresh}
                 onKeyDown={handleRefresh}
-                disabled={queryState?.status !== "success"}
+                disabled={isFetching}
               >
                 <RefreshCcw className="size-4 stroke-2" />
               </Button>

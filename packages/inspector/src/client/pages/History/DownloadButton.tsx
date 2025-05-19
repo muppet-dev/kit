@@ -1,11 +1,11 @@
-import { Button } from "@/client/components/ui/button";
+import { Button } from "../../components/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/client/components/ui/tooltip";
-import { eventHandler } from "@/client/lib/eventHandler";
-import { downloadJSON } from "@/client/lib/utils";
+} from "../../components/ui/tooltip";
+import { eventHandler } from "../../lib/eventHandler";
+import { downloadJSON } from "../../lib/utils";
 import { Download } from "lucide-react";
 import { useHistory } from "./providers";
 

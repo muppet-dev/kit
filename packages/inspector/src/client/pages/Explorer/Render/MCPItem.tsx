@@ -1,13 +1,13 @@
-import { highlightMatches } from "@/client/components/highlightMatches";
+import { highlightMatches } from "../../../components/highlightMatches";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/client/components/ui/card";
-import { eventHandler } from "@/client/lib/eventHandler";
-import { cn } from "@/client/lib/utils";
+} from "../../../components/ui/card";
+import { eventHandler } from "../../../lib/eventHandler";
+import { cn } from "../../../lib/utils";
 import { Tool, useMCPItem } from "../providers";
 import type { MCPItemType } from "../types";
 import type { FuseResultMatch } from "fuse.js";

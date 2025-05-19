@@ -1,18 +1,13 @@
-import { ModelField } from "@/client/components/ModelField";
-import { Button } from "@/client/components/ui/button";
+import { ModelField } from "../../../components/ModelField";
+import { Button } from "../../../components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/client/components/ui/dropdown-menu";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/client/components/ui/tooltip";
-import { eventHandler } from "@/client/lib/eventHandler";
+} from "../../../components/ui/dropdown-menu";
+import { eventHandler } from "../../../lib/eventHandler";
 import { useThreadRuntime } from "@assistant-ui/react";
 import {
   ArrowLeft,
@@ -37,7 +32,7 @@ import {
   DialogOverlay,
   DialogTitle,
   DialogTrigger,
-} from "@/client/components/ui/dialog";
+} from "../../../components/ui/dialog";
 
 export function ModelHeader(props: { chatId: string }) {
   const { getChat, addChat, onConfigChange } = useChats();

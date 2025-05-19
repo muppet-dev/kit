@@ -1,12 +1,12 @@
-import type { ConnectionInfo } from "@/client/providers/connection/manager";
-import { configTransportSchema as schema } from "@/client/validations";
+import type { ConnectionInfo } from "../../providers/connection/manager";
+import { configTransportSchema as schema } from "../../validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Transport,
   remoteTransportSchema,
   stdioTransportSchema,
 } from "@muppet-kit/shared";
-import { type PropsWithChildren, useEffect } from "react";
+import type { PropsWithChildren } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useSearchParams } from "react-router";
 import z from "zod";
