@@ -12,7 +12,7 @@ import {
 import { eventHandler } from "@/client/lib/eventHandler";
 import { useQueryClient } from "@tanstack/react-query";
 import { RefreshCcw } from "lucide-react";
-import { useGetMCPItemQueryKey, useTool } from "../providers";
+import { Tool, useGetMCPItemQueryKey, useTool } from "../providers";
 
 export function ToolsTabs() {
   const { tools, activeTool, changeTool } = useTool();
@@ -23,7 +23,7 @@ export function ToolsTabs() {
   const queryState = queryClient.getQueryState(queryKey);
 
   const handleRefresh = eventHandler(() =>
-    queryClient.refetchQueries({ queryKey }),
+    queryClient.refetchQueries({ queryKey })
   );
 
   return (
@@ -43,20 +43,22 @@ export function ToolsTabs() {
             {tab.label}
           </TabsTrigger>
         ))}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant="ghost"
-              className="size-max has-[>svg]:px-1.5 py-1.5 ml-auto mr-2"
-              onClick={handleRefresh}
-              onKeyDown={handleRefresh}
-              disabled={queryState?.status !== "success"}
-            >
-              <RefreshCcw className="size-4 stroke-2" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Refresh {activeTool.name}</TooltipContent>
-        </Tooltip>
+        {activeTool.name !== Tool.ROOTS && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                className="size-max has-[>svg]:px-1.5 py-1.5 ml-auto mr-2"
+                onClick={handleRefresh}
+                onKeyDown={handleRefresh}
+                disabled={queryState?.status !== "success"}
+              >
+                <RefreshCcw className="size-4 stroke-2" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Refresh {activeTool.name}</TooltipContent>
+          </Tooltip>
+        )}
       </TabsList>
     </TabsPrimitive>
   );

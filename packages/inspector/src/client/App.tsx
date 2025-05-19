@@ -19,6 +19,7 @@ import OAuthCallbackPage from "./pages/OAuthCallback";
 import PlaygroundPage from "./pages/Playground";
 import SettingsPage from "./pages/Settings";
 import TracingPage from "./pages/Tracing";
+import { RootsProvider } from "./providers/roots";
 
 export default function App() {
   const { connectionInfo, setConnectionInfo } = useConfig();
@@ -43,25 +44,27 @@ export default function App() {
   return (
     <TracingProvider>
       <NotificationProvider>
-        <ConnectionProvider>
-          <PingServerProvider>
-            <ShikiProvider>
-              <SidebarProvider>
-                <Routes>
-                  <Route path="/" element={<AppWrapper />}>
-                    <Route index element={<HomePage />} />
-                    <Route path="/explorer" element={<ExplorerPage />} />
-                    <Route path="/playground" element={<PlaygroundPage />} />
-                    <Route path="/history" element={<HistoryPage />} />
-                    <Route path="/tracing" element={<TracingPage />} />
-                    <Route path="/settings" element={<SettingsPage />} />
-                  </Route>
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </SidebarProvider>
-            </ShikiProvider>
-          </PingServerProvider>
-        </ConnectionProvider>
+        <RootsProvider>
+          <ConnectionProvider>
+            <PingServerProvider>
+              <ShikiProvider>
+                <SidebarProvider>
+                  <Routes>
+                    <Route path="/" element={<AppWrapper />}>
+                      <Route index element={<HomePage />} />
+                      <Route path="/explorer" element={<ExplorerPage />} />
+                      <Route path="/playground" element={<PlaygroundPage />} />
+                      <Route path="/history" element={<HistoryPage />} />
+                      <Route path="/tracing" element={<TracingPage />} />
+                      <Route path="/settings" element={<SettingsPage />} />
+                    </Route>
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </SidebarProvider>
+              </ShikiProvider>
+            </PingServerProvider>
+          </ConnectionProvider>
+        </RootsProvider>
       </NotificationProvider>
     </TracingProvider>
   );
