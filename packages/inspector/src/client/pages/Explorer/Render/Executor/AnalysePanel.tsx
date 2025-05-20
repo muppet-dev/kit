@@ -16,19 +16,19 @@ enum Score {
 }
 
 const scoreTextColor = {
-  [Score.VPOOR]: "text-red-500 dark:text-red-300",
-  [Score.POOR]: "text-orange-500 dark:text-orange-300",
-  [Score.AVERAGE]: "text-yellow-500 dark:text-yellow-300",
-  [Score.GOOD]: "text-green-500 dark:text-green-300",
-  [Score.EXCELLENT]: "text-green-600 dark:text-green-400",
+  [Score.VPOOR]: "text-error",
+  [Score.POOR]: "text-alert",
+  [Score.AVERAGE]: "text-warning",
+  [Score.GOOD]: "text-success",
+  [Score.EXCELLENT]: "text-success-foreground/80",
 };
 
 const scoreBgColor = {
-  [Score.VPOOR]: "bg-red-500 dark:bg-red-400",
-  [Score.POOR]: "bg-orange-500 dark:bg-orange-400",
-  [Score.AVERAGE]: "bg-yellow-500 dark:bg-yellow-400",
-  [Score.GOOD]: "bg-green-500 dark:bg-green-400",
-  [Score.EXCELLENT]: "bg-green-600 dark:bg-green-500",
+  [Score.VPOOR]: "bg-error-foreground",
+  [Score.POOR]: "bg-alert",
+  [Score.AVERAGE]: "bg-warning/90",
+  [Score.GOOD]: "bg-success-foreground/80",
+  [Score.EXCELLENT]: "bg-success-foreground",
 };
 
 export function AnalysePanel() {
@@ -128,10 +128,10 @@ function ScoreItem(props: AnalyseDataType["recommendations"][0]) {
           className={cn(
             "text-sm italic select-none font-medium px-1.5 py-0.5",
             props.severity === AnalyseSeverity.LOW
-              ? "text-blue-500 dark:text-blue-300 bg-blue-200/40 dark:bg-blue-300/10"
+              ? "text-info bg-warning-foreground/40 dark:bg-warning-foreground/10"
               : props.severity === AnalyseSeverity.MEDIUM
-              ? "text-yellow-500 dark:text-yellow-300 bg-yellow-200/40 dark:bg-yellow-300/10"
-              : "text-red-500 dark:text-red-300 bg-red-200/40 dark:bg-red-300/10"
+              ? "text-warning bg-warning-foreground/40 dark:bg-warning-foreground/10"
+              : "text-error bg-error-foreground/40 dark:bg-error/10"
           )}
         >
           {props.severity}

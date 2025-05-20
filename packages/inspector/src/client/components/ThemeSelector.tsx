@@ -66,7 +66,7 @@ export function ThemeSelector() {
             >
               <Icon
                 className={cn(
-                  isSelected && "text-black dark:text-white",
+                  isSelected && "text-foreground",
                   "stroke-2 size-4"
                 )}
               />

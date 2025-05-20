@@ -46,9 +46,7 @@ export function CodeEditor({
         loading={
           <div className="flex h-full w-full items-center justify-center gap-1">
             <Spinner />
-            <p className="text-sm text-secondary-500 dark:text-secondary-400">
-              Loading...
-            </p>
+            <p className="text-sm text-muted-foreground">Loading...</p>
           </div>
         }
         options={{

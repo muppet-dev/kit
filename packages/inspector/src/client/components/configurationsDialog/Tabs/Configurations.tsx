@@ -88,10 +88,10 @@ export function Configurations() {
                       className={cn(
                         "leading-tight py-0 px-1 font-semibold",
                         item.type === Transport.HTTP
-                          ? "bg-green-500 dark:bg-green-300"
+                          ? "bg-success"
                           : item.type === Transport.SSE
-                          ? "bg-yellow-500 dark:bg-yellow-300"
-                          : "bg-blue-500 dark:bg-blue-300"
+                          ? "bg-warning"
+                          : "bg-info"
                       )}
                     >
                       {item.type === Transport.HTTP ? (
@@ -111,7 +111,7 @@ export function Configurations() {
                 <Button
                   title="Delete item"
                   variant="ghost"
-                  className="absolute right-3 size-max has-[>svg]:px-1.5 py-1.5 text-red-500 dark:text-red-300 hover:text-red-500 hover:bg-red-100 dark:hover:bg-red-300/20"
+                  className="absolute right-3 size-max has-[>svg]:px-1.5 py-1.5 text-error hover:text-error hover:bg-error-foreground dark:hover:bg-error-foreground/20"
                   onClick={handleDeleteItem(item.name)}
                   onKeyDown={handleDeleteItem(item.name)}
                 >

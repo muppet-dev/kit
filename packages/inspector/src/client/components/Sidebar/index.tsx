@@ -1,4 +1,20 @@
 import {
+  BookText,
+  Construction,
+  History,
+  Logs,
+  Settings2,
+  Shield,
+  SquareTerminal,
+} from "lucide-react";
+import { Link } from "react-router";
+import { cn } from "../../lib/utils";
+import { useConfig, useConnection } from "../../providers";
+import { Logo } from "../Logo";
+import { LogoSmall } from "../LogoSmall";
+import { ThemeSelector } from "../ThemeSelector";
+import { Button } from "../ui/button";
+import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
@@ -9,26 +25,10 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "../ui/sidebar";
-import { cn } from "../../lib/utils";
-import { useConfig, useConnection } from "../../providers";
-import {
-  BookText,
-  History,
-  Logs,
-  Construction,
-  Settings2,
-  Shield,
-  SquareTerminal,
-} from "lucide-react";
-import { Link } from "react-router";
-import { ThemeSelector } from "../ThemeSelector";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { ConnectStatus } from "./ConnectStatus";
 import { PingButton } from "./PingButton";
 import { SidebarItem } from "./SidebarItem";
-import { Button } from "../ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import { Logo } from "../Logo";
-import { SmallLogo } from "../SmallLogo";
 
 const SIDEBAR_ITEMS = {
   panels: [
@@ -78,7 +78,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           {open ? (
             <Logo className="w-28" />
           ) : (
-            <SmallLogo className="h-[15.53px] w-max" />
+            <LogoSmall className="h-[15.53px] w-max" />
           )}
         </Link>
         {open && (

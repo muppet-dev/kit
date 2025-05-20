@@ -51,7 +51,7 @@ export function ModelHeader(props: { chatId: string }) {
   const handleAddingChat = eventHandler(() => addChat());
 
   return (
-    <div className="p-2 flex items-center gap-1 border-b border-zinc-300 dark:border-zinc-800 bg-background">
+    <div className="p-2 flex items-center gap-1 border-b bg-background">
       <ModelSelect model={model} />
       <div className="flex-1" />
       <ExperimentalBadge />
@@ -66,7 +66,7 @@ export function ModelHeader(props: { chatId: string }) {
         <SyncButtonIcon className="size-[18px] stroke-zinc-600 dark:stroke-zinc-300" />
         {model.sync && (
           <div className="absolute top-1.5 right-0.5 size-2 rounded-full p-0.5 bg-background">
-            <div className="bg-green-500 dark:bg-green-300 size-full rounded-[inherit]" />
+            <div className="bg-success size-full rounded-[inherit]" />
           </div>
         )}
       </Button>
@@ -109,7 +109,7 @@ function ExperimentalBadge() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="cursor-pointer flex items-center gap-1 rounded-full select-none px-3.5 pt-0.5 pb-1 text-sm text-white dark:text-black bg-yellow-500 dark:bg-yellow-300 font-semibold mr-2">
+        <div className="cursor-pointer flex items-center gap-1 rounded-full select-none px-3.5 pt-0.5 pb-1 text-sm text-background bg-warning font-semibold mr-2">
           <TriangleAlert className="size-3.5 mt-0.5 stroke-3" />
           <p>Experimental</p>
         </div>
@@ -142,7 +142,7 @@ function ExperimentalBadge() {
             href="https://ai-sdk.dev/cookbook/node/mcp-tools"
             target="_blank"
             rel="noreferrer"
-            className="text-blue-500 dark:text-blue-300 hover:underline"
+            className="text-info hover:underline"
           >
             AI SDK documentation
           </a>{" "}

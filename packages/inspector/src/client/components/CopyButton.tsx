@@ -36,12 +36,7 @@ export function CopyButton({
       onClick={handleCopyToClipboard}
       onKeyDown={handleCopyToClipboard}
     >
-      <Icon
-        className={cn(
-          "size-4 stroke-2",
-          isCopied && "stroke-green-500 dark:stroke-green-300"
-        )}
-      />
+      <Icon className={cn("size-4 stroke-2", isCopied && "stroke-success")} />
     </Button>
   );
 

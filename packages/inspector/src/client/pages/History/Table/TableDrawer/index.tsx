@@ -114,8 +114,8 @@ export function TableDrawer({ traces }: TableDrawer) {
           className={cn(
             "text-sm font-medium",
             selectedHistory.response?.error
-              ? "text-red-500 dark:text-red-300"
-              : "text-green-600 dark:text-green-400"
+              ? "text-error"
+              : "text-success-foreground"
           )}
         >
           {selectedHistory.response?.error ? "Error" : "Success"}

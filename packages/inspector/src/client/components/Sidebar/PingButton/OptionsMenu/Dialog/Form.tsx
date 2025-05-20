@@ -39,7 +39,7 @@ export function CustomTimeIntervalForm(props: { onSubmit: () => void }) {
     >
       <div>
         <Label className="mb-0.5 gap-1">
-          Time Duration<span className="text-red-500 dark:text-red-300">*</span>
+          Time Duration<span className="text-error">*</span>
         </Label>
         <p className="text-xs text-muted-foreground mb-1.5">
           Enter time duration in seconds
@@ -50,9 +50,7 @@ export function CustomTimeIntervalForm(props: { onSubmit: () => void }) {
           {...register("interval", { valueAsNumber: true })}
         />
         {errors.interval && (
-          <p className="text-red-500 dark:text-red-300">
-            {errors.interval.message}
-          </p>
+          <p className="text-error">{errors.interval.message}</p>
         )}
       </div>
       <DialogFooter className="mt-6 sm:justify-between">

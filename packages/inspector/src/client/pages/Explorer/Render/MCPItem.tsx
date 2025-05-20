@@ -35,8 +35,8 @@ export function MCPItem(props: MCPItem) {
       key={props.name}
       className={cn(
         props.name === selectedItem?.name
-          ? "bg-white dark:bg-background"
-          : "bg-transparent hover:bg-white dark:hover:bg-background transition-all ease-in-out",
+          ? "bg-background"
+          : "bg-transparent hover:bg-background transition-all ease-in-out",
         "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max"
       )}
       onClick={handleSelectItem(props.name)}

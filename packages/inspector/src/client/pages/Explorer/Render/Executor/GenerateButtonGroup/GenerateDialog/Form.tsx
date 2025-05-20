@@ -61,9 +61,7 @@ export function GenerateForm(props: GenerateForm) {
         </p>
         <Textarea {...register("context")} required />
         {errors.context && (
-          <p className="text-sm text-red-500 dark:text-red-300">
-            {errors.context.message}
-          </p>
+          <p className="text-sm text-error">{errors.context.message}</p>
         )}
       </div>
       <div className="space-y-1">
@@ -76,9 +74,7 @@ export function GenerateForm(props: GenerateForm) {
           )}
         />
         {errors.model && (
-          <p className="text-sm text-red-500 dark:text-red-300">
-            {errors.model?.message}
-          </p>
+          <p className="text-sm text-error">{errors.model?.message}</p>
         )}
       </div>
       <div className="flex items-center justify-end">

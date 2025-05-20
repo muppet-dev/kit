@@ -38,7 +38,7 @@ export function OptionsMenu() {
           <SidebarMenuAction
             onClick={handleClearTimeInterval}
             onKeyDown={handleClearTimeInterval}
-            className="text-red-500 dark:text-red-300 hover:text-red-500 hover:bg-red-100 dark:hover:bg-red-300/20 peer-hover/menu-button:text-red-500"
+            className="text-error hover:text-error hover:bg-error-foreground dark:hover:bg-error-foreground/20 peer-hover/menu-button:text-error"
           >
             <X className="size-3.5" />
           </SidebarMenuAction>
