@@ -50,6 +50,8 @@ export function RootsRender() {
     },
     onSuccess: (values) => {
       ref.current = values.roots;
+
+      toast.success("Roots updated successfully");
     },
     onError: (err) => {
       toast.error(err.message);
