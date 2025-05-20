@@ -1,0 +1,73 @@
+{
+  "name": "@muppet-kit/proxy",
+  "description": "MCP proxy for connecting and managing multiple MCP servers.",
+  "version": "0.1.0",
+  "license": "MIT",
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
+  "type": "module",
+  "bin": "./dist/cli.js",
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "mcp",
+    "proxy",
+    "muppet",
+    "kit",
+    "tools",
+    "server"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build --mode client && vite build && node build.mjs",
+    "deploy": "vite build --mode client --config vc.config.ts && vite build --config vc.config.ts && wrangler deploy dist-server/index.js"
+  },
+  "homepage": "https://github.com/muppet-dev/kit",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/muppet-dev/kit.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/muppet-dev/kit/issues"
+  },
+  "exports": {
+    "import": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "require": {
+      "types": "./dist/index.d.cts",
+      "default": "./dist/index.cjs"
+    }
+  },
+  "dependencies": {
+    "hono": "^4.7.9",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "peerDependencies": {
+    "@hono/node-server": "^1.14.1",
+    "@muppet-kit/shared": "^0.1.9",
+    "commander": "^13.1.0",
+    "dotenv": "^16.5.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250519.0",
+    "@hono/vite-dev-server": "^0.19.0",
+    "@tailwindcss/vite": "^4.1.4",
+    "@types/node": "^20.11.17",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "esbuild": "^0.25.4",
+    "tailwindcss": "^4.1.4",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.1",
+    "wrangler": "^4.15.2"
+  }
+}
