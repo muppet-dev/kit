@@ -63,7 +63,7 @@ export function ModelHeader(props: { chatId: string }) {
         onClick={handleConfigChange(model.id, !model.sync)}
         onKeyDown={handleConfigChange(model.id, !model.sync)}
       >
-        <SyncButtonIcon className="size-[18px] stroke-zinc-600 dark:stroke-zinc-300" />
+        <SyncButtonIcon className="size-[18px] stroke-secondary-foreground/80" />
         {model.sync && (
           <div className="absolute top-1.5 right-0.5 size-2 rounded-full p-0.5 bg-background">
             <div className="bg-success size-full rounded-[inherit]" />
@@ -78,7 +78,7 @@ export function ModelHeader(props: { chatId: string }) {
         onKeyDown={handleAddingChat}
         disabled
       >
-        <Plus className="size-[18px] stroke-zinc-600 dark:stroke-zinc-300" />
+        <Plus className="size-[18px] stroke-secondary-foreground/80" />
       </Button>
       <OptionsMenu model={model} />
     </div>
@@ -155,7 +155,7 @@ function ExperimentalBadge() {
 
 function SyncedBadge() {
   return (
-    <div className="rounded-full select-none px-3.5 pt-0.5 pb-1 text-sm text-zinc-500 dark:text-zinc-400 bg-zinc-200/70 dark:bg-zinc-800/70 font-semibold mr-2">
+    <div className="rounded-full select-none px-3.5 pt-0.5 pb-1 text-sm text-muted-foreground bg-secondary font-semibold mr-2">
       Synced
     </div>
   );
@@ -191,7 +191,7 @@ function OptionsMenu(props: { model: ChatProps }) {
           variant="ghost"
           className="has-[>svg]:px-1.5 py-1.5 h-max rounded-sm data-[state=open]:bg-accent dark:data-[state=open]:bg-accent/50"
         >
-          <Ellipsis className="size-[18px] stroke-zinc-600 dark:stroke-zinc-300" />
+          <Ellipsis className="size-[18px] stroke-secondary-foreground/80" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

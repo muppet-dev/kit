@@ -104,7 +104,7 @@ function TunnelLink() {
                   variant="ghost"
                   className="has-[>svg]:px-1.5 py-1.5 h-max rounded-sm data-[state=open]:bg-accent dark:data-[state=open]:bg-accent/50"
                 >
-                  <Pickaxe className="stroke-zinc-600 dark:stroke-zinc-300" />
+                  <Pickaxe className="stroke-secondary-foreground/80" />
                 </Button>
               </DropdownMenuTrigger>
             </div>

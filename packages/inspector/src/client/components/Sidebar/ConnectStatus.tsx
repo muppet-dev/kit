@@ -39,7 +39,7 @@ export function ConnectStatus() {
                 ? "bg-error"
                 : connectionStatus === ConnectionStatus.CONNECTING
                 ? "bg-warning"
-                : "bg-gray-500 dark:bg-gray-300"
+                : "bg-secondary-foreground/60"
             )}
           />
         </TooltipTrigger>

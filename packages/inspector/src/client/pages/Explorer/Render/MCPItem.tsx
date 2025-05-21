@@ -54,7 +54,7 @@ export function MCPItem(props: MCPItem) {
           </p>
           {(props.type === Tool.DYNAMIC_RESOURCES ||
             props.type === Tool.STATIC_RESOURCES) && (
-            <span className="italic text-zinc-500 dark:text-zinc-400">
+            <span className="italic text-muted-foreground">
               {props.mimeType}
             </span>
           )}

@@ -68,7 +68,7 @@ export function PromptFieldRender({
           )}
         />
         {item.description && (
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             {item.description}
             {item.required && (
               <span className="text-xs mt-1 ml-1">(Required)</span>
