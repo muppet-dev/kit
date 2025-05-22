@@ -14,7 +14,7 @@ const apiRouter = new Hono<EnvWithConfig>().use(async (c, next) => {
       (mod) => mod.default,
     );
 
-    c.set("config", config);
+    c.set("config", config(process.env));
   }
 
   await next();
