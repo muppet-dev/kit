@@ -1,10 +1,11 @@
-import { createRoot } from "react-dom/client";
-import "./index.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createRoot } from "react-dom/client";
 import toast, { Toaster } from "react-hot-toast";
 import { BrowserRouter } from "react-router";
 import App from "./App";
-import { ConfigProvider, ThemeProvider } from "./providers";
+import "./index.css";
+import { ConfigProvider } from "./providers";
+import { PreferencesProvider, usePreferences } from "./providers/preferences";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -28,13 +29,23 @@ const queryClient = new QueryClient({
 
 createRoot(document.getElementById("root")!).render(
   <QueryClientProvider client={queryClient}>
-    <BrowserRouter>
-      <ConfigProvider>
-        <ThemeProvider>
-          <App />
-          <Toaster position="bottom-right" />
-        </ThemeProvider>
-      </ConfigProvider>
-    </BrowserRouter>
-  </QueryClientProvider>,
+    <PreferencesProvider>
+      <BrowserRouter>
+        <ConfigProvider>
+          <Render />
+        </ConfigProvider>
+      </BrowserRouter>
+    </PreferencesProvider>
+  </QueryClientProvider>
 );
+
+function Render() {
+  const { toastPosition } = usePreferences();
+
+  return (
+    <>
+      <App />
+      <Toaster position={toastPosition} />
+    </>
+  );
+}

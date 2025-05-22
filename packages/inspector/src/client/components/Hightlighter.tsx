@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { cn } from "../lib/utils";
-import { Theme, useShiki, useTheme } from "../providers";
+import { Theme, usePreferences, useShiki } from "../providers";
 import { CopyButton } from "./CopyButton";
 import { Skeleton } from "./ui/skeleton";
 
@@ -9,7 +9,7 @@ export type CodeHighlighter = { content: string; className?: string };
 export function CodeHighlighter({ content, className }: CodeHighlighter) {
   const highlighter = useShiki();
   const [html, setHtml] = useState("");
-  const { theme } = useTheme();
+  const { theme } = usePreferences();
 
   if (!highlighter)
     return (

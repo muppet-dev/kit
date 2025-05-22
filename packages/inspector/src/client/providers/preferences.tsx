@@ -1,11 +1,12 @@
 import { useLocalStorage } from "@uidotdev/usehooks";
 import {
-  type PropsWithChildren,
   createContext,
   useContext,
   useEffect,
   useState,
+  type PropsWithChildren,
 } from "react";
+import type { ToastPosition } from "react-hot-toast";
 
 export enum Theme {
   DARK = "dark",
@@ -13,34 +14,37 @@ export enum Theme {
   SYSTEM = "system",
 }
 
-type ThemeProviderProps = {
+type PreferencesContextType = ReturnType<typeof usePreferencesManager>;
+
+const PreferencesContext = createContext<PreferencesContextType | null>(null);
+
+export type PreferencesProviderProps = {
   defaultTheme?: Theme;
   storageKey?: string;
 };
 
-const ThemeProviderContext = createContext<ReturnType<
-  typeof useThemeManager
-> | null>(null);
-
-export function ThemeProvider({
+export function PreferencesProvider({
   children,
   defaultTheme = Theme.SYSTEM,
   storageKey = "muppet-theme",
-  ...props
-}: PropsWithChildren<ThemeProviderProps>) {
-  const value = useThemeManager({ storageKey, defaultTheme });
+}: PropsWithChildren<PreferencesProviderProps>) {
+  const values = usePreferencesManager({ storageKey, defaultTheme });
 
   return (
-    <ThemeProviderContext.Provider {...props} value={value}>
+    <PreferencesContext.Provider value={values}>
       {children}
-    </ThemeProviderContext.Provider>
+    </PreferencesContext.Provider>
   );
 }
 
-function useThemeManager({
+function usePreferencesManager({
   storageKey,
   defaultTheme,
-}: Required<ThemeProviderProps>) {
+}: Required<PreferencesProviderProps>) {
+  const [toastPosition, setToastPosition] = useLocalStorage<ToastPosition>(
+    "toast-preferences",
+    "bottom-right"
+  );
   const [theme, setThemeState] = useLocalStorage<Theme>(
     storageKey,
     defaultTheme
@@ -72,17 +76,23 @@ function useThemeManager({
 
   const setTheme = (newTheme: Theme) => setThemeState(newTheme);
 
+  const setToast = (newToastPosition: ToastPosition) =>
+    setToastPosition(newToastPosition);
+
   return {
-    theme: resolvedTheme,
+    toastPosition,
+    setToast,
     setTheme,
+    theme: resolvedTheme,
     themeStorageKey: storageKey,
   };
 }
 
-export const useTheme = () => {
-  const context = useContext(ThemeProviderContext);
+export const usePreferences = () => {
+  const context = useContext(PreferencesContext);
 
-  if (!context) throw new Error("Missing ThemeContext.Provider in the tree!");
+  if (!context)
+    throw new Error("Missing PreferencesContext.Provider in the tree!");
 
   return context;
 };

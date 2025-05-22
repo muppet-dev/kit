@@ -12,7 +12,6 @@ import { cn } from "../../lib/utils";
 import { useConfig, useConnection } from "../../providers";
 import { Logo } from "../Logo";
 import { LogoSmall } from "../LogoSmall";
-import { ThemeSelector } from "../ThemeSelector";
 import { Button } from "../ui/button";
 import {
   Sidebar,
@@ -28,6 +27,7 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { ConnectStatus } from "./ConnectStatus";
 import { PingButton } from "./PingButton";
+import { PreferencesDialog } from "./PreferencesDialog";
 import { SidebarItem } from "./SidebarItem";
 
 const SIDEBAR_ITEMS = {
@@ -100,7 +100,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarFooter className={cn(open && "flex-row items-center")}>
         <GithubLinkButton />
         <DocumentationLinkButton />
-        <ThemeSelector />
+        <PreferencesDialog />
         {open && <div className="flex-1" />}
         <SidebarTrigger />
       </SidebarFooter>
