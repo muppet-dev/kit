@@ -73,6 +73,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
   );
   const [serverCapabilities, setServerCapabilities] =
     useState<ServerCapabilities | null>(null);
+  const [token, setToken] = useState<string | null>(null);
   const [mcpClient, setMcpClient] = useState<Client | null>(null);
   const [requestHistory, setRequestHistory] = useState<RequestHistory[]>([]);
   const [completionsSupported, setCompletionsSupported] = useState(true);
@@ -316,6 +317,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
         if (token) {
           const authHeaderName = props.headerName || "Authorization";
           headers[authHeaderName] = `Bearer ${token}`;
+          setToken(token);
         }
       }
 
@@ -447,6 +449,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
   return {
     connectionStatus,
     serverCapabilities,
+    token,
     mcpClient,
     requestHistory,
     makeRequest,

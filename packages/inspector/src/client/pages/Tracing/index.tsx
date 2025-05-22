@@ -24,7 +24,7 @@ import {
   TooltipTrigger,
 } from "../../components/ui/tooltip";
 import { eventHandler } from "../../lib/eventHandler";
-import { useConfig } from "../../providers";
+import { useConfig, useConnection } from "../../providers";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { ListX, Logs, Pickaxe } from "lucide-react";
 import type { BaseSyntheticEvent } from "react";
@@ -135,23 +135,24 @@ function TunnelLink() {
 function TunnelInformationDialog(props: {
   id: string;
   url: URL;
-  headers: HeadersInit;
 }) {
-  const headers = Object.fromEntries(new Headers(props.headers).entries());
+  const { token } = useConnection();
+
+  const content = `${props.url.toString()}&authorization=${token}`;
 
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button variant="secondary" className="max-w-[300px] py-1.5">
-          <p className="truncate w-full">{props.url.toString()}</p>
+          <p className="truncate w-full">{content}</p>
         </Button>
       </DialogTrigger>
       <DialogOverlay />
       <DialogContent className="flex flex-col">
         <DialogHeader>
-          <DialogTitle>Generated Information</DialogTitle>
+          <DialogTitle>Proxy URL</DialogTitle>
           <DialogDescription>
-            Your URL and headers are ready to use
+            Add this URL to the MCP Client to connect the inspector as a proxy.
           </DialogDescription>
         </DialogHeader>
         <div className="w-full">
@@ -159,23 +160,17 @@ function TunnelInformationDialog(props: {
           <div className="w-full flex relative items-center">
             <Input
               readOnly
-              value={props.url.toString()}
+              value={content}
               placeholder=""
               className="w-full h-max pr-8"
             />
             <CopyButton
-              data={props.url.toString()}
+              data={content}
               tooltipContent="Copy URL"
               className="absolute right-0"
             />
           </div>
         </div>
-        {Object.entries(headers).length > 0 && (
-          <div className="w-full">
-            <Label className="mb-1.5">Headers</Label>
-            <CodeHighlighter content={JSON.stringify(headers)} />
-          </div>
-        )}
       </DialogContent>
     </Dialog>
   );
