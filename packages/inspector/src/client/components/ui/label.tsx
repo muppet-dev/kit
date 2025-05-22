@@ -14,7 +14,7 @@ function Label({
       data-slot="label"
       className={cn(
         "flex items-center gap-0.5 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
-        required && "after:text-error after:content-['*']",
+        required && "after:text-destructive after:content-['*']",
         className
       )}
       {...props}

@@ -36,7 +36,7 @@ export function ConnectStatus() {
                 : connectionStatus === ConnectionStatus.ERROR ||
                   connectionStatus ===
                     ConnectionStatus.ERROR_CONNECTING_TO_PROXY
-                ? "bg-error"
+                ? "bg-destructive"
                 : connectionStatus === ConnectionStatus.CONNECTING
                 ? "bg-warning"
                 : "bg-secondary-foreground/60"

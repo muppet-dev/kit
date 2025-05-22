@@ -16,7 +16,7 @@ enum Score {
 }
 
 const scoreTextColor = {
-  [Score.VPOOR]: "text-error",
+  [Score.VPOOR]: "text-destructive",
   [Score.POOR]: "text-alert",
   [Score.AVERAGE]: "text-warning",
   [Score.GOOD]: "text-success/80 dark:text-success",
@@ -24,7 +24,7 @@ const scoreTextColor = {
 };
 
 const scoreBgColor = {
-  [Score.VPOOR]: "bg-error",
+  [Score.VPOOR]: "bg-destructive",
   [Score.POOR]: "bg-alert",
   [Score.AVERAGE]: "bg-warning",
   [Score.GOOD]: "bg-success/80 dark:bg-success",
@@ -128,10 +128,10 @@ function ScoreItem(props: AnalyseDataType["recommendations"][0]) {
           className={cn(
             "text-sm italic select-none font-medium px-1.5 py-0.5",
             props.severity === AnalyseSeverity.LOW
-              ? "text-info bg-warning/40 dark:bg-warning/10"
+              ? "text-info bg-info/10"
               : props.severity === AnalyseSeverity.MEDIUM
-              ? "text-warning bg-warning/40 dark:bg-warning/10"
-              : "text-error bg-error/40 dark:bg-error/10"
+              ? "text-warning bg-warning/10"
+              : "text-destructive bg-destructive/10"
           )}
         >
           {props.severity}

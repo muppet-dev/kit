@@ -123,7 +123,7 @@ export function TracingTable() {
                               className={cn(
                                 "border px-1.5 w-max",
                                 isError
-                                  ? "text-error bg-error/10"
+                                  ? "text-destructive bg-destructive/10"
                                   : "text-success bg-success/10"
                               )}
                             >

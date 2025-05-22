@@ -47,7 +47,7 @@ function ConnectionWrapper(props: PropsWithChildren) {
     connectionStatus === ConnectionStatus.ERROR_CONNECTING_TO_PROXY
   )
     return (
-      <div className="flex flex-col items-center justify-center gap-2 size-full select-none text-destructive/60">
+      <div className="flex flex-col items-center justify-center gap-2 size-full select-none text-destructive">
         <XCircle className="size-14" />
         <p className="text-xl font-medium">Error Connecting Server</p>
       </div>

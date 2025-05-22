@@ -45,8 +45,6 @@
   --color-warning-foreground: var(--background);
   --color-info: var(--info);
   ---color-info-foreground: var(--background);
-  --color-error: var(--error);
-  --color-error-foreground: var(--background);
   --color-success: var(--success);
   --color-success-foreground: var(--background);
   --color-alert: var(--alert);
@@ -83,8 +81,6 @@
   --warning: oklch(76.9% 0.188 70.08);
   /* Info Colors */
   --info: oklch(62.3% 0.214 259.815);
-  /* Error Colors */
-  --error: oklch(57.7% 0.245 27.325);
   /* Success Colors */
   --success: oklch(62.7% 0.194 149.214);
   /* Alert Colors */
@@ -121,8 +117,6 @@
   --warning: oklch(87.9% 0.169 91.605);
   /* Info Colors */
   --info: oklch(88.2% 0.059 254.128);
-  /* Error Colors */
-  --error: oklch(80.8% 0.114 19.571);
   /* Success Colors */
   --success: oklch(92.5% 0.084 155.995);
   /* Alert Colors */

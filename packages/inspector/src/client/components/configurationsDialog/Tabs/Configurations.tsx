@@ -111,7 +111,7 @@ export function Configurations() {
                 <Button
                   title="Delete item"
                   variant="ghost"
-                  className="absolute right-3 size-max has-[>svg]:px-1.5 py-1.5 text-error hover:text-error hover:bg-error/10 dark:hover:bg-error/10"
+                  className="absolute right-3 size-max has-[>svg]:px-1.5 py-1.5 text-destructive hover:text-destructive hover:bg-destructive/10 dark:hover:bg-destructive/10"
                   onClick={handleDeleteItem(item.name)}
                   onKeyDown={handleDeleteItem(item.name)}
                 >

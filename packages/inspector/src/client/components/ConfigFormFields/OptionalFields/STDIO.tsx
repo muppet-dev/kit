@@ -87,7 +87,7 @@ function EnvField() {
               <Button
                 title="Delete Variable"
                 type="button"
-                className="h-max has-[>svg]:px-1.5 py-1.5 text-error hover:bg-error/10 hover:text-error dark:hover:bg-error/10"
+                className="h-max has-[>svg]:px-1.5 py-1.5 text-destructive hover:bg-destructive/10 hover:text-destructive dark:hover:bg-destructive/10"
                 variant="ghost"
                 onClick={handleDeleteItem(index)}
                 onKeyDown={handleDeleteItem(index)}

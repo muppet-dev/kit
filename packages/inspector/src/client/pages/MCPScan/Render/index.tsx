@@ -33,7 +33,7 @@ export function PageRender() {
             mutation.data.tools.length > 0 ? (
               <>
                 <div className="mb-2 lg:mb-3 flex items-center gap-1 lg:gap-2">
-                  <ShieldAlert className="size-7 text-error" />
+                  <ShieldAlert className="size-7 text-destructive" />
                   <h2 className="text-2xl font-semibold">
                     Vulnerabilities Detected
                   </h2>
