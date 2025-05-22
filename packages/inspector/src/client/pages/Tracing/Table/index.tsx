@@ -129,8 +129,8 @@ export function TracingTable() {
                           className={cn(
                             "border px-1.5 w-max",
                             isError
-                              ? "text-error bg-error-foreground/40 dark:bg-error-foreground/10"
-                              : "text-success bg-success-foreground/40"
+                              ? "text-error bg-error/10"
+                              : "text-success bg-success/10"
                           )}
                         >
                           {isError ? "Error" : "Success"}

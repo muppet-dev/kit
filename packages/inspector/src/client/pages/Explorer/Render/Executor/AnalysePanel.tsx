@@ -19,16 +19,16 @@ const scoreTextColor = {
   [Score.VPOOR]: "text-error",
   [Score.POOR]: "text-alert",
   [Score.AVERAGE]: "text-warning",
-  [Score.GOOD]: "text-success",
-  [Score.EXCELLENT]: "text-success-foreground/80",
+  [Score.GOOD]: "text-success/80 dark:text-success",
+  [Score.EXCELLENT]: "text-success dark:text-success/80",
 };
 
 const scoreBgColor = {
-  [Score.VPOOR]: "bg-error-foreground",
+  [Score.VPOOR]: "bg-error",
   [Score.POOR]: "bg-alert",
-  [Score.AVERAGE]: "bg-warning/90",
-  [Score.GOOD]: "bg-success-foreground/80",
-  [Score.EXCELLENT]: "bg-success-foreground",
+  [Score.AVERAGE]: "bg-warning",
+  [Score.GOOD]: "bg-success/80 dark:bg-success",
+  [Score.EXCELLENT]: "bg-success dark:bg-success/80",
 };
 
 export function AnalysePanel() {
@@ -128,10 +128,10 @@ function ScoreItem(props: AnalyseDataType["recommendations"][0]) {
           className={cn(
             "text-sm italic select-none font-medium px-1.5 py-0.5",
             props.severity === AnalyseSeverity.LOW
-              ? "text-info bg-warning-foreground/40 dark:bg-warning-foreground/10"
+              ? "text-info bg-warning/40 dark:bg-warning/10"
               : props.severity === AnalyseSeverity.MEDIUM
-              ? "text-warning bg-warning-foreground/40 dark:bg-warning-foreground/10"
-              : "text-error bg-error-foreground/40 dark:bg-error/10"
+              ? "text-warning bg-warning/40 dark:bg-warning/10"
+              : "text-error bg-error/40 dark:bg-error/10"
           )}
         >
           {props.severity}

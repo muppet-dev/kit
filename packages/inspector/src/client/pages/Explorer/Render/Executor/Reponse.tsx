@@ -93,7 +93,7 @@ function ResponseTime() {
   if (isSubmitting) return <Skeleton className="w-14 h-5" />;
 
   return (
-    <span className="text-xs text-success-foreground">
+    <span className="text-xs text-success">
       {(data?.duration ?? 0) > 1000
         ? `${numberFormatter(
             Number(((data?.duration ?? 0) / 1000).toFixed(2)),

@@ -42,13 +42,13 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-warning: var(--warning);
-  --color-warning-foreground: var(--warning-foreground);
+  --color-warning-foreground: var(--background);
   --color-info: var(--info);
-  ---color-info-foreground: var(--info-foreground);
+  ---color-info-foreground: var(--background);
   --color-error: var(--error);
-  --color-error-foreground: var(--error-foreground);
+  --color-error-foreground: var(--background);
   --color-success: var(--success);
-  --color-success-foreground: var(--success-foreground);
+  --color-success-foreground: var(--background);
   --color-alert: var(--alert);
 }
 
@@ -80,17 +80,13 @@
   --sidebar-ring: oklch(0.708 0 0);
   /* Custom Colors */
   /* Warning Colors */
-  --warning: oklch(79.5% 0.184 86.047);
-  --warning-foreground: oklch(94.5% 0.129 101.54);
+  --warning: oklch(76.9% 0.188 70.08);
   /* Info Colors */
   --info: oklch(62.3% 0.214 259.815);
-  --info-foreground: oklch(88.2% 0.059 254.128);
   /* Error Colors */
-  --error: oklch(63.7% 0.237 25.331);
-  --error-foreground: oklch(88.5% 0.062 18.334);
+  --error: oklch(57.7% 0.245 27.325);
   /* Success Colors */
-  --success: oklch(72.3% 0.219 149.579);
-  --success-foreground: oklch(62.7% 0.194 149.214);
+  --success: oklch(62.7% 0.194 149.214);
   /* Alert Colors */
   --alert: oklch(70.5% 0.213 47.604);
 }
@@ -122,17 +118,13 @@
   --sidebar-ring: oklch(0.556 0 0);
   /* Custom Colors */
   /* Warning Colors */
-  --warning: oklch(90.5% 0.182 98.111);
-  --warning-foreground: oklch(90.5% 0.182 98.111);
+  --warning: oklch(87.9% 0.169 91.605);
   /* Info Colors */
-  --info: oklch(80.9% 0.105 251.813);
-  --info-foreground: oklch(80.9% 0.105 251.813);
+  --info: oklch(88.2% 0.059 254.128);
   /* Error Colors */
   --error: oklch(80.8% 0.114 19.571);
-  --error-foreground: oklch(80.8% 0.114 19.571);
   /* Success Colors */
-  --success: oklch(87.1% 0.15 154.449);
-  --success-foreground: oklch(79.2% 0.209 151.711);
+  --success: oklch(92.5% 0.084 155.995);
   /* Alert Colors */
   --alert: oklch(83.7% 0.128 66.29);
 }
