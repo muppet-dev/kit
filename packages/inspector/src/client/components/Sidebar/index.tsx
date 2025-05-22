@@ -119,7 +119,7 @@ function ServerInfoSection() {
     <SidebarGroup>
       <SidebarMenu>
         {open ? (
-          <div className="p-2 flex gap-1 flex-col w-full border bg-background dark:bg-background/50">
+          <div className="p-2 flex gap-1 flex-col w-full border bg-background">
             {connectionStatus === "connected" ? (
               <div className="pl-1 flex justify-between items-center text-sm select-none">
                 <p

@@ -56,7 +56,6 @@ export function CustomTimeIntervalForm(props: { onSubmit: () => void }) {
       <DialogFooter className="mt-6 sm:justify-between">
         <DialogClose asChild>
           <Button
-            type="button"
             variant="outline"
             onClick={handleCloseDialog}
             onKeyDown={handleCloseDialog}

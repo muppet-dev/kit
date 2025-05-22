@@ -37,21 +37,16 @@ export function CodeHighlighter({ content, className }: CodeHighlighter) {
 
   return (
     <div className="relative size-full">
-      <div
-        className={cn(
-          "p-2 bg-white border relative h-full overflow-y-auto dark:bg-[#0d1117]",
-          className
-        )}
-      >
+      <div className={cn("border relative h-full overflow-auto", className)}>
         <div
-          className="h-max min-h-full w-max min-w-full"
+          className="h-max min-h-full w-max min-w-full [&>pre]:p-2"
           // biome-ignore lint/security/noDangerouslySetInnerHtml: Need this to show the highlighting
           dangerouslySetInnerHTML={{ __html: html }}
         />
       </div>
       <CopyButton
         data={content ? content : undefined}
-        className="absolute right-1 top-1"
+        className="absolute right-2 top-2 [&>svg]:size-3.5"
       />
     </div>
   );

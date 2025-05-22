@@ -63,7 +63,7 @@ function ReconnectButton() {
 
   return (
     <Button
-      variant="secondary"
+      colorScheme="secondary"
       className="text-base mt-6 py-2.5"
       onClick={handleConnect}
       onKeyDown={handleConnect}

@@ -85,7 +85,7 @@ export function ArrayField() {
               <Plus className="size-4 stroke-2" />
             </Button>
             <Button
-              variant="destructive"
+              colorScheme="destructive"
               size="icon"
               onClick={handleDelete(index)}
               onKeyDown={handleDelete(index)}
@@ -99,7 +99,6 @@ export function ArrayField() {
         variant="outline"
         onClick={handleAddItem}
         onKeyDown={handleAddItem}
-        type="button"
         className="w-max"
       >
         Add

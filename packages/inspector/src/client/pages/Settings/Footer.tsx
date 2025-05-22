@@ -34,7 +34,6 @@ export function FormFooter() {
   return (
     <div className="flex items-center justify-between mt-4">
       <Button
-        type="button"
         variant="outline"
         disabled={isSameValues}
         onClick={handleResetForm}

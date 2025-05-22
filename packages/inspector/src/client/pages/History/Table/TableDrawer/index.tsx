@@ -107,7 +107,7 @@ export function TableDrawer({ traces }: TableDrawer) {
   return (
     <div className="p-4 w-[550px] border space-y-3 h-full overflow-y-auto">
       <div className="flex items-center gap-2">
-        <kbd className="text-foreground bg-secondary border px-1.5 text-sm font-medium shadow dark:shadow-none">
+        <kbd className="text-foreground bg-secondary border px-1.5 text-sm font-medium shadow">
           {selectedHistory.request.method}
         </kbd>
         <p

@@ -16,10 +16,7 @@ export const highlightMatches = (
         inputText
           .substring(nextUnhighlightedRegionStartingIndex, region[0])
           .replace(" ", "\u00A0"),
-        <span
-          key={`${i}-${region}`}
-          className="bg-warning/70 text-foreground dark:text-background"
-        >
+        <span key={`${i}-${region}`} className="bg-warning/50 text-foreground">
           {inputText
             .substring(region[0], lastRegionNextIndex)
             .replace(" ", "\u00A0")}

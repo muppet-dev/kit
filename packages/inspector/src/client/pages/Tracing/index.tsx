@@ -142,7 +142,7 @@ function TunnelInformationDialog(props: {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="secondary" className="max-w-[300px] py-1.5">
+        <Button colorScheme="secondary" className="max-w-[300px] py-1.5">
           <p className="truncate w-full">{props.url.toString()}</p>
         </Button>
       </DialogTrigger>

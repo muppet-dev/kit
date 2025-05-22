@@ -76,8 +76,8 @@ export function Configurations() {
                 onKeyDown={handleSelectItem(item)}
                 className={cn(
                   selected?.name === item.name
-                    ? "bg-accent/80 dark:bg-accent/50 border-primary/30"
-                    : "hover:bg-accent/80 dark:hover:bg-accent/50 hover:border-primary/30 transition-all",
+                    ? "bg-accent/80 border-primary/30"
+                    : "hover:bg-accent/80 hover:border-primary/30 transition-all",
                   "relative border pl-3 pr-[54px] pt-1.5 pb-2 cursor-pointer flex items-center justify-between select-none w-full"
                 )}
               >
@@ -111,7 +111,8 @@ export function Configurations() {
                 <Button
                   title="Delete item"
                   variant="ghost"
-                  className="absolute right-3 size-max has-[>svg]:px-1.5 py-1.5 text-destructive hover:text-destructive hover:bg-destructive/10 dark:hover:bg-destructive/10"
+                  colorScheme="destructive"
+                  className="absolute right-3 size-max has-[>svg]:px-1.5 py-1.5"
                   onClick={handleDeleteItem(item.name)}
                   onKeyDown={handleDeleteItem(item.name)}
                 >
@@ -129,7 +130,6 @@ export function Configurations() {
       <div className="flex items-center justify-between">
         {localSavedConfigs != null && localSavedConfigs.length !== 0 ? (
           <Button
-            type="button"
             variant="ghost"
             title="Clear all configurations"
             onClick={handleAllDelete}
@@ -141,7 +141,6 @@ export function Configurations() {
           <span />
         )}
         <Button
-          type="button"
           disabled={!selected || mutation.isPending}
           onClick={handleConnect}
           onKeyDown={handleConnect}
