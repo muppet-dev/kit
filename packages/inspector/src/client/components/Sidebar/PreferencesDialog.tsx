@@ -9,6 +9,7 @@ import { Button } from "../ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -52,51 +53,52 @@ export function PreferencesDialog() {
         </TooltipTrigger>
         <TooltipContent>Preferences</TooltipContent>
       </Tooltip>
-      <DialogContent>
-        <DialogHeader>
+      <DialogContent className="gap-5">
+        <DialogHeader className="gap-1">
           <DialogTitle>Preferences</DialogTitle>
+          <DialogDescription>
+            Change the theme and toast position of the application.
+          </DialogDescription>
         </DialogHeader>
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-2">
-            <Label>Theme</Label>
-            <div className="flex items-center w-full gap-2">
-              {Object.entries(THEMES).map(([name, icon]) => {
-                const isSelected = theme === name;
+        <div className="flex flex-col gap-2">
+          <Label>Theme</Label>
+          <div className="flex items-center w-full gap-2">
+            {Object.entries(THEMES).map(([name, icon]) => {
+              const isSelected = theme === name;
 
-                return (
-                  <ItemCard
-                    key={name}
-                    isSelected={isSelected}
-                    onClick={handleChangeTheme(name as Theme)}
-                    name={name}
-                    icon={icon}
-                  />
-                );
-              })}
-            </div>
+              return (
+                <ItemCard
+                  key={name}
+                  isSelected={isSelected}
+                  onClick={handleChangeTheme(name as Theme)}
+                  name={name}
+                  icon={icon}
+                />
+              );
+            })}
           </div>
-          <div className="flex flex-col gap-2">
-            <Label>Toast Position</Label>
-            <div className="grid grid-cols-3 gap-3">
-              {TOAST_POSITIONS.map((name) => {
-                const isSelected = toastPosition === name;
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label>Toast Position</Label>
+          <div className="grid grid-cols-3 gap-3">
+            {TOAST_POSITIONS.map((name) => {
+              const isSelected = toastPosition === name;
 
-                return (
-                  <ItemCard
-                    key={name}
-                    isSelected={isSelected}
-                    onClick={() => {
-                      setToast(name as ToastPosition);
+              return (
+                <ItemCard
+                  key={name}
+                  isSelected={isSelected}
+                  onClick={() => {
+                    setToast(name as ToastPosition);
 
-                      toast.success(`Toast position changed to ${name}`, {
-                        id: "toast-position-changed",
-                      });
-                    }}
-                    name={name}
-                  />
-                );
-              })}
-            </div>
+                    toast.success(`Toast position changed to ${name}`, {
+                      id: "toast-position-changed",
+                    });
+                  }}
+                  name={name}
+                />
+              );
+            })}
           </div>
         </div>
       </DialogContent>
