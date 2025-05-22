@@ -1,7 +1,6 @@
 import { eventHandler } from "@/client/lib/eventHandler";
 import { cn } from "@/client/lib/utils";
 import { Theme, usePreferences } from "@/client/providers/preferences";
-import { useLocalStorage } from "@uidotdev/usehooks";
 import { type LucideIcon, Moon, Settings, Sun, Tv } from "lucide-react";
 import type { BaseSyntheticEvent } from "react";
 import toast, { type ToastPosition } from "react-hot-toast";
@@ -33,9 +32,7 @@ const TOAST_POSITIONS = [
 ];
 
 export function PreferencesDialog() {
-  const { toastPosition, setToast, setTheme, themeStorageKey } =
-    usePreferences();
-  const [theme] = useLocalStorage(themeStorageKey);
+  const { toastPosition, setToast, setTheme, theme } = usePreferences();
 
   const handleChangeTheme = (name: Theme) => eventHandler(() => setTheme(name));
 

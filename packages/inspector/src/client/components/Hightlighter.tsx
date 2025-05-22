@@ -9,7 +9,7 @@ export type CodeHighlighter = { content: string; className?: string };
 export function CodeHighlighter({ content, className }: CodeHighlighter) {
   const highlighter = useShiki();
   const [html, setHtml] = useState("");
-  const { theme } = usePreferences();
+  const { resolvedTheme } = usePreferences();
 
   if (!highlighter)
     return (
@@ -28,12 +28,12 @@ export function CodeHighlighter({ content, className }: CodeHighlighter) {
       .codeToHtml(content, {
         lang: "json",
         theme:
-          theme === Theme.LIGHT
+          resolvedTheme === Theme.LIGHT
             ? "github-light-default"
             : "github-dark-default",
       })
       .then((val) => setHtml(val));
-  }, [content, theme]);
+  }, [content, resolvedTheme]);
 
   return (
     <div className="relative size-full">

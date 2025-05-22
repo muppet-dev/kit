@@ -18,17 +18,8 @@ type PreferencesContextType = ReturnType<typeof usePreferencesManager>;
 
 const PreferencesContext = createContext<PreferencesContextType | null>(null);
 
-export type PreferencesProviderProps = {
-  defaultTheme?: Theme;
-  storageKey?: string;
-};
-
-export function PreferencesProvider({
-  children,
-  defaultTheme = Theme.SYSTEM,
-  storageKey = "muppet-theme",
-}: PropsWithChildren<PreferencesProviderProps>) {
-  const values = usePreferencesManager({ storageKey, defaultTheme });
+export function PreferencesProvider({ children }: PropsWithChildren) {
+  const values = usePreferencesManager();
 
   return (
     <PreferencesContext.Provider value={values}>
@@ -37,21 +28,19 @@ export function PreferencesProvider({
   );
 }
 
-function usePreferencesManager({
-  storageKey,
-  defaultTheme,
-}: Required<PreferencesProviderProps>) {
-  const [toastPosition, setToastPosition] = useLocalStorage<ToastPosition>(
-    "toast-preferences",
-    "bottom-right"
-  );
-  const [theme, setThemeState] = useLocalStorage<Theme>(
-    storageKey,
-    defaultTheme
-  );
+function usePreferencesManager() {
+  const [preferences, setPreferences] = useLocalStorage<{
+    toast: ToastPosition;
+    theme: Theme;
+  }>("muppet-preferences", {
+    toast: "bottom-right",
+    theme: Theme.SYSTEM,
+  });
   const [resolvedTheme, setResolvedTheme] = useState<Theme.LIGHT | Theme.DARK>(
     Theme.LIGHT
   );
+
+  const { theme, toast } = preferences;
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-color-scheme: dark)");
@@ -74,17 +63,24 @@ function usePreferencesManager({
     }
   }, [theme]);
 
-  const setTheme = (newTheme: Theme) => setThemeState(newTheme);
+  const setTheme = (newTheme: Theme) =>
+    setPreferences((prev) => ({
+      ...prev,
+      theme: newTheme,
+    }));
 
   const setToast = (newToastPosition: ToastPosition) =>
-    setToastPosition(newToastPosition);
+    setPreferences((prev) => ({
+      ...prev,
+      toast: newToastPosition,
+    }));
 
   return {
-    toastPosition,
+    toastPosition: toast,
     setToast,
     setTheme,
-    theme: resolvedTheme,
-    themeStorageKey: storageKey,
+    resolvedTheme,
+    theme,
   };
 }
 

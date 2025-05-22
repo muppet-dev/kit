@@ -24,7 +24,7 @@ export function CodeEditor({
 }: CodeEditor) {
   const [editorInstance, setEditorInstance] =
     useState<Parameters<OnMount>[0]>();
-  const { theme } = usePreferences();
+  const { resolvedTheme } = usePreferences();
 
   const handleEditorMount: OnMount = (editor) => setEditorInstance(editor);
   const handleFormatCode = eventHandler(() => {
@@ -39,7 +39,7 @@ export function CodeEditor({
       <MonacoEditor
         language={language}
         onMount={handleEditorMount}
-        theme={theme === Theme.DARK ? "vs-dark" : "light"}
+        theme={resolvedTheme === Theme.DARK ? "vs-dark" : "light"}
         className="h-full"
         value={value}
         onChange={onValueChange}
