@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 
 export const highlightMatches = (
   inputText: string,
-  regions: readonly RangeTuple[] = [],
+  regions: readonly RangeTuple[] = []
 ) => {
   const children: ReactNode[] = [];
   let nextUnhighlightedRegionStartingIndex = 0;
@@ -16,15 +16,12 @@ export const highlightMatches = (
         inputText
           .substring(nextUnhighlightedRegionStartingIndex, region[0])
           .replace(" ", "\u00A0"),
-        <span
-          key={`${i}-${region}`}
-          className="bg-yellow-200/80 text-black dark:bg-yellow-300"
-        >
+        <span key={`${i}-${region}`} className="bg-warning/50 text-foreground">
           {inputText
             .substring(region[0], lastRegionNextIndex)
             .replace(" ", "\u00A0")}
         </span>,
-      ],
+      ]
     );
 
     nextUnhighlightedRegionStartingIndex = lastRegionNextIndex;
@@ -33,7 +30,7 @@ export const highlightMatches = (
   children.push(
     inputText
       .substring(nextUnhighlightedRegionStartingIndex)
-      .replace(" ", "\u00A0"),
+      .replace(" ", "\u00A0")
   );
 
   return children;

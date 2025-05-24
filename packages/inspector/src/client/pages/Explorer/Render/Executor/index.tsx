@@ -183,7 +183,7 @@ function TabsTriggerComponent({
     <TabsTrigger
       {...props}
       className={cn(
-        "data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-2 xl:px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black",
+        "data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-2 xl:px-5 dark:data-[state=active]:bg-foreground dark:data-[state=active]:text-background",
         className
       )}
     >

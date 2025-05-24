@@ -1,13 +1,13 @@
 import { Editor as MonacoEditor, type OnMount } from "@monaco-editor/react";
-import { type ComponentProps, useState } from "react";
-import { Theme, useTheme } from "../providers";
-import { Spinner } from "./ui/spinner";
-import { CopyButton } from "./CopyButton";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
-import { Button } from "./ui/button";
-import { eventHandler } from "../lib/eventHandler";
 import { AlignLeft } from "lucide-react";
+import { type ComponentProps, useState } from "react";
+import { eventHandler } from "../lib/eventHandler";
 import { cn } from "../lib/utils";
+import { Theme, usePreferences } from "../providers";
+import { CopyButton } from "./CopyButton";
+import { Button } from "./ui/button";
+import { Spinner } from "./ui/spinner";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export type CodeEditor = {
   value?: string;
@@ -24,7 +24,7 @@ export function CodeEditor({
 }: CodeEditor) {
   const [editorInstance, setEditorInstance] =
     useState<Parameters<OnMount>[0]>();
-  const { theme } = useTheme();
+  const { resolvedTheme } = usePreferences();
 
   const handleEditorMount: OnMount = (editor) => setEditorInstance(editor);
   const handleFormatCode = eventHandler(() => {
@@ -39,16 +39,14 @@ export function CodeEditor({
       <MonacoEditor
         language={language}
         onMount={handleEditorMount}
-        theme={theme === Theme.DARK ? "vs-dark" : "light"}
+        theme={resolvedTheme === Theme.DARK ? "vs-dark" : "light"}
         className="h-full"
         value={value}
         onChange={onValueChange}
         loading={
           <div className="flex h-full w-full items-center justify-center gap-1">
             <Spinner />
-            <p className="text-sm text-secondary-500 dark:text-secondary-400">
-              Loading...
-            </p>
+            <p className="text-sm text-muted-foreground">Loading...</p>
           </div>
         }
         options={{

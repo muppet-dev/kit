@@ -30,7 +30,6 @@ export function FormFooter() {
   return (
     <DialogFooter className="sm:justify-start">
       <Button
-        type="button"
         variant="outline"
         onClick={handleResetForm}
         onKeyDown={handleResetForm}

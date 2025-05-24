@@ -34,19 +34,19 @@ function HistoryPanel() {
           <TabsList>
             <TabsTrigger
               value={HistoryTab.HISTORY}
-              className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black"
+              className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5 dark:data-[state=active]:bg-foreground dark:data-[state=active]:text-background"
             >
               History
             </TabsTrigger>
             <TabsTrigger
               value={HistoryTab.NOTIFICATIONS}
-              className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black"
+              className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5 dark:data-[state=active]:bg-foreground dark:data-[state=active]:text-background"
             >
               Notifications
             </TabsTrigger>
             <TabsTrigger
               value={HistoryTab.ERRORS}
-              className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black"
+              className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-5 dark:data-[state=active]:bg-foreground dark:data-[state=active]:text-background"
             >
               Errors
             </TabsTrigger>

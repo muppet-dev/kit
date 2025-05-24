@@ -7,6 +7,7 @@ export function defineInspectorConfig(
   const {
     host = process.env.HOST ?? "localhost",
     port = Number(process.env.PORT ?? 3553),
+    auto_open = true,
     models,
     ..._config
   } = config;
@@ -35,6 +36,7 @@ export function defineInspectorConfig(
   return {
     host,
     port,
+    auto_open,
     models: models
       ? {
           default: defaultModel!,

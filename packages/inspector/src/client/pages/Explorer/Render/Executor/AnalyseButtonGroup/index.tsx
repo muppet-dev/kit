@@ -25,7 +25,7 @@ function ActionButton() {
     <>
       <Button
         className="px-3 py-1.5 xl:flex hidden"
-        variant="secondary"
+        colorScheme="secondary"
         disabled={mutation.isPending}
         onClick={handleAnalyse}
         onKeyDown={handleAnalyse}
@@ -36,7 +36,7 @@ function ActionButton() {
       </Button>
       <Button
         className="xl:hidden size-max has-[>svg]:px-2.5 py-2.5"
-        variant="secondary"
+        colorScheme="secondary"
         disabled={mutation.isPending}
         onClick={handleAnalyse}
         onKeyDown={handleAnalyse}

@@ -15,7 +15,7 @@ export function FormResetButton() {
   return (
     <>
       <Button
-        variant="secondary"
+        colorScheme="secondary"
         className="xl:flex hidden"
         onClick={handleResetForm}
         onKeyDown={handleResetForm}
@@ -24,7 +24,7 @@ export function FormResetButton() {
         Reset
       </Button>
       <Button
-        variant="secondary"
+        colorScheme="secondary"
         className="xl:hidden size-max has-[>svg]:px-2.5 py-2.5"
         onClick={handleResetForm}
         onKeyDown={handleResetForm}

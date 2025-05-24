@@ -57,26 +57,18 @@ function URLField() {
 
   const url = useWatch({ control, name: "url" });
 
-  if (url != null)
-    return (
-      <div className="relative flex items-center col-span-3">
-        <Input
-          placeholder="Enter URL"
-          {...register("url")}
-          className="w-full pr-9"
-        />
-        <CopyButton
-          className="absolute right-1"
-          data={url}
-          tooltipContent="Copy URL"
-        />
-      </div>
-    );
   return (
-    <Input
-      placeholder="Enter URL"
-      {...register("url")}
-      className="col-span-3"
-    />
+    <div className="relative flex items-center col-span-3">
+      <Input
+        placeholder="Enter URL"
+        {...register("url")}
+        className="w-full pr-9"
+      />
+      <CopyButton
+        className="absolute right-1"
+        data={url}
+        tooltipContent="Copy URL"
+      />
+    </div>
   );
 }

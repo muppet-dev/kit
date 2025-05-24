@@ -102,15 +102,15 @@ export function TableDrawer({ traces }: TableDrawer) {
   return (
     <div className="p-4 w-[550px] border space-y-3 h-full overflow-y-auto">
       <div className="flex items-center gap-2">
-        <kbd className="text-foreground dark:text-secondary-300 bg-secondary border px-1.5 text-sm font-medium shadow dark:shadow-none">
+        <kbd className="text-foreground bg-secondary border px-1.5 text-sm font-medium shadow">
           {selectedHistory.request?.method ?? "N/A"}
         </kbd>
         <p
           className={cn(
             "text-sm font-medium",
             selectedHistory.response?.error
-              ? "text-red-500 dark:text-red-300"
-              : "text-green-600 dark:text-green-400"
+              ? "text-destructive"
+              : "text-success"
           )}
         >
           {selectedHistory.response?.error ? "Error" : "Success"}
@@ -162,35 +162,36 @@ export function TableDrawer({ traces }: TableDrawer) {
           <TooltipContent>Close</TooltipContent>
         </Tooltip>
       </div>
-      {selectedHistory.request?.method !== "initialize" && (
-        <div className="flex items-center justify-end gap-2">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                size="icon"
-                variant="ghost"
-                className="p-1.5 size-max"
-                onClick={handleSendRequest}
-                onKeyDown={handleSendRequest}
-                disabled={resendDirectory[selectedHistory.id]}
-              >
-                <RefreshCcw
-                  className={
-                    resendDirectory[selectedHistory.id]
-                      ? "animate-spin"
-                      : undefined
-                  }
-                />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Resend request</TooltipContent>
-          </Tooltip>
-          {selectedHistory.request &&
-            UPDATABLE_METHODS.includes(selectedHistory.request.method) && (
-              <UpdateRequestDialog request={selectedHistory.request} />
-            )}
-        </div>
-      )}
+      {selectedHistory.request?.method !== "initialize" &&
+        !selectedHistory.request?.method?.includes("notifications") && (
+          <div className="flex items-center justify-end gap-2">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="p-1.5 size-max"
+                  onClick={handleSendRequest}
+                  onKeyDown={handleSendRequest}
+                  disabled={resendDirectory[selectedHistory.id]}
+                >
+                  <RefreshCcw
+                    className={
+                      resendDirectory[selectedHistory.id]
+                        ? "animate-spin"
+                        : undefined
+                    }
+                  />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Resend request</TooltipContent>
+            </Tooltip>
+            {selectedHistory.request &&
+              UPDATABLE_METHODS.includes(selectedHistory.request.method) && (
+                <UpdateRequestDialog request={selectedHistory.request} />
+              )}
+          </div>
+        )}
       {Object.values(selectedHistory.request ?? {}).map((res) => res != null)
         .length > 0 && (
         <TracingDetails

@@ -70,9 +70,7 @@ function FieldErrorMessage({ name }: { name: string }) {
     <ErrorMessage
       name={name}
       render={({ message }) => (
-        <p className="my-0.5 text-sm text-red-600 dark:text-red-400">
-          {message}
-        </p>
+        <p className="my-0.5 text-sm text-destructive">{message}</p>
       )}
     />
   );
