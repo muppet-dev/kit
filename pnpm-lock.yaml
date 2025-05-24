@@ -259,6 +259,9 @@ importers:
       '@hono/node-server':
         specifier: ^1.14.1
         version: 1.14.1(hono@4.7.9)
+      '@hono/standard-validator':
+        specifier: ^0.1.2
+        version: 0.1.2(@standard-schema/spec@1.0.0)(hono@4.7.9)
       '@modelcontextprotocol/sdk':
         specifier: ^1.11.2
         version: 1.11.2
@@ -292,6 +295,9 @@ importers:
       '@shikijs/themes':
         specifier: ^3.2.2
         version: 3.4.0
+      '@sindresorhus/slugify':
+        specifier: ^2.2.1
+        version: 2.2.1
       '@tanstack/react-query':
         specifier: ^5.75.2
         version: 5.76.0(react@19.1.0)
@@ -346,6 +352,9 @@ importers:
       tailwind-merge:
         specifier: ^3.2.0
         version: 3.3.0
+      zod:
+        specifier: ^3.24.4
+        version: 3.24.4
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^4.20250519.0
@@ -1740,6 +1749,14 @@ packages:
 
   '@shikijs/vscode-textmate@10.0.2':
     resolution: {integrity: sha512-83yeghZ2xxin3Nj8z1NMd/NCuca+gsYXswywDy5bHvwlWL8tpTQmzGeUuHd9FC3E/SBEMvzJRwWEOz5gGes9Qg==}
+
+  '@sindresorhus/slugify@2.2.1':
+    resolution: {integrity: sha512-MkngSCRZ8JdSOCHRaYd+D01XhvU3Hjy6MGl06zhOk614hp9EOAp5gIkBeQg7wtmxpitU6eAL4kdiRMcJa2dlrw==}
+    engines: {node: '>=12'}
+
+  '@sindresorhus/transliterate@1.6.0':
+    resolution: {integrity: sha512-doH1gimEu3A46VX6aVxpHTeHrytJAG6HgdxntYnCFiIFHEM/ZGpG8KiZGBChchjQmG0XFIBL552kBTjVcMZXwQ==}
+    engines: {node: '>=12'}
 
   '@standard-community/standard-json@0.1.2':
     resolution: {integrity: sha512-GxrChjZ/6/9I2vjxMsG9tBqfniqBQfSgVcnWB5HPQuiv15ZEyiAI3xW2pQ0Aibe37s17ijAx2dyaXFappRvJ4g==}
@@ -4689,6 +4706,15 @@ snapshots:
       '@types/hast': 3.0.4
 
   '@shikijs/vscode-textmate@10.0.2': {}
+
+  '@sindresorhus/slugify@2.2.1':
+    dependencies:
+      '@sindresorhus/transliterate': 1.6.0
+      escape-string-regexp: 5.0.0
+
+  '@sindresorhus/transliterate@1.6.0':
+    dependencies:
+      escape-string-regexp: 5.0.0
 
   '@standard-community/standard-json@0.1.2(zod-to-json-schema@3.24.5(zod@3.24.4))':
     optionalDependencies:

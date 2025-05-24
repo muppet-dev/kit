@@ -46,6 +46,7 @@
     }
   },
   "dependencies": {
+    "@hono/standard-validator": "^0.1.2",
     "@modelcontextprotocol/sdk": "^1.11.2",
     "@monaco-editor/react": "^4.7.0",
     "@radix-ui/react-dialog": "^1.1.11",
@@ -56,6 +57,7 @@
     "@radix-ui/react-tooltip": "^1.2.4",
     "@shikijs/langs": "^3.2.2",
     "@shikijs/themes": "^3.2.2",
+    "@sindresorhus/slugify": "^2.2.1",
     "@tanstack/react-query": "^5.75.2",
     "@uidotdev/usehooks": "^2.4.1",
     "class-variance-authority": "^0.7.1",
@@ -71,7 +73,8 @@
     "react-hot-toast": "^2.5.2",
     "react-router": "^7.5.1",
     "shiki": "^3.2.2",
-    "tailwind-merge": "^3.2.0"
+    "tailwind-merge": "^3.2.0",
+    "zod": "^3.24.4"
   },
   "peerDependencies": {
     "@hono/node-server": "^1.14.1",

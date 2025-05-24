@@ -3,8 +3,15 @@ import statsRouter from "./stats";
 import serversRouter from "./servers";
 import pkg from "../../package.json";
 import clientRouter from "./client";
+import type { BaseEnv } from "@/types";
 
-const apiRouter = new Hono();
+const servers: BaseEnv["Variables"]["servers"] = [];
+
+const apiRouter = new Hono<BaseEnv>().use(async (c, next) => {
+  c.set("servers", servers);
+
+  await next();
+});
 
 apiRouter.route("/stats", statsRouter);
 apiRouter.route("/servers", serversRouter);
