@@ -105,13 +105,13 @@ function ConnectStatus() {
             "rounded-full",
             open ? "size-2 ml-1 mb-1.5" : "size-2.5 ml-[3px]",
             connectionStatus === ConnectionStatus.CONNECTED
-              ? "bg-green-500 dark:bg-green-300"
+              ? "bg-success"
               : connectionStatus === ConnectionStatus.ERROR ||
                 connectionStatus === ConnectionStatus.ERROR_CONNECTING_TO_PROXY
-              ? "bg-red-500 dark:bg-red-300"
+              ? "bg-destructive"
               : connectionStatus === ConnectionStatus.CONNECTING
-              ? "bg-yellow-500 dark:bg-yellow-300"
-              : "bg-gray-500 dark:bg-gray-300"
+              ? "bg-warning"
+              : "bg-secondary-foreground/60"
           )}
         />
       </TooltipWrapper>
