@@ -5,7 +5,7 @@ import {
   sidebarMenuButtonVariants,
   useSidebar,
 } from "../ui/sidebar";
-import { cn } from "../../../lib/utils";
+import { cn } from "../../lib/utils";
 import type { LucideIcon } from "lucide-react";
 import type { PropsWithChildren } from "react";
 import { NavLink } from "react-router";
