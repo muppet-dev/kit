@@ -98,7 +98,7 @@
   },
   "peerDependencies": {
     "@hono/node-server": "^1.14.1",
-    "@muppet-kit/shared": "^0.1.9",
+    "@muppet-kit/shared": "^0.1.10",
     "commander": "^13.1.0",
     "dotenv": "^16.5.0",
     "spawn-rx": "^5.1.2"

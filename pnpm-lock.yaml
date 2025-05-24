@@ -76,8 +76,8 @@ importers:
         specifier: ^4.7.0
         version: 4.7.0(monaco-editor@0.52.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@muppet-kit/shared':
-        specifier: ^0.1.9
-        version: 0.1.9
+        specifier: ^0.1.10
+        version: 0.1.10
       '@radix-ui/react-accordion':
         specifier: ^1.2.4
         version: 1.2.10(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -906,8 +906,8 @@ packages:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
-  '@muppet-kit/shared@0.1.9':
-    resolution: {integrity: sha512-CEEzn3X4HA4/xznkIdOrLbBHW5dzxWmgwWhSTrUDmjrwt0UllaNjhCrYaQ67QEmFKL+jm4N3LYh3U4hdT7Fgfg==}
+  '@muppet-kit/shared@0.1.10':
+    resolution: {integrity: sha512-64m+Movw+tzm02gTh5EBD5EPa8CeqNwxmZMWmJftEbWtvxPq73xeLhS5nmXiGvL1veZkyeFF+q0kfBtIHFfN9g==}
 
   '@ngrok/ngrok-android-arm64@1.5.1':
     resolution: {integrity: sha512-2Tokwi5GVWNLw3JEoM0Ieb/ypALniZu6fciUTgpuByutbKxOjvahD4fYOKwW3KMdV9bCb3XGGtWJCZXfRPPq1g==}
@@ -3935,11 +3935,12 @@ snapshots:
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
 
-  '@muppet-kit/shared@0.1.9':
+  '@muppet-kit/shared@0.1.10':
     dependencies:
       '@hono/node-server': 1.14.1(hono@4.7.9)
       c12: 3.0.3
       hono: 4.7.9
+      open: 10.1.2
       zod: 3.24.4
     transitivePeerDependencies:
       - magicast
