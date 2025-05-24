@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import { NotFound } from "./components/NotFound";
 import { SidebarProvider } from "./components/ui/sidebar";
 import DashboardPage from "./pages/Dashboard";
-import { MCPProxyPage } from "./pages/MCPProxy";
+import { HomePage } from "./pages/Home";
 import TracingPage from "./pages/Tracing";
 import {
   PreferencesProvider,
@@ -46,7 +46,7 @@ export default function App() {
                 <BrowserRouter>
                   <Routes>
                     <Route path="/" element={<AppWrapper />}>
-                      <Route index element={<MCPProxyPage />} />
+                      <Route index element={<HomePage />} />
                       <Route path="/dashboard" element={<DashboardPage />} />
                       <Route path="/tracing" element={<TracingPage />} />
                     </Route>
