@@ -4,8 +4,10 @@ import toast, { Toaster } from "react-hot-toast";
 import { BrowserRouter, Route, Routes } from "react-router";
 import { NotFound } from "./components/NotFound";
 import { SidebarProvider } from "./components/ui/sidebar";
+import AddServerPage from "./pages/AddServer";
 import DashboardPage from "./pages/Dashboard";
-import { HomePage } from "./pages/Home";
+import HomePage from "./pages/Home";
+import ServersPage from "./pages/Servers";
 import TracingPage from "./pages/Tracing";
 import {
   PreferencesProvider,
@@ -14,7 +16,6 @@ import {
 } from "./providers";
 import { ConfigProvider } from "./providers/config";
 import { ShikiProvider } from "./providers/shiki";
-import AddServerPage from "./pages/AddServer";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -49,8 +50,11 @@ export default function App() {
                     <Route path="/" element={<AppWrapper />}>
                       <Route index element={<HomePage />} />
                       <Route path="/dashboard" element={<DashboardPage />} />
+                      <Route path="/servers">
+                        <Route index element={<ServersPage />} />
+                        <Route path="add" element={<AddServerPage />} />
+                      </Route>
                       <Route path="/tracing" element={<TracingPage />} />
-                      <Route path="/servers/add" element={<AddServerPage />} />
                     </Route>
                     <Route path="*" element={<NotFound />} />
                   </Routes>

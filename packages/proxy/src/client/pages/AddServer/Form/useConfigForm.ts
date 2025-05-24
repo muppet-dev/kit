@@ -1,11 +1,16 @@
-import toast from "react-hot-toast";
 import { generateName } from "@/client/lib/utils";
-import { Transport } from "@muppet-kit/shared";
-import { useMutation } from "@tanstack/react-query";
-import type z from "zod";
+import { serversDataQueryKey } from "@/client/queries/useServersData";
 import type { configValidation } from "@/client/validations";
+import { Transport } from "@muppet-kit/shared";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router";
+import type z from "zod";
 
 export function useConfigForm() {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async (values: z.infer<typeof configValidation>) => {
       const _values = {
@@ -34,9 +39,21 @@ export function useConfigForm() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(_values),
+      }).then((res) => {
+        if (!res.ok) {
+          throw new Error(
+            "Failed to save configuration. Please check your network connection or try again later."
+          );
+        }
+
+        navigate("/servers");
       });
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: serversDataQueryKey,
+      });
+
       toast.success("Configuration saved successfully!");
     },
     onError: (error) => {

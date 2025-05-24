@@ -50,7 +50,7 @@ export const configTransportSchema = z.union([
 router.post("/", sValidator("json", configTransportSchema), (c) => {
   const server = c.req.valid("json");
   const servers = c.get("servers");
-  const id = servers[servers.length - 1].id + 1;
+  const id = (servers.length > 0 ? servers[servers.length - 1].id : 0) + 1;
 
   servers.push({
     ...server,

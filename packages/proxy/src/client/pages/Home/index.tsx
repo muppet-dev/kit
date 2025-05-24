@@ -1,6 +1,6 @@
 import { Logo } from "../../components/Logo";
 
-export function HomePage() {
+export default function HomePage() {
   return (
     <div className="flex items-center justify-center flex-col gap-0.5 size-full select-none">
       <Logo className="w-44" />

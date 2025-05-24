@@ -15,6 +15,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/client/components/ui/select";
+import { Button } from "@/client/components/ui/button";
+import { Spinner } from "@/client/components/ui/spinner";
 
 export function AddServerForm() {
   const methods = useForm<z.infer<typeof configValidation>>({
@@ -24,7 +26,12 @@ export function AddServerForm() {
     },
   });
 
-  const { handleSubmit, register, control } = methods;
+  const {
+    handleSubmit,
+    register,
+    control,
+    formState: { isSubmitting },
+  } = methods;
 
   const mutation = useConfigForm();
 
@@ -71,6 +78,13 @@ export function AddServerForm() {
             />
           </div>
           <OptionalFields />
+        </div>
+        <div className="flex justify-end">
+          <Button type="submit" disabled={mutation.isPending || isSubmitting}>
+            {mutation.isPending ||
+              (isSubmitting && <Spinner className="size-4 min-w-4 min-h-4" />)}
+            {mutation.isPending || isSubmitting ? "Submitting" : "Submit"}
+          </Button>
         </div>
       </form>
     </FormProvider>
