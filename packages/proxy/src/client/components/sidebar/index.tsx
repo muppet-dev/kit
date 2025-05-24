@@ -1,5 +1,9 @@
+import { useConfig } from "@/client/providers";
 import { BookText, LayoutDashboard, Logs } from "lucide-react";
+import { Link } from "react-router";
 import { cn } from "../../lib/utils";
+import { Logo } from "../Logo";
+import { LogoSmall } from "../LogoSmall";
 import { Button } from "../ui/button";
 import {
   Sidebar,
@@ -11,6 +15,7 @@ import {
   useSidebar,
 } from "../ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { PreferencesDialog } from "./PreferencesDialog";
 import { SidebarItem } from "./SidebarItem";
 
 const SIDEBAR_ITEMS = [
@@ -28,23 +33,23 @@ const SIDEBAR_ITEMS = [
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { open } = useSidebar();
-  //   const { version } = useConfig();
+  const { version } = useConfig();
 
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="flex-row items-center justify-between">
-        {/* <Link to="/" className={cn("w-max", open ? "py-0.5" : "py-1.5")}>
+        <Link to="/" className={cn("w-max", open ? "py-0.5" : "py-1.5")}>
           {open ? (
             <Logo className="w-28" />
           ) : (
-            <SmallLogo className="h-[15.53px] w-max" />
+            <LogoSmall className="h-[15.53px] w-max" />
           )}
-        </Link> */}
-        {/* {open && (
+        </Link>
+        {open && (
           <p className="text-sm font-semibold text-muted-foreground">
             v{version}
           </p>
-        )} */}
+        )}
       </SidebarHeader>
       <SidebarContent>
         <SidebarItem items={SIDEBAR_ITEMS} />
@@ -52,7 +57,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarFooter className={cn(open && "flex-row items-center")}>
         <GithubLinkButton />
         <DocumentationLinkButton />
-
+        <PreferencesDialog />
         {open && <div className="flex-1" />}
         <SidebarTrigger />
       </SidebarFooter>

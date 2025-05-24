@@ -1,12 +1,11 @@
+import { cn } from "../../lib/utils";
 import type * as React from "react";
-
-import { cn } from "@/client/lib/utils";
 
 function Table({ className, ...props }: React.ComponentProps<"table">) {
   return (
     <div
       data-slot="table-container"
-      className="relative w-full overflow-x-auto"
+      className="relative w-full overflow-x-auto border"
     >
       <table
         data-slot="table"

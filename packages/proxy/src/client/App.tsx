@@ -1,20 +1,66 @@
 import { AppWrapper } from "@/client/components/AppWrapper";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import toast, { Toaster } from "react-hot-toast";
 import { BrowserRouter, Route, Routes } from "react-router";
+import { SidebarProvider } from "./components/ui/sidebar";
 import DashboardPage from "./pages/Dashboard";
 import TracingPage from "./pages/Tracing";
-import { SidebarProvider } from "./components/ui/sidebar";
+import {
+  PreferencesProvider,
+  TracingProvider,
+  usePreferences,
+} from "./providers";
+import { ConfigProvider } from "./providers/config";
+import { ShikiProvider } from "./providers/shiki";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      throwOnError: (err, query) => {
+        console.error(query, err);
+        toast.error(err.message ?? "Something went wrong!");
+
+        return false;
+      },
+      staleTime: Number.POSITIVE_INFINITY,
+    },
+    mutations: {
+      onError: (err) => {
+        console.error(err);
+        toast.error(err.message ?? "Something went wrong!");
+      },
+    },
+  },
+});
 
 export default function App() {
   return (
-    <SidebarProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<AppWrapper />}>
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/tracing" element={<TracingPage />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </SidebarProvider>
+    <QueryClientProvider client={queryClient}>
+      <PreferencesProvider>
+        <ConfigProvider>
+          <TracingProvider>
+            <ShikiProvider>
+              <SidebarProvider>
+                <BrowserRouter>
+                  <Routes>
+                    <Route path="/" element={<AppWrapper />}>
+                      <Route path="/dashboard" element={<DashboardPage />} />
+                      <Route path="/tracing" element={<TracingPage />} />
+                    </Route>
+                  </Routes>
+                </BrowserRouter>
+                <ToastRender />
+              </SidebarProvider>
+            </ShikiProvider>
+          </TracingProvider>
+        </ConfigProvider>
+      </PreferencesProvider>
+    </QueryClientProvider>
   );
+}
+
+function ToastRender() {
+  const { toastPosition } = usePreferences();
+
+  return <Toaster position={toastPosition} />;
 }
