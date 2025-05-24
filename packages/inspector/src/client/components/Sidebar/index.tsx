@@ -9,9 +9,9 @@ import {
 } from "lucide-react";
 import { Link } from "react-router";
 import { cn } from "../../lib/utils";
-import { useConfig, useConnection } from "../../providers";
 import { Logo } from "../Logo";
 import { LogoSmall } from "../LogoSmall";
+import { useConfig } from "../../providers";
 import { Button } from "../ui/button";
 import {
   Sidebar,
@@ -25,9 +25,9 @@ import {
   useSidebar,
 } from "../ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import { ConnectStatus } from "./ConnectStatus";
-import { PingButton } from "./PingButton";
 import { PreferencesDialog } from "./PreferencesDialog";
+import { PingButton } from "./PingButton";
+import { ServerInfo } from "./ServerInfo";
 import { SidebarItem } from "./SidebarItem";
 
 const SIDEBAR_ITEMS = {
@@ -88,7 +88,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         )}
       </SidebarHeader>
       <SidebarContent>
-        <ServerInfoSection />
+        <SidebarGroup>
+          <SidebarMenu>
+            <ServerInfo />
+          </SidebarMenu>
+        </SidebarGroup>
         <SidebarGroup>
           <SidebarMenu>
             <PingButton />
@@ -106,42 +110,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  );
-}
-
-function ServerInfoSection() {
-  const { mcpClient, connectionStatus } = useConnection();
-  const { open } = useSidebar();
-
-  const serverInfo = mcpClient?.getServerVersion();
-
-  return (
-    <SidebarGroup>
-      <SidebarMenu>
-        {open ? (
-          <div className="p-2 flex gap-1 flex-col w-full border bg-background">
-            {connectionStatus === "connected" ? (
-              <div className="pl-1 flex justify-between items-center text-sm select-none">
-                <p
-                  className="font-semibold line-clamp-1"
-                  title={serverInfo?.name}
-                >
-                  {serverInfo?.name}
-                </p>
-                <p className="text-muted-foreground">v{serverInfo?.version}</p>
-              </div>
-            ) : (
-              <p className="text-center text-sm text-muted-foreground select-none">
-                No Server
-              </p>
-            )}
-            <ConnectStatus />
-          </div>
-        ) : (
-          <ConnectStatus />
-        )}
-      </SidebarMenu>
-    </SidebarGroup>
   );
 }
 

@@ -162,35 +162,36 @@ export function TableDrawer({ traces }: TableDrawer) {
           <TooltipContent>Close</TooltipContent>
         </Tooltip>
       </div>
-      {selectedHistory.request?.method !== "initialize" && (
-        <div className="flex items-center justify-end gap-2">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                size="icon"
-                variant="ghost"
-                className="p-1.5 size-max"
-                onClick={handleSendRequest}
-                onKeyDown={handleSendRequest}
-                disabled={resendDirectory[selectedHistory.id]}
-              >
-                <RefreshCcw
-                  className={
-                    resendDirectory[selectedHistory.id]
-                      ? "animate-spin"
-                      : undefined
-                  }
-                />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Resend request</TooltipContent>
-          </Tooltip>
-          {selectedHistory.request &&
-            UPDATABLE_METHODS.includes(selectedHistory.request.method) && (
-              <UpdateRequestDialog request={selectedHistory.request} />
-            )}
-        </div>
-      )}
+      {selectedHistory.request?.method !== "initialize" &&
+        !selectedHistory.request?.method?.includes("notifications") && (
+          <div className="flex items-center justify-end gap-2">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="p-1.5 size-max"
+                  onClick={handleSendRequest}
+                  onKeyDown={handleSendRequest}
+                  disabled={resendDirectory[selectedHistory.id]}
+                >
+                  <RefreshCcw
+                    className={
+                      resendDirectory[selectedHistory.id]
+                        ? "animate-spin"
+                        : undefined
+                    }
+                  />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Resend request</TooltipContent>
+            </Tooltip>
+            {selectedHistory.request &&
+              UPDATABLE_METHODS.includes(selectedHistory.request.method) && (
+                <UpdateRequestDialog request={selectedHistory.request} />
+              )}
+          </div>
+        )}
       {Object.values(selectedHistory.request ?? {}).map((res) => res != null)
         .length > 0 && (
         <TracingDetails

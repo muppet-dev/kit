@@ -70,13 +70,12 @@ const buildServer = (): Plugin => {
         import config from "./muppet.config";
 
         export class MuppetInspector extends DurableObject {
-          _app = new Hono().use(async (c, next) => {
-          c.set("config", config);
-          await next();
-        }).route("/", app);
-
           constructor(ctx, env) {
             super(ctx, env);
+            this._app = new Hono().use(async (c, next) => {
+              c.set("config", config(env));
+              await next();
+            }).route("/", app)
           }
 
           async fetch(request) {

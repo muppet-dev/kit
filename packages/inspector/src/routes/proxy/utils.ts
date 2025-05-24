@@ -34,10 +34,14 @@ export const transportSchema = z.union([
         .optional()
         .transform((val) => (val ? JSON.parse(val) : {})),
     }),
-  remoteTransportSchema.pick({
-    type: true,
-    url: true,
-  }),
+  remoteTransportSchema
+    .pick({
+      type: true,
+      url: true,
+    })
+    .extend({
+      authorization: z.string().optional(),
+    }),
 ]);
 
 export const transportHeaderSchema = z.object({
@@ -103,6 +107,14 @@ export async function createTransport<
       headers[key] = Array.isArray(value) ? value[value.length - 1] : value;
     }
 
+    /**
+     * This is for maintaining auth session when using proxy
+     * to connect to another client.
+     */
+    if (query.authorization) {
+      headers.authorization = query.authorization;
+    }
+
     console.log(
       `SSE transport: url=${query.url}, headers=${Object.keys(headers)}`,
     );
@@ -135,6 +147,14 @@ export async function createTransport<
       }
 
       headers[key] = Array.isArray(value) ? value[value.length - 1] : value;
+    }
+
+    /**
+     * This is for maintaining auth session when using proxy
+     * to connect to another client.
+     */
+    if (query.authorization) {
+      headers.authorization = query.authorization;
     }
 
     console.log(

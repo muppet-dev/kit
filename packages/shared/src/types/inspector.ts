@@ -22,6 +22,11 @@ export type InspectorConfig = {
    */
   host: string;
   /**
+   * Enables the inspector to open automatically when the server starts.
+   * @default true
+   */
+  auto_open?: boolean;
+  /**
    * The default configuration for connecting to the MCP.
    */
   configurations?: TransportConfig | Array<TransportConfig>;

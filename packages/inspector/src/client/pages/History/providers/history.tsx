@@ -22,6 +22,7 @@ const HISTORY_METHODS = [
   "prompts/get",
   "resources/templates/list",
   "completion/complete",
+  "notifications/roots/list_changed",
 ];
 
 export const HistoryProvider = (props: PropsWithChildren) => {
