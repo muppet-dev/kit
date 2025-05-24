@@ -5,7 +5,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/client/components/ui/card";
+import { Skeleton } from "@/client/components/ui/skeleton";
 import { cn } from "@/client/lib/utils";
+import { useStats } from "@/client/queries/useStats";
 import {
   Database,
   Layers,
@@ -17,35 +19,47 @@ import {
 import type { ForwardRefExoticComponent, RefAttributes } from "react";
 import { Link } from "react-router";
 
+const ITEMS: Pick<DashboardCard, "icon" | "title" | "theme">[] = [
+  {
+    title: "Servers",
+    icon: Server,
+    theme: "blue",
+  },
+  {
+    title: "Tools",
+    icon: Layers,
+    theme: "purple",
+  },
+  {
+    title: "Prompts",
+    icon: Users,
+    theme: "green",
+  },
+  {
+    title: "Resources",
+    icon: Database,
+    theme: "orange",
+  },
+];
+
 export default function DashboardPage() {
+  const { data, isLoading, isError } = useStats();
+
   return (
     <div className="p-4 size-full flex flex-col gap-4">
       <h2 className="text-2xl font-bold">Dashboard</h2>
       <div className="flex gap-4">
-        <DashboardCard
-          title="Total Servers"
-          icon={Server}
-          stat={12}
-          theme="blue"
-        />
-        <DashboardCard
-          title="Total Tools"
-          icon={Layers}
-          stat={8}
-          theme="purple"
-        />
-        <DashboardCard
-          title="Total Prompts"
-          icon={Users}
-          stat={24}
-          theme="green"
-        />
-        <DashboardCard
-          title="Total Resources"
-          icon={Database}
-          stat={142}
-          theme="orange"
-        />
+        {ITEMS.map((item) => (
+          <DashboardCard
+            key={item.title}
+            title={`Total ${item.title}`}
+            icon={item.icon}
+            theme={item.theme}
+            stat={data?.[item.title.toLowerCase()]}
+            isLoading={isLoading}
+            isError={isError}
+          />
+        ))}
       </div>
       <AddServerCard />
     </div>
@@ -71,11 +85,14 @@ type DashboardCard = {
     Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
   >;
   theme: "blue" | "purple" | "green" | "orange";
-  stat: number;
+  stat?: number;
+  isLoading?: boolean;
+  isError?: boolean;
 };
 
 function DashboardCard(props: DashboardCard) {
   const Icon = props.icon;
+
   return (
     <Card className="w-80">
       <CardHeader className="flex justify-between items-center">
@@ -87,7 +104,15 @@ function DashboardCard(props: DashboardCard) {
         </div>
       </CardHeader>
       <CardContent>
-        <p className="text-2xl font-bold tracking-tight">{props.stat}</p>
+        {props.isLoading ? (
+          <Skeleton className="w-10 h-8" />
+        ) : !props.isError ? (
+          <p className="text-2xl font-bold tracking-tight">
+            {props.stat != null ? props.stat : "-"}
+          </p>
+        ) : (
+          <p className="font-medium tracking-tight text-destructive">Error</p>
+        )}
       </CardContent>
     </Card>
   );
