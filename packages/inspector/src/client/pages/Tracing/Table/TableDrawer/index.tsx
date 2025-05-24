@@ -102,15 +102,15 @@ export function TableDrawer({ traces }: TableDrawer) {
   return (
     <div className="p-4 w-[550px] border space-y-3 h-full overflow-y-auto">
       <div className="flex items-center gap-2">
-        <kbd className="text-foreground dark:text-secondary-300 bg-secondary border px-1.5 text-sm font-medium shadow dark:shadow-none">
+        <kbd className="text-foreground bg-secondary border px-1.5 text-sm font-medium shadow">
           {selectedHistory.request?.method ?? "N/A"}
         </kbd>
         <p
           className={cn(
             "text-sm font-medium",
             selectedHistory.response?.error
-              ? "text-red-500 dark:text-red-300"
-              : "text-green-600 dark:text-green-400"
+              ? "text-destructive"
+              : "text-success"
           )}
         >
           {selectedHistory.response?.error ? "Error" : "Success"}

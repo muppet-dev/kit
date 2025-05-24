@@ -1,5 +1,4 @@
 import { CopyButton } from "../../components/CopyButton";
-import { CodeHighlighter } from "../../components/Hightlighter";
 import { Button } from "../../components/ui/button";
 import {
   Dialog,
@@ -104,7 +103,7 @@ function TunnelLink() {
                   variant="ghost"
                   className="has-[>svg]:px-1.5 py-1.5 h-max rounded-sm data-[state=open]:bg-accent dark:data-[state=open]:bg-accent/50"
                 >
-                  <Pickaxe className="stroke-zinc-600 dark:stroke-zinc-300" />
+                  <Pickaxe className="stroke-secondary-foreground/80" />
                 </Button>
               </DropdownMenuTrigger>
             </div>
@@ -132,10 +131,7 @@ function TunnelLink() {
   );
 }
 
-function TunnelInformationDialog(props: {
-  id: string;
-  url: URL;
-}) {
+function TunnelInformationDialog(props: { id: string; url: URL }) {
   const { token } = useConnection();
 
   const content = `${props.url.toString()}&authorization=${token}`;
@@ -143,7 +139,7 @@ function TunnelInformationDialog(props: {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="secondary" className="max-w-[300px] py-1.5">
+        <Button colorScheme="secondary" className="max-w-[300px] py-1.5">
           <p className="truncate w-full">{content}</p>
         </Button>
       </DialogTrigger>

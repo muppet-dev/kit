@@ -96,8 +96,7 @@ export function RootsRender() {
             <div className="flex items-center gap-2">
               <ClearButton onClick={clearRoots} />
               <Button
-                variant="secondary"
-                type="button"
+                colorScheme="secondary"
                 onClick={addRoots}
                 onKeyDown={addRoots}
               >
@@ -151,7 +150,6 @@ function ClearButton({ onClick }: ClearButton) {
   return (
     <Button
       variant="ghost"
-      type="button"
       disabled={!value.roots || value.roots?.length === 0}
       onClick={onClick}
       onKeyDown={onClick}

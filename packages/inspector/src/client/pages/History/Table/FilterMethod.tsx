@@ -34,7 +34,7 @@ export function FilterMethod() {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="h-max has-[>svg]:px-1.5 py-1.5 cursor-pointer hover:bg-zinc-200 text-zinc-600 dark:hover:bg-zinc-700 dark:text-zinc-400 dark:hover:text-accent-foreground data-[state=open]:text-accent-foreground dark:data-[state=open]:text-accent-foreground data-[state=open]:bg-zinc-200 dark:data-[state=open]:bg-zinc-700"
+          className="h-max has-[>svg]:px-1.5 py-1.5 cursor-pointer hover:bg-muted-foreground/20 text-secondary-foreground/70 dark:hover:text-accent-foreground data-[state=open]:text-accent-foreground dark:data-[state=open]:text-accent-foreground data-[state=open]:bg-muted-foreground/20"
         >
           <Filter className="size-4" />
         </Button>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { cn } from "../lib/utils";
-import { Theme, useShiki, useTheme } from "../providers";
+import { Theme, usePreferences, useShiki } from "../providers";
 import { CopyButton } from "./CopyButton";
 import { Skeleton } from "./ui/skeleton";
 
@@ -9,7 +9,7 @@ export type CodeHighlighter = { content: string; className?: string };
 export function CodeHighlighter({ content, className }: CodeHighlighter) {
   const highlighter = useShiki();
   const [html, setHtml] = useState("");
-  const { theme } = useTheme();
+  const { resolvedTheme } = usePreferences();
 
   if (!highlighter)
     return (
@@ -28,30 +28,25 @@ export function CodeHighlighter({ content, className }: CodeHighlighter) {
       .codeToHtml(content, {
         lang: "json",
         theme:
-          theme === Theme.LIGHT
+          resolvedTheme === Theme.LIGHT
             ? "github-light-default"
             : "github-dark-default",
       })
       .then((val) => setHtml(val));
-  }, [content, theme]);
+  }, [content, resolvedTheme]);
 
   return (
     <div className="relative size-full">
-      <div
-        className={cn(
-          "p-2 bg-white border relative h-full overflow-y-auto dark:bg-[#0d1117]",
-          className
-        )}
-      >
+      <div className={cn("border relative h-full overflow-auto", className)}>
         <div
-          className="h-max min-h-full w-max min-w-full"
+          className="h-max min-h-full w-max min-w-full [&>pre]:p-2"
           // biome-ignore lint/security/noDangerouslySetInnerHtml: Need this to show the highlighting
           dangerouslySetInnerHTML={{ __html: html }}
         />
       </div>
       <CopyButton
         data={content ? content : undefined}
-        className="absolute right-1 top-1"
+        className="absolute right-2 top-2 [&>svg]:size-3.5"
       />
     </div>
   );

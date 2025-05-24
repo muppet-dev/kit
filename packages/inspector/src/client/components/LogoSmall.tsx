@@ -1,9 +1,9 @@
 import { cn } from "../lib/utils";
 import type { ComponentProps } from "react";
 
-export type SmallLogo = ComponentProps<"svg">;
+export type LogoSmall = ComponentProps<"svg">;
 
-export function SmallLogo({ className, ...props }: SmallLogo) {
+export function LogoSmall({ className, ...props }: LogoSmall) {
   return (
     <svg
       {...props}
@@ -27,7 +27,6 @@ export function SmallLogo({ className, ...props }: SmallLogo) {
         </linearGradient>
       </defs>
       <path
-        className="dark:fill-white"
         transform="translate(-10 -150) scale(16)"
         d="M2.907 25.6v-11.627h-2.187v-4.373h4.48v2.613h1.173q0.853-1.387 2.213-2.147t3.36-0.76q1.92 0 3.293 0.68t2.2 2.013h0.107q1.84-2.693 5.467-2.693 3.093 0 4.907 1.8t1.813 4.867v9.627h-4.427v-8.773q0-3.573-3.387-3.573t-3.387 3.573v8.773h-4.427v-8.773q0-3.573-3.44-3.573-1.653 0-2.493 0.88t-0.84 2.693v8.773h-4.427z"
       />

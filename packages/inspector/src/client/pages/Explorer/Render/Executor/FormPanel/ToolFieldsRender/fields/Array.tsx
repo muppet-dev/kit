@@ -50,7 +50,7 @@ export function ArrayField() {
       {fields.map((field, index) => (
         <div
           key={field.id}
-          className="flex mb-2 min-h-[120px] items-center gap-2 rounded-lg border border-secondary-200 p-2 dark:border-secondary-800"
+          className="flex mb-2 min-h-[120px] items-center gap-2 rounded-lg border p-2"
         >
           <div className="space-y-2">
             <Button
@@ -85,7 +85,7 @@ export function ArrayField() {
               <Plus className="size-4 stroke-2" />
             </Button>
             <Button
-              variant="destructive"
+              colorScheme="destructive"
               size="icon"
               onClick={handleDelete(index)}
               onKeyDown={handleDelete(index)}
@@ -99,7 +99,6 @@ export function ArrayField() {
         variant="outline"
         onClick={handleAddItem}
         onKeyDown={handleAddItem}
-        type="button"
         className="w-max"
       >
         Add

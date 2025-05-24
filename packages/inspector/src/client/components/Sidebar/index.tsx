@@ -9,10 +9,9 @@ import {
 } from "lucide-react";
 import { Link } from "react-router";
 import { cn } from "../../lib/utils";
-import { useConfig } from "../../providers";
 import { Logo } from "../Logo";
-import { SmallLogo } from "../SmallLogo";
-import { ThemeSelector } from "../ThemeSelector";
+import { LogoSmall } from "../LogoSmall";
+import { useConfig } from "../../providers";
 import { Button } from "../ui/button";
 import {
   Sidebar,
@@ -26,6 +25,7 @@ import {
   useSidebar,
 } from "../ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { PreferencesDialog } from "./PreferencesDialog";
 import { PingButton } from "./PingButton";
 import { ServerInfo } from "./ServerInfo";
 import { SidebarItem } from "./SidebarItem";
@@ -78,7 +78,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           {open ? (
             <Logo className="w-28" />
           ) : (
-            <SmallLogo className="h-[15.53px] w-max" />
+            <LogoSmall className="h-[15.53px] w-max" />
           )}
         </Link>
         {open && (
@@ -104,7 +104,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarFooter className={cn(open && "flex-row items-center")}>
         <GithubLinkButton />
         <DocumentationLinkButton />
-        <ThemeSelector />
+        <PreferencesDialog />
         {open && <div className="flex-1" />}
         <SidebarTrigger />
       </SidebarFooter>

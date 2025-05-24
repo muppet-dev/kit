@@ -8,13 +8,13 @@ export function ConfigTabs() {
       <TabsList className="w-full">
         <TabsTrigger
           value="connect"
-          className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-2 xl:px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black"
+          className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-2 xl:px-5 dark:data-[state=active]:bg-foreground dark:data-[state=active]:text-background"
         >
           Connect
         </TabsTrigger>
         <TabsTrigger
           value="configurations"
-          className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-2 xl:px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black"
+          className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-2 xl:px-5 dark:data-[state=active]:bg-foreground dark:data-[state=active]:text-background"
         >
           Quick Connect
         </TabsTrigger>
