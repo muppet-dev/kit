@@ -23,7 +23,7 @@ import {
   TooltipTrigger,
 } from "../../components/ui/tooltip";
 import { eventHandler } from "../../lib/eventHandler";
-import { useConfig, useConnection } from "../../providers";
+import { useConfig, useConnection, useTracing } from "../../providers";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { ListX, Logs, Pickaxe } from "lucide-react";
 import type { BaseSyntheticEvent } from "react";
@@ -50,10 +50,9 @@ export default function TracingPage() {
 }
 
 function PageHeader() {
-  // TODO: Please update this function
-  const onClear = eventHandler(() => {
-    console.log("Clear logs");
-  });
+  const { clearTraces } = useTracing();
+
+  const onClear = eventHandler(() => clearTraces());
 
   return (
     <div className="flex items-center gap-2">

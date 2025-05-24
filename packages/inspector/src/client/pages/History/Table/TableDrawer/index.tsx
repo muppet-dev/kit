@@ -51,7 +51,7 @@ export function TableDrawer({ traces }: TableDrawer) {
       }
 
       return prev;
-    })
+    }),
   );
   const handleGoToNextRequest = eventHandler(() =>
     setSelected((prev) => {
@@ -62,7 +62,7 @@ export function TableDrawer({ traces }: TableDrawer) {
       }
 
       return prev;
-    })
+    }),
   );
   const handleSendRequest = eventHandler(async () => {
     if (
@@ -88,7 +88,7 @@ export function TableDrawer({ traces }: TableDrawer) {
         method: selectedHistory.request.method,
         params: selectedHistory.request.params,
       },
-      EmptyResultSchema.passthrough()
+      EmptyResultSchema.passthrough(),
     );
 
     setResendDirectory((prev) => {
@@ -110,16 +110,21 @@ export function TableDrawer({ traces }: TableDrawer) {
         <kbd className="text-foreground bg-secondary border px-1.5 text-sm font-medium shadow">
           {selectedHistory.request.method}
         </kbd>
-        <p
-          className={cn(
-            "text-sm font-medium",
-            selectedHistory.response?.error
-              ? "text-destructive"
-              : "text-success"
-          )}
-        >
-          {selectedHistory.response?.error ? "Error" : "Success"}
-        </p>
+        <Tooltip>
+          <TooltipTrigger>
+            <div
+              className={cn(
+                "rounded-full size-[7px] min-w-[7px] min-h-[7px]",
+                selectedHistory.response?.error
+                  ? "bg-destructive"
+                  : "bg-success",
+              )}
+            />
+          </TooltipTrigger>
+          <TooltipContent>
+            {selectedHistory.response?.error ? "Error" : "Success"}
+          </TooltipContent>
+        </Tooltip>
         <div className="flex-1" />
         <Tooltip>
           <TooltipTrigger asChild>
