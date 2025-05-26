@@ -4,9 +4,17 @@ import { CopyButton } from "./CopyButton";
 import { Skeleton } from "./ui/skeleton";
 import { cn } from "@/client/lib/utils";
 
-export type CodeHighlighter = { content: string; className?: string };
+export type CodeHighlighter = {
+  content: string;
+  className?: string;
+  tooltipContent?: string;
+};
 
-export function CodeHighlighter({ content, className }: CodeHighlighter) {
+export function CodeHighlighter({
+  content,
+  className,
+  tooltipContent,
+}: CodeHighlighter) {
   const highlighter = useShiki();
   const [html, setHtml] = useState("");
   const { resolvedTheme } = usePreferences();
@@ -46,6 +54,7 @@ export function CodeHighlighter({ content, className }: CodeHighlighter) {
       </div>
       <CopyButton
         data={content ? content : undefined}
+        tooltipContent={tooltipContent}
         className="absolute right-2 top-2 [&>svg]:size-3.5"
       />
     </div>

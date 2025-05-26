@@ -47,9 +47,9 @@ export function ServerTable() {
             <TableHeader>
               <TableRow className="hover:bg-accent divide-x bg-accent">
                 <TableHead>Name</TableHead>
-                <TableHead>Status</TableHead>
+                <TableHead className="w-32 text-center">Status</TableHead>
                 <TableHead>URL / Command</TableHead>
-                <TableHead className="text-right">Action</TableHead>
+                <TableHead className="text-right w-32">Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -68,7 +68,7 @@ export function ServerTable() {
                       <TableCell>
                         <p className="truncate">{server.name}</p>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="flex items-center justify-center">
                         <div
                           className={cn(
                             "border px-1.5 w-max capitalize",
@@ -112,7 +112,11 @@ export function ServerTable() {
           </Table>
         </div>
       </div>
-      <TableDrawer selected={selected} setSelected={setSelected} />
+      <TableDrawer
+        selected={selected}
+        setSelected={setSelected}
+        data={serversData ?? []}
+      />
     </div>
   );
 }
