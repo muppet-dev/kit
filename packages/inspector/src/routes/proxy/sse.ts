@@ -17,7 +17,7 @@ const router = new Hono<ProxyEnv>()
     sValidator("header", transportHeaderSchema),
     async (c) => {
       console.log(
-        "New SSE connection. NOTE: The sse transport is deprecated and has been replaced by streamable-http",
+        "New SSE connection. NOTE: The sse transport is deprecated and has been replaced by streamable-http"
       );
 
       try {
@@ -27,7 +27,7 @@ const router = new Hono<ProxyEnv>()
         if (error instanceof SseError && error.code === 401) {
           console.error(
             "Received 401 Unauthorized from MCP server:",
-            error.message,
+            error.message
           );
           return c.json(error, 401);
         }
@@ -54,15 +54,17 @@ const router = new Hono<ProxyEnv>()
 
         console.log("Set up MCP proxy");
       });
-    },
+    }
   )
   .post("/message", async (c) => {
     const sessionId = c.req.query("sessionId");
     console.log(`Received message for sessionId ${sessionId}`);
 
-    const transport = c
-      .get("transports")
-      .get(sessionId as string) as SSEHonoTransport;
+    if (!sessionId) {
+      throw new Error("Session ID is required for POST message");
+    }
+
+    const transport = c.get("transports").get(sessionId) as SSEHonoTransport;
     if (!transport) {
       return c.text("Session not found", 404);
     }

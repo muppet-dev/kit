@@ -24,7 +24,7 @@ const router = new Hono<ProxyEnv>()
       "header",
       z.object({
         "mcp-session-id": z.string(),
-      }),
+      })
     ),
     async (c) => {
       const sessionId = c.req.valid("header")["mcp-session-id"];
@@ -41,7 +41,7 @@ const router = new Hono<ProxyEnv>()
       await transport.handleRequest(req, res);
 
       return toFetchResponse(res);
-    },
+    }
   )
   .post(
     "/",
@@ -60,7 +60,7 @@ const router = new Hono<ProxyEnv>()
           if (error instanceof SseError && error.code === 401) {
             console.error(
               "Received 401 Unauthorized from MCP server:",
-              error.message,
+              error.message
             );
             return c.json(error, 401);
           }
@@ -87,11 +87,7 @@ const router = new Hono<ProxyEnv>()
         });
 
         const { req, res } = toReqRes(c.req.raw);
-        await (webAppTransport as StreamableHTTPServerTransport).handleRequest(
-          req,
-          res,
-          await c.req.json(),
-        );
+        await webAppTransport.handleRequest(req, res, await c.req.json());
 
         return toFetchResponse(res);
       }
@@ -104,14 +100,11 @@ const router = new Hono<ProxyEnv>()
         c.text(`Transport not found for sessionId ${sessionId}`, 404);
       } else {
         const { req, res } = toReqRes(c.req.raw);
-        await (transport as StreamableHTTPServerTransport).handleRequest(
-          req,
-          res,
-        );
+        await transport.handleRequest(req, res);
 
         return toFetchResponse(res);
       }
-    },
+    }
   );
 
 export default router;
