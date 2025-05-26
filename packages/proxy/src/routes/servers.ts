@@ -75,7 +75,27 @@ router.get("/:id", sValidator("param", idValidator), (c) => {
     return c.notFound();
   }
 
-  return c.json({});
+  const server = servers[index];
+
+  return c.json({
+    server,
+    tools: {
+      enabled: 10,
+      total: 24,
+    },
+    prompts: {
+      enabled: 4,
+      total: 4,
+    },
+    static_resources: {
+      enabled: 2,
+      total: 2,
+    },
+    dynamic_resources: {
+      enabled: 0,
+      total: 3,
+    },
+  });
 });
 
 router.delete("/:id", sValidator("param", idValidator), (c) => {
