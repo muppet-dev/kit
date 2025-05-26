@@ -1,8 +1,8 @@
 import { eventHandler } from "@/client/lib/eventHandler";
 import { cn } from "@/client/lib/utils";
 import { Theme, usePreferences } from "@/client/providers/preferences";
-import { type LucideIcon, Moon, Settings, Sun, Tv } from "lucide-react";
-import type { BaseSyntheticEvent } from "react";
+import { type LucideIcon, Moon, Plus, Settings, Sun, Tv } from "lucide-react";
+import { useState, type BaseSyntheticEvent } from "react";
 import toast, { type ToastPosition } from "react-hot-toast";
 import { Button } from "../ui/button";
 import {
@@ -15,6 +15,7 @@ import {
 } from "../ui/dialog";
 import { Label } from "../ui/label";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { ThemeDialog } from "./ThemeDialog";
 
 const THEMES = {
   [Theme.LIGHT]: Sun,
@@ -32,74 +33,121 @@ const TOAST_POSITIONS = [
 ];
 
 export function PreferencesDialog() {
-  const { toastPosition, setToast, setTheme, theme } = usePreferences();
+  const {
+    toastPosition,
+    setToast,
+    setTheme,
+    theme,
+    currentColorTheme,
+    colorTheme,
+    setCurrentColorTheme,
+  } = usePreferences();
+  const [isOpen, setOpen] = useState(false);
 
-  const handleChangeTheme = (name: Theme) => eventHandler(() => setTheme(name));
+  const handleChangeColorMode = (name: Theme) =>
+    eventHandler(() => setTheme(name));
+
+  const handleChangeTheme = (name: string) =>
+    eventHandler(() => setCurrentColorTheme(name));
+
+  const handleOpenThemeDialog = eventHandler(() => setOpen(true));
 
   return (
-    <Dialog>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <div>
-            <DialogTrigger asChild>
-              <Button variant="ghost" className="size-8">
-                <Settings />
-              </Button>
-            </DialogTrigger>
-          </div>
-        </TooltipTrigger>
-        <TooltipContent>Preferences</TooltipContent>
-      </Tooltip>
-      <DialogContent className="gap-5">
-        <DialogHeader className="gap-1">
-          <DialogTitle>Preferences</DialogTitle>
-          <DialogDescription>
-            Change the theme and toast position of the application.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="flex flex-col gap-2">
-          <Label>Theme</Label>
-          <div className="flex items-center w-full gap-2">
-            {Object.entries(THEMES).map(([name, icon]) => {
-              const isSelected = theme === name;
+    <>
+      <Dialog>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div>
+              <DialogTrigger asChild>
+                <Button variant="ghost" className="size-8">
+                  <Settings />
+                </Button>
+              </DialogTrigger>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>Preferences</TooltipContent>
+        </Tooltip>
+        <DialogContent className="gap-5">
+          <DialogHeader className="gap-1">
+            <DialogTitle>Preferences</DialogTitle>
+            <DialogDescription>
+              Change the theme and toast position of the application.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col gap-2">
+            <Label>Color Mode</Label>
+            <div className="flex items-center w-full gap-2">
+              {Object.entries(THEMES).map(([name, icon]) => {
+                const isSelected = theme === name;
 
-              return (
-                <ItemCard
-                  key={name}
-                  isSelected={isSelected}
-                  onClick={handleChangeTheme(name as Theme)}
-                  name={name}
-                  icon={icon}
-                />
-              );
-            })}
+                return (
+                  <ItemCard
+                    key={name}
+                    isSelected={isSelected}
+                    onClick={handleChangeColorMode(name as Theme)}
+                    name={name}
+                    icon={icon}
+                  />
+                );
+              })}
+            </div>
           </div>
-        </div>
-        <div className="flex flex-col gap-2">
-          <Label>Toast Position</Label>
-          <div className="grid grid-cols-3 gap-3">
-            {TOAST_POSITIONS.map((name) => {
-              const isSelected = toastPosition === name;
+          <div className="flex flex-col gap-2">
+            <Label>Theme</Label>
+            <div className="grid grid-cols-3 gap-3">
+              <ItemCard
+                isSelected={currentColorTheme === "default"}
+                onClick={() => {}}
+                name={currentColorTheme}
+              />
+              {Object.keys(colorTheme ?? {}).length > 0 &&
+                Object.keys(colorTheme).map((name) => {
+                  const isSelected = currentColorTheme === name;
 
-              return (
-                <ItemCard
-                  key={name}
-                  isSelected={isSelected}
-                  onClick={() => {
-                    setToast(name as ToastPosition);
-
-                    toast.success(`Toast position changed to ${name}`, {
-                      id: "toast-position-changed",
-                    });
-                  }}
-                  name={name}
-                />
-              );
-            })}
+                  return (
+                    <ItemCard
+                      key={name}
+                      isSelected={isSelected}
+                      onClick={handleChangeTheme(name)}
+                      name={name}
+                    />
+                  );
+                })}
+              <ItemCard
+                isSelected={false}
+                onClick={handleOpenThemeDialog}
+                name="Add Theme"
+                icon={Plus}
+              />
+            </div>
           </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+          <div className="flex flex-col gap-2">
+            <Label>Toast Position</Label>
+            <div className="grid grid-cols-3 gap-3">
+              {TOAST_POSITIONS.map((name) => {
+                const isSelected = toastPosition === name;
+
+                return (
+                  <ItemCard
+                    key={name}
+                    isSelected={isSelected}
+                    onClick={() => {
+                      setToast(name as ToastPosition);
+
+                      toast.success(`Toast position changed to ${name}`, {
+                        id: "toast-position-changed",
+                      });
+                    }}
+                    name={name}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+      <ThemeDialog onOpenChange={setOpen} open={isOpen} />
+    </>
   );
 }
 

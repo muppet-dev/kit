@@ -32,15 +32,20 @@ function usePreferencesManager() {
   const [preferences, setPreferences] = useLocalStorage<{
     toast: ToastPosition;
     theme: Theme;
+    color_theme: string;
   }>("muppet-preferences", {
     toast: "bottom-right",
     theme: Theme.SYSTEM,
+    color_theme: "default",
   });
+  const [colorTheme, setColorTheme] =
+    useLocalStorage<Record<string, string>>("muppet-color-theme");
+
   const [resolvedTheme, setResolvedTheme] = useState<Theme.LIGHT | Theme.DARK>(
     Theme.LIGHT
   );
 
-  const { theme, toast } = preferences;
+  const { theme, toast, color_theme } = preferences;
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-color-scheme: dark)");
@@ -75,12 +80,23 @@ function usePreferencesManager() {
       toast: newToastPosition,
     }));
 
+  const setCurrentColorTheme = (newColorTheme: string) => {
+    setPreferences((prev) => ({
+      ...prev,
+      color_theme: newColorTheme,
+    }));
+  };
+
   return {
     toastPosition: toast,
     setToast,
     setTheme,
     resolvedTheme,
     theme,
+    colorTheme,
+    setColorTheme,
+    setCurrentColorTheme,
+    currentColorTheme: color_theme,
   };
 }
 
