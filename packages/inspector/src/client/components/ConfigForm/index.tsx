@@ -1,5 +1,3 @@
-import type { ConnectionInfo } from "../../providers/connection/manager";
-import { configTransportSchema as schema } from "../../validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Transport,
@@ -10,7 +8,15 @@ import type { PropsWithChildren } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useSearchParams } from "react-router";
 import z from "zod";
+import type { ConnectionInfo } from "../../providers/connection/manager";
+import { configTransportSchema as schema } from "../../validations";
 import { useConfigForm } from "./useConfigForm";
+
+export const DEFAULT_VALUES = {
+  request_timeout: 10000,
+  progress: true,
+  total_timeout: 60000,
+};
 
 export type ConfigForm = PropsWithChildren<{
   data?: ConnectionInfo;
@@ -27,10 +33,8 @@ export function ConfigForm(props: ConfigForm) {
   const methods = useForm<z.output<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: props.data ?? {
-      request_timeout: 10000,
-      progress: true,
-      total_timeout: 60000,
       type: Transport.STDIO,
+      ...DEFAULT_VALUES,
       ...params,
     },
   });
