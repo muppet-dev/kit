@@ -1,7 +1,7 @@
 import { eventHandler } from "@/client/lib/eventHandler";
 import { cn } from "@/client/lib/utils";
 import { Theme, usePreferences } from "@/client/providers/preferences";
-import { type LucideIcon, Moon, Plus, Settings, Sun, Tv } from "lucide-react";
+import { Moon, Plus, Settings, Sun, Tv, type LucideIcon } from "lucide-react";
 import { useState, type BaseSyntheticEvent } from "react";
 import toast, { type ToastPosition } from "react-hot-toast";
 import { Button } from "../ui/button";
@@ -95,24 +95,18 @@ export function PreferencesDialog() {
           <div className="flex flex-col gap-2">
             <Label>Theme</Label>
             <div className="grid grid-cols-3 gap-3">
-              <ItemCard
-                isSelected={currentColorTheme === "default"}
-                onClick={() => {}}
-                name={currentColorTheme}
-              />
-              {Object.keys(colorTheme ?? {}).length > 0 &&
-                Object.keys(colorTheme).map((name) => {
-                  const isSelected = currentColorTheme === name;
+              {Object.keys(colorTheme).map((name) => {
+                const isSelected = currentColorTheme === name;
 
-                  return (
-                    <ItemCard
-                      key={name}
-                      isSelected={isSelected}
-                      onClick={handleChangeTheme(name)}
-                      name={name}
-                    />
-                  );
-                })}
+                return (
+                  <ItemCard
+                    key={name}
+                    isSelected={isSelected}
+                    onClick={handleChangeTheme(name)}
+                    name={name}
+                  />
+                );
+              })}
               <ItemCard
                 isSelected={false}
                 onClick={handleOpenThemeDialog}
