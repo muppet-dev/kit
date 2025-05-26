@@ -107,11 +107,12 @@ function ConnectStatus() {
             connectionStatus === ConnectionStatus.CONNECTED
               ? "bg-success"
               : connectionStatus === ConnectionStatus.ERROR ||
-                connectionStatus === ConnectionStatus.ERROR_CONNECTING_TO_PROXY
-              ? "bg-destructive"
-              : connectionStatus === ConnectionStatus.CONNECTING
-              ? "bg-warning"
-              : "bg-secondary-foreground/60"
+                  connectionStatus ===
+                    ConnectionStatus.ERROR_CONNECTING_TO_PROXY
+                ? "bg-destructive"
+                : connectionStatus === ConnectionStatus.CONNECTING
+                  ? "bg-warning"
+                  : "bg-secondary-foreground/60",
           )}
         />
       </TooltipWrapper>
@@ -146,13 +147,13 @@ function ConnectedServerOptionsMenu() {
         return {
           type: connectionInfo?.type,
           url: connectionInfo?.url,
-          note: "For SSE connections, add this URL directly in Client",
+          note: "For SSE connections, add this URL directly in your MCP Client",
         };
       case "streamable-http":
         return {
           type: connectionInfo?.type,
           url: connectionInfo?.url,
-          note: "For Streamable HTTP connections, add this URL directly in Client",
+          note: "For Streamable HTTP connections, add this URL directly in your MCP Client",
         };
     }
   }, [connectionInfo]);
