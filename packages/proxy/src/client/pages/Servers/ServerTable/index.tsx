@@ -14,6 +14,9 @@ import Fuse from "fuse.js";
 import { useMemo, useState } from "react";
 import { DeleteButton } from "./DeleteButton";
 import { TableDrawer } from "./TableDrawer";
+import { Link } from "react-router";
+import { Button } from "@/client/components/ui/button";
+import { Settings2 } from "lucide-react";
 
 export function ServerTable() {
   const [selected, setSelected] = useState<string>();
@@ -91,7 +94,15 @@ export function ServerTable() {
                         </p>
                       </TableCell>
                       <TableCell>
-                        <div className="flex justify-end">
+                        <div className="flex justify-end gap-1">
+                          <Link to={`/servers/${server.id}`}>
+                            <Button
+                              className="size-max has-[>svg]:px-1.5 py-1.5"
+                              variant="ghost"
+                            >
+                              <Settings2 />
+                            </Button>
+                          </Link>
                           <DeleteButton id={server.id} />
                         </div>
                       </TableCell>

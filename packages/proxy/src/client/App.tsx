@@ -16,6 +16,7 @@ import {
 } from "./providers";
 import { ConfigProvider } from "./providers/config";
 import { ShikiProvider } from "./providers/shiki";
+import ServerConfigurationsPage from "./pages/ServerConfigurations";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -53,6 +54,10 @@ export default function App() {
                       <Route path="/servers">
                         <Route index element={<ServersPage />} />
                         <Route path="add" element={<AddServerPage />} />
+                        <Route
+                          path=":serverId"
+                          element={<ServerConfigurationsPage />}
+                        />
                       </Route>
                       <Route path="/tracing" element={<TracingPage />} />
                     </Route>

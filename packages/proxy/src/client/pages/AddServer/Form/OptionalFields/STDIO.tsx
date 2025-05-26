@@ -10,7 +10,7 @@ import { Input } from "@/client/components/ui/input";
 import { Label } from "@/client/components/ui/label";
 import { eventHandler } from "@/client/lib/eventHandler";
 import type { configValidation } from "@/client/validations";
-import { Trash } from "lucide-react";
+import { Plus, Trash } from "lucide-react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import type z from "zod";
 
@@ -115,12 +115,13 @@ function EnvField() {
       )}
       <Button
         type="button"
-        variant="secondary"
+        variant="ghost"
         onClick={handleAddItem}
         onKeyDown={handleAddItem}
         className="w-max"
       >
-        Add variable
+        <Plus />
+        Add Variable
       </Button>
     </>
   );

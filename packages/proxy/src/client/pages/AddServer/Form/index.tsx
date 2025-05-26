@@ -35,6 +35,8 @@ export function AddServerForm() {
 
   const mutation = useConfigForm();
 
+  const isFormSubmitting = mutation.isPending || isSubmitting;
+
   return (
     <FormProvider {...methods}>
       <form
@@ -79,11 +81,10 @@ export function AddServerForm() {
           </div>
           <OptionalFields />
         </div>
-        <div className="flex justify-end">
-          <Button type="submit" disabled={mutation.isPending || isSubmitting}>
-            {mutation.isPending ||
-              (isSubmitting && <Spinner className="size-4 min-w-4 min-h-4" />)}
-            {mutation.isPending || isSubmitting ? "Submitting" : "Submit"}
+        <div className="flex justify-end mt-4 max-w-4xl mx-auto w-full">
+          <Button type="submit" disabled={isFormSubmitting}>
+            {isFormSubmitting && <Spinner className="size-4 min-w-4 min-h-4" />}
+            {isFormSubmitting ? "Adding" : "Add"} Server
           </Button>
         </div>
       </form>
