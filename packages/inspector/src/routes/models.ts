@@ -194,6 +194,110 @@ router.post(
   },
 );
 
+const hexColorSchema = z
+  .string()
+  .length(7)
+  .startsWith("#")
+  .describe("Color in hex format");
+
+const themeSchema = z.object({
+  light: z.object({
+    "--radius": z.string().describe("Border radius in CSS format"),
+    "--background": hexColorSchema,
+    "--foreground": hexColorSchema,
+    "--card": hexColorSchema,
+    "--card-foreground": hexColorSchema,
+    "--popover": hexColorSchema,
+    "--popover-foreground": hexColorSchema,
+    "--primary": hexColorSchema,
+    "--primary-foreground": hexColorSchema,
+    "--secondary": hexColorSchema,
+    "--secondary-foreground": hexColorSchema,
+    "--muted": hexColorSchema,
+    "--muted-foreground": hexColorSchema,
+    "--accent": hexColorSchema,
+    "--accent-foreground": hexColorSchema,
+    "--destructive": hexColorSchema,
+    "--border": hexColorSchema,
+    "--input": hexColorSchema,
+    "--ring": hexColorSchema,
+    "--sidebar": hexColorSchema,
+    "--sidebar-foreground": hexColorSchema,
+    "--sidebar-accent": hexColorSchema,
+    "--sidebar-accent-foreground": hexColorSchema,
+    "--sidebar-border": hexColorSchema,
+    "--sidebar-ring": hexColorSchema,
+    "--warning": hexColorSchema,
+    "--info": hexColorSchema,
+    "--success": hexColorSchema,
+    "--alert": hexColorSchema,
+  }),
+  dark: z.object({
+    "--background": hexColorSchema,
+    "--foreground": hexColorSchema,
+    "--card": hexColorSchema,
+    "--card-foreground": hexColorSchema,
+    "--popover": hexColorSchema,
+    "--popover-foreground": hexColorSchema,
+    "--primary": hexColorSchema,
+    "--primary-foreground": hexColorSchema,
+    "--secondary": hexColorSchema,
+    "--secondary-foreground": hexColorSchema,
+    "--muted": hexColorSchema,
+    "--muted-foreground": hexColorSchema,
+    "--accent": hexColorSchema,
+    "--accent-foreground": hexColorSchema,
+    "--destructive": hexColorSchema,
+    "--border": hexColorSchema,
+    "--input": hexColorSchema,
+    "--ring": hexColorSchema,
+    "--sidebar": hexColorSchema,
+    "--sidebar-foreground": hexColorSchema,
+    "--sidebar-accent": hexColorSchema,
+    "--sidebar-accent-foreground": hexColorSchema,
+    "--sidebar-border": hexColorSchema,
+    "--sidebar-ring": hexColorSchema,
+    "--warning": hexColorSchema,
+    "--info": hexColorSchema,
+    "--success": hexColorSchema,
+    "--alert": hexColorSchema,
+  }),
+});
+
+router.post(
+  "/theme",
+  ...handlers,
+  sValidator(
+    "json",
+    z.object({
+      context: z.string().optional(),
+    }),
+  ),
+  async (c) => {
+    const { context } = c.req.valid("json");
+
+    let prompt =
+      "Generate a theme for the application. The theme should include CSS variables for both light and dark modes. You need to generate the value for each CSS variable in hex format. The theme should be visually appealing and suitable for a modern web application. Try to use a consistent color palette and ensure good contrast between text and background colors. This is a MCP (Model Context Protocol) Inspector which is a devtool used by developers for testing and debugging their MCP servers.";
+
+    if (context) {
+      prompt += ` This is the suggestion given by the user, "${context}". Use these suggestions to generate the theme. The theme should be relevant to the context.`;
+    }
+
+    const result = await generateObject({
+      model: c.get("modelToBeUsed"),
+      prompt,
+      schemaName: "theme-generation",
+      schemaDescription:
+        "This is schema containing the css variables for the theme of the application.",
+      schema: themeSchema,
+    });
+
+    c.header("Content-Type", "text/plain; charset=utf-8");
+
+    return c.json(result.object);
+  },
+);
+
 export default router;
 
 // This function converts json schema into a zod schema
