@@ -3,24 +3,28 @@ import { usePreferences } from "@/client/providers";
 import { useMutation } from "@tanstack/react-query";
 import { Trash } from "lucide-react";
 import toast from "react-hot-toast";
-import { Button } from "../../ui/button";
+import { Button } from "../../../ui/button";
 
-export function DeleteButton({ name }: { name: string }) {
-  const { setColorTheme } = usePreferences();
+export function DeleteThemeButton(props: { name: string }) {
+  const { setColorTheme, setCurrentColorTheme, currentColorTheme } =
+    usePreferences();
 
   const mutation = useMutation({
     mutationFn: async () => {
       setColorTheme((prev) => {
         const newThemes = { ...prev };
-        delete newThemes[name];
+        delete newThemes[props.name];
         return newThemes;
       });
     },
     onSuccess: () => {
-      toast.success("Theme deleted successfully");
+      toast.success(`${props.name} theme deleted successfully`);
+      if (currentColorTheme === props.name) {
+        setCurrentColorTheme("default");
+      }
     },
     onError: () => {
-      toast.error("Failed to delete theme");
+      toast.error(`Error deleting ${props.name} theme`);
     },
   });
 
@@ -28,12 +32,12 @@ export function DeleteButton({ name }: { name: string }) {
 
   return (
     <Button
+      title="Delete Theme"
       colorScheme="destructive"
       variant="ghost"
       className="size-max has-[>svg]:px-1 py-1"
       onClick={handleDeleteTheme}
       onKeyDown={handleDeleteTheme}
-      title="Delete Theme"
     >
       <Trash className="size-3.5" />
     </Button>

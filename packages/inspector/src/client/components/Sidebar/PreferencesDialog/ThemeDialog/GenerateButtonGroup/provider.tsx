@@ -3,7 +3,7 @@ import { type PropsWithChildren, createContext, useContext } from "react";
 import { useFormContext } from "react-hook-form";
 import toast from "react-hot-toast";
 import type z from "zod";
-import type { colorThemeValidation } from "../ThemeDialog";
+import type { colorThemeValidation as schema } from "../validation";
 
 type GenerateContextType = ReturnType<typeof useGenerateManager>;
 
@@ -20,7 +20,7 @@ export const GenerateProvider = (props: PropsWithChildren) => {
 };
 
 function useGenerateManager() {
-  const { reset } = useFormContext();
+  const { setValue } = useFormContext<z.infer<typeof schema>>();
 
   return useMutation({
     mutationFn: async (values: { context?: string; modelId?: string }) =>
@@ -35,14 +35,12 @@ function useGenerateManager() {
           throw new Error("Failed to generate data. Please try again later.");
         }
 
-        return res.json() as Promise<z.infer<typeof colorThemeValidation>>;
+        return res.json() as Promise<z.infer<typeof schema>>;
       }),
     onSuccess: (data) => {
       const formattedData = JSON.stringify(data, null, 2);
 
-      reset({
-        variables: formattedData,
-      });
+      setValue("variables", formattedData);
       toast.success("Data generated successfully!");
     },
     onError: (err) => {

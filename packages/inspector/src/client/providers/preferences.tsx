@@ -138,8 +138,11 @@ function usePreferencesManager() {
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
+    const currentColorThemeVariable =
+      colorTheme[preferences.color_theme] ?? colorTheme.default;
+
     const variables = colorTheme
-      ? (JSON.parse(colorTheme[preferences.color_theme]) as {
+      ? (JSON.parse(currentColorThemeVariable) as {
           light: Record<string, string>;
           dark: Record<string, string>;
         })
