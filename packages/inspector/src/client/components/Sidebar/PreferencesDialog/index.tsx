@@ -1,10 +1,9 @@
 import { eventHandler } from "@/client/lib/eventHandler";
-import { cn } from "@/client/lib/utils";
 import { Theme, usePreferences } from "@/client/providers/preferences";
-import { Moon, Plus, Settings, Sun, Tv, type LucideIcon } from "lucide-react";
-import { useState, type BaseSyntheticEvent } from "react";
+import { Moon, Pencil, Plus, Settings, Sun, Tv } from "lucide-react";
+import { useState } from "react";
 import toast, { type ToastPosition } from "react-hot-toast";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import {
   Dialog,
   DialogContent,
@@ -12,9 +11,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
-import { Label } from "../ui/label";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+} from "../../ui/dialog";
+import { Label } from "../../ui/label";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/tooltip";
+import { DeleteButton } from "./DeleteButton";
+import { ItemCard } from "./ItemCard";
 import { ThemeDialog } from "./ThemeDialog";
 
 const THEMES = {
@@ -32,6 +33,15 @@ const TOAST_POSITIONS = [
   "bottom-right",
 ];
 
+export type DialogType =
+  | {
+      type: "add";
+    }
+  | {
+      type: "edit";
+      data?: Record<string, string>;
+    };
+
 export function PreferencesDialog() {
   const {
     toastPosition,
@@ -42,7 +52,7 @@ export function PreferencesDialog() {
     colorTheme,
     setCurrentColorTheme,
   } = usePreferences();
-  const [isOpen, setOpen] = useState(false);
+  const [isOpen, setOpen] = useState<DialogType>();
 
   const handleChangeColorMode = (name: Theme) =>
     eventHandler(() => setTheme(name));
@@ -50,7 +60,22 @@ export function PreferencesDialog() {
   const handleChangeTheme = (name: string) =>
     eventHandler(() => setCurrentColorTheme(name));
 
-  const handleOpenThemeDialog = eventHandler(() => setOpen(true));
+  const handleOpenThemeDialog = eventHandler(() =>
+    setOpen({
+      type: "add",
+    })
+  );
+
+  const handleEditTheme = (name: string) =>
+    eventHandler(() =>
+      setOpen({
+        type: "edit",
+        data: {
+          name,
+          variables: colorTheme[name],
+        },
+      })
+    );
 
   return (
     <>
@@ -86,6 +111,7 @@ export function PreferencesDialog() {
                     isSelected={isSelected}
                     onClick={handleChangeColorMode(name as Theme)}
                     name={name}
+                    className="capitalize"
                     icon={icon}
                   />
                 );
@@ -94,7 +120,7 @@ export function PreferencesDialog() {
           </div>
           <div className="flex flex-col gap-2">
             <Label>Theme</Label>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="flex flex-col gap-1 max-h-[250px] overflow-y-auto">
               {Object.keys(colorTheme).map((name) => {
                 const isSelected = currentColorTheme === name;
 
@@ -104,13 +130,30 @@ export function PreferencesDialog() {
                     isSelected={isSelected}
                     onClick={handleChangeTheme(name)}
                     name={name}
-                  />
+                    className="justify-start"
+                  >
+                    {name !== "default" && (
+                      <>
+                        <div className="flex-1" />
+                        <Button
+                          variant="ghost"
+                          className="size-max has-[>svg]:px-1 py-1"
+                          onClick={handleEditTheme(name)}
+                          onKeyDown={handleEditTheme(name)}
+                        >
+                          <Pencil className="size-3.5" />
+                        </Button>
+                        <DeleteButton name={name} />
+                      </>
+                    )}
+                  </ItemCard>
                 );
               })}
               <ItemCard
                 isSelected={false}
                 onClick={handleOpenThemeDialog}
                 name="Add Theme"
+                className="h-10"
                 icon={Plus}
               />
             </div>
@@ -132,6 +175,7 @@ export function PreferencesDialog() {
                         id: "toast-position-changed",
                       });
                     }}
+                    className="capitalize"
                     name={name}
                   />
                 );
@@ -142,28 +186,5 @@ export function PreferencesDialog() {
       </Dialog>
       <ThemeDialog onOpenChange={setOpen} open={isOpen} />
     </>
-  );
-}
-
-type ItemCard = {
-  isSelected: boolean;
-  onClick: (event: BaseSyntheticEvent) => void;
-  icon?: LucideIcon;
-  name: string;
-};
-
-function ItemCard({ isSelected, name, onClick, icon: Icon }: ItemCard) {
-  return (
-    <div
-      className={cn(
-        "px-4 py-[8px] border text-muted-foreground leading-none cursor-pointer hover:bg-accent/60 hover:border-primary/30 transition-all ease-in-out capitalize flex items-center gap-2 w-full justify-center",
-        isSelected && "bg-accent/60 border-primary/30 text-foreground"
-      )}
-      onClick={onClick}
-      onKeyDown={onClick}
-    >
-      {Icon && <Icon className="stroke-2 size-4" />}
-      {name}
-    </div>
   );
 }
