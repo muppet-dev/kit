@@ -176,7 +176,13 @@ export function ThemeDialog({
                 {formSubmitting && (
                   <Spinner className="size-4 min-w-4 min-h-4" />
                 )}
-                {formSubmitting ? "Submitting" : "Submit"}
+                {defaultValues
+                  ? formSubmitting
+                    ? "Saving"
+                    : "Save"
+                  : formSubmitting
+                  ? "Adding"
+                  : "Add"}
               </Button>
             </div>
           </form>

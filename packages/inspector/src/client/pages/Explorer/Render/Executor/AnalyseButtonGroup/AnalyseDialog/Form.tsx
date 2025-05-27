@@ -11,7 +11,7 @@ import { ModelField } from "../../../../../../components/ModelField";
 import { Spinner } from "../../../../../../components/ui/spinner";
 
 const schema = z.object({
-  context: z.string(),
+  context: z.string().optional(),
   model: z.string().optional(),
 });
 
@@ -53,12 +53,12 @@ export function AnalyseForm(props: AnalyseForm) {
       className="w-full space-y-4"
     >
       <div>
-        <Label>Additional Context</Label>
+        <Label htmlFor="context">Additional Context</Label>
         <p className="text-xs text-muted-foreground mb-1">
           Add background information or specific conditions to customize the
           analysis results.
         </p>
-        <Textarea {...register("context")} required />
+        <Textarea id="context" {...register("context")} />
         {errors.context && (
           <p className="text-sm text-destructive">{errors.context.message}</p>
         )}
@@ -78,7 +78,7 @@ export function AnalyseForm(props: AnalyseForm) {
       </div>
       <div className="flex items-center justify-end">
         <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting && <Spinner />}
+          {isSubmitting && <Spinner className="size-4 min-w-4 min-h-4" />}
           {isSubmitting ? "Analysing" : "Analyse"}
         </Button>
       </div>

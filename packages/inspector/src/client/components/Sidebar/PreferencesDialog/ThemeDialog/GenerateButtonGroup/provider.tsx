@@ -41,7 +41,7 @@ function useGenerateManager() {
       const formattedData = JSON.stringify(data, null, 2);
 
       setValue("variables", formattedData);
-      toast.success("Data generated successfully!");
+      toast.success("Theme generated successfully!");
     },
     onError: (err) => {
       toast.error(err.message);

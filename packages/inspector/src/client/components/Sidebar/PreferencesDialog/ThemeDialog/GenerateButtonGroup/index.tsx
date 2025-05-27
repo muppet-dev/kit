@@ -32,20 +32,35 @@ function ActionButton() {
   const handleGenerate = eventHandler(() => mutation.mutateAsync({}));
 
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Button
-          className="px-3 py-1.5 xl:flex hidden"
-          colorScheme="secondary"
-          disabled={mutation.isPending}
-          onClick={handleGenerate}
-          onKeyDown={handleGenerate}
-        >
-          <Dices className="size-4" />
-          {mutation.isPending && <Spinner className="size-4 min-w-4 min-h-4" />}
-        </Button>
-      </TooltipTrigger>
-      <TooltipContent>Randomise</TooltipContent>
-    </Tooltip>
+    <>
+      <Button
+        className="px-3 py-1.5 xl:flex hidden"
+        colorScheme="secondary"
+        disabled={mutation.isPending}
+        onClick={handleGenerate}
+        onKeyDown={handleGenerate}
+      >
+        <Dices className="size-4" />
+        {mutation.isPending ? "Randomising" : "Randomise"}
+        {mutation.isPending && <Spinner className="size-4 min-w-4 min-h-4" />}
+      </Button>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            className="xl:hidden size-max has-[>svg]:px-2.5 py-2.5"
+            colorScheme="secondary"
+            disabled={mutation.isPending}
+            onClick={handleGenerate}
+            onKeyDown={handleGenerate}
+          >
+            <Dices className="size-4" />
+            {mutation.isPending && (
+              <Spinner className="size-4 min-w-4 min-h-4" />
+            )}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>Randomise</TooltipContent>
+      </Tooltip>
+    </>
   );
 }

@@ -31,7 +31,7 @@ export function ToolsTabs() {
             key={tab.name}
             value={tab.name}
             disabled={!tab.enabled}
-            className="rounded-none bg-background h-full data-[state=active]:shadow-none border-b-2 border-transparent data-[state=active]:border-b-primary dark:data-[state=active]:border-input/0 dark:data-[state=active]:border-b-foreground dark:data-[state=active]:bg-transparent max-w-max"
+            className="rounded-none bg-background cursor-pointer h-full dark:hover:text-foreground data-[state=active]:shadow-none border-b-2 border-transparent data-[state=active]:border-b-primary dark:data-[state=active]:border-input/0 dark:data-[state=active]:border-b-foreground dark:data-[state=active]:bg-transparent max-w-max"
           >
             {tab.label}
           </TabsTrigger>

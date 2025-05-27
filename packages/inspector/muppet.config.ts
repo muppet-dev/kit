@@ -11,6 +11,6 @@ export default (env: Record<string, string | undefined>) => {
   });
 
   return defineInspectorConfig({
-    models: [openai("gpt-4.1-nano")],
+    models: [openai("gpt-4.1-nano"), openai("gpt-4.1-mini")],
   });
 };
