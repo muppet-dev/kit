@@ -3,9 +3,10 @@ import { DEFAULT_THEME, usePreferences } from "@/client/providers";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { Controller, FormProvider, useForm, useWatch } from "react-hook-form";
+import { Controller, FormProvider, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
+import type { DialogType } from ".";
 import { CodeEditor } from "../../CodeEditor";
 import { FieldErrorMessage } from "../../FieldErrorMessage";
 import { Button } from "../../ui/button";
@@ -19,10 +20,11 @@ import {
 } from "../../ui/dialog";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
-import type { DialogType } from ".";
 import { Spinner } from "../../ui/spinner";
+import { GenerateButtonGroup } from "./GenerateButtonGroup";
+import { X } from "lucide-react";
 
-const schema = z.object({
+export const colorThemeValidation = z.object({
   name: z.string().optional(),
   variables: z.string(),
 });
@@ -35,8 +37,8 @@ export type ThemeDialog = {
 export function ThemeDialog(props: ThemeDialog) {
   const data = props.open?.type === "edit" ? props.open.data : undefined;
 
-  const methods = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
+  const methods = useForm<z.infer<typeof colorThemeValidation>>({
+    resolver: zodResolver(colorThemeValidation),
     defaultValues: data ?? {
       variables: DEFAULT_THEME,
     },
@@ -53,7 +55,7 @@ export function ThemeDialog(props: ThemeDialog) {
   } = methods;
 
   const mutations = useMutation({
-    mutationFn: async (values: z.infer<typeof schema>) => {
+    mutationFn: async (values: z.infer<typeof colorThemeValidation>) => {
       const name =
         values.name && values.name.trim().length > 0
           ? values.name
@@ -123,12 +125,15 @@ export function ThemeDialog(props: ThemeDialog) {
         }
       }}
     >
-      <DialogContent className="sm:max-w-xl">
-        <DialogHeader>
-          <DialogTitle>{data ? "Edit Theme" : "Add Theme"}</DialogTitle>
-          <DialogDescription className="hidden" />
-        </DialogHeader>
+      <DialogContent className="sm:max-w-xl" isClosable={false}>
         <FormProvider {...methods}>
+          <div className="flex items-center gap-2 justify-between">
+            <DialogHeader>
+              <DialogTitle>{data ? "Edit Theme" : "Add Theme"}</DialogTitle>
+              <DialogDescription className="hidden" />
+            </DialogHeader>
+            <GenerateButtonGroup />
+          </div>
           <form
             className="flex flex-col gap-4"
             onSubmit={handleSubmit(
