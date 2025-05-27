@@ -1,6 +1,6 @@
 import { usePreferences } from "@/client/providers/preferences";
 import { Settings } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../../ui/button";
 import {
   Dialog,
@@ -28,10 +28,23 @@ export type DialogType =
 export function PreferencesDialog() {
   const { colorTheme } = usePreferences();
   const [isThemeDialog, setThemeDialog] = useState<DialogType | undefined>();
+  const [isOpen, setOpen] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "/" && (event.metaKey || event.ctrlKey)) {
+        event.preventDefault();
+        setOpen((prev) => !prev);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   return (
     <>
-      <Dialog>
+      <Dialog open={isOpen} onOpenChange={setOpen}>
         <Tooltip>
           <TooltipTrigger asChild>
             <div>
