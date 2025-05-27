@@ -107,12 +107,11 @@ function ConnectStatus() {
             connectionStatus === ConnectionStatus.CONNECTED
               ? "bg-success"
               : connectionStatus === ConnectionStatus.ERROR ||
-                  connectionStatus ===
-                    ConnectionStatus.ERROR_CONNECTING_TO_PROXY
-                ? "bg-destructive"
-                : connectionStatus === ConnectionStatus.CONNECTING
-                  ? "bg-warning"
-                  : "bg-secondary-foreground/60",
+                connectionStatus === ConnectionStatus.ERROR_CONNECTING_TO_PROXY
+              ? "bg-destructive"
+              : connectionStatus === ConnectionStatus.CONNECTING
+              ? "bg-warning"
+              : "bg-secondary-foreground/60"
           )}
         />
       </TooltipWrapper>
@@ -187,13 +186,6 @@ function ConnectedServerOptionsMenu() {
       </DropdownMenuTrigger>
       <DropdownMenuContent side="right" align="start">
         <DropdownMenuItem
-          onClick={handleDisconnect}
-          onKeyDown={handleDisconnect}
-        >
-          <Unplug />
-          Disconnect Server
-        </DropdownMenuItem>
-        <DropdownMenuItem
           onClick={handleCopyServerEntry}
           onKeyDown={handleCopyServerEntry}
         >
@@ -206,6 +198,13 @@ function ConnectedServerOptionsMenu() {
         >
           <Copy />
           Copy Servers File
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={handleDisconnect}
+          onKeyDown={handleDisconnect}
+        >
+          <Unplug />
+          Disconnect Server
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

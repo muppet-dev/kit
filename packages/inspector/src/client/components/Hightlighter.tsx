@@ -39,7 +39,7 @@ export function CodeHighlighter({ content, className }: CodeHighlighter) {
     <div className="relative size-full">
       <div className={cn("border relative h-full overflow-auto", className)}>
         <div
-          className="h-max min-h-full w-max min-w-full [&>pre]:p-2"
+          className="h-max min-h-full w-max min-w-full flex [&>pre]:p-2 [&>pre]:min-h-full [&>pre]:min-w-full"
           // biome-ignore lint/security/noDangerouslySetInnerHtml: Need this to show the highlighting
           dangerouslySetInnerHTML={{ __html: html }}
         />
