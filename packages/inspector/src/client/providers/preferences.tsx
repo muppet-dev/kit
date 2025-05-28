@@ -136,25 +136,34 @@ function usePreferencesManager() {
     }
   }, [theme]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  type VariablesType = {
+    light: Record<string, string>;
+    dark: Record<string, string>;
+  };
+
   useEffect(() => {
     const currentColorThemeVariable =
       colorTheme[preferences.color_theme] ?? colorTheme.default;
 
     const variables = colorTheme
-      ? (JSON.parse(currentColorThemeVariable) as {
-          light: Record<string, string>;
-          dark: Record<string, string>;
-        })
+      ? (JSON.parse(currentColorThemeVariable) as VariablesType)
       : { light: {}, dark: {} };
     const isDarkMode = resolvedTheme === Theme.DARK;
 
-    for (const [key, value] of Object.entries(
-      isDarkMode ? variables.dark : variables.light
-    )) {
+    const defaultParseTheme = JSON.parse(DEFAULT_THEME) as VariablesType;
+
+    const themeVariables = isDarkMode
+      ? {
+          ...defaultParseTheme.dark,
+          ...variables.dark,
+          "--radius": variables.light["--radius"],
+        }
+      : { ...defaultParseTheme.light, ...variables.light };
+
+    for (const [key, value] of Object.entries(themeVariables)) {
       document.documentElement.style.setProperty(key, value);
     }
-  }, [preferences.color_theme, resolvedTheme]);
+  }, [preferences.color_theme, resolvedTheme, colorTheme]);
 
   const setTheme = (newTheme: Theme) =>
     setPreferences((prev) => ({
