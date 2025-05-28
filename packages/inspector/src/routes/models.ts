@@ -1,4 +1,5 @@
 import type { EnvWithDefaultModel } from "@/types/index.js";
+import { customThemeSchema } from "@/validations";
 import { sValidator } from "@hono/standard-validator";
 import { transportSchema } from "@muppet-kit/shared";
 import { generateObject, streamText, experimental_createMCPClient } from "ai";
@@ -194,82 +195,6 @@ router.post(
   },
 );
 
-const hexColorSchema = z
-  .string()
-  .length(7)
-  .startsWith("#")
-  .describe("Color in hex format");
-
-const themeSchema = z.object({
-  light: z
-    .object({
-      "--radius": z.string().describe("Border radius in CSS format"),
-      "--background": hexColorSchema,
-      "--foreground": hexColorSchema,
-      "--card": hexColorSchema,
-      "--card-foreground": hexColorSchema,
-      "--popover": hexColorSchema,
-      "--popover-foreground": hexColorSchema,
-      "--primary": hexColorSchema,
-      "--primary-foreground": hexColorSchema,
-      "--secondary": hexColorSchema,
-      "--secondary-foreground": hexColorSchema,
-      "--muted": hexColorSchema,
-      "--muted-foreground": hexColorSchema,
-      "--accent": hexColorSchema,
-      "--accent-foreground": hexColorSchema,
-      "--destructive": hexColorSchema,
-      "--border": hexColorSchema,
-      "--input": hexColorSchema,
-      "--ring": hexColorSchema,
-      "--sidebar": hexColorSchema,
-      "--sidebar-foreground": hexColorSchema,
-      "--sidebar-accent": hexColorSchema,
-      "--sidebar-accent-foreground": hexColorSchema,
-      "--sidebar-border": hexColorSchema,
-      "--sidebar-ring": hexColorSchema,
-      "--warning": hexColorSchema,
-      "--info": hexColorSchema,
-      "--success": hexColorSchema,
-      "--alert": hexColorSchema,
-    })
-    .partial()
-    .optional(),
-  dark: z
-    .object({
-      "--background": hexColorSchema,
-      "--foreground": hexColorSchema,
-      "--card": hexColorSchema,
-      "--card-foreground": hexColorSchema,
-      "--popover": hexColorSchema,
-      "--popover-foreground": hexColorSchema,
-      "--primary": hexColorSchema,
-      "--primary-foreground": hexColorSchema,
-      "--secondary": hexColorSchema,
-      "--secondary-foreground": hexColorSchema,
-      "--muted": hexColorSchema,
-      "--muted-foreground": hexColorSchema,
-      "--accent": hexColorSchema,
-      "--accent-foreground": hexColorSchema,
-      "--destructive": hexColorSchema,
-      "--border": hexColorSchema,
-      "--input": hexColorSchema,
-      "--ring": hexColorSchema,
-      "--sidebar": hexColorSchema,
-      "--sidebar-foreground": hexColorSchema,
-      "--sidebar-accent": hexColorSchema,
-      "--sidebar-accent-foreground": hexColorSchema,
-      "--sidebar-border": hexColorSchema,
-      "--sidebar-ring": hexColorSchema,
-      "--warning": hexColorSchema,
-      "--info": hexColorSchema,
-      "--success": hexColorSchema,
-      "--alert": hexColorSchema,
-    })
-    .partial()
-    .optional(),
-});
-
 router.post(
   "/theme",
   ...handlers,
@@ -295,7 +220,7 @@ router.post(
       schemaName: "theme-generation",
       schemaDescription:
         "This is schema containing the css variables for the theme of the application.",
-      schema: themeSchema,
+      schema: customThemeSchema,
     });
 
     c.header("Content-Type", "text/plain; charset=utf-8");
