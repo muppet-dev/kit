@@ -1,4 +1,4 @@
-import { useState } from "react";
+import type { FuseResultMatch } from "fuse.js";
 import { highlightMatches } from "../../../components/highlightMatches";
 import {
   Card,
@@ -11,7 +11,7 @@ import { eventHandler } from "../../../lib/eventHandler";
 import { cn } from "../../../lib/utils";
 import { Tool, useMCPItem } from "../providers";
 import type { MCPItemType } from "../types";
-import type { FuseResultMatch } from "fuse.js";
+import { CardDescriptionRender } from "./CardDescriptionRender";
 
 export type MCPItem = MCPItemType & {
   matches?: FuseResultMatch[];
@@ -19,7 +19,6 @@ export type MCPItem = MCPItemType & {
 
 export function MCPItem(props: MCPItem) {
   const { selectedItem, changeSelectedItem } = useMCPItem();
-  const [isViewMore, setIsViewMore] = useState(false);
 
   const handleSelectItem = (name: string) =>
     eventHandler(() => changeSelectedItem(name));
@@ -31,10 +30,6 @@ export function MCPItem(props: MCPItem) {
     if (item.key === "name") nameMatches = item.indices;
     if (item.key === "description") descriptionMatches = item.indices;
   });
-
-  const handleViewMoreOrLess = eventHandler(() =>
-    setIsViewMore((prev) => !prev)
-  );
 
   return (
     <Card
@@ -68,33 +63,18 @@ export function MCPItem(props: MCPItem) {
       </CardHeader>
       {props.description && (
         <CardContent className="px-4">
-          <CardDescription
-            className={cn(
-              "leading-tight tracking-tight inline-flex",
-              isViewMore && "flex-col"
-            )}
-          >
-            <span
-              title={props.description}
-              className={cn("w-full", !isViewMore && "line-clamp-2")}
-            >
+          {props.description.length > 200 ? (
+            <CardDescriptionRender
+              description={props.description}
+              descriptionMatches={descriptionMatches}
+            />
+          ) : (
+            <CardDescription className="leading-tight tracking-tight line-clamp-2">
               {descriptionMatches
                 ? highlightMatches(props.description, descriptionMatches)
                 : props.description}
-            </span>
-            {props.description.length > 200 && (
-              <span
-                className={cn(
-                  "whitespace-nowrap text-foreground cursor-pointer",
-                  !isViewMore && "self-end"
-                )}
-                onClick={handleViewMoreOrLess}
-                onKeyDown={handleViewMoreOrLess}
-              >
-                Read {isViewMore ? "less" : "more"}
-              </span>
-            )}
-          </CardDescription>
+            </CardDescription>
+          )}
         </CardContent>
       )}
     </Card>
