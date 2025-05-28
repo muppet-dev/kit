@@ -43,7 +43,7 @@ export function STDIOFields() {
           value="1"
           className="border-b-0 h-full flex flex-col [&>div]:data-[state=open]:h-full [&>div]:data-[state=open]:flex"
         >
-          <AccordionTrigger className="hover:no-underline cursor-pointer hover:bg-accent/80 data-[state=open]:bg-accent/80 py-1.5 hover:px-2 data-[state=open]:px-2">
+          <AccordionTrigger className="hover:no-underline cursor-pointer hover:bg-accent/80 data-[state=open]:bg-accent/80 py-1.5 hover:px-2 data-[state=open]:px-2 rounded-md">
             Environmental Variables
           </AccordionTrigger>
           <AccordionContent className="pt-2 pb-0 h-full w-full flex flex-col gap-2">
@@ -75,7 +75,7 @@ function EnvField() {
   return (
     <>
       {fields.length === 0 ? (
-        <div className="h-[36px] w-full flex items-center justify-center border">
+        <div className="h-[36px] rounded-md w-full flex items-center justify-center border">
           <p className="text-sm select-none">No variables added</p>
         </div>
       ) : (

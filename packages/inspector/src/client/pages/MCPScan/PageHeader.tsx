@@ -23,7 +23,7 @@ function PoweredBy() {
     <Tooltip>
       <TooltipTrigger>
         <a href="https://invariantlabs.ai/" target="_blank" rel="noreferrer">
-          <div className="flex items-center gap-1 p-1.5 border shadow-md dark:bg-muted/50 ml-2">
+          <div className="flex items-center rounded gap-1 p-1.5 border shadow-md dark:bg-muted/50 ml-2">
             <img
               src="https://invariantlabs.ai/theme/images/logo.svg"
               alt="Invariant Labs Logo"

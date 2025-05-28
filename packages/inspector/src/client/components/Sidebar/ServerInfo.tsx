@@ -34,7 +34,7 @@ export function ServerInfo() {
     );
 
   return (
-    <div className="p-2 flex gap-1 flex-col w-full border bg-background dark:bg-background/50">
+    <div className="p-2 flex rounded-md gap-1 flex-col w-full border bg-background dark:bg-background/50">
       {connectionStatus === "connected" ? (
         <div className="pl-1 flex justify-between items-center text-sm select-none">
           <p className="font-semibold line-clamp-1" title={serverInfo?.name}>

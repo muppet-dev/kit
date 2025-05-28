@@ -51,7 +51,7 @@ export function TableDrawer({ traces }: TableDrawer) {
       }
 
       return prev;
-    }),
+    })
   );
   const handleGoToNextRequest = eventHandler(() =>
     setSelected((prev) => {
@@ -62,7 +62,7 @@ export function TableDrawer({ traces }: TableDrawer) {
       }
 
       return prev;
-    }),
+    })
   );
   const handleSendRequest = eventHandler(async () => {
     if (
@@ -88,7 +88,7 @@ export function TableDrawer({ traces }: TableDrawer) {
         method: selectedHistory.request.method,
         params: selectedHistory.request.params,
       },
-      EmptyResultSchema.passthrough(),
+      EmptyResultSchema.passthrough()
     );
 
     setResendDirectory((prev) => {
@@ -107,7 +107,7 @@ export function TableDrawer({ traces }: TableDrawer) {
   return (
     <div className="p-4 w-[550px] border space-y-3 h-full overflow-y-auto">
       <div className="flex items-center gap-2">
-        <kbd className="text-foreground bg-secondary border px-1.5 text-sm font-medium shadow">
+        <kbd className="text-foreground rounded bg-secondary border px-1.5 text-sm font-medium shadow">
           {selectedHistory.request.method}
         </kbd>
         <Tooltip>
@@ -117,7 +117,7 @@ export function TableDrawer({ traces }: TableDrawer) {
                 "rounded-full size-[7px] min-w-[7px] min-h-[7px]",
                 selectedHistory.response?.error
                   ? "bg-destructive"
-                  : "bg-success",
+                  : "bg-success"
               )}
             />
           </TooltipTrigger>

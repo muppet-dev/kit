@@ -21,7 +21,7 @@ export function PageRender() {
   return (
     <div className="overflow-auto">
       <div className="mx-auto max-w-2xl lg:max-w-7xl w-full flex gap-4 lg:gap-6">
-        <div className="bg-muted/50 border p-4 lg:p-6 size-full flex flex-col gap-2 lg:gap-3">
+        <div className="bg-muted/50 border p-4 lg:p-6 size-full flex flex-col gap-2 lg:gap-3 rounded-md">
           {mutation.isPending ? (
             Array.from({ length: 5 }).map((_, index) => (
               <Skeleton

@@ -56,41 +56,42 @@ export function ArrayField() {
             <Button
               title="Go Up"
               variant="ghost"
-              size="icon"
               onClick={handleGoUp(index)}
               onKeyDown={handleGoUp(index)}
               disabled={index === 0}
+              className="size-max has-[>svg]:px-1.5 py-1.5"
             >
-              <ArrowUp className="size-4 stroke-2" />
+              <ArrowUp className="stroke-2" />
             </Button>
             <Button
               title="Go Down"
               variant="ghost"
-              size="icon"
               onClick={handleGoDown(index)}
               onKeyDown={handleGoDown(index)}
               disabled={index === fields.length - 1}
+              className="size-max has-[>svg]:px-1.5 py-1.5"
             >
-              <ArrowDown className="size-4 stroke-2" />
+              <ArrowDown className="stroke-2" />
             </Button>
           </div>
           <DuckField id={`${componentId}.${index}`} {...props.items} />
           <div className="space-y-2">
             <Button
               variant="ghost"
-              size="icon"
               onClick={handleInsertNew(index)}
               onKeyDown={handleInsertNew(index)}
+              className="size-max has-[>svg]:px-1.5 py-1.5"
             >
-              <Plus className="size-4 stroke-2" />
+              <Plus className="stroke-2" />
             </Button>
             <Button
               colorScheme="destructive"
-              size="icon"
+              variant="ghost"
               onClick={handleDelete(index)}
               onKeyDown={handleDelete(index)}
+              className="size-max has-[>svg]:px-1.5 py-1.5"
             >
-              <Trash className="size-4 stroke-2" />
+              <Trash className="stroke-2" />
             </Button>
           </div>
         </div>

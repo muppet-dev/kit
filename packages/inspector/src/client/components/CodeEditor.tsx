@@ -34,7 +34,10 @@ export function CodeEditor({
 
   return (
     <div
-      className={cn("border w-full relative h-full overflow-hidden", className)}
+      className={cn(
+        "border w-full relative h-full overflow-hidden rounded-md",
+        className
+      )}
     >
       <MonacoEditor
         language={language}

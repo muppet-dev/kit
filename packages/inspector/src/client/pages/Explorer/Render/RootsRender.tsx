@@ -127,7 +127,7 @@ export function RootsRender() {
                 </div>
               ))
             ) : (
-              <div className="flex items-center justify-center text-muted-foreground text-sm h-[200px] border">
+              <div className="flex items-center rounded-md justify-center text-muted-foreground text-sm h-[200px] border">
                 No roots configured. Add a root to start.
               </div>
             )}

@@ -20,7 +20,7 @@ export function ItemCard({
     <div
       {...props}
       className={cn(
-        "px-4 py-2 border text-muted-foreground leading-none cursor-pointer hover:bg-accent/60 hover:border-primary/30 transition-all ease-in-out flex items-center gap-2 w-full justify-center",
+        "px-4 py-2 border text-muted-foreground leading-none cursor-pointer hover:bg-accent/60 hover:border-primary/30 transition-all ease-in-out flex items-center gap-2 w-full justify-center rounded-md",
         isSelected && "bg-accent/60 border-primary/30 text-foreground",
         className
       )}

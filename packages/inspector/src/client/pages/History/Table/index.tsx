@@ -121,7 +121,7 @@ export function TracingTable() {
                           <TableCell>
                             <div
                               className={cn(
-                                "border px-1.5 w-max",
+                                "border px-1.5 w-max rounded",
                                 isError
                                   ? "text-destructive bg-destructive/10"
                                   : "text-success bg-success/10"

@@ -16,7 +16,7 @@ export function StatusPanel(props: {
   const mutation = useMCPScan();
 
   return (
-    <div className="bg-muted/50 border p-4 lg:p-6 min-w-[400px] max-w-[400px] w-full h-full flex flex-col gap-4 lg:gap-6 sticky top-0">
+    <div className="bg-muted/50 border rounded-md p-4 lg:p-6 min-w-[400px] max-w-[400px] w-full h-full flex flex-col gap-4 lg:gap-6 sticky top-0">
       <div className="w-full space-y-2 lg:space-y-3">
         <h3 className="text-2xl font-semibold">Security Status</h3>
         <StatusItem
@@ -106,7 +106,7 @@ function SummaryItem(props: {
   return (
     <div
       className={cn(
-        "w-full h-[111px] select-none flex flex-col gap-0.5 lg:gap-1 items-center justify-center bg-background cursor-pointer border transition-all ease-in-out",
+        "w-full h-[111px] rounded select-none flex flex-col gap-0.5 lg:gap-1 items-center justify-center bg-background cursor-pointer border transition-all ease-in-out",
         props.filter === props.name
           ? "border-accent-foreground"
           : "border-transparent"

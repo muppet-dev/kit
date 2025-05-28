@@ -104,7 +104,7 @@ export function AnalysePanel() {
             <Skeleton key={i} className="h-[54px] w-full mb-2" />
           ))
         ) : !data || data.recommendations.length === 0 ? (
-          <div className="border h-full w-full flex items-center justify-center select-none">
+          <div className="border rounded-md h-full w-full flex items-center justify-center select-none">
             <p className="text-sm text-muted-foreground">
               No recommendation available
             </p>
@@ -121,7 +121,7 @@ export function AnalysePanel() {
 
 function ScoreItem(props: AnalyseDataType["recommendations"][0]) {
   return (
-    <div className="w-full select-none border flex flex-col px-2.5 py-1 hover:bg-accent/80 dark:hover:bg-accent/50 hover:border-primary/30 transition-all ease-in-out">
+    <div className="w-full select-none border flex flex-col px-2.5 py-1 hover:bg-accent/80 dark:hover:bg-accent/50 hover:border-primary/30 transition-all ease-in-out rounded-md">
       <div className="flex items-center justify-between">
         <h4 className="font-medium">{props.category}</h4>
         <p
