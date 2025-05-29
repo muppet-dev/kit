@@ -1,46 +1,26 @@
 import { Button } from "@/client/components/ui/button";
-import { useConfig } from "@/client/providers";
 import { useCopyToClipboard } from "@uidotdev/usehooks";
 import { Copy, Ellipsis } from "lucide-react";
-import {
-  type BaseSyntheticEvent,
-  type PropsWithChildren,
-  useMemo,
-} from "react";
+import type { BaseSyntheticEvent, PropsWithChildren } from "react";
 import toast from "react-hot-toast";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+} from "../../components/ui/dropdown-menu";
 
-export function ServerOptionMenu({ children }: PropsWithChildren) {
-  const { connectionInfo } = useConfig();
+export function ServerOptionMenu({
+  children,
+  url,
+}: PropsWithChildren<{ url: string }>) {
   const [_, copyToClipboard] = useCopyToClipboard();
 
-  const serverEntry = useMemo(() => {
-    switch (connectionInfo?.type) {
-      case "stdio":
-        return {
-          command: connectionInfo.command,
-          args: connectionInfo.args ? [connectionInfo.args] : undefined,
-          env: connectionInfo.env,
-        };
-      case "sse":
-        return {
-          type: connectionInfo?.type,
-          url: connectionInfo?.url,
-          note: "For SSE connections, add this URL directly in your MCP Client",
-        };
-      case "streamable-http":
-        return {
-          type: connectionInfo?.type,
-          url: connectionInfo?.url,
-          note: "For Streamable HTTP connections, add this URL directly in your MCP Client",
-        };
-    }
-  }, [connectionInfo]);
+  const serverEntry = {
+    type: "streamable-http",
+    url,
+    note: "For Streamable HTTP connections, add this URL directly in your MCP Client",
+  };
 
   const handleCopyServerEntry = (event: BaseSyntheticEvent) => {
     if ("key" in event && event.key !== "Enter") return;
@@ -59,6 +39,13 @@ export function ServerOptionMenu({ children }: PropsWithChildren) {
     toast.success("Copied servers file to clipboard");
   };
 
+  const handleCopyURL = (event: BaseSyntheticEvent) => {
+    if ("key" in event && event.key !== "Enter") return;
+
+    copyToClipboard(JSON.stringify(url, null, 2));
+    toast.success("Copied tunnel URL to clipboard");
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -70,6 +57,10 @@ export function ServerOptionMenu({ children }: PropsWithChildren) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent side="right" align="start">
+        <DropdownMenuItem onClick={handleCopyURL} onKeyDown={handleCopyURL}>
+          <Copy />
+          Copy URL
+        </DropdownMenuItem>
         <DropdownMenuItem
           onClick={handleCopyServerEntry}
           onKeyDown={handleCopyServerEntry}

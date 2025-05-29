@@ -1,8 +1,5 @@
-import { ServerOptionMenu } from "@/client/components/ServerOptionMenu";
-import { useCopyToClipboard } from "@uidotdev/usehooks";
-import { Copy, ListX, Logs, Pickaxe, RefreshCcw } from "lucide-react";
-import { type BaseSyntheticEvent, useState } from "react";
-import toast from "react-hot-toast";
+import { ListX, Logs, Pickaxe, RefreshCcw } from "lucide-react";
+import { useState } from "react";
 import { Button } from "../../components/ui/button";
 import {
   Dialog,
@@ -25,6 +22,7 @@ import { eventHandler } from "../../lib/eventHandler";
 import { useConfig, useConnection, useTracing } from "../../providers";
 import { DownloadButton } from "./DownloadButton";
 import { LogsProvider } from "./providers";
+import { ServerOptionMenu } from "./ServerOptionMenu";
 import { TracingTable } from "./Table";
 
 export default function TracingPage() {
@@ -128,29 +126,16 @@ function TunnelInformationDialog(props: TunnelInformationDialog) {
 function LocalContentRender() {
   const { token } = useConnection();
   const { connectionLink } = useConfig();
-  const [_, copyToClipboard] = useCopyToClipboard();
 
   const authorization = token ? `&authorization=${token}` : "";
-  const content = `${connectionLink?.url?.toString()}${authorization}`;
-
-  const handleCopyURL = (event: BaseSyntheticEvent) => {
-    if ("key" in event && event.key !== "Enter") return;
-
-    copyToClipboard(JSON.stringify(content, null, 2));
-    toast.success("Copied tunnel URL to clipboard");
-  };
+  const url = `${connectionLink?.url?.toString()}${authorization}`;
 
   return (
     <div className="w-full">
       <Label className="mb-1.5">Local URL</Label>
       <div className="w-full flex items-center gap-2">
-        <Input readOnly value={content} className="w-full h-max" />
-        <ServerOptionMenu>
-          <DropdownMenuItem onClick={handleCopyURL} onKeyDown={handleCopyURL}>
-            <Copy />
-            Copy URL
-          </DropdownMenuItem>
-        </ServerOptionMenu>
+        <Input readOnly value={url} className="w-full h-max" />
+        <ServerOptionMenu url={url} />
       </div>
     </div>
   );
@@ -165,7 +150,8 @@ function PublicContentRender() {
   if (createLink.isPending) return <Skeleton className="h-[30px] rounded-md" />;
 
   const data = createLink.data;
-  const content = `${data?.url?.toString()}&authorization=${token}`;
+
+  const url = `${data?.url?.toString()}&authorization=${token}`;
 
   const handleGeneratePublicURL = eventHandler(() => createLink.mutateAsync());
 
@@ -174,8 +160,8 @@ function PublicContentRender() {
       <Label className="mb-1.5">Public URL</Label>
       {data ? (
         <div className="w-full flex items-center gap-2">
-          <Input readOnly value={content} className="w-full h-max" />
-          <ServerOptionMenu>
+          <Input readOnly value={url} className="w-full h-max" />
+          <ServerOptionMenu url={url}>
             <DropdownMenuItem
               onClick={handleGeneratePublicURL}
               onKeyDown={handleGeneratePublicURL}
