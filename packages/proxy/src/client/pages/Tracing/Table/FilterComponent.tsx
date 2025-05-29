@@ -12,7 +12,7 @@ import { useLogs } from "../providers";
 
 export type FilterComponent = {
   filterOptions: string[];
-  filterKey: "methods" | "sessions";
+  filterKey: "methods" | "sessions" | "servers";
   selectedFilters: string[] | null;
 };
 
@@ -34,9 +34,9 @@ export function FilterComponent({
     setSelected(null);
   });
 
-  const handleSelectMethod = (method: string) =>
+  const handleSelectFilter = (filter: string) =>
     eventHandler(() => {
-      toggleFilterValue(filterKey, isAllSelected ? [method] : method);
+      toggleFilterValue(filterKey, isAllSelected ? [filter] : filter);
       setSelected(null);
     });
 
@@ -60,19 +60,19 @@ export function FilterComponent({
           Select All
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        {filterOptions.map((method) => (
+        {filterOptions.map((filter) => (
           <DropdownMenuItem
-            key={method}
-            onClick={handleSelectMethod(method)}
-            onKeyDown={handleSelectMethod(method)}
+            key={filter}
+            onClick={handleSelectFilter(filter)}
+            onKeyDown={handleSelectFilter(filter)}
             className="cursor-pointer"
           >
             <Check
               className={
-                !isAllSelected && filters.has(method) ? "visible" : "invisible"
+                !isAllSelected && filters.has(filter) ? "visible" : "invisible"
               }
             />
-            {method}
+            {filter}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

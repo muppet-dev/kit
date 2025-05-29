@@ -8,7 +8,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import { useConfig } from "./config";
 
 type TracingContextType = ReturnType<typeof useTracingManager>;
 
@@ -25,6 +24,7 @@ export const TracingProvider = ({ children }: PropsWithChildren) => {
 export type Trace = {
   id: string;
   session: string;
+  server: string;
   mid: string;
   timestamp: {
     start: number;
@@ -39,6 +39,7 @@ function useTracingManager() {
   const [filters, setFilters] = useState({
     sessions: new Set<string>(),
     methods: new Set<string>(),
+    servers: new Set<string>(),
   });
 
   useEffect(() => {
@@ -56,12 +57,13 @@ function useTracingManager() {
 
           if (!eventData) continue;
 
-          const { at, session, from, message } = JSON.parse(eventData);
+          const { at, session, from, message, server } = JSON.parse(eventData);
 
           if (from === "client")
             setFilters((prev) => {
               prev.methods.add(message.method);
               prev.sessions.add(session);
+              prev.servers.add(server);
 
               return {
                 ...prev,
@@ -90,6 +92,7 @@ function useTracingManager() {
                 tmp.push({
                   id: nanoid(),
                   session,
+                  server,
                   timestamp: {
                     start: at,
                   },
@@ -101,6 +104,7 @@ function useTracingManager() {
               tmp.push({
                 id: nanoid(),
                 session,
+                server,
                 timestamp: {
                   start: at,
                 },
@@ -131,6 +135,7 @@ function useTracingManager() {
     filters: {
       methods: [...filters.methods],
       sessions: [...filters.sessions],
+      servers: [...filters.servers],
     },
     clearTraces,
   };

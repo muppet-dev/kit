@@ -18,6 +18,7 @@ import { SortingEnum, useLogs } from "../providers";
 import { FilterMethod } from "./FilterMethod";
 import { FilterSession } from "./FilterSession";
 import { TableDrawer } from "./TableDrawer";
+import { FilterServer } from "./FilterServer";
 
 export function TracingTable() {
   const { logs, selected, setSelected, timestampSort, toggleTimestampSort } =
@@ -52,6 +53,12 @@ export function TracingTable() {
           <Table className="overflow-y-auto lg:table-fixed [&>thead>tr>th]:bg-accent [&>thead>tr>th]:sticky [&>thead>tr>th]:top-0 [&>thead>tr>th]:z-10">
             <TableHeader>
               <TableRow className="hover:bg-accent divide-x bg-accent">
+                <TableHead>
+                  <div className="flex items-center justify-between">
+                    Server ID
+                    <FilterServer />
+                  </div>
+                </TableHead>
                 <TableHead>
                   <div className="flex items-center justify-between">
                     Session ID
@@ -109,6 +116,16 @@ export function TracingTable() {
                     >
                       <TableCell>
                         <div className="flex justify-between items-center gap-1">
+                          <p className="truncate">{trace.server}</p>
+                          <CopyButton
+                            data={trace.server}
+                            tooltipContent=""
+                            className="[&>svg]:size-3.5 p-1 has-[>svg]:px-1"
+                          />
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex justify-between items-center gap-1">
                           <p className="truncate">{trace.session}</p>
                           <CopyButton
                             data={trace.session}
@@ -154,7 +171,7 @@ export function TracingTable() {
                 <TableRow className="hover:bg-transparent">
                   <TableCell
                     className="h-[500px] text-center select-none text-muted-foreground"
-                    colSpan={5}
+                    colSpan={6}
                   >
                     No data available
                   </TableCell>

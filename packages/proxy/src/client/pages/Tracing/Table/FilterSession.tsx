@@ -4,7 +4,7 @@ import { FilterComponent } from "./FilterComponent";
 export function FilterSession() {
   const { sessionFilters, filterData } = useLogs();
 
-  if (!filterData.methods) return <></>;
+  if (!filterData.sessions) return <></>;
 
   return (
     <FilterComponent

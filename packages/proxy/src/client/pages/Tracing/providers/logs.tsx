@@ -30,17 +30,20 @@ function useLogsManager() {
   const [filters, setFilters] = useState<{
     methods: string[] | null;
     sessions: string[] | null;
-  }>({ methods: null, sessions: null });
+    servers: string[] | null;
+  }>({ methods: null, sessions: null, servers: null });
   const [timestampSort, setTimestampSort] = useState<SortingEnum>(
     SortingEnum.ASCENDING
   );
 
   const logs = useMemo(() => {
-    let results = traces.filter(({ request, session }) => {
+    let results = traces.filter(({ request, session, server }) => {
       const methodMatch =
         filters.methods?.includes(request?.method ?? "") ?? true;
       const sessionMatch = filters.sessions?.includes(session ?? "") ?? true;
-      return methodMatch && sessionMatch;
+      const serverMatch = filters.servers?.includes(server ?? "") ?? true;
+
+      return methodMatch && sessionMatch && serverMatch;
     });
     results = results.sort((a, b) => {
       const aTimestamp = a.timestamp.start;
@@ -93,6 +96,7 @@ function useLogsManager() {
     setSelected,
     methodFilters: filters.methods,
     sessionFilters: filters.sessions,
+    serverFilters: filters.servers,
     toggleFilterValue,
     timestampSort,
     filterData,

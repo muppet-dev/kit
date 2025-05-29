@@ -1,5 +1,6 @@
 import { Button } from "@/client/components/ui/button";
 import { eventHandler } from "@/client/lib/eventHandler";
+import { useTracing } from "@/client/providers";
 import { ListX, Logs } from "lucide-react";
 import {
   Tooltip,
@@ -29,9 +30,10 @@ export default function TracingPage() {
 }
 
 function PageHeader() {
-  // TODO: Please update this function
+  const { clearTraces } = useTracing();
+
   const onClear = eventHandler(() => {
-    console.log("Clear logs");
+    clearTraces();
   });
 
   return (
