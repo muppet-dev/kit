@@ -1,4 +1,8 @@
-import { CopyButton } from "../../components/CopyButton";
+import { ServerOptionMenu } from "@/client/components/ServerOptionMenu";
+import { useCopyToClipboard } from "@uidotdev/usehooks";
+import { Copy, ListX, Logs, Pickaxe, RefreshCcw } from "lucide-react";
+import { type BaseSyntheticEvent, useState } from "react";
+import toast from "react-hot-toast";
 import { Button } from "../../components/ui/button";
 import {
   Dialog,
@@ -8,12 +12,7 @@ import {
   DialogOverlay,
   DialogTitle,
 } from "../../components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../../components/ui/dropdown-menu";
+import { DropdownMenuItem } from "../../components/ui/dropdown-menu";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import { Skeleton } from "../../components/ui/skeleton";
@@ -24,12 +23,9 @@ import {
 } from "../../components/ui/tooltip";
 import { eventHandler } from "../../lib/eventHandler";
 import { useConfig, useConnection, useTracing } from "../../providers";
-import { DialogTrigger } from "@radix-ui/react-dialog";
-import { ListX, Logs, Pickaxe } from "lucide-react";
-import type { BaseSyntheticEvent } from "react";
 import { DownloadButton } from "./DownloadButton";
-import { TracingTable } from "./Table";
 import { LogsProvider } from "./providers";
+import { TracingTable } from "./Table";
 
 export default function TracingPage() {
   return (
@@ -56,7 +52,7 @@ function PageHeader() {
 
   return (
     <div className="flex items-center gap-2">
-      <TunnelLink />
+      <TunnelLinkButton />
       <DownloadButton />
       <Tooltip>
         <TooltipTrigger asChild>
@@ -76,72 +72,44 @@ function PageHeader() {
   );
 }
 
-function TunnelLink() {
-  const { isTunnelingEnabled, createLink } = useConfig();
+function TunnelLinkButton() {
+  const [isTunnelDialogOpen, setTunnelDialogOpen] = useState(false);
 
-  const handleCreateLink =
-    (linkType: "local" | "public") => (event: BaseSyntheticEvent) => {
-      if ("key" in event && event.key !== "Enter") return;
-
-      createLink.mutateAsync(linkType);
-    };
+  const handleOpenDialog = eventHandler(() => setTunnelDialogOpen(true));
 
   return (
     <>
-      {createLink.isPending ? (
-        <Skeleton className="h-[30px] w-[300px]" />
-      ) : (
-        createLink.data && <TunnelInformationDialog {...createLink.data} />
+      {isTunnelDialogOpen && (
+        <TunnelInformationDialog
+          open={isTunnelDialogOpen}
+          onOpenChange={setTunnelDialogOpen}
+        />
       )}
-      <DropdownMenu>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <div>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="has-[>svg]:px-1.5 py-1.5 h-max data-[state=open]:bg-accent dark:data-[state=open]:bg-accent/50"
-                >
-                  <Pickaxe className="stroke-secondary-foreground/80" />
-                </Button>
-              </DropdownMenuTrigger>
-            </div>
-          </TooltipTrigger>
-          <TooltipContent>Create a tunnel</TooltipContent>
-        </Tooltip>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem
-            disabled={createLink.isPending}
-            onClick={handleCreateLink("local")}
-            onKeyDown={handleCreateLink("local")}
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="ghost"
+            className="has-[>svg]:px-1.5 py-1.5 h-max rounded-sm data-[state=open]:bg-accent dark:data-[state=open]:bg-accent/50"
+            onClick={handleOpenDialog}
+            onKeyDown={handleOpenDialog}
           >
-            Local Tunnel
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            disabled={!isTunnelingEnabled || createLink.isPending}
-            onClick={handleCreateLink("public")}
-            onKeyDown={handleCreateLink("public")}
-          >
-            Public Tunnel
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+            <Pickaxe className="stroke-secondary-foreground/80" />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>Create a tunnel</TooltipContent>
+      </Tooltip>
     </>
   );
 }
 
-function TunnelInformationDialog(props: { id: string; url: URL }) {
-  const { token } = useConnection();
+type TunnelInformationDialog = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+};
 
-  const content = `${props.url.toString()}&authorization=${token}`;
-
+function TunnelInformationDialog(props: TunnelInformationDialog) {
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button colorScheme="secondary" className="max-w-[300px] py-1.5">
-          <p className="truncate w-full">{content}</p>
-        </Button>
-      </DialogTrigger>
+    <Dialog open={props.open} onOpenChange={props.onOpenChange}>
       <DialogOverlay />
       <DialogContent className="flex flex-col">
         <DialogHeader>
@@ -150,23 +118,82 @@ function TunnelInformationDialog(props: { id: string; url: URL }) {
             Add this URL to the MCP Client to connect the inspector as a proxy.
           </DialogDescription>
         </DialogHeader>
-        <div className="w-full">
-          <Label className="mb-1.5">URL</Label>
-          <div className="w-full flex relative items-center">
-            <Input
-              readOnly
-              value={content}
-              placeholder=""
-              className="w-full h-max pr-8"
-            />
-            <CopyButton
-              data={content}
-              tooltipContent="Copy URL"
-              className="absolute right-0"
-            />
-          </div>
-        </div>
+        <LocalContentRender />
+        <PublicContentRender />
       </DialogContent>
     </Dialog>
+  );
+}
+
+function LocalContentRender() {
+  const { token } = useConnection();
+  const { connectionLink } = useConfig();
+  const [_, copyToClipboard] = useCopyToClipboard();
+
+  const authorization = token ? `&authorization=${token}` : "";
+  const content = `${connectionLink?.url?.toString()}${authorization}`;
+
+  const handleCopyURL = (event: BaseSyntheticEvent) => {
+    if ("key" in event && event.key !== "Enter") return;
+
+    copyToClipboard(JSON.stringify(content, null, 2));
+    toast.success("Copied tunnel URL to clipboard");
+  };
+
+  return (
+    <div className="w-full">
+      <Label className="mb-1.5">Local URL</Label>
+      <div className="w-full flex items-center gap-2">
+        <Input readOnly value={content} className="w-full h-max" />
+        <ServerOptionMenu>
+          <DropdownMenuItem onClick={handleCopyURL} onKeyDown={handleCopyURL}>
+            <Copy />
+            Copy URL
+          </DropdownMenuItem>
+        </ServerOptionMenu>
+      </div>
+    </div>
+  );
+}
+
+function PublicContentRender() {
+  const { token } = useConnection();
+  const { createLink, isTunnelingEnabled } = useConfig();
+
+  if (!isTunnelingEnabled) return <></>;
+
+  if (createLink.isPending) return <Skeleton className="h-[30px] rounded-md" />;
+
+  const data = createLink.data;
+  const content = `${data?.url?.toString()}&authorization=${token}`;
+
+  const handleGeneratePublicURL = eventHandler(() => createLink.mutateAsync());
+
+  return (
+    <div className="w-full">
+      <Label className="mb-1.5">Public URL</Label>
+      {data ? (
+        <div className="w-full flex items-center gap-2">
+          <Input readOnly value={content} className="w-full h-max" />
+          <ServerOptionMenu>
+            <DropdownMenuItem
+              onClick={handleGeneratePublicURL}
+              onKeyDown={handleGeneratePublicURL}
+            >
+              <RefreshCcw />
+              Re-Generate
+            </DropdownMenuItem>
+          </ServerOptionMenu>
+        </div>
+      ) : (
+        <Button
+          onClick={handleGeneratePublicURL}
+          onKeyDown={handleGeneratePublicURL}
+          className="h-max py-[5px] px-2"
+        >
+          Generate URL
+        </Button>
+      )}
+    </div>
   );
 }
