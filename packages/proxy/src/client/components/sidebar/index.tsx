@@ -1,5 +1,5 @@
 import { useConfig } from "@/client/providers";
-import { BookText, LayoutDashboard, Logs, Server } from "lucide-react";
+import { BookText, Logs, Server } from "lucide-react";
 import { Link } from "react-router";
 import { cn } from "../../lib/utils";
 import { Logo } from "../Logo";
@@ -19,11 +19,6 @@ import { PreferencesDialog } from "./PreferencesDialog";
 import { SidebarItem } from "./SidebarItem";
 
 const SIDEBAR_ITEMS = [
-  {
-    name: "Dashboard",
-    url: "/dashboard",
-    icon: LayoutDashboard,
-  },
   {
     name: "Servers",
     url: "/servers",

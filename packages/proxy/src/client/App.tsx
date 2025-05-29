@@ -50,7 +50,6 @@ export default function App() {
                   <Routes>
                     <Route path="/" element={<AppWrapper />}>
                       <Route index element={<HomePage />} />
-                      <Route path="/dashboard" element={<DashboardPage />} />
                       <Route path="/servers">
                         <Route index element={<ServersPage />} />
                         <Route path="add" element={<AddServerPage />} />
