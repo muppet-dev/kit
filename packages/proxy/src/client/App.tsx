@@ -4,8 +4,6 @@ import toast, { Toaster } from "react-hot-toast";
 import { BrowserRouter, Route, Routes } from "react-router";
 import { NotFound } from "./components/NotFound";
 import { SidebarProvider } from "./components/ui/sidebar";
-import AddServerPage from "./pages/AddServer";
-import DashboardPage from "./pages/Dashboard";
 import HomePage from "./pages/Home";
 import ServersPage from "./pages/Servers";
 import TracingPage from "./pages/Tracing";
@@ -52,7 +50,6 @@ export default function App() {
                       <Route index element={<HomePage />} />
                       <Route path="/servers">
                         <Route index element={<ServersPage />} />
-                        <Route path="add" element={<AddServerPage />} />
                         <Route
                           path=":serverId"
                           element={<ServerConfigurationsPage />}

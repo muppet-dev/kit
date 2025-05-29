@@ -19,26 +19,21 @@ export function STDIOFields() {
 
   return (
     <>
-      <div className="grid grid-cols-4 w-full items-center gap-2">
+      <div className="space-y-1">
         <Label htmlFor="command" required>
           Command
         </Label>
         <Input
           id="command"
-          className="col-span-3"
           placeholder="Enter command"
           required
           {...register("command")}
         />
         <FieldErrorMessage name="command" />
       </div>
-      <div className="grid grid-cols-4 w-full items-center gap-2">
-        <Label htmlFor="arguments">Arguments</Label>
-        <Input
-          className="col-span-3 text-md"
-          placeholder="Enter arguments"
-          {...register("args")}
-        />
+      <div className="space-y-1">
+        <Label htmlFor="args">Arguments</Label>
+        <Input id="args" placeholder="Enter arguments" {...register("args")} />
         <FieldErrorMessage name="command" />
       </div>
       <Accordion type="single" collapsible className="flex flex-col">
@@ -84,7 +79,7 @@ function EnvField() {
           <p className="text-sm select-none">No variables added</p>
         </div>
       ) : (
-        <div className="space-y-1">
+        <div className="space-y-1 max-h-[180px] overflow-y-auto">
           {fields.map((item, index) => (
             <div key={item.id} className="flex w-full items-center gap-2">
               <div className="w-full">

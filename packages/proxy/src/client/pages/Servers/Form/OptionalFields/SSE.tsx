@@ -17,7 +17,7 @@ export function SSEFields() {
 
   return (
     <>
-      <div className="grid grid-cols-4 w-full items-center gap-2">
+      <div className="space-y-1">
         <Label htmlFor="url" required>
           URL
         </Label>
@@ -30,19 +30,19 @@ export function SSEFields() {
             Authentication
           </AccordionTrigger>
           <AccordionContent className="pt-2 pb-0 space-y-2">
-            <div className="grid grid-cols-4 w-full items-center gap-2">
+            <div className="space-y-1">
               <Label htmlFor="bearerToken">Bearer Token</Label>
               <Input
-                className="col-span-3"
+                id="bearerToken"
                 placeholder="Bearer Token"
                 {...register("bearerToken")}
               />
               <FieldErrorMessage name="bearerToken" />
             </div>
-            <div className="grid grid-cols-4 w-full items-center gap-2">
+            <div className="space-y-1">
               <Label htmlFor="headerName">Header Name</Label>
               <Input
-                className="col-span-3"
+                id="headerName"
                 placeholder="Authorization"
                 {...register("headerName")}
               />
@@ -62,8 +62,9 @@ function URLField() {
   const url = useWatch({ control, name: "url" });
 
   return (
-    <div className="relative flex items-center col-span-3">
+    <div className="relative flex items-center">
       <Input
+        id="url"
         placeholder="Enter URL"
         {...register("url")}
         className="w-full pr-9"

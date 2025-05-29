@@ -5,12 +5,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Trash } from "lucide-react";
 import toast from "react-hot-toast";
 
-export function DeleteButton({ id }: { id: string }) {
+export function DeleteServerButton(props: { id: string }) {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
     mutationFn: async () =>
-      await fetch(`/api/servers/${id}`, {
+      await fetch(`/api/servers/${props.id}`, {
         method: "DELETE",
       }).then((res) => {
         if (!res.ok) {
@@ -35,7 +35,7 @@ export function DeleteButton({ id }: { id: string }) {
 
   return (
     <Button
-      title="Delete item"
+      title="Delete server"
       variant="ghost"
       colorScheme="destructive"
       className="size-max has-[>svg]:px-1.5 py-1.5"
