@@ -112,7 +112,8 @@ export function TracingTable() {
                           <p className="truncate">{trace.session}</p>
                           <CopyButton
                             data={trace.session}
-                            tooltipContent="Copy session ID"
+                            // This is to remove tooltip
+                            tooltipContent=""
                             className="[&>svg]:size-3.5 p-1 has-[>svg]:px-1"
                           />
                         </div>
