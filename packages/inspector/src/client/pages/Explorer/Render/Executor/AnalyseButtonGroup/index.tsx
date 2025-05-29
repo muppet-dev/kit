@@ -29,7 +29,7 @@ function ActionButton() {
   return (
     <>
       <Button
-        className="px-3 py-1.5 xl:flex hidden"
+        className="px-3 py-1.5 xl:flex hidden rounded-r-none"
         colorScheme="secondary"
         disabled={mutation.isPending}
         onClick={handleAnalyse}
@@ -42,7 +42,7 @@ function ActionButton() {
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
-            className="xl:hidden size-max has-[>svg]:px-2.5 py-2.5"
+            className="xl:hidden size-max has-[>svg]:px-2.5 py-2.5 rounded-r-none"
             colorScheme="secondary"
             disabled={mutation.isPending}
             onClick={handleAnalyse}

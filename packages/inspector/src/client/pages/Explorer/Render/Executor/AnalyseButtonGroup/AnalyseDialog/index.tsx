@@ -20,7 +20,7 @@ export function AnalyseDialog() {
       <DialogTrigger asChild>
         <Button
           colorScheme="secondary"
-          className="size-max has-[>svg]:px-2.5 py-2.5"
+          className="size-max has-[>svg]:px-2.5 py-2.5 rounded-l-none"
         >
           <Settings className="size-4" />
         </Button>
