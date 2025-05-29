@@ -45,14 +45,14 @@ export function AnalysePanel() {
         </p>
         <div className="mt-1 px-2 flex w-full items-center justify-between">
           {isPending ? (
-            <Skeleton className="h-12 w-8" />
+            <Skeleton className="h-12 w-8 rounded-md" />
           ) : (
             <p className="text-5xl">
               {data ? <span className="font-semibold">{data.score}</span> : "-"}
             </p>
           )}
           {isPending ? (
-            <Skeleton className="h-7 w-16" />
+            <Skeleton className="h-7 w-16 rounded-md" />
           ) : (
             <p
               className={cn(
@@ -101,7 +101,7 @@ export function AnalysePanel() {
         {isPending ? (
           Array.from({ length: 4 }).map((_, i) => (
             // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-            <Skeleton key={i} className="h-[54px] w-full mb-2" />
+            <Skeleton key={i} className="h-[54px] w-full rounded-md" />
           ))
         ) : !data || data.recommendations.length === 0 ? (
           <div className="border rounded-md h-full w-full flex items-center justify-center select-none">

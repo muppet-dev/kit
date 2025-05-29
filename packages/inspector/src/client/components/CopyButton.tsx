@@ -47,7 +47,7 @@ export function CopyButton({
       aria-label="copy"
       variant="ghost"
       disabled={!data || disabled}
-      className={cn("size-max has-[>svg]:px-1.5 py-1.5", className)}
+      className={cn("size-max has-[>svg]:px-1.5 py-1.5 rounded-sm", className)}
       onClick={handleCopyToClipboard}
       onKeyDown={handleCopyToClipboard}
     >

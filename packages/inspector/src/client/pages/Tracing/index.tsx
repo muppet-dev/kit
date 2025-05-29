@@ -100,7 +100,7 @@ function TunnelLink() {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="has-[>svg]:px-1.5 py-1.5 h-max rounded-sm data-[state=open]:bg-accent dark:data-[state=open]:bg-accent/50"
+                  className="has-[>svg]:px-1.5 py-1.5 h-max data-[state=open]:bg-accent dark:data-[state=open]:bg-accent/50"
                 >
                   <Pickaxe className="stroke-secondary-foreground/80" />
                 </Button>

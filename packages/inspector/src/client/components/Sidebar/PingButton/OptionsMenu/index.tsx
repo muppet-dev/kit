@@ -40,7 +40,7 @@ export function OptionsMenu() {
           <SidebarMenuAction
             onClick={handleClearTimeInterval}
             onKeyDown={handleClearTimeInterval}
-            className="text-destructive hover:text-destructive hover:bg-destructive/10 dark:hover:bg-destructive/10 peer-hover/menu-button:text-destructive"
+            className="text-destructive hover:text-destructive hover:bg-destructive/10 dark:hover:bg-destructive/10 peer-hover/menu-button:text-destructive rounded-sm"
           >
             <X className="size-3.5" />
           </SidebarMenuAction>
@@ -56,7 +56,7 @@ export function OptionsMenu() {
           disabled={connectionStatus !== ConnectionStatus.CONNECTED}
           asChild
         >
-          <SidebarMenuAction className="data-[state=open]:bg-sidebar-accent disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:[&>svg]:text-sidebar-accent-foreground/50">
+          <SidebarMenuAction className="data-[state=open]:bg-sidebar-accent disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:[&>svg]:text-sidebar-accent-foreground/50 rounded-sm data-[state=open]:text-accent-foreground">
             <Ellipsis />
           </SidebarMenuAction>
         </DropdownMenuTrigger>

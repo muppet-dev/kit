@@ -36,10 +36,10 @@ export function CodeHighlighter({ content, className }: CodeHighlighter) {
   }, [content, resolvedTheme]);
 
   return (
-    <div className="relative size-full">
+    <div className="relative size-full overflow-y-auto">
       <div
         className={cn(
-          "border relative h-full overflow-auto rounded-md",
+          "border relative size-full overflow-auto rounded-md",
           className
         )}
       >

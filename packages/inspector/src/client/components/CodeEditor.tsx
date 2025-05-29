@@ -68,6 +68,7 @@ export function CodeEditor({
               disabled={!value}
               onClick={handleFormatCode}
               onKeyDown={handleFormatCode}
+              className="size-max has-[>svg]:px-1.5 py-1.5 rounded-sm"
             >
               <AlignLeft className="size-4 stroke-2" />
             </Button>

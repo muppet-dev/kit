@@ -105,112 +105,116 @@ export function TableDrawer({ traces }: TableDrawer) {
   const selectedIndex = traces.findIndex((item) => item.id === selected);
 
   return (
-    <div className="p-4 w-[550px] border space-y-3 h-full overflow-y-auto">
-      <div className="flex items-center gap-2">
-        <kbd className="text-foreground rounded bg-secondary border px-1.5 text-sm font-medium shadow">
-          {selectedHistory.request.method}
-        </kbd>
-        <Tooltip>
-          <TooltipTrigger>
-            <div
-              className={cn(
-                "rounded-full size-[7px] min-w-[7px] min-h-[7px]",
-                selectedHistory.response?.error
-                  ? "bg-destructive"
-                  : "bg-success"
-              )}
-            />
-          </TooltipTrigger>
-          <TooltipContent>
-            {selectedHistory.response?.error ? "Error" : "Success"}
-          </TooltipContent>
-        </Tooltip>
-        <div className="flex-1" />
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              size="icon"
-              variant="ghost"
-              className="p-1 size-max"
-              disabled={selected != null && selectedIndex === 0}
-              onClick={handleGoToPreviosRequest}
-              onKeyDown={handleGoToPreviosRequest}
-            >
-              <ChevronUp />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Previous request</TooltipContent>
-        </Tooltip>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              size="icon"
-              variant="ghost"
-              className="p-1 size-max"
-              disabled={selected != null && selectedIndex === traces.length - 1}
-              onClick={handleGoToNextRequest}
-              onKeyDown={handleGoToNextRequest}
-            >
-              <ChevronDown />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Next request</TooltipContent>
-        </Tooltip>
-        <div className="h-4 w-px bg-muted" />
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              size="icon"
-              variant="ghost"
-              className="p-1 size-max"
-              onClick={handleCloseDrawer}
-              onKeyDown={handleCloseDrawer}
-            >
-              <X />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Close</TooltipContent>
-        </Tooltip>
-      </div>
-      {selectedHistory.request.method !== "initialize" && (
-        <div className="flex items-center justify-end gap-2">
+    <div className="p-4 w-[550px] border rounded-lg h-full flex overflow-y-auto">
+      <div className="flex flex-col gap-3 size-full overflow-y-auto">
+        <div className="flex items-center gap-2">
+          <kbd className="text-foreground rounded bg-secondary border px-1.5 text-sm font-medium shadow">
+            {selectedHistory.request.method}
+          </kbd>
+          <Tooltip>
+            <TooltipTrigger>
+              <div
+                className={cn(
+                  "rounded-full size-[7px] min-w-[7px] min-h-[7px]",
+                  selectedHistory.response?.error
+                    ? "bg-destructive"
+                    : "bg-success"
+                )}
+              />
+            </TooltipTrigger>
+            <TooltipContent>
+              {selectedHistory.response?.error ? "Error" : "Success"}
+            </TooltipContent>
+          </Tooltip>
+          <div className="flex-1" />
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
                 size="icon"
                 variant="ghost"
-                className="p-1.5 size-max"
-                onClick={handleSendRequest}
-                onKeyDown={handleSendRequest}
-                disabled={resendDirectory[selectedHistory.id]}
+                className="p-1 size-max"
+                disabled={selected != null && selectedIndex === 0}
+                onClick={handleGoToPreviosRequest}
+                onKeyDown={handleGoToPreviosRequest}
               >
-                <RefreshCcw
-                  className={
-                    resendDirectory[selectedHistory.id]
-                      ? "animate-spin"
-                      : undefined
-                  }
-                />
+                <ChevronUp />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Resend request</TooltipContent>
+            <TooltipContent>Previous request</TooltipContent>
           </Tooltip>
-          {UPDATABLE_METHODS.includes(selectedHistory.request.method) && (
-            <UpdateRequestDialog request={selectedHistory.request} />
-          )}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="icon"
+                variant="ghost"
+                className="p-1 size-max"
+                disabled={
+                  selected != null && selectedIndex === traces.length - 1
+                }
+                onClick={handleGoToNextRequest}
+                onKeyDown={handleGoToNextRequest}
+              >
+                <ChevronDown />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Next request</TooltipContent>
+          </Tooltip>
+          <div className="h-4 w-px bg-muted" />
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="icon"
+                variant="ghost"
+                className="p-1 size-max"
+                onClick={handleCloseDrawer}
+                onKeyDown={handleCloseDrawer}
+              >
+                <X />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Close</TooltipContent>
+          </Tooltip>
         </div>
-      )}
-      <TracingDetails
-        label="Request"
-        content={JSON.stringify(selectedHistory.request, null, 2)}
-      />
-      {Object.values(selectedHistory.response ?? {}).map((res) => res != null)
-        .length > 0 && (
+        {selectedHistory.request.method !== "initialize" && (
+          <div className="flex items-center justify-end gap-2">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="p-1.5 size-max"
+                  onClick={handleSendRequest}
+                  onKeyDown={handleSendRequest}
+                  disabled={resendDirectory[selectedHistory.id]}
+                >
+                  <RefreshCcw
+                    className={
+                      resendDirectory[selectedHistory.id]
+                        ? "animate-spin"
+                        : undefined
+                    }
+                  />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Resend request</TooltipContent>
+            </Tooltip>
+            {UPDATABLE_METHODS.includes(selectedHistory.request.method) && (
+              <UpdateRequestDialog request={selectedHistory.request} />
+            )}
+          </div>
+        )}
         <TracingDetails
-          label="Response"
-          content={JSON.stringify(selectedHistory.response, null, 2)}
+          label="Request"
+          content={JSON.stringify(selectedHistory.request, null, 2)}
         />
-      )}
+        {Object.values(selectedHistory.response ?? {}).map((res) => res != null)
+          .length > 0 && (
+          <TracingDetails
+            label="Response"
+            content={JSON.stringify(selectedHistory.response, null, 2)}
+          />
+        )}
+      </div>
     </div>
   );
 }
@@ -223,9 +227,9 @@ function TracingDetails({
   content: string;
 }) {
   return (
-    <div className="space-y-1">
+    <div className="flex-1 flex flex-col gap-1 overflow-y-auto">
       <h2 className="text-sm font-semibold">{label}</h2>
-      <CodeHighlighter content={content} className="max-h-96" />
+      <CodeHighlighter content={content} className="max-h-full" />
     </div>
   );
 }

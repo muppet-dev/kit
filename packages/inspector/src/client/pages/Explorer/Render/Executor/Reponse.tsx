@@ -49,7 +49,7 @@ export function ReponsePanel({ isExpend, onExpandChange }: ReponsePanel) {
           onPanelExpandChange={onExpandChange}
         />
         {isSubmitting ? (
-          <Skeleton className="size-full" />
+          <Skeleton className="size-full rounded-md" />
         ) : (
           <div className="overflow-y-auto flex-1 space-y-2">
             {dataFormat === "raw" && (
@@ -90,7 +90,7 @@ function ResponseTime() {
   const mutation = useCustomForm();
   const data = mutation.data;
 
-  if (isSubmitting) return <Skeleton className="w-14 h-5" />;
+  if (isSubmitting) return <Skeleton className="w-14 h-5 rounded-sm" />;
 
   return (
     <span className="text-xs text-success">

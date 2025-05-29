@@ -179,7 +179,7 @@ function ConnectedServerOptionsMenu() {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="h-max has-[>svg]:px-1 px-1 py-1 data-[state=open]:bg-accent dark:data-[state=open]:bg-accent/50"
+          className="h-max has-[>svg]:px-1 px-1 py-1 data-[state=open]:bg-accent dark:data-[state=open]:bg-accent/50 data-[state=open]:text-accent-foreground rounded-sm"
         >
           <Ellipsis />
         </Button>
