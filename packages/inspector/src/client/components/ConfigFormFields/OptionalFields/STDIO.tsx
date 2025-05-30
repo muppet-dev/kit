@@ -74,29 +74,27 @@ function EnvField() {
   const handleDeleteItem = (index: number) => eventHandler(() => remove(index));
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-
-    if (file) {
+    if (event.target.files && event.target.files.length > 0) {
       const reader = new FileReader();
-      reader.onload = (event) => {
+      reader.onload = (ent) => {
         try {
-          const raw = String(event.target?.result);
-          const value = parseKeyValueString(raw);
+          const raw = (ent.target?.result?.toString() || "").trim();
 
-          if (!value || Object.keys(value).length === 0)
-            throw new Error("The file doesn't contain valid KEY=VALUE pairs.");
+          if (raw.length === 0) return;
 
-          const formattedValue = Object.entries(value).map(([key, value]) => ({
-            key,
-            value,
-          }));
+          const envs = parseKeyValueString(raw);
 
-          append(formattedValue);
+          if (envs.length === 0) return;
+
+          append(envs);
         } catch (error: any) {
           toast.error(error.message || "Failed to parse the file");
         }
       };
-      reader.readAsText(file);
+
+      for (const file of event.target.files) {
+        reader.readAsText(file);
+      }
     }
   };
 
@@ -154,8 +152,8 @@ function EnvField() {
   );
 }
 
-const parseKeyValueString = (str: string): Record<string, string> => {
-  const result: Record<string, string> = {};
+const parseKeyValueString = (str: string) => {
+  const result: { key: string; value: string }[] = [];
   const lines = str.split(/\r?\n/);
 
   for (const line of lines) {
@@ -166,7 +164,7 @@ const parseKeyValueString = (str: string): Record<string, string> => {
     if (match) {
       const key = match[1];
       const value = match[3] != null ? match[3] : match[4];
-      result[key] = value;
+      result.push({ key, value });
     } else throw new Error(`Invalid line format: "${line}"`);
   }
 
