@@ -53,8 +53,6 @@ export function ConfigForm(props: ConfigForm) {
     }
   }
 
-  console.log(defaultValues);
-
   const methods = useForm<z.output<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues,
