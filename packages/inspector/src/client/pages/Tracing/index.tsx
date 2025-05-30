@@ -24,6 +24,7 @@ import { DownloadButton } from "./DownloadButton";
 import { LogsProvider } from "./providers";
 import { ServerOptionMenu } from "./ServerOptionMenu";
 import { TracingTable } from "./Table";
+import { CodeHighlighter } from "@/client/components/Hightlighter";
 
 export default function TracingPage() {
   return (
@@ -77,12 +78,6 @@ function TunnelLinkButton() {
 
   return (
     <>
-      {isTunnelDialogOpen && (
-        <TunnelInformationDialog
-          open={isTunnelDialogOpen}
-          onOpenChange={setTunnelDialogOpen}
-        />
-      )}
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
@@ -96,30 +91,22 @@ function TunnelLinkButton() {
         </TooltipTrigger>
         <TooltipContent>Create a tunnel</TooltipContent>
       </Tooltip>
+      <Dialog open={isTunnelDialogOpen} onOpenChange={setTunnelDialogOpen}>
+        <DialogOverlay />
+        <DialogContent className="flex flex-col">
+          <DialogHeader>
+            <DialogTitle>Proxy URL</DialogTitle>
+            <DialogDescription>
+              Add this URL to the MCP Client to connect the inspector as a
+              proxy.
+            </DialogDescription>
+          </DialogHeader>
+          <LocalContentRender />
+          <PublicContentRender />
+          <AuthorizationCodeRender />
+        </DialogContent>
+      </Dialog>
     </>
-  );
-}
-
-type TunnelInformationDialog = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-};
-
-function TunnelInformationDialog(props: TunnelInformationDialog) {
-  return (
-    <Dialog open={props.open} onOpenChange={props.onOpenChange}>
-      <DialogOverlay />
-      <DialogContent className="flex flex-col">
-        <DialogHeader>
-          <DialogTitle>Proxy URL</DialogTitle>
-          <DialogDescription>
-            Add this URL to the MCP Client to connect the inspector as a proxy.
-          </DialogDescription>
-        </DialogHeader>
-        <LocalContentRender />
-        <PublicContentRender />
-      </DialogContent>
-    </Dialog>
   );
 }
 
@@ -180,6 +167,19 @@ function PublicContentRender() {
           Generate URL
         </Button>
       )}
+    </div>
+  );
+}
+
+function AuthorizationCodeRender() {
+  const { token } = useConnection();
+
+  if (!token) return <></>;
+
+  return (
+    <div className="w-full">
+      <Label className="mb-1.5">Authorization Code</Label>
+      <CodeHighlighter content={`{ "authorization": "${token}" }`} />
     </div>
   );
 }
