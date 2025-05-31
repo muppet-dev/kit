@@ -24,7 +24,6 @@ import { DownloadButton } from "./DownloadButton";
 import { LogsProvider } from "./providers";
 import { ServerOptionMenu } from "./ServerOptionMenu";
 import { TracingTable } from "./Table";
-import { CodeHighlighter } from "@/client/components/Hightlighter";
 
 export default function TracingPage() {
   return (
@@ -103,7 +102,6 @@ function TunnelLinkButton() {
           </DialogHeader>
           <LocalContentRender />
           <PublicContentRender />
-          <AuthorizationCodeRender />
         </DialogContent>
       </Dialog>
     </>
@@ -114,7 +112,7 @@ function LocalContentRender() {
   const { token } = useConnection();
   const { connectionLink } = useConfig();
 
-  const authorization = token ? `&authorization=${token}` : "";
+  const authorization = token != null ? `&authorization=${token}` : "";
   const url = `${connectionLink?.url?.toString()}${authorization}`;
 
   return (
@@ -138,7 +136,8 @@ function PublicContentRender() {
 
   const data = createLink.data;
 
-  const url = `${data?.url?.toString()}&authorization=${token}`;
+  const authorization = token != null ? `&authorization=${token}` : "";
+  const url = `${data?.url?.toString()}${authorization}`;
 
   const handleGeneratePublicURL = eventHandler(() => createLink.mutateAsync());
 
@@ -167,19 +166,6 @@ function PublicContentRender() {
           Generate URL
         </Button>
       )}
-    </div>
-  );
-}
-
-function AuthorizationCodeRender() {
-  const { token } = useConnection();
-
-  if (!token) return <></>;
-
-  return (
-    <div className="w-full">
-      <Label className="mb-1.5">Authorization Code</Label>
-      <CodeHighlighter content={`{ "authorization": "${token}" }`} />
     </div>
   );
 }
