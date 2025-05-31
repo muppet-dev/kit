@@ -45,14 +45,14 @@ export function AnalysePanel() {
         </p>
         <div className="mt-1 px-2 flex w-full items-center justify-between">
           {isPending ? (
-            <Skeleton className="h-12 w-8" />
+            <Skeleton className="h-12 w-8 rounded-md" />
           ) : (
             <p className="text-5xl">
               {data ? <span className="font-semibold">{data.score}</span> : "-"}
             </p>
           )}
           {isPending ? (
-            <Skeleton className="h-7 w-16" />
+            <Skeleton className="h-7 w-16 rounded-md" />
           ) : (
             <p
               className={cn(
@@ -101,10 +101,10 @@ export function AnalysePanel() {
         {isPending ? (
           Array.from({ length: 4 }).map((_, i) => (
             // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-            <Skeleton key={i} className="h-[54px] w-full mb-2" />
+            <Skeleton key={i} className="h-[54px] w-full rounded-md" />
           ))
         ) : !data || data.recommendations.length === 0 ? (
-          <div className="border h-full w-full flex items-center justify-center select-none">
+          <div className="border rounded-md h-full w-full flex items-center justify-center select-none">
             <p className="text-sm text-muted-foreground">
               No recommendation available
             </p>
@@ -121,7 +121,7 @@ export function AnalysePanel() {
 
 function ScoreItem(props: AnalyseDataType["recommendations"][0]) {
   return (
-    <div className="w-full select-none border flex flex-col px-2.5 py-1 hover:bg-accent/80 dark:hover:bg-accent/50 hover:border-primary/30 transition-all ease-in-out">
+    <div className="w-full select-none border flex flex-col px-2.5 py-1 hover:bg-accent/80 dark:hover:bg-accent/50 hover:border-primary/30 transition-all ease-in-out rounded-md">
       <div className="flex items-center justify-between">
         <h4 className="font-medium">{props.category}</h4>
         <p

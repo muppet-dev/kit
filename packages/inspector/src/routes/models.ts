@@ -1,4 +1,5 @@
 import type { EnvWithDefaultModel } from "@/types/index.js";
+import { customThemeSchema } from "@/validations";
 import { sValidator } from "@hono/standard-validator";
 import { transportSchema } from "@muppet-kit/shared";
 import { generateObject, streamText, experimental_createMCPClient } from "ai";
@@ -186,6 +187,40 @@ router.post(
           }),
         ),
       }),
+    });
+
+    c.header("Content-Type", "text/plain; charset=utf-8");
+
+    return c.json(result.object);
+  },
+);
+
+router.post(
+  "/theme",
+  ...handlers,
+  sValidator(
+    "json",
+    z.object({
+      context: z.string().optional(),
+    }),
+  ),
+  async (c) => {
+    const { context } = c.req.valid("json");
+
+    let prompt =
+      "Generate a theme for the application. The theme should include CSS variables for both light and dark modes. You need to generate the value for each CSS variable in hex format. The theme should be visually appealing and suitable for a modern web application. Try to use a consistent color palette and ensure good contrast between text and background colors. This is a MCP (Model Context Protocol) Inspector which is a devtool used by developers for testing and debugging their MCP servers.";
+
+    if (context) {
+      prompt += ` This is the suggestion given by the user, "${context}". Use these suggestions to generate the theme. The theme should be relevant to the context.`;
+    }
+
+    const result = await generateObject({
+      model: c.get("modelToBeUsed"),
+      prompt,
+      schemaName: "theme-generation",
+      schemaDescription:
+        "This is schema containing the css variables for the theme of the application.",
+      schema: customThemeSchema,
     });
 
     c.header("Content-Type", "text/plain; charset=utf-8");

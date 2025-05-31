@@ -78,7 +78,7 @@ export function Configurations() {
                   selected?.name === item.name
                     ? "bg-accent/80 border-primary/30"
                     : "hover:bg-accent/80 hover:border-primary/30 transition-all",
-                  "relative border pl-3 pr-[54px] pt-1.5 pb-2 cursor-pointer flex items-center justify-between select-none w-full"
+                  "relative border pl-3 pr-[54px] pt-1.5 pb-2 rounded-md cursor-pointer flex items-center justify-between select-none w-full"
                 )}
               >
                 <div className="w-full flex flex-col">

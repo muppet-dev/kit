@@ -34,7 +34,10 @@ export function CodeEditor({
 
   return (
     <div
-      className={cn("border w-full relative h-full overflow-hidden", className)}
+      className={cn(
+        "border w-full relative h-full overflow-hidden rounded-md",
+        className
+      )}
     >
       <MonacoEditor
         language={language}
@@ -65,6 +68,7 @@ export function CodeEditor({
               disabled={!value}
               onClick={handleFormatCode}
               onKeyDown={handleFormatCode}
+              className="size-max has-[>svg]:px-1.5 py-1.5 rounded-sm"
             >
               <AlignLeft className="size-4 stroke-2" />
             </Button>

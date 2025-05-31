@@ -6,6 +6,11 @@ import { Sparkles } from "lucide-react";
 import { useMCPItem } from "../../../providers";
 import { GenerateDialog } from "./GenerateDialog";
 import { GenerateProvider, useGenerate } from "./provider";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/client/components/ui/tooltip";
 
 export function GenerateButtonGroup() {
   const { isModelsEnabled } = useConfig();
@@ -34,7 +39,7 @@ function ActionButton() {
   return (
     <>
       <Button
-        className="px-3 py-1.5 xl:flex hidden"
+        className="px-3 py-1.5 xl:flex hidden rounded-r-none"
         colorScheme="secondary"
         disabled={mutation.isPending}
         onClick={handleGenerate}
@@ -44,16 +49,23 @@ function ActionButton() {
         {mutation.isPending ? "Generating" : "Generate"}
         {mutation.isPending && <Spinner className="size-4 min-w-4 min-h-4" />}
       </Button>
-      <Button
-        className="xl:hidden size-max has-[>svg]:px-2.5 py-2.5"
-        colorScheme="secondary"
-        disabled={mutation.isPending}
-        onClick={handleGenerate}
-        onKeyDown={handleGenerate}
-      >
-        <Sparkles className="size-4" />
-        {mutation.isPending && <Spinner className="size-4 min-w-4 min-h-4" />}
-      </Button>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            className="xl:hidden size-max has-[>svg]:px-2.5 py-2.5 rounded-r-none"
+            colorScheme="secondary"
+            disabled={mutation.isPending}
+            onClick={handleGenerate}
+            onKeyDown={handleGenerate}
+          >
+            <Sparkles className="size-4" />
+            {mutation.isPending && (
+              <Spinner className="size-4 min-w-4 min-h-4" />
+            )}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>Generate</TooltipContent>
+      </Tooltip>
     </>
   );
 }

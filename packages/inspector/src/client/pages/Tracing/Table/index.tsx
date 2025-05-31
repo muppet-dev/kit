@@ -112,6 +112,7 @@ export function TracingTable() {
                           <p className="truncate">{trace.session}</p>
                           <CopyButton
                             data={trace.session}
+                            // This is to remove tooltip
                             tooltipContent=""
                             className="[&>svg]:size-3.5 p-1 has-[>svg]:px-1"
                           />
@@ -127,7 +128,7 @@ export function TracingTable() {
                       <TableCell>
                         <div
                           className={cn(
-                            "border px-1.5 w-max",
+                            "border px-1.5 w-max rounded",
                             isError
                               ? "text-destructive bg-destructive/10"
                               : "text-success bg-success/10"

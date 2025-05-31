@@ -59,7 +59,7 @@ export function ModelHeader(props: { chatId: string }) {
       <Button
         title="Sync chat messages with other models"
         variant="ghost"
-        className="has-[>svg]:px-1.5 py-1.5 h-max rounded-sm relative"
+        className="has-[>svg]:px-1.5 py-1.5 h-max relative"
         onClick={handleConfigChange(model.id, !model.sync)}
         onKeyDown={handleConfigChange(model.id, !model.sync)}
       >
@@ -73,7 +73,7 @@ export function ModelHeader(props: { chatId: string }) {
       <Button
         title="Add model for comparison"
         variant="ghost"
-        className="has-[>svg]:px-1.5 py-1.5 h-max rounded-sm"
+        className="has-[>svg]:px-1.5 py-1.5 h-max"
         onClick={handleAddingChat}
         onKeyDown={handleAddingChat}
         disabled
@@ -189,7 +189,7 @@ function OptionsMenu(props: { model: ChatProps }) {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="has-[>svg]:px-1.5 py-1.5 h-max rounded-sm data-[state=open]:bg-accent dark:data-[state=open]:bg-accent/50"
+          className="has-[>svg]:px-1.5 py-1.5 h-max data-[state=open]:bg-accent dark:data-[state=open]:bg-accent/50"
         >
           <Ellipsis className="size-[18px] stroke-secondary-foreground/80" />
         </Button>

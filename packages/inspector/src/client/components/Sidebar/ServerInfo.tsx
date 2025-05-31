@@ -1,9 +1,11 @@
+import { useCopyToClipboard } from "@uidotdev/usehooks";
 import { Copy, Ellipsis, RotateCcw, Unplug } from "lucide-react";
 import {
   type BaseSyntheticEvent,
   type PropsWithChildren,
   useMemo,
 } from "react";
+import toast from "react-hot-toast";
 import { eventHandler } from "../../lib/eventHandler";
 import { cn } from "../../lib/utils";
 import { useConfig, useConnection } from "../../providers";
@@ -17,8 +19,6 @@ import {
 } from "../ui/dropdown-menu";
 import { useSidebar } from "../ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import { useCopyToClipboard } from "@uidotdev/usehooks";
-import toast from "react-hot-toast";
 
 export function ServerInfo() {
   const { mcpClient, connectionStatus } = useConnection();
@@ -34,7 +34,7 @@ export function ServerInfo() {
     );
 
   return (
-    <div className="p-2 flex gap-1 flex-col w-full border bg-background dark:bg-background/50">
+    <div className="p-2 flex rounded-md gap-1 flex-col w-full border bg-background dark:bg-background/50">
       {connectionStatus === "connected" ? (
         <div className="pl-1 flex justify-between items-center text-sm select-none">
           <p className="font-semibold line-clamp-1" title={serverInfo?.name}>
@@ -107,12 +107,11 @@ function ConnectStatus() {
             connectionStatus === ConnectionStatus.CONNECTED
               ? "bg-success"
               : connectionStatus === ConnectionStatus.ERROR ||
-                  connectionStatus ===
-                    ConnectionStatus.ERROR_CONNECTING_TO_PROXY
-                ? "bg-destructive"
-                : connectionStatus === ConnectionStatus.CONNECTING
-                  ? "bg-warning"
-                  : "bg-secondary-foreground/60",
+                connectionStatus === ConnectionStatus.ERROR_CONNECTING_TO_PROXY
+              ? "bg-destructive"
+              : connectionStatus === ConnectionStatus.CONNECTING
+              ? "bg-warning"
+              : "bg-secondary-foreground/60"
           )}
         />
       </TooltipWrapper>
@@ -180,19 +179,12 @@ function ConnectedServerOptionsMenu() {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="h-max has-[>svg]:px-1 px-1 py-1 data-[state=open]:bg-accent dark:data-[state=open]:bg-accent/50"
+          className="h-max has-[>svg]:px-1 px-1 py-1 data-[state=open]:bg-accent dark:data-[state=open]:bg-accent/50 data-[state=open]:text-accent-foreground rounded-sm"
         >
           <Ellipsis />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent side="right" align="start">
-        <DropdownMenuItem
-          onClick={handleDisconnect}
-          onKeyDown={handleDisconnect}
-        >
-          <Unplug />
-          Disconnect Server
-        </DropdownMenuItem>
         <DropdownMenuItem
           onClick={handleCopyServerEntry}
           onKeyDown={handleCopyServerEntry}
@@ -206,6 +198,13 @@ function ConnectedServerOptionsMenu() {
         >
           <Copy />
           Copy Servers File
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={handleDisconnect}
+          onKeyDown={handleDisconnect}
+        >
+          <Unplug />
+          Disconnect Server
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

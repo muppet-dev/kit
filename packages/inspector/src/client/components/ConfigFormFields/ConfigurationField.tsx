@@ -23,7 +23,7 @@ export function ConfigurationField() {
         value="1"
         className="border-b-0 h-full flex flex-col [&>div]:data-[state=open]:h-full [&>div]:data-[state=open]:flex"
       >
-        <AccordionTrigger className="hover:no-underline cursor-pointer hover:bg-accent/80 data-[state=open]:bg-accent/80 py-1.5 hover:px-2 data-[state=open]:px-2">
+        <AccordionTrigger className="hover:no-underline cursor-pointer hover:bg-accent/80 data-[state=open]:bg-accent/80 py-1.5 hover:px-2 data-[state=open]:px-2 rounded-md">
           Configuration
         </AccordionTrigger>
         <AccordionContent className="pt-2 pb-0 h-full w-full flex flex-col gap-2">

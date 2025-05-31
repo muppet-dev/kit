@@ -30,7 +30,7 @@ export function Chat(props: Chat) {
 
   return (
     <AssistantRuntimeProvider runtime={runtime}>
-      <div className="w-full min-w-[543px] flex flex-col h-full border">
+      <div className="w-full min-w-[543px] flex flex-col h-full border rounded-md overflow-auto">
         <ModelHeader chatId={props.chatId} />
         <Thread chatId={props.chatId} modelId={chat.model} />
       </div>

@@ -30,13 +30,32 @@ export function ConfigForm(props: ConfigForm) {
     .union([stdioTransportSchema.partial(), remoteTransportSchema.partial()])
     .parse(Object.fromEntries(searchParams.entries()));
 
+  let defaultValues: any = {
+    type: Transport.STDIO,
+    ...DEFAULT_VALUES,
+    ...params,
+  };
+
+  if (props.data) {
+    if (props.data.type === Transport.STDIO) {
+      defaultValues = {
+        ...props.data,
+        // @ts-expect-error: converting data from string to array of object
+        env: Object.entries(JSON.parse(props.data.env || "{}")).map(
+          ([key, value]) => ({
+            key,
+            value,
+          }),
+        ),
+      };
+    } else {
+      defaultValues = props.data;
+    }
+  }
+
   const methods = useForm<z.output<typeof schema>>({
     resolver: zodResolver(schema),
-    defaultValues: props.data ?? {
-      type: Transport.STDIO,
-      ...DEFAULT_VALUES,
-      ...params,
-    },
+    defaultValues,
   });
 
   const { handleSubmit } = methods;
@@ -47,7 +66,7 @@ export function ConfigForm(props: ConfigForm) {
         className="flex flex-col h-full gap-4 flex-1"
         onSubmit={handleSubmit(
           (values) => mutation.mutateAsync(values),
-          console.error
+          console.error,
         )}
       >
         {props.children}
