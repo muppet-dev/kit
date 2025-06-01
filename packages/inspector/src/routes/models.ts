@@ -208,7 +208,7 @@ router.post(
     const { context } = c.req.valid("json");
 
     let prompt =
-      "Generate a theme for the application. The theme should include CSS variables for both light and dark modes. You need to generate the value for each CSS variable in hex format. The theme should be visually appealing and suitable for a modern web application. Try to use a consistent color palette and ensure good contrast between text and background colors. This is a MCP (Model Context Protocol) Inspector which is a devtool used by developers for testing and debugging their MCP servers.";
+      "Generate a theme for the application. The theme should include CSS variables for both light and dark modes. You need to generate the value for each CSS variable in hex format. The theme should be visually appealing and suitable for a modern web application. Try to use a consistent color palette and ensure good contrast between text and background colors. This is a MCP (Model Context Protocol) Inspector which is a devtool used by developers for testing and debugging their MCP servers. The UI is built using shadcn/ui, which is a Tailwind CSS component library. The theme should be compatible with shadcn/ui components.";
 
     if (context) {
       prompt += ` This is the suggestion given by the user, "${context}". Use these suggestions to generate the theme. The theme should be relevant to the context.`;
