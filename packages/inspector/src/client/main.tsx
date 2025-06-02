@@ -6,6 +6,8 @@ import App from "./App";
 import "./index.css";
 import { ConfigProvider } from "./providers";
 import { PreferencesProvider, usePreferences } from "./providers/preferences";
+import { ErrorBoundary } from "react-error-boundary";
+import { ErrorBoundaryRender } from "./components/ErrorBoundaryRender";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -43,9 +45,9 @@ function Render() {
   const { toastPosition } = usePreferences();
 
   return (
-    <>
+    <ErrorBoundary FallbackComponent={ErrorBoundaryRender}>
       <App />
       <Toaster position={toastPosition} />
-    </>
+    </ErrorBoundary>
   );
 }
