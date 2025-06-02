@@ -11,6 +11,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/client/components/ui/tooltip";
+import { useEffect } from "react";
+import { useFormContext } from "react-hook-form";
 
 export function GenerateButtonGroup() {
   const { isModelsEnabled } = useConfig();
@@ -29,12 +31,18 @@ export function GenerateButtonGroup() {
 
 function ActionButton() {
   const { selectedItem } = useMCPItem();
+  const { reset } = useFormContext();
 
   const mutation = useGenerate();
 
   const handleGenerate = eventHandler(() =>
     mutation.mutateAsync(selectedItem!)
   );
+
+  useEffect(() => {
+    mutation.reset();
+    reset({ __reset: true });
+  }, [selectedItem]);
 
   return (
     <>

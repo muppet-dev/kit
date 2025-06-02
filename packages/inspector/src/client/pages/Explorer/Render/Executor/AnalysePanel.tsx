@@ -1,6 +1,7 @@
+import { useEffect } from "react";
 import { Skeleton } from "../../../../components/ui/skeleton";
 import { cn } from "../../../../lib/utils";
-import { useTool } from "../../providers";
+import { useMCPItem, useTool } from "../../providers";
 import {
   type AnalyseDataType,
   AnalyseSeverity,
@@ -32,8 +33,13 @@ const scoreBgColor = {
 };
 
 export function AnalysePanel() {
-  const { data, isPending } = useAnalyse();
+  const { data, isPending, reset } = useAnalyse();
   const { activeTool } = useTool();
+  const { selectedItem } = useMCPItem();
+
+  useEffect(() => {
+    reset();
+  }, [selectedItem]);
 
   const scoreRemark = data ? getScoreRemark(data.score) : undefined;
 
