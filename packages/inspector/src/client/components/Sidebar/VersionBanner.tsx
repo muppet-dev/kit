@@ -3,7 +3,7 @@ import { useConfig } from "@/client/providers";
 import { X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/button";
-import { Card, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { SidebarGroup, SidebarMenu } from "../ui/sidebar";
 
 export function VersionBanner() {
@@ -19,24 +19,33 @@ export function VersionBanner() {
   return (
     <SidebarGroup>
       <SidebarMenu>
-        <Card className="py-2">
-          <CardHeader className="flex gap-2 px-2">
+        <Card className="py-2 gap-1">
+          <CardHeader className="flex gap-1 items-center px-2">
             <div className="rounded-full p-1 bg-warning m-1" />
-            <CardTitle className="text-xs flex-1">
-              A new version (
-              <span className="font-bold">{npmVersion?.version}</span>) is
-              available. You are using{" "}
-              <span className="font-bold">{version}</span>. Please update.
+            <CardTitle className="text-xs flex-1 text-warning">
+              New Version
             </CardTitle>
             <Button
+              title="Close"
               variant="ghost"
-              className="size-max has-[>svg]:px-1 py-1"
+              className="size-max has-[>svg]:px-0.5 py-0.5"
               onClick={handleCloseBanner}
               onKeyDown={handleCloseBanner}
             >
-              <X />
+              <X className="size-3.5" />
             </Button>
           </CardHeader>
+          <CardContent className="px-2 text-xs space-y-1">
+            <p>A new version of @muppet-kit/inspector is available!</p>
+            <table className="w-full">
+              <tbody>
+                <tr>
+                  <td>Latest available:</td>
+                  <td className="text-right">{npmVersion?.version}</td>
+                </tr>
+              </tbody>
+            </table>
+          </CardContent>
         </Card>
       </SidebarMenu>
     </SidebarGroup>
