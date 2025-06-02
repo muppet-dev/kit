@@ -1,6 +1,9 @@
-import { CodeHighlighter } from "../../../../components/Hightlighter";
+import { defaultMakdownComponents } from "@/client/components/MakdownComponents";
+import { CodeHighlighter } from "../../../../../components/Hightlighter";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
-export type JSONRender = {
+export type FormattedDataRender = {
   content?:
     | {
         contents: { type: "text"; text: string }[];
@@ -10,7 +13,7 @@ export type JSONRender = {
       };
 };
 
-export function JSONRender(props: JSONRender) {
+export function FormattedDataRender(props: FormattedDataRender) {
   if (!props.content) return;
 
   let content: { text: string }[] = [];
@@ -22,6 +25,15 @@ export function JSONRender(props: JSONRender) {
     <>
       {content.map((item, index) => {
         if ("text" in item) {
+          if ("mimeType" in item)
+            return (
+              <Markdown
+                remarkPlugins={[remarkGfm]}
+                components={defaultMakdownComponents}
+              >
+                {item.text}
+              </Markdown>
+            );
           return <TextRender key={`item-${index + 1}`} content={item.text} />;
         }
 
