@@ -9,9 +9,9 @@ import {
 } from "lucide-react";
 import { Link } from "react-router";
 import { cn } from "../../lib/utils";
+import { useConfig } from "../../providers";
 import { Logo } from "../Logo";
 import { LogoSmall } from "../LogoSmall";
-import { useConfig } from "../../providers";
 import { Button } from "../ui/button";
 import {
   Sidebar,
@@ -25,10 +25,11 @@ import {
   useSidebar,
 } from "../ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import { PreferencesDialog } from "./PreferencesDialog";
 import { PingButton } from "./PingButton";
+import { PreferencesDialog } from "./PreferencesDialog";
 import { ServerInfo } from "./ServerInfo";
 import { SidebarItem } from "./SidebarItem";
+import { VersionBanner } from "./VersionBanner";
 
 const SIDEBAR_ITEMS = {
   panels: [
@@ -100,6 +101,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarGroup>
         <SidebarItem items={SIDEBAR_ITEMS.panels} />
         <SidebarItem items={SIDEBAR_ITEMS.configuration} />
+        <div className="flex-1" />
+        <VersionBanner />
       </SidebarContent>
       <SidebarFooter className={cn(open && "flex-row items-center")}>
         <GithubLinkButton />
