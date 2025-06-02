@@ -1,21 +1,23 @@
 import { RotateCcw, Unplug, XCircle } from "lucide-react";
 import type { PropsWithChildren } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import { Outlet, useLocation } from "react-router";
 import { eventHandler } from "../lib/eventHandler";
 import { useConnection } from "../providers";
 import { ConnectionStatus } from "../providers/connection/manager";
+import { ErrorBoundaryRender } from "./ErrorBoundaryRender";
 import { AppSidebar } from "./Sidebar";
 import { Button } from "./ui/button";
 import { Spinner } from "./ui/spinner";
 
 export function AppWrapper() {
   return (
-    <>
+    <ErrorBoundary FallbackComponent={ErrorBoundaryRender}>
       <AppSidebar />
       <ConnectionWrapper>
         <Outlet />
       </ConnectionWrapper>
-    </>
+    </ErrorBoundary>
   );
 }
 
