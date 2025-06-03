@@ -1,26 +1,27 @@
-import { CodeHighlighter } from "../../../../components/Hightlighter";
+import { CodeHighlighter } from "../../../../../components/Hightlighter";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-} from "../../../../components/ui/select";
-import { Skeleton } from "../../../../components/ui/skeleton";
-import { numberFormatter } from "../../../../lib/utils";
-import { useState } from "react";
+} from "../../../../../components/ui/select";
+import { Skeleton } from "../../../../../components/ui/skeleton";
+import { numberFormatter } from "../../../../../lib/utils";
+import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { JSONRender } from "./JSONRender";
-import { useCustomForm } from "./provider";
+import { FormattedDataRender } from "./FormattedData";
+import { useCustomForm } from "../provider";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { Button } from "../../../../components/ui/button";
-import { eventHandler } from "../../../../lib/eventHandler";
+import { Button } from "../../../../../components/ui/button";
+import { eventHandler } from "../../../../../lib/eventHandler";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "../../../../components/ui/tooltip";
+} from "../../../../../components/ui/tooltip";
 
 enum Format {
+  TEXT = "text",
   JSON = "json",
   RAW = "raw",
 }
@@ -39,6 +40,24 @@ export function ReponsePanel({ isExpend, onExpandChange }: ReponsePanel) {
   const mutation = useCustomForm();
   const data = mutation.data;
 
+  let isMarkdown = false;
+
+  let content: { text: string }[] = [];
+
+  if (data?.content) {
+    if ("contents" in data.content) content = data.content.contents;
+    else if ("content" in data.content) content = data.content.content;
+
+    for (const item of content) {
+      if ("mimeType" in item) isMarkdown = true;
+    }
+  }
+
+  useEffect(() => {
+    if (isMarkdown) setDataFormat(Format.TEXT);
+    else setDataFormat(Format.JSON);
+  }, [isMarkdown]);
+
   if (isSubmitting || isSubmitSuccessful)
     return (
       <div className="h-full flex flex-col gap-2 overflow-y-auto pt-2 border-t">
@@ -47,17 +66,19 @@ export function ReponsePanel({ isExpend, onExpandChange }: ReponsePanel) {
           onFormatChange={setDataFormat}
           isPanelExpend={isExpend}
           onPanelExpandChange={onExpandChange}
+          isMarkdown={isMarkdown}
         />
         {isSubmitting ? (
           <Skeleton className="size-full rounded-md" />
         ) : (
           <div className="overflow-y-auto flex-1 space-y-2">
-            {dataFormat === "raw" && (
+            {dataFormat === Format.RAW ? (
               <CodeHighlighter
                 content={JSON.stringify(data?.content, null, 2)}
               />
+            ) : (
+              <FormattedDataRender content={data?.content} />
             )}
-            {dataFormat === "json" && <JSONRender content={data?.content} />}
           </div>
         )}
       </div>
@@ -73,6 +94,7 @@ function Header(props: FormatSelect & ExpandPanelButton) {
       <FormatSelect
         format={props.format}
         onFormatChange={props.onFormatChange}
+        isMarkdown={props.isMarkdown}
       />
       <ExpandPanelButton
         isPanelExpend={props.isPanelExpend}
@@ -107,6 +129,7 @@ function ResponseTime() {
 type FormatSelect = {
   format: Format;
   onFormatChange: (val: Format) => void;
+  isMarkdown: boolean;
 };
 
 function FormatSelect(props: FormatSelect) {
@@ -121,10 +144,19 @@ function FormatSelect(props: FormatSelect) {
       disabled={isSubmitting}
     >
       <SelectTrigger size="sm" className="py-1 px-2 gap-1.5 border-0 h-max">
-        {props.format === Format.JSON ? "JSON" : "Raw"}
+        {props.format === Format.JSON
+          ? "JSON"
+          : props.format === Format.TEXT
+          ? "Text"
+          : "Raw"}
       </SelectTrigger>
       <SelectContent align="end">
-        <SelectItem value={Format.JSON}>JSON</SelectItem>
+        <SelectItem value={Format.TEXT} disabled={!props.isMarkdown}>
+          Text
+        </SelectItem>
+        <SelectItem value={Format.JSON} disabled={props.isMarkdown}>
+          JSON
+        </SelectItem>
         <SelectItem value={Format.RAW}>Raw</SelectItem>
       </SelectContent>
     </Select>
