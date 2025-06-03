@@ -8,6 +8,8 @@ It is a devtool for testing and debugging MCPs servers.
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/muppet-dev/kit/tree/main/packages/inspector)
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmuppet-dev%2Fkit%2Ftree%2Fmain%2Fpackages%2Finspector&project-name=muppet-kit-inspector&repository-name=muppet-kit-inspector)
+
 ![Inspector](https://raw.githubusercontent.com/muppet-dev/kit/main/public/inspector.png)
 
 ### Usage
