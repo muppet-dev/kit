@@ -5,11 +5,14 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { SidebarGroup, SidebarMenu } from "../ui/sidebar";
+import { Badge } from "../ui/badge";
 
 export function VersionBanner() {
   const { version, npmVersion } = useConfig();
   const isOldVersion =
-    version && npmVersion ? isOlderVersion(version, npmVersion.version) : false;
+    version != null && npmVersion
+      ? isOlderVersion(version, npmVersion.version)
+      : false;
   const [isOpenBanner, setOpenBanner] = useState(isOldVersion);
 
   const handleCloseBanner = eventHandler(() => setOpenBanner(false));
@@ -36,15 +39,16 @@ export function VersionBanner() {
             </Button>
           </CardHeader>
           <CardContent className="px-2 text-xs space-y-1">
-            <p>A new version of @muppet-kit/inspector is available!</p>
-            <table className="w-full">
-              <tbody>
-                <tr>
-                  <td>Latest available:</td>
-                  <td className="text-right">{npmVersion?.version}</td>
-                </tr>
-              </tbody>
-            </table>
+            <p>A new version of the inspector is available.</p>
+            <a
+              href="https://www.npmjs.com/package/@muppet-kit/inspector"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Badge className="w-full mt-2">
+                @muppet-kit/inspector@{npmVersion?.version}
+              </Badge>
+            </a>
           </CardContent>
         </Card>
       </SidebarMenu>
@@ -52,15 +56,15 @@ export function VersionBanner() {
   );
 }
 
-function isOlderVersion(current: string, latest: string): boolean {
+function isOlderVersion(current: string, fromNpm: string): boolean {
   const cur = current.split(".").map(Number);
-  const lat = latest.split(".").map(Number);
+  const npm = fromNpm.split(".").map(Number);
 
-  for (let i = 0; i < Math.max(cur.length, lat.length); i++) {
+  for (let i = 0; i < 3; i++) {
     const curVal = cur[i] ?? 0;
-    const latVal = lat[i] ?? 0;
-    if (latVal > curVal) return true;
-    if (latVal < curVal) return false;
+    const npmVal = npm[i] ?? 0;
+    if (npmVal > curVal) return true;
+    if (npmVal < curVal) return false;
   }
 
   return false;
