@@ -7,7 +7,7 @@ import stdioRouter from "./stdio";
 import streamingRouter from "./streaming";
 import type { ProxyEnv } from "./types";
 
-const webAppTransports: Map<string, Transport> = new Map<string, Transport>();
+const webAppTransports: Map<string, Transport> = new Map();
 let backingServerTransport: Transport | undefined;
 const broadcast = new Broadcast();
 
@@ -22,7 +22,7 @@ const router = new Hono<ProxyEnv>().use(async (c, next) => {
 router.get("/subscribe", (c) =>
   streamSSE(c, async (stream) => {
     c.get("broadcast").addStream(stream);
-  }),
+  })
 );
 router.route("/mcp", streamingRouter);
 router.route("/stdio", stdioRouter);

@@ -72,7 +72,7 @@ export function ModelField({ onChange, value, className }: ModelField) {
         <Button
           variant="outline"
           className={cn(
-            "w-[300px] justify-start rounded-sm data-[state=closed]:hover:[&>svg]:opacity-100 data-[state=open]:[&>svg]:opacity-100 transition-all ease-in-out [&>svg]:transition-all [&>svg]:ease-in-out",
+            "w-[300px] justify-start data-[state=closed]:hover:[&>svg]:opacity-100 data-[state=open]:[&>svg]:opacity-100 transition-all ease-in-out [&>svg]:transition-all [&>svg]:ease-in-out",
             className
           )}
           ref={triggerRef}

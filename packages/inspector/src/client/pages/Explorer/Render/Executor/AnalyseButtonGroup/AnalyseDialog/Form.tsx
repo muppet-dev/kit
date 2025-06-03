@@ -11,7 +11,7 @@ import { ModelField } from "../../../../../../components/ModelField";
 import { Spinner } from "../../../../../../components/ui/spinner";
 
 const schema = z.object({
-  context: z.string(),
+  context: z.string().optional(),
   model: z.string().optional(),
 });
 
@@ -53,16 +53,14 @@ export function AnalyseForm(props: AnalyseForm) {
       className="w-full space-y-4"
     >
       <div>
-        <Label>Additional Context</Label>
+        <Label htmlFor="context">Additional Context</Label>
         <p className="text-xs text-muted-foreground mb-1">
           Add background information or specific conditions to customize the
           analysis results.
         </p>
-        <Textarea {...register("context")} required />
+        <Textarea id="context" {...register("context")} />
         {errors.context && (
-          <p className="text-sm text-red-500 dark:text-red-300">
-            {errors.context.message}
-          </p>
+          <p className="text-sm text-destructive">{errors.context.message}</p>
         )}
       </div>
       <div className="space-y-1">
@@ -75,14 +73,12 @@ export function AnalyseForm(props: AnalyseForm) {
           )}
         />
         {errors.model && (
-          <p className="text-sm text-red-500 dark:text-red-300">
-            {errors.model?.message}
-          </p>
+          <p className="text-sm text-destructive">{errors.model?.message}</p>
         )}
       </div>
       <div className="flex items-center justify-end">
         <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting && <Spinner />}
+          {isSubmitting && <Spinner className="size-4 min-w-4 min-h-4" />}
           {isSubmitting ? "Analysing" : "Analyse"}
         </Button>
       </div>

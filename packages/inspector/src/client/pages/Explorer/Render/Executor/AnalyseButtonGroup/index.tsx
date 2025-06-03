@@ -5,6 +5,11 @@ import { Sparkles } from "lucide-react";
 import { useMCPItem } from "../../../providers";
 import { AnalyseDialog } from "./AnalyseDialog";
 import { useAnalyse } from "./provider";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/client/components/ui/tooltip";
 
 export function AnalyseButtonGroup() {
   return (
@@ -24,8 +29,8 @@ function ActionButton() {
   return (
     <>
       <Button
-        className="px-3 py-1.5 xl:flex hidden"
-        variant="secondary"
+        className="px-3 py-1.5 xl:flex hidden rounded-r-none"
+        colorScheme="secondary"
         disabled={mutation.isPending}
         onClick={handleAnalyse}
         onKeyDown={handleAnalyse}
@@ -34,17 +39,23 @@ function ActionButton() {
         {mutation.isPending ? "Analysing" : "Analyse"}
         {mutation.isPending && <Spinner className="size-4 min-w-4 min-h-4" />}
       </Button>
-      <Button
-        className="xl:hidden size-max has-[>svg]:px-2.5 py-2.5"
-        variant="secondary"
-        disabled={mutation.isPending}
-        onClick={handleAnalyse}
-        onKeyDown={handleAnalyse}
-      >
-        <Sparkles className="size-4" />
-        {mutation.isPending ? "Analysing" : "Analyse"}
-        {mutation.isPending && <Spinner className="size-4 min-w-4 min-h-4" />}
-      </Button>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            className="xl:hidden size-max has-[>svg]:px-2.5 py-2.5 rounded-r-none"
+            colorScheme="secondary"
+            disabled={mutation.isPending}
+            onClick={handleAnalyse}
+            onKeyDown={handleAnalyse}
+          >
+            <Sparkles className="size-4" />
+            {mutation.isPending && (
+              <Spinner className="size-4 min-w-4 min-h-4" />
+            )}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>Analyse</TooltipContent>
+      </Tooltip>
     </>
   );
 }

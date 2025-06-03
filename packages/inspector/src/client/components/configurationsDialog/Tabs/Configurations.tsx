@@ -76,9 +76,9 @@ export function Configurations() {
                 onKeyDown={handleSelectItem(item)}
                 className={cn(
                   selected?.name === item.name
-                    ? "bg-accent/80 dark:bg-accent/50 border-primary/30"
-                    : "hover:bg-accent/80 dark:hover:bg-accent/50 hover:border-primary/30 transition-all",
-                  "relative border pl-3 pr-[54px] pt-1.5 pb-2 cursor-pointer flex items-center justify-between select-none w-full"
+                    ? "bg-accent/80 border-primary/30"
+                    : "hover:bg-accent/80 hover:border-primary/30 transition-all",
+                  "relative border pl-3 pr-[54px] pt-1.5 pb-2 rounded-md cursor-pointer flex items-center justify-between select-none w-full"
                 )}
               >
                 <div className="w-full flex flex-col">
@@ -88,10 +88,10 @@ export function Configurations() {
                       className={cn(
                         "leading-tight py-0 px-1 font-semibold",
                         item.type === Transport.HTTP
-                          ? "bg-green-500 dark:bg-green-300"
+                          ? "bg-success"
                           : item.type === Transport.SSE
-                          ? "bg-yellow-500 dark:bg-yellow-300"
-                          : "bg-blue-500 dark:bg-blue-300"
+                          ? "bg-warning"
+                          : "bg-info"
                       )}
                     >
                       {item.type === Transport.HTTP ? (
@@ -111,7 +111,8 @@ export function Configurations() {
                 <Button
                   title="Delete item"
                   variant="ghost"
-                  className="absolute right-3 size-max has-[>svg]:px-1.5 py-1.5 text-red-500 dark:text-red-300 hover:text-red-500 hover:bg-red-100 dark:hover:bg-red-300/20"
+                  colorScheme="destructive"
+                  className="absolute right-3 size-max has-[>svg]:px-1.5 py-1.5"
                   onClick={handleDeleteItem(item.name)}
                   onKeyDown={handleDeleteItem(item.name)}
                 >
@@ -129,7 +130,6 @@ export function Configurations() {
       <div className="flex items-center justify-between">
         {localSavedConfigs != null && localSavedConfigs.length !== 0 ? (
           <Button
-            type="button"
             variant="ghost"
             title="Clear all configurations"
             onClick={handleAllDelete}
@@ -141,7 +141,6 @@ export function Configurations() {
           <span />
         )}
         <Button
-          type="button"
           disabled={!selected || mutation.isPending}
           onClick={handleConnect}
           onKeyDown={handleConnect}

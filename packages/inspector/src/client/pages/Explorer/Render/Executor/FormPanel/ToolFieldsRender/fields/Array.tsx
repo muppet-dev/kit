@@ -50,47 +50,48 @@ export function ArrayField() {
       {fields.map((field, index) => (
         <div
           key={field.id}
-          className="flex mb-2 min-h-[120px] items-center gap-2 rounded-lg border border-secondary-200 p-2 dark:border-secondary-800"
+          className="flex mb-2 min-h-[120px] items-center gap-2 rounded-lg border p-2"
         >
           <div className="space-y-2">
             <Button
               title="Go Up"
               variant="ghost"
-              size="icon"
               onClick={handleGoUp(index)}
               onKeyDown={handleGoUp(index)}
               disabled={index === 0}
+              className="size-max has-[>svg]:px-1.5 py-1.5"
             >
-              <ArrowUp className="size-4 stroke-2" />
+              <ArrowUp className="stroke-2" />
             </Button>
             <Button
               title="Go Down"
               variant="ghost"
-              size="icon"
               onClick={handleGoDown(index)}
               onKeyDown={handleGoDown(index)}
               disabled={index === fields.length - 1}
+              className="size-max has-[>svg]:px-1.5 py-1.5"
             >
-              <ArrowDown className="size-4 stroke-2" />
+              <ArrowDown className="stroke-2" />
             </Button>
           </div>
           <DuckField id={`${componentId}.${index}`} {...props.items} />
           <div className="space-y-2">
             <Button
               variant="ghost"
-              size="icon"
               onClick={handleInsertNew(index)}
               onKeyDown={handleInsertNew(index)}
+              className="size-max has-[>svg]:px-1.5 py-1.5"
             >
-              <Plus className="size-4 stroke-2" />
+              <Plus className="stroke-2" />
             </Button>
             <Button
-              variant="destructive"
-              size="icon"
+              colorScheme="destructive"
+              variant="ghost"
               onClick={handleDelete(index)}
               onKeyDown={handleDelete(index)}
+              className="size-max has-[>svg]:px-1.5 py-1.5"
             >
-              <Trash className="size-4 stroke-2" />
+              <Trash className="stroke-2" />
             </Button>
           </div>
         </div>
@@ -99,7 +100,6 @@ export function ArrayField() {
         variant="outline"
         onClick={handleAddItem}
         onKeyDown={handleAddItem}
-        type="button"
         className="w-max"
       >
         Add

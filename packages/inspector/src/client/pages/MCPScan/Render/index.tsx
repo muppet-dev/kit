@@ -21,19 +21,19 @@ export function PageRender() {
   return (
     <div className="overflow-auto">
       <div className="mx-auto max-w-2xl lg:max-w-7xl w-full flex gap-4 lg:gap-6">
-        <div className="bg-muted/50 border p-4 lg:p-6 size-full flex flex-col gap-2 lg:gap-3">
+        <div className="bg-muted/50 border p-4 lg:p-6 size-full flex flex-col gap-2 lg:gap-3 rounded-lg">
           {mutation.isPending ? (
             Array.from({ length: 5 }).map((_, index) => (
               <Skeleton
                 key={`vulnerability-${index + 1}`}
-                className="w-full h-[120px]"
+                className="w-full h-[120px] rounded-md"
               />
             ))
           ) : mutation.data ? (
             mutation.data.tools.length > 0 ? (
               <>
                 <div className="mb-2 lg:mb-3 flex items-center gap-1 lg:gap-2">
-                  <ShieldAlert className="size-7 text-red-500 dark:text-red-300" />
+                  <ShieldAlert className="size-7 text-destructive" />
                   <h2 className="text-2xl font-semibold">
                     Vulnerabilities Detected
                   </h2>
@@ -53,7 +53,7 @@ export function PageRender() {
               </>
             ) : (
               <div className="flex flex-col items-center justify-center w-full gap-2 lg:gap-4 h-[525px]">
-                <ShieldCheck className="size-32 text-green-500 dark:text-green-300" />
+                <ShieldCheck className="size-32 text-success" />
                 <h2 className="text-balance font-medium tracking-tight text-2xl max-w-2xl text-center text-muted-foreground">
                   No Vulnerabilities Detected
                 </h2>

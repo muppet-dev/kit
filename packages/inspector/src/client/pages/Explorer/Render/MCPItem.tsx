@@ -1,3 +1,4 @@
+import type { FuseResultMatch } from "fuse.js";
 import { highlightMatches } from "../../../components/highlightMatches";
 import {
   Card,
@@ -10,7 +11,7 @@ import { eventHandler } from "../../../lib/eventHandler";
 import { cn } from "../../../lib/utils";
 import { Tool, useMCPItem } from "../providers";
 import type { MCPItemType } from "../types";
-import type { FuseResultMatch } from "fuse.js";
+import { CardDescriptionRender } from "./CardDescriptionRender";
 
 export type MCPItem = MCPItemType & {
   matches?: FuseResultMatch[];
@@ -35,8 +36,8 @@ export function MCPItem(props: MCPItem) {
       key={props.name}
       className={cn(
         props.name === selectedItem?.name
-          ? "bg-white dark:bg-background"
-          : "bg-transparent hover:bg-white dark:hover:bg-background transition-all ease-in-out",
+          ? "bg-background"
+          : "bg-transparent hover:bg-background transition-all ease-in-out",
         "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max"
       )}
       onClick={handleSelectItem(props.name)}
@@ -54,7 +55,7 @@ export function MCPItem(props: MCPItem) {
           </p>
           {(props.type === Tool.DYNAMIC_RESOURCES ||
             props.type === Tool.STATIC_RESOURCES) && (
-            <span className="italic text-zinc-500 dark:text-zinc-400">
+            <span className="italic text-muted-foreground">
               {props.mimeType}
             </span>
           )}
@@ -62,14 +63,18 @@ export function MCPItem(props: MCPItem) {
       </CardHeader>
       {props.description && (
         <CardContent className="px-4">
-          <CardDescription
-            title={props.description}
-            className="line-clamp-2 leading-tight tracking-tight"
-          >
-            {descriptionMatches
-              ? highlightMatches(props.description, descriptionMatches)
-              : props.description}
-          </CardDescription>
+          {props.description.length > 200 ? (
+            <CardDescriptionRender
+              description={props.description}
+              descriptionMatches={descriptionMatches}
+            />
+          ) : (
+            <CardDescription className="leading-tight tracking-tight line-clamp-2">
+              {descriptionMatches
+                ? highlightMatches(props.description, descriptionMatches)
+                : props.description}
+            </CardDescription>
+          )}
         </CardContent>
       )}
     </Card>

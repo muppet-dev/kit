@@ -1,6 +1,7 @@
+import { useEffect } from "react";
 import { Skeleton } from "../../../../components/ui/skeleton";
 import { cn } from "../../../../lib/utils";
-import { useTool } from "../../providers";
+import { useMCPItem, useTool } from "../../providers";
 import {
   type AnalyseDataType,
   AnalyseSeverity,
@@ -16,24 +17,29 @@ enum Score {
 }
 
 const scoreTextColor = {
-  [Score.VPOOR]: "text-red-500 dark:text-red-300",
-  [Score.POOR]: "text-orange-500 dark:text-orange-300",
-  [Score.AVERAGE]: "text-yellow-500 dark:text-yellow-300",
-  [Score.GOOD]: "text-green-500 dark:text-green-300",
-  [Score.EXCELLENT]: "text-green-600 dark:text-green-400",
+  [Score.VPOOR]: "text-destructive",
+  [Score.POOR]: "text-alert",
+  [Score.AVERAGE]: "text-warning",
+  [Score.GOOD]: "text-success/80 dark:text-success",
+  [Score.EXCELLENT]: "text-success dark:text-success/80",
 };
 
 const scoreBgColor = {
-  [Score.VPOOR]: "bg-red-500 dark:bg-red-400",
-  [Score.POOR]: "bg-orange-500 dark:bg-orange-400",
-  [Score.AVERAGE]: "bg-yellow-500 dark:bg-yellow-400",
-  [Score.GOOD]: "bg-green-500 dark:bg-green-400",
-  [Score.EXCELLENT]: "bg-green-600 dark:bg-green-500",
+  [Score.VPOOR]: "bg-destructive",
+  [Score.POOR]: "bg-alert",
+  [Score.AVERAGE]: "bg-warning",
+  [Score.GOOD]: "bg-success/80 dark:bg-success",
+  [Score.EXCELLENT]: "bg-success dark:bg-success/80",
 };
 
 export function AnalysePanel() {
-  const { data, isPending } = useAnalyse();
+  const { data, isPending, reset } = useAnalyse();
   const { activeTool } = useTool();
+  const { selectedItem } = useMCPItem();
+
+  useEffect(() => {
+    reset();
+  }, [selectedItem]);
 
   const scoreRemark = data ? getScoreRemark(data.score) : undefined;
 
@@ -45,14 +51,14 @@ export function AnalysePanel() {
         </p>
         <div className="mt-1 px-2 flex w-full items-center justify-between">
           {isPending ? (
-            <Skeleton className="h-12 w-8" />
+            <Skeleton className="h-12 w-8 rounded-md" />
           ) : (
             <p className="text-5xl">
               {data ? <span className="font-semibold">{data.score}</span> : "-"}
             </p>
           )}
           {isPending ? (
-            <Skeleton className="h-7 w-16" />
+            <Skeleton className="h-7 w-16 rounded-md" />
           ) : (
             <p
               className={cn(
@@ -101,10 +107,10 @@ export function AnalysePanel() {
         {isPending ? (
           Array.from({ length: 4 }).map((_, i) => (
             // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-            <Skeleton key={i} className="h-[54px] w-full mb-2" />
+            <Skeleton key={i} className="h-[54px] w-full rounded-md" />
           ))
         ) : !data || data.recommendations.length === 0 ? (
-          <div className="border h-full w-full flex items-center justify-center select-none">
+          <div className="border rounded-md h-full w-full flex items-center justify-center select-none">
             <p className="text-sm text-muted-foreground">
               No recommendation available
             </p>
@@ -121,17 +127,17 @@ export function AnalysePanel() {
 
 function ScoreItem(props: AnalyseDataType["recommendations"][0]) {
   return (
-    <div className="w-full select-none border flex flex-col px-2.5 py-1 hover:bg-accent/80 dark:hover:bg-accent/50 hover:border-primary/30 transition-all ease-in-out">
+    <div className="w-full select-none border flex flex-col px-2.5 py-1 hover:bg-accent/80 dark:hover:bg-accent/50 hover:border-primary/30 transition-all ease-in-out rounded-md">
       <div className="flex items-center justify-between">
         <h4 className="font-medium">{props.category}</h4>
         <p
           className={cn(
             "text-sm italic select-none font-medium px-1.5 py-0.5",
             props.severity === AnalyseSeverity.LOW
-              ? "text-blue-500 dark:text-blue-300 bg-blue-200/40 dark:bg-blue-300/10"
+              ? "text-info bg-info/10"
               : props.severity === AnalyseSeverity.MEDIUM
-              ? "text-yellow-500 dark:text-yellow-300 bg-yellow-200/40 dark:bg-yellow-300/10"
-              : "text-red-500 dark:text-red-300 bg-red-200/40 dark:bg-red-300/10"
+              ? "text-warning bg-warning/10"
+              : "text-destructive bg-destructive/10"
           )}
         >
           {props.severity}

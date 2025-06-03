@@ -24,7 +24,7 @@ export function SSEFields() {
       </div>
       <Accordion type="single" collapsible>
         <AccordionItem value="1" className="border-b-0">
-          <AccordionTrigger className="hover:no-underline cursor-pointer hover:bg-accent/80 data-[state=open]:bg-accent/80 py-1.5 hover:px-2 data-[state=open]:px-2">
+          <AccordionTrigger className="hover:no-underline cursor-pointer hover:bg-accent/80 data-[state=open]:bg-accent/80 py-1.5 hover:px-2 data-[state=open]:px-2 rounded-md">
             Authentication
           </AccordionTrigger>
           <AccordionContent className="pt-2 pb-0 space-y-2">
@@ -57,26 +57,18 @@ function URLField() {
 
   const url = useWatch({ control, name: "url" });
 
-  if (url != null)
-    return (
-      <div className="relative flex items-center col-span-3">
-        <Input
-          placeholder="Enter URL"
-          {...register("url")}
-          className="w-full pr-9"
-        />
-        <CopyButton
-          className="absolute right-1"
-          data={url}
-          tooltipContent="Copy URL"
-        />
-      </div>
-    );
   return (
-    <Input
-      placeholder="Enter URL"
-      {...register("url")}
-      className="col-span-3"
-    />
+    <div className="relative flex items-center col-span-3">
+      <Input
+        placeholder="Enter URL"
+        {...register("url")}
+        className="w-full pr-9"
+      />
+      <CopyButton
+        className="absolute right-1"
+        data={url}
+        tooltipContent="Copy URL"
+      />
+    </div>
   );
 }

@@ -1,3 +1,9 @@
+import { Plus, PlusSquare, Trash } from "lucide-react";
+import { useFieldArray, useFormContext } from "react-hook-form";
+import toast from "react-hot-toast";
+import type z from "zod";
+import { eventHandler } from "../../../lib/eventHandler";
+import type { configTransportSchema } from "../../../validations";
 import {
   Accordion,
   AccordionContent,
@@ -7,11 +13,6 @@ import {
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
-import { eventHandler } from "../../../lib/eventHandler";
-import type { configTransportSchema } from "../../../validations";
-import { Trash } from "lucide-react";
-import { useFieldArray, useFormContext } from "react-hook-form";
-import type z from "zod";
 
 export function STDIOFields() {
   const { register } = useFormContext<z.infer<typeof configTransportSchema>>();
@@ -43,7 +44,7 @@ export function STDIOFields() {
           value="1"
           className="border-b-0 h-full flex flex-col [&>div]:data-[state=open]:h-full [&>div]:data-[state=open]:flex"
         >
-          <AccordionTrigger className="hover:no-underline cursor-pointer hover:bg-accent/80 data-[state=open]:bg-accent/80 py-1.5 hover:px-2 data-[state=open]:px-2">
+          <AccordionTrigger className="hover:no-underline cursor-pointer hover:bg-accent/80 data-[state=open]:bg-accent/80 py-1.5 hover:px-2 data-[state=open]:px-2 rounded-md">
             Environmental Variables
           </AccordionTrigger>
           <AccordionContent className="pt-2 pb-0 h-full w-full flex flex-col gap-2">
@@ -72,10 +73,35 @@ function EnvField() {
   const handleAddItem = eventHandler(() => append(ENV_FIELD_DEFAULT_VALUE));
   const handleDeleteItem = (index: number) => eventHandler(() => remove(index));
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = (ent) => {
+        try {
+          const raw = (ent.target?.result?.toString() || "").trim();
+
+          if (raw.length === 0) return;
+
+          const envs = parseKeyValueString(raw);
+
+          if (envs.length === 0) return;
+
+          append(envs);
+        } catch (error: any) {
+          toast.error(error.message || "Failed to parse the file");
+        }
+      };
+
+      for (const file of event.target.files) {
+        reader.readAsText(file);
+      }
+    }
+  };
+
   return (
     <>
       {fields.length === 0 ? (
-        <div className="h-[36px] w-full flex items-center justify-center border">
+        <div className="h-[36px] rounded-md w-full flex items-center justify-center border">
           <p className="text-sm select-none">No variables added</p>
         </div>
       ) : (
@@ -86,9 +112,9 @@ function EnvField() {
               <Input {...register(`env.${index}.value`)} placeholder="Value" />
               <Button
                 title="Delete Variable"
-                type="button"
-                className="h-max has-[>svg]:px-1.5 py-1.5 text-red-500 dark:text-red-300 hover:text-red-500 hover:bg-red-100 dark:hover:bg-red-300/20"
                 variant="ghost"
+                colorScheme="destructive"
+                className="h-max has-[>svg]:px-1.5 py-1.5"
                 onClick={handleDeleteItem(index)}
                 onKeyDown={handleDeleteItem(index)}
               >
@@ -98,15 +124,49 @@ function EnvField() {
           ))}
         </div>
       )}
-      <Button
-        type="button"
-        variant="secondary"
-        onClick={handleAddItem}
-        onKeyDown={handleAddItem}
-        className="w-max"
-      >
-        Add variable
-      </Button>
+      <div className="flex items-center gap-2">
+        <Button
+          colorScheme="secondary"
+          onClick={handleAddItem}
+          onKeyDown={handleAddItem}
+          className="w-max"
+        >
+          <Plus />
+          Add variable
+        </Button>
+        <label
+          htmlFor="env-file"
+          className="h-9 px-4 py-2 shadow-xs bg-secondary text-secondary-foreground hover:bg-secondary/80 w-max cursor-pointer flex items-center gap-2"
+        >
+          <PlusSquare className="size-4" />
+          Add variable from file
+          <Input
+            id="env-file"
+            type="file"
+            className="hidden"
+            onChange={handleFileChange}
+          />
+        </label>
+      </div>
     </>
   );
 }
+
+const parseKeyValueString = (str: string) => {
+  const result: { key: string; value: string }[] = [];
+  const lines = str.split(/\r?\n/);
+
+  for (const line of lines) {
+    if (!line.trim()) continue;
+
+    const match = line.match(/^(\w+)=("(.*?)"|(.+))$/);
+
+    if (match) {
+      const key = match[1];
+      const value = match[3] != null ? match[3] : match[4];
+      result.push({ key, value });
+    } else throw new Error(`Invalid line format: "${line}"`);
+  }
+
+  return result;
+};

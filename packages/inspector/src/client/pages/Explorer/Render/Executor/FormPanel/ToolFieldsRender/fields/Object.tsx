@@ -33,7 +33,7 @@ export function ObjectField<
   const componentId = customId ?? autoId;
 
   return (
-    <div className="p-1 md:p-2 lg:p-3 xl:p-4 border flex flex-col border-secondary-200 dark:border-secondary-800 rounded-md gap-1 md:gap-2 lg:gap-3 xl:gap-4">
+    <div className="p-1 md:p-2 lg:p-3 xl:p-4 border flex flex-col rounded-md gap-1 md:gap-2 lg:gap-3 xl:gap-4">
       {Object.entries(props.properties).map(([fieldName, field]) => {
         const uniqueName = `${componentId}.${fieldName}`;
 

@@ -19,8 +19,8 @@ export function AnalyseDialog() {
     <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
-          variant="secondary"
-          className="size-max has-[>svg]:px-2.5 py-2.5"
+          colorScheme="secondary"
+          className="size-max has-[>svg]:px-2.5 py-2.5 rounded-l-none"
         >
           <Settings className="size-4" />
         </Button>

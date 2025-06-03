@@ -50,6 +50,8 @@ export function RootsRender() {
     },
     onSuccess: (values) => {
       ref.current = values.roots;
+
+      toast.success("Roots updated successfully");
     },
     onError: (err) => {
       toast.error(err.message);
@@ -94,8 +96,7 @@ export function RootsRender() {
             <div className="flex items-center gap-2">
               <ClearButton onClick={clearRoots} />
               <Button
-                variant="secondary"
-                type="button"
+                colorScheme="secondary"
                 onClick={addRoots}
                 onKeyDown={addRoots}
               >
@@ -126,7 +127,7 @@ export function RootsRender() {
                 </div>
               ))
             ) : (
-              <div className="flex items-center justify-center text-muted-foreground text-sm h-[200px] border">
+              <div className="flex items-center rounded-md justify-center text-muted-foreground text-sm h-[200px] border">
                 No roots configured. Add a root to start.
               </div>
             )}
@@ -149,7 +150,6 @@ function ClearButton({ onClick }: ClearButton) {
   return (
     <Button
       variant="ghost"
-      type="button"
       disabled={!value.roots || value.roots?.length === 0}
       onClick={onClick}
       onKeyDown={onClick}

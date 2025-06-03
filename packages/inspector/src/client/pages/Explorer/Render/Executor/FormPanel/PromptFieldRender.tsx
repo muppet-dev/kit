@@ -1,10 +1,9 @@
+import { useEffect } from "react";
+import { Controller, useFormContext } from "react-hook-form";
 import { Combobox } from "../../../../../components/ui/combobox";
 import { Label } from "../../../../../components/ui/label";
 import { useCompletionState } from "../../../../../hooks/use-completion-state";
-import { cn } from "../../../../../lib/utils";
 import { useConnection } from "../../../../../providers";
-import { useEffect } from "react";
-import { Controller, useFormContext } from "react-hook-form";
 import type { PromptItemType } from "../../../types";
 
 export type PromptFieldRender = PromptItemType & { selectedPromptName: string };
@@ -43,11 +42,8 @@ export function PromptFieldRender({
       <div key={item.name} className="space-y-1">
         <Label
           htmlFor={item.name}
-          className={cn(
-            item.required &&
-              "after:ml-0.5 after:text-red-500 after:content-['*'] after:dark:text-red-400",
-            "leading-snug capitalize"
-          )}
+          required={item.required}
+          className="leading-snug capitalize"
         >
           {item.name}
         </Label>
@@ -72,7 +68,7 @@ export function PromptFieldRender({
           )}
         />
         {item.description && (
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             {item.description}
             {item.required && (
               <span className="text-xs mt-1 ml-1">(Required)</span>

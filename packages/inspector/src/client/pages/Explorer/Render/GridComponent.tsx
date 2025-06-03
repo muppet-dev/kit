@@ -1,6 +1,6 @@
 import { Input } from "@/client/components/ui/input";
 import { Spinner } from "@/client/components/ui/spinner";
-import Fuse, { type FuseResultMatch, type RangeTuple } from "fuse.js";
+import Fuse, { type FuseResultMatch } from "fuse.js";
 import { CircleX } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useMCPItem, useTool } from "../providers";

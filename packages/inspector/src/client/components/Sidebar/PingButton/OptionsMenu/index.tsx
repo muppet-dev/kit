@@ -6,14 +6,16 @@ import {
 } from "../../../ui/dropdown-menu";
 import { SidebarMenuAction } from "../../../ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../../ui/tooltip";
-import { usePingServer } from "../../../../providers";
+import { useConnection, usePingServer } from "../../../../providers";
 import { Ellipsis, X } from "lucide-react";
 import { type BaseSyntheticEvent, useState } from "react";
 import { CustomTimeIntervalDialog } from "./Dialog";
+import { ConnectionStatus } from "@/client/providers/connection/manager";
 
 export function OptionsMenu() {
   const [isCustomTimeDialogOpen, setCustomTimeDialogOpen] = useState(false);
   const { timeInterval, setTimeInterval, clearTimeInterval } = usePingServer();
+  const { connectionStatus } = useConnection();
 
   const handleSetTimeInterval =
     (time: 60 | 300 | 600) => (event: BaseSyntheticEvent) => {
@@ -38,7 +40,7 @@ export function OptionsMenu() {
           <SidebarMenuAction
             onClick={handleClearTimeInterval}
             onKeyDown={handleClearTimeInterval}
-            className="text-red-500 dark:text-red-300 hover:text-red-500 hover:bg-red-100 dark:hover:bg-red-300/20 peer-hover/menu-button:text-red-500"
+            className="text-destructive hover:text-destructive hover:bg-destructive/10 dark:hover:bg-destructive/10 peer-hover/menu-button:text-destructive rounded-sm"
           >
             <X className="size-3.5" />
           </SidebarMenuAction>
@@ -50,8 +52,11 @@ export function OptionsMenu() {
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <SidebarMenuAction className="data-[state=open]:bg-sidebar-accent">
+        <DropdownMenuTrigger
+          disabled={connectionStatus !== ConnectionStatus.CONNECTED}
+          asChild
+        >
+          <SidebarMenuAction className="data-[state=open]:bg-sidebar-accent disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:[&>svg]:text-sidebar-accent-foreground/50 rounded-sm data-[state=open]:text-accent-foreground">
             <Ellipsis />
           </SidebarMenuAction>
         </DropdownMenuTrigger>

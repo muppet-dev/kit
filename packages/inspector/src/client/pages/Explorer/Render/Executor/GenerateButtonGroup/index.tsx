@@ -6,6 +6,13 @@ import { Sparkles } from "lucide-react";
 import { useMCPItem } from "../../../providers";
 import { GenerateDialog } from "./GenerateDialog";
 import { GenerateProvider, useGenerate } from "./provider";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/client/components/ui/tooltip";
+import { useEffect } from "react";
+import { useFormContext } from "react-hook-form";
 
 export function GenerateButtonGroup() {
   const { isModelsEnabled } = useConfig();
@@ -24,6 +31,7 @@ export function GenerateButtonGroup() {
 
 function ActionButton() {
   const { selectedItem } = useMCPItem();
+  const { reset } = useFormContext();
 
   const mutation = useGenerate();
 
@@ -31,11 +39,16 @@ function ActionButton() {
     mutation.mutateAsync(selectedItem!)
   );
 
+  useEffect(() => {
+    mutation.reset();
+    reset({ __reset: true });
+  }, [selectedItem]);
+
   return (
     <>
       <Button
-        className="px-3 py-1.5 xl:flex hidden"
-        variant="secondary"
+        className="px-3 py-1.5 xl:flex hidden rounded-r-none"
+        colorScheme="secondary"
         disabled={mutation.isPending}
         onClick={handleGenerate}
         onKeyDown={handleGenerate}
@@ -44,16 +57,23 @@ function ActionButton() {
         {mutation.isPending ? "Generating" : "Generate"}
         {mutation.isPending && <Spinner className="size-4 min-w-4 min-h-4" />}
       </Button>
-      <Button
-        className="xl:hidden size-max has-[>svg]:px-2.5 py-2.5"
-        variant="secondary"
-        disabled={mutation.isPending}
-        onClick={handleGenerate}
-        onKeyDown={handleGenerate}
-      >
-        <Sparkles className="size-4" />
-        {mutation.isPending && <Spinner className="size-4 min-w-4 min-h-4" />}
-      </Button>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            className="xl:hidden size-max has-[>svg]:px-2.5 py-2.5 rounded-r-none"
+            colorScheme="secondary"
+            disabled={mutation.isPending}
+            onClick={handleGenerate}
+            onKeyDown={handleGenerate}
+          >
+            <Sparkles className="size-4" />
+            {mutation.isPending && (
+              <Spinner className="size-4 min-w-4 min-h-4" />
+            )}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>Generate</TooltipContent>
+      </Tooltip>
     </>
   );
 }

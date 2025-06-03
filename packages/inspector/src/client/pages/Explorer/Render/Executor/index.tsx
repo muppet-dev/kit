@@ -1,11 +1,3 @@
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "../../../../components/ui/tabs";
-import { cn } from "../../../../lib/utils";
-import { useConfig } from "../../../../providers";
 import type * as TabsPrimitive from "@radix-ui/react-tabs";
 import {
   AlignJustify,
@@ -22,13 +14,20 @@ import {
   useState,
 } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "../../../../components/ui/tabs";
+import { cn } from "../../../../lib/utils";
+import { useConfig } from "../../../../providers";
 import { Tool, useMCPItem, useTool } from "../../providers";
 import { AnalyseButtonGroup } from "./AnalyseButtonGroup";
 import { AnalyseProvider } from "./AnalyseButtonGroup/provider";
 import { AnalysePanel } from "./AnalysePanel";
 import { FormPanel } from "./FormPanel";
 import { FormResetButton } from "./FormResetButton";
-import { FormWrapper } from "./FormWrapper";
 import { GenerateButtonGroup } from "./GenerateButtonGroup";
 import { JSONPanel } from "./JSONPanel";
 import { ReponsePanel } from "./Reponse";
@@ -183,7 +182,7 @@ function TabsTriggerComponent({
     <TabsTrigger
       {...props}
       className={cn(
-        "data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-2 xl:px-5 dark:data-[state=active]:bg-white dark:data-[state=active]:text-black",
+        "data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-2 xl:px-5 dark:data-[state=active]:bg-foreground dark:data-[state=active]:text-background",
         className
       )}
     >
