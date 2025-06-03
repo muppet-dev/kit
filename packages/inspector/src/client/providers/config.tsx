@@ -58,6 +58,22 @@ function useConfigManager(props: ConfigProvider) {
       }),
   });
 
+  const { data: npmVersion } = useQuery({
+    queryKey: ["npm", "version"],
+    queryFn: () =>
+      fetch("https://registry.npmjs.org/@muppet-kit/inspector/latest").then(
+        (res) => {
+          if (!res.ok) {
+            throw new Error(
+              "Failed to fetch version data. Please check your network connection or try again later."
+            );
+          }
+
+          return res.json() as Promise<Record<string, any>>;
+        }
+      ),
+  });
+
   const { data: config } = useQuery({
     queryKey: ["base-config"],
     queryFn: () =>
@@ -180,6 +196,7 @@ function useConfigManager(props: ConfigProvider) {
 
   return {
     version,
+    npmVersion,
     connectionLink,
     setConnectionLink,
     isTunnelingEnabled,
