@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Skeleton } from "../../../../components/ui/skeleton";
 import { cn } from "../../../../lib/utils";
 import { useMCPItem, useTool } from "../../providers";
@@ -37,9 +37,16 @@ export function AnalysePanel() {
   const { activeTool } = useTool();
   const { selectedItem } = useMCPItem();
 
+  const prevSelectedItemRef = useRef<typeof selectedItem | null>(null);
+
   useEffect(() => {
-    reset();
-  }, [selectedItem]);
+    if (
+      prevSelectedItemRef.current &&
+      selectedItem?.name !== prevSelectedItemRef.current?.name
+    )
+      reset();
+    prevSelectedItemRef.current = selectedItem;
+  }, [selectedItem, reset]);
 
   const scoreRemark = data ? getScoreRemark(data.score) : undefined;
 
