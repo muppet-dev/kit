@@ -4,6 +4,7 @@ import {
 } from "@assistant-ui/react-markdown";
 import { cn } from "../lib/utils";
 import { CopyButton } from "./CopyButton";
+import { CodeHighlighter } from "./Hightlighter";
 
 export const defaultMakdownComponents = memoizeMarkdownComponents({
   h1: ({ className, ...props }) => (
@@ -141,16 +142,24 @@ export const defaultMakdownComponents = memoizeMarkdownComponents({
       {...props}
     />
   ),
-  code: function Code({ className, ...props }) {
+  code: function Code({ className, children, ...props }) {
     const isCodeBlock = useIsMarkdownCodeBlock();
-    return (
+
+    const match = (className || "").match(/language-(\w+)/);
+
+    return match ? (
+      <CodeHighlighter content={String(children).replace(/\n$/, "")} />
+    ) : (
       <code
         className={cn(
-          !isCodeBlock && "bg-muted rounded border font-semibold",
+          !isCodeBlock &&
+            "bg-muted rounded-md border px-1.5 text-sm font-medium shadow dark:shadow-none",
           className
         )}
         {...props}
-      />
+      >
+        {children}
+      </code>
     );
   },
   CodeHeader: function CodeHeader({ language, code }) {

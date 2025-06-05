@@ -30,6 +30,7 @@ export function FormattedDataRender(props: FormattedDataRender) {
               <Markdown
                 remarkPlugins={[remarkGfm]}
                 components={defaultMakdownComponents}
+                key={`item-${index + 1}`}
               >
                 {item.text}
               </Markdown>
