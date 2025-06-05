@@ -1,18 +1,18 @@
-import { Button } from "../../../../../components/ui/button";
-import { Spinner } from "../../../../../components/ui/spinner";
-import { eventHandler } from "../../../../../lib/eventHandler";
-import { useConfig } from "../../../../../providers";
-import { Sparkles } from "lucide-react";
-import { useMCPItem } from "../../../providers";
-import { GenerateDialog } from "./GenerateDialog";
-import { GenerateProvider, useGenerate } from "./provider";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/client/components/ui/tooltip";
-import { useEffect } from "react";
+import { Sparkles } from "lucide-react";
+import { useEffect, useRef } from "react";
 import { useFormContext } from "react-hook-form";
+import { Button } from "../../../../../components/ui/button";
+import { Spinner } from "../../../../../components/ui/spinner";
+import { eventHandler } from "../../../../../lib/eventHandler";
+import { useConfig } from "../../../../../providers";
+import { useMCPItem } from "../../../providers";
+import { GenerateDialog } from "./GenerateDialog";
+import { GenerateProvider, useGenerate } from "./provider";
 
 export function GenerateButtonGroup() {
   const { isModelsEnabled } = useConfig();
@@ -38,10 +38,18 @@ function ActionButton() {
   const handleGenerate = eventHandler(() =>
     mutation.mutateAsync(selectedItem!)
   );
+  const prevSelectedItemRef = useRef<typeof selectedItem | null>(null);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    mutation.reset();
-    reset({ __reset: true });
+    if (
+      prevSelectedItemRef.current &&
+      selectedItem?.name !== prevSelectedItemRef.current?.name
+    ) {
+      mutation.reset();
+      reset({ __reset: true });
+    }
+    prevSelectedItemRef.current = selectedItem;
   }, [selectedItem]);
 
   return (
