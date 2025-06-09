@@ -1,7 +1,13 @@
+import type {
+  CallToolResultSchema,
+  GetPromptResultSchema,
+  ReadResourceResultSchema,
+} from "@modelcontextprotocol/sdk/types.js";
 import { useMutation } from "@tanstack/react-query";
 import { type PropsWithChildren, createContext, useContext } from "react";
 import type { FieldValues } from "react-hook-form";
 import toast from "react-hot-toast";
+import type z from "zod";
 import { useMCPItem } from "../../providers";
 
 type CustomFormContextType = ReturnType<typeof useCustomFormManager>;
@@ -27,7 +33,10 @@ function useCustomFormManager() {
       const result = await callItem(selectedItem!, values);
       return {
         duration: performance.now() - startTime,
-        content: result as { content: { type: "text"; text: string }[] },
+        content: result as
+          | z.infer<typeof CallToolResultSchema>
+          | z.infer<typeof GetPromptResultSchema>
+          | z.infer<typeof ReadResourceResultSchema>,
       };
     },
     onSuccess: () => {

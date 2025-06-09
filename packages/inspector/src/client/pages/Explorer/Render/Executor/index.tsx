@@ -39,7 +39,7 @@ export function Executor() {
   const { isModelsEnabled } = useConfig();
   const { activeTool } = useTool();
   const { selectedItem } = useMCPItem();
-  const [isExpend, setExpend] = useState(false);
+  const [isExpanded, setExpanded] = useState(false);
 
   const methods = useForm();
 
@@ -54,7 +54,7 @@ export function Executor() {
     setSelectedTab((prev) =>
       activeTool.name === Tool.STATIC_RESOURCES && prev === RequestTab.JSON
         ? RequestTab.FORM
-        : prev
+        : prev,
     );
   }, [activeTool]);
 
@@ -121,7 +121,7 @@ export function Executor() {
                 <div
                   className={cn(
                     "flex-1 flex overflow-y-auto",
-                    !isExpend && "min-h-1/2 h-full"
+                    !isExpanded && "min-h-1/2 h-full",
                   )}
                 >
                   <FormPanel />
@@ -131,13 +131,16 @@ export function Executor() {
                 <div
                   className={cn(
                     "flex-1 flex flex-col gap-1.5 overflow-y-auto",
-                    !isExpend && "min-h-1/2 h-full"
+                    !isExpanded && "min-h-1/2 h-full",
                   )}
                 >
                   <JSONPanel />
                 </div>
               )}
-              <ReponsePanel isExpend={isExpend} onExpandChange={setExpend} />
+              <ReponsePanel
+                isExpanded={isExpanded}
+                onExpandChange={setExpanded}
+              />
             </div>
           )}
           <TabsContent
@@ -180,7 +183,7 @@ function TabsTriggerComponent({
       {...props}
       className={cn(
         "data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-2 xl:px-5 dark:data-[state=active]:bg-foreground dark:data-[state=active]:text-background",
-        className
+        className,
       )}
     >
       <p className="xl:flex hidden">{label}</p>
