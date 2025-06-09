@@ -9,6 +9,7 @@ import {
   type TextContent,
 } from "@modelcontextprotocol/sdk/types.js";
 import type z from "zod";
+import { AudioRender } from "./Audio";
 import { ImageRender } from "./Image";
 import { JsonRender } from "./Json";
 
@@ -95,7 +96,7 @@ function RenderContent(props: ImageContent | TextContent | AudioContent) {
     case "text":
       return <JsonRender {...props} />;
     case "audio":
-      return <>Audio</>;
+      return <AudioRender {...props} />;
   }
 }
 
