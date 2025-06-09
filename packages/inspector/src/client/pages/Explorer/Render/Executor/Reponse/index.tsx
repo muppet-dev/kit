@@ -4,6 +4,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
+  SelectValue,
 } from "../../../../../components/ui/select";
 import { Skeleton } from "../../../../../components/ui/skeleton";
 import { numberFormatter } from "../../../../../lib/utils";
@@ -24,6 +25,7 @@ enum Format {
   TEXT = "text",
   JSON = "json",
   RAW = "raw",
+  IMAGE = "image",
 }
 
 export type ReponsePanel = {
@@ -41,6 +43,7 @@ export function ReponsePanel({ isExpend, onExpandChange }: ReponsePanel) {
   const data = mutation.data;
 
   let isMarkdown = false;
+  let isImageType = false;
 
   let content: { text: string }[] = [];
 
@@ -49,14 +52,17 @@ export function ReponsePanel({ isExpend, onExpandChange }: ReponsePanel) {
     else if ("content" in data.content) content = data.content.content;
 
     for (const item of content) {
-      if ("mimeType" in item) isMarkdown = true;
+      if ("type" in item) {
+        if (item.type === "image") isImageType = true;
+      } else if ("mimeType" in item) isMarkdown = true;
     }
   }
 
   useEffect(() => {
     if (isMarkdown) setDataFormat(Format.TEXT);
+    else if (isImageType) setDataFormat(Format.IMAGE);
     else setDataFormat(Format.JSON);
-  }, [isMarkdown]);
+  }, [isMarkdown, isImageType]);
 
   if (isSubmitting || isSubmitSuccessful)
     return (
@@ -67,6 +73,7 @@ export function ReponsePanel({ isExpend, onExpandChange }: ReponsePanel) {
           isPanelExpend={isExpend}
           onPanelExpandChange={onExpandChange}
           isMarkdown={isMarkdown}
+          isImageType={isImageType}
         />
         {isSubmitting ? (
           <Skeleton className="size-full rounded-md" />
@@ -95,6 +102,7 @@ function Header(props: FormatSelect & ExpandPanelButton) {
         format={props.format}
         onFormatChange={props.onFormatChange}
         isMarkdown={props.isMarkdown}
+        isImageType={props.isImageType}
       />
       <ExpandPanelButton
         isPanelExpend={props.isPanelExpend}
@@ -130,6 +138,7 @@ type FormatSelect = {
   format: Format;
   onFormatChange: (val: Format) => void;
   isMarkdown: boolean;
+  isImageType: boolean;
 };
 
 function FormatSelect(props: FormatSelect) {
@@ -144,17 +153,19 @@ function FormatSelect(props: FormatSelect) {
       disabled={isSubmitting}
     >
       <SelectTrigger size="sm" className="py-1 px-2 gap-1.5 border-0 h-max">
-        {props.format === Format.JSON
-          ? "JSON"
-          : props.format === Format.TEXT
-          ? "Text"
-          : "Raw"}
+        <SelectValue />
       </SelectTrigger>
       <SelectContent align="end">
+        <SelectItem value={Format.IMAGE} disabled={!props.isImageType}>
+          Image
+        </SelectItem>
         <SelectItem value={Format.TEXT} disabled={!props.isMarkdown}>
           Text
         </SelectItem>
-        <SelectItem value={Format.JSON} disabled={props.isMarkdown}>
+        <SelectItem
+          value={Format.JSON}
+          disabled={props.isMarkdown || props.isImageType}
+        >
           JSON
         </SelectItem>
         <SelectItem value={Format.RAW}>Raw</SelectItem>

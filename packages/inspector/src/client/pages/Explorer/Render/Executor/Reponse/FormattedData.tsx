@@ -24,6 +24,21 @@ export function FormattedDataRender(props: FormattedDataRender) {
   return (
     <>
       {content.map((item, index) => {
+        if ("type" in item) {
+          if (item.type === "image" && "mimeType" in item && "data" in item) {
+            const imageURL = `data:${item.mimeType};base64,${item.data}`;
+
+            return (
+              <img
+                key={`item-${index + 1}`}
+                src={imageURL}
+                alt="Rendered content"
+                className="size-full object-contain"
+              />
+            );
+          }
+        }
+
         if ("text" in item) {
           if ("mimeType" in item)
             return (
@@ -38,7 +53,14 @@ export function FormattedDataRender(props: FormattedDataRender) {
           return <TextRender key={`item-${index + 1}`} content={item.text} />;
         }
 
-        return <p key={`item-${index + 1}`}>Unable to parse value</p>;
+        return (
+          <div
+            key={`item-${index + 1}`}
+            className="size-full flex items-center justify-center text-muted-foreground select-none"
+          >
+            Unable to parse value
+          </div>
+        );
       })}
     </>
   );

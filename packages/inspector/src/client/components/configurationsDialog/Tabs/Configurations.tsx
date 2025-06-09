@@ -62,7 +62,7 @@ export function Configurations() {
   return (
     <div className="flex flex-col gap-6 justify-between h-full w-full overflow-hidden">
       {configurations && configurations.length > 0 ? (
-        <div className="flex flex-col gap-2 h-full overflow-y-auto w-full">
+        <div className="flex flex-col gap-2 overflow-y-auto w-full h-[364px]">
           {configurations.map((item) => {
             const content =
               item.type === Transport.STDIO
