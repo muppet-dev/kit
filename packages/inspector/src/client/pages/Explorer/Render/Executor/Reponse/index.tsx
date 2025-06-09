@@ -1,4 +1,8 @@
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { useState } from "react";
+import { useFormContext } from "react-hook-form";
 import { CodeHighlighter } from "../../../../../components/Hightlighter";
+import { Button } from "../../../../../components/ui/button";
 import {
   Select,
   SelectContent,
@@ -7,34 +11,23 @@ import {
   SelectValue,
 } from "../../../../../components/ui/select";
 import { Skeleton } from "../../../../../components/ui/skeleton";
-import { numberFormatter } from "../../../../../lib/utils";
-import { useEffect, useState } from "react";
-import { useFormContext } from "react-hook-form";
-import { FormattedDataRender } from "./FormattedData";
-import { useCustomForm } from "../provider";
-import { ChevronDown, ChevronUp } from "lucide-react";
-import { Button } from "../../../../../components/ui/button";
-import { eventHandler } from "../../../../../lib/eventHandler";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "../../../../../components/ui/tooltip";
-
-enum Format {
-  TEXT = "text",
-  JSON = "json",
-  RAW = "raw",
-  IMAGE = "image",
-}
+import { eventHandler } from "../../../../../lib/eventHandler";
+import { numberFormatter } from "../../../../../lib/utils";
+import { useCustomForm } from "../provider";
+import { FormattedDataRender } from "./FormattedData";
 
 export type ReponsePanel = {
-  isExpend: boolean;
+  isExpanded: boolean;
   onExpandChange: (expand: boolean) => void;
 };
 
-export function ReponsePanel({ isExpend, onExpandChange }: ReponsePanel) {
-  const [dataFormat, setDataFormat] = useState<Format>(Format.JSON);
+export function ReponsePanel({ isExpanded, onExpandChange }: ReponsePanel) {
+  const [formatted, setFormatted] = useState(true);
   const {
     formState: { isSubmitting, isSubmitSuccessful },
   } = useFormContext();
@@ -42,72 +35,43 @@ export function ReponsePanel({ isExpend, onExpandChange }: ReponsePanel) {
   const mutation = useCustomForm();
   const data = mutation.data;
 
-  let isMarkdown = false;
-  let isImageType = false;
+  if (!isSubmitting && !isSubmitSuccessful) return <></>;
 
-  let content: { text: string }[] = [];
-
-  if (data?.content) {
-    if ("contents" in data.content) content = data.content.contents;
-    else if ("content" in data.content) content = data.content.content;
-
-    for (const item of content) {
-      if ("type" in item) {
-        if (item.type === "image") isImageType = true;
-      } else if ("mimeType" in item) isMarkdown = true;
-    }
-  }
-
-  useEffect(() => {
-    if (isMarkdown) setDataFormat(Format.TEXT);
-    else if (isImageType) setDataFormat(Format.IMAGE);
-    else setDataFormat(Format.JSON);
-  }, [isMarkdown, isImageType]);
-
-  if (isSubmitting || isSubmitSuccessful)
-    return (
-      <div className="h-full flex flex-col gap-2 overflow-y-auto pt-2 border-t">
-        <Header
-          format={dataFormat}
-          onFormatChange={setDataFormat}
-          isPanelExpend={isExpend}
-          onPanelExpandChange={onExpandChange}
-          isMarkdown={isMarkdown}
-          isImageType={isImageType}
-        />
-        {isSubmitting ? (
-          <Skeleton className="size-full rounded-md" />
-        ) : (
-          <div className="overflow-y-auto flex-1 space-y-2">
-            {dataFormat === Format.RAW ? (
-              <CodeHighlighter
-                content={JSON.stringify(data?.content, null, 2)}
-              />
-            ) : (
-              <FormattedDataRender content={data?.content} />
-            )}
-          </div>
-        )}
-      </div>
-    );
-}
-
-function Header(props: FormatSelect & ExpandPanelButton) {
   return (
-    <div className="flex items-center gap-2">
-      <h2 className="text-sm font-semibold">Response</h2>
-      <ResponseTime />
-      <div className="flex-1" />
-      <FormatSelect
-        format={props.format}
-        onFormatChange={props.onFormatChange}
-        isMarkdown={props.isMarkdown}
-        isImageType={props.isImageType}
-      />
-      <ExpandPanelButton
-        isPanelExpend={props.isPanelExpend}
-        onPanelExpandChange={props.onPanelExpandChange}
-      />
+    <div className="h-full flex flex-col gap-2 overflow-y-auto pt-2 border-t">
+      <div className="flex items-center gap-2">
+        <h2 className="text-sm font-semibold">Response</h2>
+        <ResponseTime />
+        <div className="flex-1" />
+        <Select
+          value={String(Number(formatted))}
+          onValueChange={(value) => setFormatted(Boolean(Number(value)))}
+          disabled={isSubmitting}
+        >
+          <SelectTrigger size="sm" className="py-1 px-2 gap-1.5 border-0 h-max">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent align="end">
+            <SelectItem value="1">Formatted</SelectItem>
+            <SelectItem value="0">Raw</SelectItem>
+          </SelectContent>
+        </Select>
+        <ExpandPanelButton
+          isPanelExpand={isExpanded}
+          onPanelExpandChange={onExpandChange}
+        />
+      </div>
+      {isSubmitting ? (
+        <Skeleton className="size-full rounded-md" />
+      ) : (
+        <div className="overflow-y-auto flex-1 space-y-2">
+          {formatted ? (
+            <FormattedDataRender content={data?.content} />
+          ) : (
+            <CodeHighlighter content={JSON.stringify(data?.content, null, 2)} />
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -134,48 +98,8 @@ function ResponseTime() {
   );
 }
 
-type FormatSelect = {
-  format: Format;
-  onFormatChange: (val: Format) => void;
-  isMarkdown: boolean;
-  isImageType: boolean;
-};
-
-function FormatSelect(props: FormatSelect) {
-  const {
-    formState: { isSubmitting },
-  } = useFormContext();
-
-  return (
-    <Select
-      value={props.format}
-      onValueChange={(val) => props.onFormatChange(val as Format)}
-      disabled={isSubmitting}
-    >
-      <SelectTrigger size="sm" className="py-1 px-2 gap-1.5 border-0 h-max">
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent align="end">
-        <SelectItem value={Format.IMAGE} disabled={!props.isImageType}>
-          Image
-        </SelectItem>
-        <SelectItem value={Format.TEXT} disabled={!props.isMarkdown}>
-          Text
-        </SelectItem>
-        <SelectItem
-          value={Format.JSON}
-          disabled={props.isMarkdown || props.isImageType}
-        >
-          JSON
-        </SelectItem>
-        <SelectItem value={Format.RAW}>Raw</SelectItem>
-      </SelectContent>
-    </Select>
-  );
-}
-
 type ExpandPanelButton = {
-  isPanelExpend: boolean;
+  isPanelExpand: boolean;
   onPanelExpandChange: (value: boolean) => void;
 };
 
@@ -184,10 +108,10 @@ function ExpandPanelButton(props: ExpandPanelButton) {
     formState: { isSubmitting },
   } = useFormContext();
 
-  const ExpandButtonIcon = props.isPanelExpend ? ChevronDown : ChevronUp;
+  const ExpandButtonIcon = props.isPanelExpand ? ChevronDown : ChevronUp;
 
   const handlePanelExpandCollapse = eventHandler(() =>
-    props.onPanelExpandChange(!props.isPanelExpend)
+    props.onPanelExpandChange(!props.isPanelExpand)
   );
 
   return (
@@ -204,7 +128,7 @@ function ExpandPanelButton(props: ExpandPanelButton) {
         </Button>
       </TooltipTrigger>
       <TooltipContent>
-        {`${props.isPanelExpend ? "Collapse" : "Expand"} response panel`}
+        {`${props.isPanelExpand ? "Collapse" : "Expand"} response panel`}
       </TooltipContent>
     </Tooltip>
   );
