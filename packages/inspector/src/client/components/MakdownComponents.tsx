@@ -137,10 +137,7 @@ export const defaultMakdownComponents = memoizeMarkdownComponents({
     />
   ),
   pre: ({ className, ...props }) => (
-    <pre
-      className={cn("overflow-x-auto rounded-b-lg p-4", className)}
-      {...props}
-    />
+    <pre className={cn("overflow-x-auto rounded-b-lg", className)} {...props} />
   ),
   code: function Code({ className, children, ...props }) {
     const isCodeBlock = useIsMarkdownCodeBlock();

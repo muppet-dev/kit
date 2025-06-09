@@ -1,3 +1,4 @@
+import { cn } from "@/client/lib/utils";
 import {
   type AudioContent,
   CallToolResultSchema,
@@ -56,8 +57,20 @@ export function FormattedDataRender(props: FormattedDataRender) {
       };
 
       return (
-        <div key={`message-${index}`} className="mb-4">
-          <div>{message.role}</div>
+        <div
+          key={`message-${index}`}
+          className="space-y-2 border rounded-md px-2 py-2.5"
+        >
+          <div
+            className={cn(
+              "px-1.5 text-sm font-medium rounded-md w-max border",
+              message.role === "user"
+                ? "text-info bg-info/20 border-info/20"
+                : "text-warning bg-warnitext-warning/20 border-warnitext-warning/20"
+            )}
+          >
+            {message.role}
+          </div>
           <div>
             <Component />
           </div>
