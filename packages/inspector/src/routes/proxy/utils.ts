@@ -66,10 +66,12 @@ export async function createTransport<
 
   if (query.type === MuppetTransport.STDIO) {
     const queryEnv = query.env ?? {};
+    const _queryEnv =
+      typeof queryEnv === "string" ? JSON.parse(queryEnv) : queryEnv;
 
     const env = {
       ...process.env,
-      ...queryEnv,
+      ..._queryEnv,
     };
 
     const { cmd, args } = findActualExecutable(

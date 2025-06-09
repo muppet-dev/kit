@@ -24,7 +24,7 @@ export function NumberField() {
   const autoId = useId();
   const customId = useMemo(
     () => generateId?.(schema, props),
-    [generateId, schema, props]
+    [generateId, schema, props],
   );
 
   const componentId = customId ?? autoId;
@@ -36,6 +36,7 @@ export function NumberField() {
     <Input
       {...fieldProps}
       type="number"
+      step="any"
       {...register(componentId, { valueAsNumber: true })}
     />
   );
