@@ -1,6 +1,6 @@
 import { CodeHighlighter } from "@/client/components/Hightlighter";
 import { defaultMakdownComponents } from "@/client/components/MakdownComponents";
-import { TextContent } from "@modelcontextprotocol/sdk/types.js";
+import type { TextContent } from "@modelcontextprotocol/sdk/types.js";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 

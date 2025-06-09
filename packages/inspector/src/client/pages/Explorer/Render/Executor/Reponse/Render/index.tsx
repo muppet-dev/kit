@@ -59,7 +59,10 @@ export function FormattedDataRender(props: FormattedDataRender) {
 
       return (
         <div
-          key={`message-${index}`}
+          key={`message-${
+            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+            index
+          }`}
           className="space-y-2 border rounded-md px-2 py-2.5"
         >
           <div

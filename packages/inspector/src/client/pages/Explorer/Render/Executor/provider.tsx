@@ -1,4 +1,4 @@
-import {
+import type {
   CallToolResultSchema,
   GetPromptResultSchema,
   ReadResourceResultSchema,
@@ -7,7 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { type PropsWithChildren, createContext, useContext } from "react";
 import type { FieldValues } from "react-hook-form";
 import toast from "react-hot-toast";
-import z from "zod";
+import type z from "zod";
 import { useMCPItem } from "../../providers";
 
 type CustomFormContextType = ReturnType<typeof useCustomFormManager>;
