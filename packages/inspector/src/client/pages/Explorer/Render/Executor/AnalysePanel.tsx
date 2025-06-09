@@ -5,7 +5,7 @@ import {
   type AnalyseDataType,
   AnalyseSeverity,
   useAnalyse,
-} from "./AnalyseButtonGroup/provider";
+} from "./AnalyseButtonGroup/useAnalyse";
 
 enum Score {
   VPOOR = "Very Poor",
@@ -13,6 +13,7 @@ enum Score {
   AVERAGE = "Average",
   GOOD = "Good",
   EXCELLENT = "Excellent",
+  UNKNOWN = "Unknown",
 }
 
 const scoreTextColor = {
@@ -21,6 +22,7 @@ const scoreTextColor = {
   [Score.AVERAGE]: "text-warning",
   [Score.GOOD]: "text-success/80 dark:text-success",
   [Score.EXCELLENT]: "text-success dark:text-success/80",
+  [Score.UNKNOWN]: "text-secondary dark:text-secondary/80",
 };
 
 const scoreBgColor = {
@@ -29,11 +31,12 @@ const scoreBgColor = {
   [Score.AVERAGE]: "bg-warning",
   [Score.GOOD]: "bg-success/80 dark:bg-success",
   [Score.EXCELLENT]: "bg-success dark:bg-success/80",
+  [Score.UNKNOWN]: "bg-secondary dark:text-secondary/80",
 };
 
 export function AnalysePanel() {
-  const { data, isPending } = useAnalyse();
   const { activeTool } = useTool();
+  const { data, isFetching } = useAnalyse();
 
   const scoreRemark = data ? getScoreRemark(data.score) : undefined;
 
@@ -44,14 +47,14 @@ export function AnalysePanel() {
           {activeTool.label} Score
         </p>
         <div className="mt-1 px-2 flex w-full items-center justify-between">
-          {isPending ? (
+          {isFetching ? (
             <Skeleton className="h-12 w-8 rounded-md" />
           ) : (
             <p className="text-5xl">
               {data ? <span className="font-semibold">{data.score}</span> : "-"}
             </p>
           )}
-          {isPending ? (
+          {isFetching ? (
             <Skeleton className="h-7 w-16 rounded-md" />
           ) : (
             <p
@@ -98,7 +101,7 @@ export function AnalysePanel() {
       </div>
       <div className="flex flex-col gap-[inherit] h-full overflow-y-auto">
         <p className="text-sm text-muted-foreground">Recommendations</p>
-        {isPending ? (
+        {isFetching ? (
           Array.from({ length: 4 }).map((_, i) => (
             // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
             <Skeleton key={i} className="h-[54px] w-full rounded-md" />
@@ -148,4 +151,6 @@ function getScoreRemark(score: number) {
   if (score > 4 && score <= 6) return Score.AVERAGE;
   if (score > 6 && score <= 8) return Score.GOOD;
   if (score > 8 && score <= 10) return Score.EXCELLENT;
+
+  return Score.UNKNOWN;
 }
