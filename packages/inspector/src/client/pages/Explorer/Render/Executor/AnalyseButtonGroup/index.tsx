@@ -1,15 +1,14 @@
-import { Button } from "../../../../../components/ui/button";
-import { Spinner } from "../../../../../components/ui/spinner";
-import { eventHandler } from "../../../../../lib/eventHandler";
-import { Sparkles } from "lucide-react";
-import { useMCPItem } from "../../../providers";
-import { AnalyseDialog } from "./AnalyseDialog";
-import { useAnalyse } from "./provider";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/client/components/ui/tooltip";
+import { Sparkles } from "lucide-react";
+import { Button } from "../../../../../components/ui/button";
+import { Spinner } from "../../../../../components/ui/spinner";
+import { eventHandler } from "../../../../../lib/eventHandler";
+import { AnalyseDialog } from "./AnalyseDialog";
+import { useAnalyse } from "./useAnalyse";
 
 export function AnalyseButtonGroup() {
   return (
@@ -21,37 +20,34 @@ export function AnalyseButtonGroup() {
 }
 
 function ActionButton() {
-  const { selectedItem } = useMCPItem();
-  const mutation = useAnalyse();
+  const { isFetching, refetch } = useAnalyse();
 
-  const handleAnalyse = eventHandler(() => mutation.mutateAsync(selectedItem!));
+  const handleAnalyse = eventHandler(() => refetch());
 
   return (
     <>
       <Button
         className="px-3 py-1.5 xl:flex hidden rounded-r-none"
         colorScheme="secondary"
-        disabled={mutation.isPending}
+        disabled={isFetching}
         onClick={handleAnalyse}
         onKeyDown={handleAnalyse}
       >
         <Sparkles className="size-4" />
-        {mutation.isPending ? "Analysing" : "Analyse"}
-        {mutation.isPending && <Spinner className="size-4 min-w-4 min-h-4" />}
+        {isFetching ? "Analysing" : "Analyse"}
+        {isFetching && <Spinner className="size-4 min-w-4 min-h-4" />}
       </Button>
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
             className="xl:hidden size-max has-[>svg]:px-2.5 py-2.5 rounded-r-none"
             colorScheme="secondary"
-            disabled={mutation.isPending}
+            disabled={isFetching}
             onClick={handleAnalyse}
             onKeyDown={handleAnalyse}
           >
             <Sparkles className="size-4" />
-            {mutation.isPending && (
-              <Spinner className="size-4 min-w-4 min-h-4" />
-            )}
+            {isFetching && <Spinner className="size-4 min-w-4 min-h-4" />}
           </Button>
         </TooltipTrigger>
         <TooltipContent>Analyse</TooltipContent>
