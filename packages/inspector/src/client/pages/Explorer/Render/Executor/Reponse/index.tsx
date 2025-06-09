@@ -19,7 +19,7 @@ import {
 import { eventHandler } from "../../../../../lib/eventHandler";
 import { numberFormatter } from "../../../../../lib/utils";
 import { useCustomForm } from "../provider";
-import { FormattedDataRender } from "./FormattedData";
+import { FormattedDataRender } from "./Render";
 
 export type ReponsePanel = {
   isExpanded: boolean;
@@ -66,7 +66,7 @@ export function ReponsePanel({ isExpanded, onExpandChange }: ReponsePanel) {
       ) : (
         <div className="overflow-y-auto flex-1 space-y-2">
           {formatted ? (
-            <FormattedDataRender content={data?.content} />
+            <FormattedDataRender result={data?.content} />
           ) : (
             <CodeHighlighter content={JSON.stringify(data?.content, null, 2)} />
           )}

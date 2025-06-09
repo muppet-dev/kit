@@ -1,25 +1,23 @@
 import { defaultMakdownComponents } from "@/client/components/MakdownComponents";
-import { CodeHighlighter } from "../../../../../components/Hightlighter";
+import { CodeHighlighter } from "../../../../../../components/Hightlighter";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import {
+  CallToolResult,
+  GetPromptResult,
+  ReadResourceResult,
+} from "@modelcontextprotocol/sdk/types.js";
 
 export type FormattedDataRender = {
-  content?:
-    | {
-        contents: { type: "text"; text: string }[];
-      }
-    | {
-        content: { type: "text"; text: string }[];
-      };
+  result?: CallToolResult | GetPromptResult | ReadResourceResult;
 };
 
 export function FormattedDataRender(props: FormattedDataRender) {
-  if (!props.content) return;
+  if (!props.result) return;
 
-  let content: { text: string }[] = [];
-
-  if ("contents" in props.content) content = props.content.contents;
-  else if ("content" in props.content) content = props.content.content;
+  // Result of tool calling
+  if ("content" in props.result) {
+  }
 
   return (
     <>
