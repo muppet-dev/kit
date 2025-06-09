@@ -39,7 +39,7 @@ export function Executor() {
   const { isModelsEnabled } = useConfig();
   const { activeTool } = useTool();
   const { selectedItem } = useMCPItem();
-  const [isExpand, setExpand] = useState(false);
+  const [isExpanded, setExpanded] = useState(false);
 
   const methods = useForm();
 
@@ -121,7 +121,7 @@ export function Executor() {
                 <div
                   className={cn(
                     "flex-1 flex overflow-y-auto",
-                    !isExpand && "min-h-1/2 h-full",
+                    !isExpanded && "min-h-1/2 h-full",
                   )}
                 >
                   <FormPanel />
@@ -131,13 +131,16 @@ export function Executor() {
                 <div
                   className={cn(
                     "flex-1 flex flex-col gap-1.5 overflow-y-auto",
-                    !isExpand && "min-h-1/2 h-full",
+                    !isExpanded && "min-h-1/2 h-full",
                   )}
                 >
                   <JSONPanel />
                 </div>
               )}
-              <ReponsePanel isExpanded={isExpand} onExpandChange={setExpand} />
+              <ReponsePanel
+                isExpanded={isExpanded}
+                onExpandChange={setExpanded}
+              />
             </div>
           )}
           <TabsContent
