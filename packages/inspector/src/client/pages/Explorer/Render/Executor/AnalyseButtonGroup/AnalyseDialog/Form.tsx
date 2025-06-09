@@ -1,14 +1,13 @@
-import { Button } from "../../../../../../components/ui/button";
-import { Label } from "../../../../../../components/ui/label";
-import { Textarea } from "../../../../../../components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
-import { useMCPItem } from "../../../../providers";
-import { useAnalyse } from "../provider";
-import { useConfig } from "../../../../../../providers";
 import { ModelField } from "../../../../../../components/ModelField";
+import { Button } from "../../../../../../components/ui/button";
+import { Label } from "../../../../../../components/ui/label";
 import { Spinner } from "../../../../../../components/ui/spinner";
+import { Textarea } from "../../../../../../components/ui/textarea";
+import { useConfig } from "../../../../../../providers";
+import { useAnalyse } from "../useAnalyse";
 
 const schema = z.object({
   context: z.string().optional(),
@@ -20,7 +19,6 @@ export type AnalyseForm = {
 };
 
 export function AnalyseForm(props: AnalyseForm) {
-  const { selectedItem } = useMCPItem();
   const { getDefaultModel } = useConfig();
   const model = getDefaultModel();
 
@@ -30,6 +28,7 @@ export function AnalyseForm(props: AnalyseForm) {
     formState: { errors, isSubmitting },
     control,
     reset,
+    watch,
   } = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -37,15 +36,13 @@ export function AnalyseForm(props: AnalyseForm) {
     },
   });
 
-  const mutation = useAnalyse();
+  const values = watch();
+  const { refetch } = useAnalyse(values);
 
   return (
     <form
-      onSubmit={handleSubmit(async (values) => {
-        await mutation.mutateAsync({
-          ...selectedItem!,
-          context: values.context,
-        });
+      onSubmit={handleSubmit(async () => {
+        await refetch();
 
         reset();
         props.onSubmit();
