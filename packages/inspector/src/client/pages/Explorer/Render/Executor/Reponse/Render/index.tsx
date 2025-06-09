@@ -1,9 +1,13 @@
 import {
+  type AudioContent,
   CallToolResultSchema,
   GetPromptResultSchema,
+  type ImageContent,
   ReadResourceResultSchema,
+  type ResourceContents,
+  type TextContent,
 } from "@modelcontextprotocol/sdk/types.js";
-import z from "zod";
+import type z from "zod";
 import { ImageRender } from "./Image";
 import { JsonRender } from "./Json";
 
@@ -27,13 +31,11 @@ export function FormattedDataRender(props: FormattedDataRender) {
     return toolsResult.data.content.map((item) => {
       switch (item.type) {
         case "image":
-          return <ImageRender {...item} />;
         case "text":
-          return <JsonRender {...item} />;
         case "audio":
-          return <>Audio</>;
+          return <RenderContent {...item} />;
         case "resource":
-          return <>Resource</>;
+          return <RenderResource {...item.resource} />;
       }
     });
   }
@@ -41,6 +43,57 @@ export function FormattedDataRender(props: FormattedDataRender) {
   const promptResult = GetPromptResultSchema.safeParse(props.result);
 
   if (promptResult.success) {
-    promptResult.data.messages[0].content.type;
+    return promptResult.data.messages.map((message, index) => {
+      const Component = () => {
+        switch (message.content.type) {
+          case "image":
+          case "text":
+          case "audio":
+            return <RenderContent {...message.content} />;
+          case "resource":
+            return <RenderResource {...message.content.resource} />;
+        }
+      };
+
+      return (
+        <div key={`message-${index}`} className="mb-4">
+          <div>{message.role}</div>
+          <div>
+            <Component />
+          </div>
+        </div>
+      );
+    });
+  }
+
+  const resourceResult = ReadResourceResultSchema.safeParse(props.result);
+
+  if (resourceResult.success) {
+    return resourceResult.data.contents.map((content) => {
+      return <RenderResource key={content.uri} {...content} />;
+    });
+  }
+}
+
+function RenderContent(props: ImageContent | TextContent | AudioContent) {
+  switch (props.type) {
+    case "image":
+      return <ImageRender {...props} />;
+    case "text":
+      return <JsonRender {...props} />;
+    case "audio":
+      return <>Audio</>;
+  }
+}
+
+function RenderResource(props: ResourceContents) {
+  if ("text" in props && typeof props.text === "string") {
+    return <JsonRender type="text" text={props.text} />;
+  }
+
+  if ("blob" in props && typeof props.blob === "string") {
+    return (
+      <ImageRender type="image" mimeType={props.mimeType!} data={props.blob} />
+    );
   }
 }
