@@ -1,11 +1,11 @@
-import { eventHandler } from "../../../lib/eventHandler";
-import { cn, SortingEnum } from "../../../lib/utils";
-import { useConfig } from "../../../providers";
-import type { ConnectionInfo } from "../../../providers/connection/manager";
-import { DocumentSubmitType, SUBMIT_BUTTON_KEY } from "../../../validations";
 import { Transport } from "@muppet-kit/shared";
 import { ListX, MoveDown, MoveUp, Trash } from "lucide-react";
 import { useState } from "react";
+import { eventHandler } from "../../../lib/eventHandler";
+import { cn, SortingEnum } from "../../../lib/utils";
+import { useConfig, usePreferences } from "../../../providers";
+import type { ConnectionInfo } from "../../../providers/connection/manager";
+import { DocumentSubmitType, SUBMIT_BUTTON_KEY } from "../../../validations";
 import { useConfigForm } from "../../ConfigForm/useConfigForm";
 import { Badge } from "../../ui/badge";
 import { Button } from "../../ui/button";
@@ -19,9 +19,8 @@ export function Configurations() {
     deleteConfiguration,
     configurations,
     localSavedConfigs,
-    configurationsSort,
-    toggleConfigurationsSort,
   } = useConfig();
+  const { toggleConfigurationsSort, configurationsSort } = usePreferences();
 
   const handleSelectItem = (value: ConnectionInfo) =>
     eventHandler(() => {

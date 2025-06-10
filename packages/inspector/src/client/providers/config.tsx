@@ -10,9 +10,10 @@ import {
 } from "react";
 import toast from "react-hot-toast";
 import type z from "zod";
+import { SortingEnum } from "../lib/utils";
 import type { configTransportSchema } from "../validations";
 import type { ConnectionInfo } from "./connection/manager";
-import { SortingEnum } from "../lib/utils";
+import { usePreferences } from "./preferences";
 
 export const CONFIG_STORAGE_KEY = "muppet-config";
 
@@ -44,9 +45,7 @@ function useConfigManager(props: ConfigProvider) {
   const [localSavedConfigs, setConfigurations] = useLocalStorage<
     ConnectionInfo[] | null
   >(CONFIG_STORAGE_KEY);
-  const [configurationsSort, setConfigurationsSort] = useState<SortingEnum>(
-    SortingEnum.ASCENDING
-  );
+  const { configurationsSort } = usePreferences();
 
   const { data: version } = useQuery({
     queryKey: ["version"],
@@ -198,14 +197,6 @@ function useConfigManager(props: ConfigProvider) {
 
   const clearAllConfigurations = () => setConfigurations(null);
 
-  const toggleConfigurationsSort = () => {
-    setConfigurationsSort((prev) => {
-      return prev === SortingEnum.ASCENDING
-        ? SortingEnum.DESCENDING
-        : SortingEnum.ASCENDING;
-    });
-  };
-
   const configurations = useMemo(() => {
     const items = [...getDeafultConfigurations(), ...(localSavedConfigs ?? [])];
 
@@ -239,8 +230,6 @@ function useConfigManager(props: ConfigProvider) {
     addConfigurations,
     deleteConfiguration,
     clearAllConfigurations,
-    toggleConfigurationsSort,
-    configurationsSort,
   };
 }
 
