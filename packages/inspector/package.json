@@ -48,8 +48,8 @@
     }
   },
   "dependencies": {
-    "@assistant-ui/react": "^0.10.5",
-    "@assistant-ui/react-ai-sdk": "^0.10.6",
+    "@assistant-ui/react": "^0.10.23",
+    "@assistant-ui/react-ai-sdk": "^0.10.13",
     "@assistant-ui/react-markdown": "^0.10.3",
     "@hono/standard-validator": "^0.1.2",
     "@hookform/error-message": "^2.0.1",
