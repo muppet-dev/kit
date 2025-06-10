@@ -3,7 +3,7 @@ import { usePreferences } from "@/client/providers";
 import { useMutation } from "@tanstack/react-query";
 import { Trash } from "lucide-react";
 import toast from "react-hot-toast";
-import { Button } from "../../../ui/button";
+import { Button } from "../../ui/button";
 
 export function DeleteThemeButton(props: { name: string }) {
   const { setColorTheme, setCurrentColorTheme, currentColorTheme } =

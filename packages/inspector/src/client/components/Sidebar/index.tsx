@@ -3,6 +3,7 @@ import {
   Construction,
   History,
   Logs,
+  Settings,
   Settings2,
   Shield,
   SquareTerminal,
@@ -26,10 +27,12 @@ import {
 } from "../ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { PingButton } from "./PingButton";
-import { PreferencesDialog } from "./PreferencesDialog";
 import { ServerInfo } from "./ServerInfo";
 import { SidebarItem } from "./SidebarItem";
 import { VersionBanner } from "./VersionBanner";
+import { useState } from "react";
+import { PreferencesDialog } from "../PreferencesDialog";
+import { eventHandler } from "@/client/lib/eventHandler";
 
 const SIDEBAR_ITEMS = {
   panels: [
@@ -107,12 +110,42 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarFooter className={cn(open && "flex-row items-center")}>
         <GithubLinkButton />
         <DocumentationLinkButton />
-        <PreferencesDialog />
+        <PreferencesDialogTrigger />
         {open && <div className="flex-1" />}
         <SidebarTrigger />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
+  );
+}
+
+function PreferencesDialogTrigger() {
+  const [isOpenPreferenceDialog, setOpenPreferenceDialog] = useState(false);
+
+  const handleOpenPreferenceDialog = eventHandler(() =>
+    setOpenPreferenceDialog(true)
+  );
+
+  return (
+    <>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="ghost"
+            className="size-8"
+            onClick={handleOpenPreferenceDialog}
+            onKeyDown={handleOpenPreferenceDialog}
+          >
+            <Settings />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>Preferences</TooltipContent>
+      </Tooltip>
+      <PreferencesDialog
+        open={isOpenPreferenceDialog}
+        onOpenChange={setOpenPreferenceDialog}
+      />
+    </>
   );
 }
 

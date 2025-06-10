@@ -1,5 +1,5 @@
 import { usePreferences } from "@/client/providers";
-import { Label } from "../../ui/label";
+import { Label } from "../ui/label";
 import toast, { type ToastPosition } from "react-hot-toast";
 import { ItemCard } from "./ItemCard";
 import { eventHandler } from "@/client/lib/eventHandler";
