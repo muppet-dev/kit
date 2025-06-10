@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Button } from "../../../../components/ui/button";
 import { Spinner } from "../../../../components/ui/spinner";
 import { SendHorizonal } from "lucide-react";
@@ -7,6 +8,22 @@ export function SendButton() {
   const {
     formState: { isSubmitting },
   } = useFormContext();
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
+        event.preventDefault();
+        const form = document.getElementById(
+          "request-form"
+        ) as HTMLFormElement | null;
+
+        if (form) form.requestSubmit();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   return (
     <>
