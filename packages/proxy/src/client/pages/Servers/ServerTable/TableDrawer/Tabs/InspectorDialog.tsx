@@ -23,7 +23,7 @@ export type InspectorDialog = {
   data?: Record<string, any>;
 };
 
-const BASE_URL = "hthttp://localhost:5173";
+const BASE_URL = "http://localhost:3553";
 
 export function InspectorDialog({ data }: InspectorDialog) {
   const url = new URL(BASE_URL);
