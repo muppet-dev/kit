@@ -61,9 +61,13 @@ function ActionButton() {
         onClick={handleGenerate}
         onKeyDown={handleGenerate}
       >
-        <Sparkles className="size-4" />
+        {mutation.isPending ? (
+          <Spinner className="size-4 min-w-4 min-h-4" />
+        ) : (
+          <Sparkles className="size-4" />
+        )}
+
         {mutation.isPending ? "Generating" : "Generate"}
-        {mutation.isPending && <Spinner className="size-4 min-w-4 min-h-4" />}
       </Button>
       <Tooltip>
         <TooltipTrigger asChild>
@@ -74,9 +78,10 @@ function ActionButton() {
             onClick={handleGenerate}
             onKeyDown={handleGenerate}
           >
-            <Sparkles className="size-4" />
-            {mutation.isPending && (
+            {mutation.isPending ? (
               <Spinner className="size-4 min-w-4 min-h-4" />
+            ) : (
+              <Sparkles className="size-4" />
             )}
           </Button>
         </TooltipTrigger>

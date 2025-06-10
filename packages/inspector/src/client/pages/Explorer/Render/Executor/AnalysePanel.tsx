@@ -22,7 +22,7 @@ const scoreTextColor = {
   [Score.AVERAGE]: "text-warning",
   [Score.GOOD]: "text-success/80 dark:text-success",
   [Score.EXCELLENT]: "text-success dark:text-success/80",
-  [Score.UNKNOWN]: "text-secondary dark:text-secondary/80",
+  [Score.UNKNOWN]: "text-muted-foreground",
 };
 
 const scoreBgColor = {
@@ -31,7 +31,7 @@ const scoreBgColor = {
   [Score.AVERAGE]: "bg-warning",
   [Score.GOOD]: "bg-success/80 dark:bg-success",
   [Score.EXCELLENT]: "bg-success dark:bg-success/80",
-  [Score.UNKNOWN]: "bg-secondary dark:text-secondary/80",
+  [Score.UNKNOWN]: "bg-muted-foreground",
 };
 
 export function AnalysePanel() {
@@ -68,7 +68,7 @@ export function AnalysePanel() {
             </p>
           )}
         </div>
-        <div className="grid grid-cols-5 w-full">
+        <div className="grid grid-cols-6 w-full">
           {Object.entries(Score).map(([key, value]) => (
             <div key={key} className="group w-full h-8 grid items-end">
               <p

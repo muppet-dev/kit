@@ -33,9 +33,12 @@ export function SendButton() {
         disabled={isSubmitting}
         className="px-3 py-1.5 xl:flex hidden"
       >
-        {isSubmitting && <Spinner className="size-4 min-w-4 min-h-4" />}
         {isSubmitting ? "Sending" : "Send"}
-        <SendHorizonal />
+        {isSubmitting ? (
+          <Spinner className="size-4 min-w-4 min-h-4" />
+        ) : (
+          <SendHorizonal />
+        )}
       </Button>
       <Button
         form="request-form"
@@ -43,8 +46,11 @@ export function SendButton() {
         disabled={isSubmitting}
         className="xl:hidden size-max has-[>svg]:px-2.5 py-2.5"
       >
-        {isSubmitting && <Spinner className="size-4 min-w-4 min-h-4" />}
-        <SendHorizonal />
+        {isSubmitting ? (
+          <Spinner className="size-4 min-w-4 min-h-4" />
+        ) : (
+          <SendHorizonal />
+        )}
       </Button>
     </>
   );
