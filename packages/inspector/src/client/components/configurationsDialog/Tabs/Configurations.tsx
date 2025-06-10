@@ -1,15 +1,16 @@
 import { eventHandler } from "../../../lib/eventHandler";
-import { cn } from "../../../lib/utils";
+import { cn, SortingEnum } from "../../../lib/utils";
 import { useConfig } from "../../../providers";
 import type { ConnectionInfo } from "../../../providers/connection/manager";
 import { DocumentSubmitType, SUBMIT_BUTTON_KEY } from "../../../validations";
 import { Transport } from "@muppet-kit/shared";
-import { Trash } from "lucide-react";
+import { ListX, MoveDown, MoveUp, Trash } from "lucide-react";
 import { useState } from "react";
 import { useConfigForm } from "../../ConfigForm/useConfigForm";
 import { Badge } from "../../ui/badge";
 import { Button } from "../../ui/button";
 import { Spinner } from "../../ui/spinner";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/tooltip";
 
 export function Configurations() {
   const [selected, setSelected] = useState<ConnectionInfo>();
@@ -18,6 +19,8 @@ export function Configurations() {
     deleteConfiguration,
     configurations,
     localSavedConfigs,
+    configurationsSort,
+    toggleConfigurationsSort,
   } = useConfig();
 
   const handleSelectItem = (value: ConnectionInfo) =>
@@ -58,6 +61,10 @@ export function Configurations() {
     });
 
   const handleAllDelete = eventHandler(() => clearAllConfigurations());
+
+  const handleToggleConfigurations = eventHandler(() =>
+    toggleConfigurationsSort()
+  );
 
   return (
     <div className="flex flex-col gap-6 justify-between h-full w-full overflow-hidden">
@@ -127,19 +134,44 @@ export function Configurations() {
           No saved connections found.
         </div>
       )}
-      <div className="flex items-center justify-between">
-        {localSavedConfigs != null && localSavedConfigs.length !== 0 ? (
-          <Button
-            variant="ghost"
-            title="Clear all configurations"
-            onClick={handleAllDelete}
-            onKeyDown={handleAllDelete}
-          >
-            Clear Local Configs
-          </Button>
-        ) : (
-          <span />
+      <div className="flex items-center gap-2">
+        {localSavedConfigs != null && localSavedConfigs.length !== 0 && (
+          <>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="size-max has-[>svg]:px-1.5 py-1.5"
+                  colorScheme="destructive"
+                  onClick={handleAllDelete}
+                  onKeyDown={handleAllDelete}
+                >
+                  <ListX />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Clear Local Configs</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  colorScheme="secondary"
+                  className="size-max has-[>svg]:px-1.5 py-1.5"
+                  onClick={handleToggleConfigurations}
+                  onKeyDown={handleToggleConfigurations}
+                >
+                  {configurationsSort === SortingEnum.ASCENDING && (
+                    <MoveUp className="size-3.5" />
+                  )}
+                  {configurationsSort === SortingEnum.DESCENDING && (
+                    <MoveDown className="size-3.5" />
+                  )}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Toggle sort order</TooltipContent>
+            </Tooltip>
+          </>
         )}
+        <div className="flex-1" />
         <Button
           disabled={!selected || mutation.isPending}
           onClick={handleConnect}

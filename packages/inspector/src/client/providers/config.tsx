@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 import type z from "zod";
 import type { configTransportSchema } from "../validations";
 import type { ConnectionInfo } from "./connection/manager";
+import { SortingEnum } from "../lib/utils";
 
 export const CONFIG_STORAGE_KEY = "muppet-config";
 
@@ -43,6 +44,9 @@ function useConfigManager(props: ConfigProvider) {
   const [localSavedConfigs, setConfigurations] = useLocalStorage<
     ConnectionInfo[] | null
   >(CONFIG_STORAGE_KEY);
+  const [configurationsSort, setConfigurationsSort] = useState<SortingEnum>(
+    SortingEnum.ASCENDING
+  );
 
   const { data: version } = useQuery({
     queryKey: ["version"],
@@ -156,7 +160,7 @@ function useConfigManager(props: ConfigProvider) {
     return models.length > 0;
   }, [getAvailableModels]);
 
-  function getDeafultConfigurations() {
+  const getDeafultConfigurations = useCallback(() => {
     if (!config?.configurations) return [];
 
     if (Array.isArray(config.configurations)) {
@@ -164,7 +168,7 @@ function useConfigManager(props: ConfigProvider) {
     }
 
     return [config.configurations];
-  }
+  }, [config?.configurations]);
 
   const deleteConfiguration = (name?: string) => {
     if (name) {
@@ -184,7 +188,7 @@ function useConfigManager(props: ConfigProvider) {
         if (index !== -1) {
           tmp[index] = configuration;
         } else {
-          tmp.push(configuration);
+          tmp.unshift(configuration);
         }
       }
 
@@ -193,6 +197,27 @@ function useConfigManager(props: ConfigProvider) {
   };
 
   const clearAllConfigurations = () => setConfigurations(null);
+
+  const toggleConfigurationsSort = () => {
+    setConfigurationsSort((prev) => {
+      return prev === SortingEnum.ASCENDING
+        ? SortingEnum.DESCENDING
+        : SortingEnum.ASCENDING;
+    });
+  };
+
+  const configurations = useMemo(() => {
+    const items = [...getDeafultConfigurations(), ...(localSavedConfigs ?? [])];
+
+    return items.sort((a, b) => {
+      const nameA = a.name ?? "";
+      const nameB = b.name ?? "";
+
+      return configurationsSort === SortingEnum.ASCENDING
+        ? nameA.localeCompare(nameB)
+        : nameB.localeCompare(nameA);
+    });
+  }, [localSavedConfigs, configurationsSort, getDeafultConfigurations]);
 
   return {
     version,
@@ -209,14 +234,13 @@ function useConfigManager(props: ConfigProvider) {
       setConnectionInfo(info);
     },
     proxyAddress,
-    configurations: [
-      ...getDeafultConfigurations(),
-      ...(localSavedConfigs ?? []),
-    ],
+    configurations,
     localSavedConfigs,
     addConfigurations,
     deleteConfiguration,
     clearAllConfigurations,
+    toggleConfigurationsSort,
+    configurationsSort,
   };
 }
 
