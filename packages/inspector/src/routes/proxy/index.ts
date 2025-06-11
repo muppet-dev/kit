@@ -7,13 +7,15 @@ import stdioRouter from "./stdio";
 import streamingRouter from "./streaming";
 import type { ProxyEnv } from "./types";
 
+// Web app transports by web app session ID
 const webAppTransports: Map<string, Transport> = new Map();
-let backingServerTransport: Transport | undefined;
+// Server transport by web app session ID
+const serverTransports: Map<string, Transport> = new Map();
 const broadcast = new Broadcast();
 
 const router = new Hono<ProxyEnv>().use(async (c, next) => {
-  c.set("transports", webAppTransports);
-  c.set("backing", backingServerTransport);
+  c.set("webAppTransports", webAppTransports);
+  c.set("serverTransports", serverTransports);
   c.set("broadcast", broadcast);
 
   await next();

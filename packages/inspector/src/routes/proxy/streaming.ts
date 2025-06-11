@@ -12,6 +12,8 @@ import {
   transportHeaderSchema,
   transportSchema,
 } from "./utils";
+import type { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
+import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 
 const router = new Hono<ProxyEnv>()
   .use(async (c, next) => {
@@ -31,7 +33,7 @@ const router = new Hono<ProxyEnv>()
       console.log(`Received GET message for sessionId ${sessionId}`);
 
       const transport = c
-        .get("transports")
+        .get("webAppTransports")
         .get(sessionId) as StreamableHTTPServerTransport;
       if (!transport) {
         return c.text("Session not found", 404);
@@ -53,9 +55,10 @@ const router = new Hono<ProxyEnv>()
 
       if (!sessionId) {
         console.log("New streamable-http connection");
+
+        let serverTransport: Transport;
         try {
-          await c.get("backing")?.close();
-          c.set("backing", await createTransport(c));
+          serverTransport = await createTransport(c);
         } catch (error) {
           if (error instanceof SseError && error.code === 401) {
             console.error(
@@ -73,7 +76,8 @@ const router = new Hono<ProxyEnv>()
         const webAppTransport = new StreamableHTTPServerTransport({
           sessionIdGenerator: nanoid,
           onsessioninitialized: (sessionId) => {
-            c.get("transports").set(sessionId, webAppTransport);
+            c.get("webAppTransports").set(sessionId, webAppTransport);
+            c.get("serverTransports").set(sessionId, serverTransport);
             console.log(`Created streamable web app transport ${sessionId}`);
           },
         });
@@ -82,7 +86,7 @@ const router = new Hono<ProxyEnv>()
 
         mcpProxy({
           transportToClient: webAppTransport,
-          transportToServer: c.get("backing")!,
+          transportToServer: serverTransport,
           ctx: c,
         });
 
@@ -93,7 +97,7 @@ const router = new Hono<ProxyEnv>()
       }
 
       const transport = c
-        .get("transports")
+        .get("webAppTransports")
         .get(sessionId) as StreamableHTTPServerTransport;
 
       if (!transport) {
@@ -105,6 +109,28 @@ const router = new Hono<ProxyEnv>()
         return toFetchResponse(res);
       }
     }
-  );
+  ).delete("/", async (c) => {
+    const sessionId = c.req.header("mcp-session-id");
+    console.log(`Received DELETE message for sessionId ${sessionId}`);
+
+    if (!sessionId) {
+      return c.text("Session ID is required", 400);
+    }
+
+    const transport = c
+      .get("webAppTransports")
+      .get(sessionId) as StreamableHTTPClientTransport
+
+    if (!transport) {
+      return c.text(`Transport not found for sessionId ${sessionId}`, 404);
+    }
+
+    await transport.terminateSession();
+    c.get("webAppTransports").delete(sessionId);
+    c.get("serverTransports").delete(sessionId);
+    console.log(`Transport for sessionId ${sessionId} terminated and removed`);
+
+    return c.text("Session terminated successfully", 200);
+  })
 
 export default router;
