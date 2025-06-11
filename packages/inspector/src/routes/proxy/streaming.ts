@@ -118,16 +118,15 @@ const router = new Hono<ProxyEnv>()
     }
 
     const transport = c
-      .get("webAppTransports")
+      .get("serverTransports")
       .get(sessionId) as StreamableHTTPClientTransport
 
     if (!transport) {
       return c.text(`Transport not found for sessionId ${sessionId}`, 404);
     }
 
-    if ("terminateSession" in transport) {
-      await transport.terminateSession();
-    }
+    await transport.terminateSession();
+
     c.get("webAppTransports").delete(sessionId);
     c.get("serverTransports").delete(sessionId);
     console.log(`Transport for sessionId ${sessionId} terminated and removed`);
