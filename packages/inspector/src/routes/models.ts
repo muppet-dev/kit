@@ -140,7 +140,7 @@ router.post(
       }
 
       tools = {
-        mcp_list_tools: tool({
+        list_tools: tool({
           description: "List all available tools from an MCP server, it will return the name, description, and parameters of each tool.",
           parameters: z.object({}),
           execute: async () => {
@@ -161,7 +161,7 @@ router.post(
             }
           }
         }),
-        mcp_call_tool: tool({
+        call_tool: tool({
           description: "Execute a specific tool on an MCP server. It will return the result of the tool execution.",
           parameters: z.object({
             name: z.string().describe("Name of the tool to execute"),
@@ -186,7 +186,7 @@ router.post(
             }
           }
         }),
-        mcp_list_prompts: tool({
+        list_prompts: tool({
           description: "List all available prompts from an MCP server",
           parameters: z.object({}),
           execute: async () => {
@@ -207,7 +207,7 @@ router.post(
             }
           }
         }),
-        mcp_get_prompt: tool({
+        get_prompt: tool({
           description: "Get a specific prompt from an MCP server",
           parameters: z.object({
             name: z.string().describe("Name of the prompt to retrieve"),
@@ -231,7 +231,7 @@ router.post(
             }
           }
         }),
-        mcp_list_resources: tool({
+        list_resources: tool({
           description: "List all available resources from an MCP server",
           parameters: z.object({}),
           execute: async () => {
@@ -252,7 +252,28 @@ router.post(
             }
           }
         }),
-        mcp_read_resource: tool({
+        list_resource_templates: tool({
+          description: "List all available resource templates from the MCP server",
+          parameters: z.object({}),
+          execute: async () => {
+            try {
+              const result = await client.listResourceTemplates();
+              return {
+                success: true,
+                resources: result.resourceTemplates,
+                count: result.resourceTemplates.length
+              };
+            } catch (error) {
+              return {
+                success: false,
+                error: error instanceof Error ? error.message : "Unknown error occurred",
+                resources: [],
+                count: 0
+              };
+            }
+          }
+        }),
+        read_resource: tool({
           description: "Read a specific resource from an MCP server",
           parameters: z.object({
             uri: z.string().describe("URI of the resource to read")
@@ -273,25 +294,6 @@ router.post(
             }
           }
         }),
-        mcp_ping: tool({
-          description: "Check if an MCP server is responsive",
-          parameters: z.object({}),
-          execute: async () => {
-            try {
-              await client.ping();
-              return {
-                success: true,
-              };
-            } catch (error) {
-              return {
-                success: false,
-                error: error instanceof Error ? error.message : "Unknown error occurred",
-                alive: false,
-                connected: false
-              };
-            }
-          }
-        })
       }
 
     } catch (error) {
