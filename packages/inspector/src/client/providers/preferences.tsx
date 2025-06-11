@@ -109,14 +109,19 @@ function usePreferencesManager() {
     "muppet-color-theme",
     {
       default: DEFAULT_THEME,
-    }
+    },
   );
 
   const [resolvedTheme, setResolvedTheme] = useState<Theme.LIGHT | Theme.DARK>(
-    Theme.LIGHT
+    Theme.LIGHT,
   );
 
-  const { theme, toast, color_theme, saved_config_sort } = preferences;
+  const {
+    theme,
+    toast,
+    color_theme,
+    saved_config_sort = SortingEnum.DESCENDING,
+  } = preferences;
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-color-scheme: dark)");

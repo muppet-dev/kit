@@ -75,7 +75,6 @@ export function ModelHeader(props: { chatId: string }) {
         className="has-[>svg]:px-1.5 py-1.5 h-max"
         onClick={handleAddingChat}
         onKeyDown={handleAddingChat}
-        disabled
       >
         <Plus className="size-[18px] stroke-secondary-foreground/80" />
       </Button>
