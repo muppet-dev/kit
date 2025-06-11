@@ -125,7 +125,9 @@ const router = new Hono<ProxyEnv>()
       return c.text(`Transport not found for sessionId ${sessionId}`, 404);
     }
 
-    await transport.terminateSession();
+    if ("terminateSession" in transport) {
+      await transport.terminateSession();
+    }
     c.get("webAppTransports").delete(sessionId);
     c.get("serverTransports").delete(sessionId);
     console.log(`Transport for sessionId ${sessionId} terminated and removed`);

@@ -1,9 +1,13 @@
 import type { EnvWithDefaultModel } from "@/types/index.js";
 import { customThemeSchema } from "@/validations";
 import { sValidator } from "@hono/standard-validator";
-import { transportSchema } from "@muppet-kit/shared";
-import { generateObject, streamText, experimental_createMCPClient } from "ai";
-import { Experimental_StdioMCPTransport } from "ai/mcp-stdio";
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js";
+import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
+import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
+import { Transport as TransportEnum, transportSchema } from "@muppet-kit/shared";
+import { generateObject, streamText, tool } from "ai";
 import { Hono } from "hono";
 import { createFactory } from "hono/factory";
 import { stream } from "hono/streaming";
@@ -48,6 +52,8 @@ const handlers = factory.createHandlers(
   },
 );
 
+let client: Client;
+
 router.post(
   "/chat",
   ...handlers,
@@ -59,26 +65,235 @@ router.post(
     }),
   ),
   async (c) => {
-    const transport = c.req.valid("query");
+    const queryPayload = c.req.valid("query");
     const { messages } = c.req.valid("json");
 
     let tools = {};
 
     try {
-      let _transport: any = transport;
-      if (_transport.type === "stdio") {
-        _transport = new Experimental_StdioMCPTransport({
-          command: _transport.command,
-          args: _transport.args,
-          env: _transport.env,
-        });
+      if (!client) {
+        client = new Client(
+          {
+            name: "muppet-inspector",
+            version: "0.1.0",
+          },
+          {
+            capabilities: {
+              sampling: {},
+              roots: {
+                listChanged: true,
+              },
+            },
+          },
+        );
+
+        let transport: Transport; if (queryPayload.type === TransportEnum.STDIO) {
+          transport = new StdioClientTransport({
+            command: queryPayload.command,
+            args: queryPayload.args ? [queryPayload.args] : undefined,
+            env: queryPayload.env
+              ? queryPayload.env.reduce<Record<string, string>>((acc, { key, value }) => {
+                acc[key] = value;
+                return acc;
+              }
+                , {})
+              : undefined,
+          })
+        } else {
+
+          let headers: HeadersInit = {};
+          if (queryPayload.headerName && queryPayload.bearerToken) {
+            headers = { [queryPayload.headerName]: queryPayload.bearerToken };
+          } else if (queryPayload.bearerToken) {
+            headers = {
+              Authorization: queryPayload.bearerToken,
+            };
+          }
+
+          if (queryPayload.type === TransportEnum.SSE) {
+            transport = new SSEClientTransport(new URL(queryPayload.url), {
+              eventSourceInit: {
+                fetch: (
+                  url: string | URL | globalThis.Request,
+                  init: RequestInit | undefined,
+                ) => fetch(url, { ...init, headers }),
+              },
+              requestInit: {
+                headers,
+              }
+            });
+          } else if (queryPayload.type === TransportEnum.HTTP) {
+            transport = new StreamableHTTPClientTransport(new URL(queryPayload.url), {
+              sessionId: undefined,
+              requestInit: {
+                headers,
+              }
+            })
+          } else {
+            throw new Error(
+              `Unsupported transport type: ${queryPayload.type}`,
+            );
+          }
+        }
+
+        await client.connect(transport);
       }
 
-      const mcpClient = await experimental_createMCPClient({
-        transport: _transport,
-      });
+      tools = {
+        mcp_list_tools: tool({
+          description: "List all available tools from an MCP server, it will return the name, description, and parameters of each tool.",
+          parameters: z.object({}),
+          execute: async () => {
+            try {
+              const result = await client.listTools();
+              return {
+                success: true,
+                tools: result.tools,
+                count: result.tools.length
+              };
+            } catch (error) {
+              return {
+                success: false,
+                error: error instanceof Error ? error.message : "Unknown error occurred",
+                tools: [],
+                count: 0
+              };
+            }
+          }
+        }),
+        mcp_call_tool: tool({
+          description: "Execute a specific tool on an MCP server. It will return the result of the tool execution.",
+          parameters: z.object({
+            name: z.string().describe("Name of the tool to execute"),
+            arguments: z.record(z.string(), z.any()).optional().describe("Parameters to pass to the tool"),
+          }),
+          execute: async (params) => {
+            try {
+              console.log(params)
+              const result = await client.callTool(params);
+              return {
+                success: true,
+                result: result.content,
+                isError: result.isError || false
+              };
+            } catch (error) {
+              return {
+                success: false,
+                error: error instanceof Error ? error.message : "Unknown error occurred",
+                result: null,
+                isError: true
+              };
+            }
+          }
+        }),
+        mcp_list_prompts: tool({
+          description: "List all available prompts from an MCP server",
+          parameters: z.object({}),
+          execute: async () => {
+            try {
+              const result = await client.listPrompts();
+              return {
+                success: true,
+                prompts: result.prompts,
+                count: result.prompts.length
+              };
+            } catch (error) {
+              return {
+                success: false,
+                error: error instanceof Error ? error.message : "Unknown error occurred",
+                prompts: [],
+                count: 0
+              };
+            }
+          }
+        }),
+        mcp_get_prompt: tool({
+          description: "Get a specific prompt from an MCP server",
+          parameters: z.object({
+            name: z.string().describe("Name of the prompt to retrieve"),
+            arguments: z.record(z.any()).optional().describe("Arguments to pass to the prompt")
+          }),
+          execute: async (params) => {
+            try {
+              const result = await client.getPrompt(params);
+              return {
+                success: true,
+                description: result.description,
+                messages: result.messages
+              };
+            } catch (error) {
+              return {
+                success: false,
+                error: error instanceof Error ? error.message : "Unknown error occurred",
+                description: null,
+                messages: []
+              };
+            }
+          }
+        }),
+        mcp_list_resources: tool({
+          description: "List all available resources from an MCP server",
+          parameters: z.object({}),
+          execute: async () => {
+            try {
+              const result = await client.listResources();
+              return {
+                success: true,
+                resources: result.resources,
+                count: result.resources.length
+              };
+            } catch (error) {
+              return {
+                success: false,
+                error: error instanceof Error ? error.message : "Unknown error occurred",
+                resources: [],
+                count: 0
+              };
+            }
+          }
+        }),
+        mcp_read_resource: tool({
+          description: "Read a specific resource from an MCP server",
+          parameters: z.object({
+            uri: z.string().describe("URI of the resource to read")
+          }),
+          execute: async (params) => {
+            try {
+              const result = await client.readResource(params);
+              return {
+                success: true,
+                contents: result.contents
+              };
+            } catch (error) {
+              return {
+                success: false,
+                error: error instanceof Error ? error.message : "Unknown error occurred",
+                contents: []
+              };
+            }
+          }
+        }),
+        mcp_ping: tool({
+          description: "Check if an MCP server is responsive",
+          parameters: z.object({}),
+          execute: async () => {
+            try {
+              await client.ping();
+              return {
+                success: true,
+              };
+            } catch (error) {
+              return {
+                success: false,
+                error: error instanceof Error ? error.message : "Unknown error occurred",
+                alive: false,
+                connected: false
+              };
+            }
+          }
+        })
+      }
 
-      tools = await mcpClient.tools();
     } catch (error) {
       console.log("Unable to create MCP client transport", error);
     }
@@ -110,11 +325,10 @@ router.post(
   async (c) => {
     const { name, description, schema, context } = c.req.valid("json");
 
-    let prompt = `Generate sample data for the tool "${name}"${
-      description ? ` with the description "${description}"` : ""
-    }. The input schema is ${JSON.stringify(
-      schema,
-    )}. The sample data should be a JSON object that matches the input schema. This is a MCP (Model Context Protocol) tool.`;
+    let prompt = `Generate sample data for the tool "${name}"${description ? ` with the description "${description}"` : ""
+      }. The input schema is ${JSON.stringify(
+        schema,
+      )}. The sample data should be a JSON object that matches the input schema. This is a MCP (Model Context Protocol) tool.`;
 
     if (context) {
       prompt += ` The context is "${context}". The sample data should be relevant to the context.`;
@@ -149,11 +363,10 @@ router.post(
   async (c) => {
     const { name, description, schema, context } = c.req.valid("json");
 
-    let prompt = `Generate a score and recommendations for the MCP (Model Context Protocol) tool "${name}"${
-      description ? ` with the description "${description}"` : ""
-    }. The input schema is ${JSON.stringify(
-      schema,
-    )}. The score should be between 0 and 10, with 10 being the best. The recommendations should include a category, description, and severity (low, medium, high). The output should be a JSON object that includes the score and an array of recommendations. The recommendations should be actionable and specific to the tool's description and schema.`;
+    let prompt = `Generate a score and recommendations for the MCP (Model Context Protocol) tool "${name}"${description ? ` with the description "${description}"` : ""
+      }. The input schema is ${JSON.stringify(
+        schema,
+      )}. The score should be between 0 and 10, with 10 being the best. The recommendations should include a category, description, and severity (low, medium, high). The output should be a JSON object that includes the score and an array of recommendations. The recommendations should be actionable and specific to the tool's description and schema.`;
 
     if (context) {
       prompt += ` The context is "${context}". The sample data should be relevant to the context.`;

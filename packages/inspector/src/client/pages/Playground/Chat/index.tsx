@@ -1,5 +1,4 @@
 import { useConfig } from "../../../providers";
-import type { ConnectionInfo } from "../../../providers/connection/manager";
 import { AssistantRuntimeProvider } from "@assistant-ui/react";
 import { useChatRuntime } from "@assistant-ui/react-ai-sdk";
 import { useChats } from "../providers";
@@ -11,7 +10,7 @@ export type Chat = {
 };
 
 export function Chat(props: Chat) {
-  const { connectionInfo, proxyAddress } = useConfig();
+  const { connectionInfo, connectionLink, proxyAddress } = useConfig();
   const { getChat } = useChats();
 
   const chat = getChat(props.chatId);
@@ -19,7 +18,17 @@ export function Chat(props: Chat) {
   const runtime = useChatRuntime({
     api: `${proxyAddress}/api/chat${
       chat?.model
-        ? `?modelId=${chat.model}&${connectionInfoSerializer(connectionInfo)}`
+        ? `?modelId=${chat.model}&${connectionInfoSerializer({
+            ...connectionInfo,
+            ...Object.entries(connectionLink?.headers ?? {}).reduce<{
+              headerName?: string;
+              bearerToken?: string;
+            }>((prev, [key, value]) => {
+              prev.headerName = key;
+              prev.bearerToken = value;
+              return prev;
+            }, {}),
+          })}`
         : ""
     }`,
   });
@@ -38,11 +47,11 @@ export function Chat(props: Chat) {
   );
 }
 
-function connectionInfoSerializer(connectionInfo?: ConnectionInfo): string {
+function connectionInfoSerializer(items?: Record<string, unknown>): string {
   const params = new URLSearchParams();
 
-  if (connectionInfo)
-    for (const [key, value] of Object.entries(connectionInfo)) {
+  if (items)
+    for (const [key, value] of Object.entries(items)) {
       if (key === "env") {
         params.set(key, JSON.stringify(value));
       } else {
