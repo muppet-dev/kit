@@ -6,6 +6,8 @@ import { ObjectField } from "./Object";
 import { TextareaField } from "./Textarea";
 import { FieldType } from "./constants";
 
+export { FieldWrapper, type FieldWrapperProps } from "./FieldWrapper";
+
 export const quackFields: Record<FieldType, () => React.JSX.Element> = {
   [FieldType.ARRAY]: ArrayField,
   [FieldType.BOOLEAN]: CheckboxField,

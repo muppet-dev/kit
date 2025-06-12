@@ -24,6 +24,7 @@ const HISTORY_METHODS = [
   "resources/templates/list",
   "completion/complete",
   "notifications/roots/list_changed",
+  "logging/setLevel",
 ];
 
 export const HistoryProvider = (props: PropsWithChildren) => {

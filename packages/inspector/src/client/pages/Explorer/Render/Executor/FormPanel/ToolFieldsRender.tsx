@@ -1,11 +1,10 @@
-import { DuckField } from "../../../../../../components/DuckField";
-import { Blueprint, DuckForm } from "../../../../../../providers";
+import { DuckField } from "../../../../../components/DuckField";
+import { Blueprint, DuckForm } from "../../../../../providers";
 import type { JSONSchema7 } from "json-schema";
 import { useEffect, useMemo } from "react";
 import { useFormContext } from "react-hook-form";
-import type { ToolItemType } from "../../../../types";
-import { quackFields } from "./fields";
-import { FieldWrapper } from "./fields/FieldWrapper";
+import type { ToolItemType } from "../../../types";
+import { FieldWrapper, quackFields } from "@/client/components/fields";
 
 export function ToolFieldsRender(props: ToolItemType) {
   const { reset } = useFormContext();
