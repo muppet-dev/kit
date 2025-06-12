@@ -5,7 +5,7 @@ import {
   MoveUp,
   Settings,
 } from "lucide-react";
-import { BaseSyntheticEvent, useState } from "react";
+import { type BaseSyntheticEvent, useState } from "react";
 import { SortingEnum } from "../../../../lib/utils";
 import { useConfig, usePreferences } from "../../../../providers";
 import { PreferencesDialog } from "../../../PreferencesDialog";
