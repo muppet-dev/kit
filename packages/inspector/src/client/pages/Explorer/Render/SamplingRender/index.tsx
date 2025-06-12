@@ -14,13 +14,13 @@ export function SamplingRender() {
         <h2 className="text-2xl font-bold">Sampling</h2>
       </div>
       <div className="flex-1 flex flex-col gap-4 h-full overflow-y-auto">
-        <div className="p-3 border rounded-md">
+        <div className="p-2 border rounded-md text-muted-foreground">
           When the server requests LLM sampling, requests will appear here for
           approval.
         </div>
         <div className="flex-1 flex flex-col gap-4 h-full pb-4 overflow-y-auto">
           <h3 className="text-lg font-semibold">Recent Requests</h3>
-          {/* {pendingSampleRequests.length === 0 ? (
+          {pendingSampleRequests.length === 0 ? (
             <div className="text-muted-foreground text-sm select-none h-full flex items-center justify-center">
               No pending requests
             </div>
@@ -30,18 +30,7 @@ export function SamplingRender() {
                 <SamplingRequest key={request.id} request={request} />
               ))}
             </div>
-          )} */}
-          <div className="size-full overflow-y-auto space-y-4">
-            <SamplingRequest
-              request={{
-                id: 23,
-                request: {
-                  method: "sampling/createMessage",
-                  params: { maxTokens: 34, messages: [] },
-                },
-              }}
-            />
-          </div>
+          )}
         </div>
       </div>
     </div>
