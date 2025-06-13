@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FormattedResponseDialog } from "@/client/components/FormattedResponseDialog";
 import { EmptyResultSchema } from "@modelcontextprotocol/sdk/types.js";
 import {
@@ -8,7 +7,7 @@ import {
   RefreshCcw,
   X,
 } from "lucide-react";
-import { type BaseSyntheticEvent, useState } from "react";
+import { type PropsWithChildren, useState } from "react";
 import { CodeHighlighter } from "../../../../components/Hightlighter";
 import { Button } from "../../../../components/ui/button";
 import {
@@ -194,47 +193,63 @@ export function TableDrawer({ traces }: TableDrawer) {
               <TooltipContent>Close</TooltipContent>
             </Tooltip>
           </div>
-          {method !== "initialize" && (
-            <div className="flex items-center justify-end gap-2">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    className="p-1.5 size-max"
-                    onClick={handleSendRequest}
-                    onKeyDown={handleSendRequest}
-                    disabled={resendDirectory[selectedHistory.id]}
-                  >
-                    <RefreshCcw
-                      className={
-                        resendDirectory[selectedHistory.id]
-                          ? "animate-spin"
-                          : undefined
-                      }
-                    />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>Resend request</TooltipContent>
-              </Tooltip>
-              {UPDATABLE_METHODS.includes(method) && (
-                <UpdateRequestDialog request={selectedHistory.request} />
-              )}
-            </div>
-          )}
           <TracingDetails
             label="Request"
             content={JSON.stringify(selectedHistory.request, null, 2)}
-          />
+          >
+            {method !== "initialize" && (
+              <div className="flex items-center justify-end gap-2">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="p-1.5 size-max"
+                      onClick={handleSendRequest}
+                      onKeyDown={handleSendRequest}
+                      disabled={resendDirectory[selectedHistory.id]}
+                    >
+                      <RefreshCcw
+                        className={
+                          resendDirectory[selectedHistory.id]
+                            ? "animate-spin"
+                            : undefined
+                        }
+                      />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Resend request</TooltipContent>
+                </Tooltip>
+                {UPDATABLE_METHODS.includes(method) && (
+                  <UpdateRequestDialog request={selectedHistory.request} />
+                )}
+              </div>
+            )}
+          </TracingDetails>
           {Object.values(selectedHistory.response ?? {}).map(
             (res) => res != null
           ).length > 0 && (
             <TracingDetails
               label="Response"
               content={JSON.stringify(selectedHistory.response, null, 2)}
-              onClick={handleOpenResponseDialog}
-              showButton={isResponseMethodAvailable}
-            />
+            >
+              {isResponseMethodAvailable && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      size="icon"
+                      onClick={handleOpenResponseDialog}
+                      onKeyDown={handleOpenResponseDialog}
+                      variant="ghost"
+                      className="p-1.5 size-max"
+                    >
+                      <ExternalLink />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>View Response</TooltipContent>
+                </Tooltip>
+              )}
+            </TracingDetails>
           )}
         </div>
       </div>
@@ -254,35 +269,18 @@ export function TableDrawer({ traces }: TableDrawer) {
 type TracingDetails = {
   label: string;
   content: string;
-  onClick?: (event: BaseSyntheticEvent) => void;
-  showButton?: boolean;
 };
 
 function TracingDetails({
   label,
   content,
-  onClick,
-  showButton,
-}: TracingDetails) {
+  children,
+}: PropsWithChildren<TracingDetails>) {
   return (
     <div className="flex-1 flex flex-col gap-1 overflow-y-auto">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold">{label}</h2>
-        {showButton && (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                onClick={onClick}
-                onKeyDown={onClick}
-                variant="ghost"
-                className="size-max has-[>svg]:px-1.5 py-1.5"
-              >
-                <ExternalLink />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>View Response</TooltipContent>
-          </Tooltip>
-        )}
+        <h2 className="font-medium">{label}</h2>
+        {children}
       </div>
       <CodeHighlighter content={content} className="max-h-full" />
     </div>

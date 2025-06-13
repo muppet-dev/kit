@@ -30,11 +30,9 @@ export function FormattedResponseDialog({
 }: FormattedResponseDialog) {
   const [formatted, setFormatted] = useState(true);
 
-  console.log(response.result);
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent isClosable={false} className="sm:max-w-xl">
+      <DialogContent isClosable={false} className="sm:max-w-6xl">
         <DialogHeader className="flex-row gap-2 items-center">
           <DialogTitle>Response</DialogTitle>
           <div className="flex-1" />
@@ -62,7 +60,7 @@ export function FormattedResponseDialog({
             </Button>
           </DialogClose>
         </DialogHeader>
-        <div className="overflow-y-auto flex-1 space-y-2 h-[500px]">
+        <div className="overflow-y-auto flex-1 space-y-2 h-[600px]">
           {formatted ? (
             <FormattedDataRender
               result={"result" in response ? response.result : response}
