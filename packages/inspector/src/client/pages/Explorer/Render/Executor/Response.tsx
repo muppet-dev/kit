@@ -1,25 +1,25 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { CodeHighlighter } from "../../../../../components/Hightlighter";
-import { Button } from "../../../../../components/ui/button";
+import { CodeHighlighter } from "../../../../components/Hightlighter";
+import { Button } from "../../../../components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../../../../components/ui/select";
-import { Skeleton } from "../../../../../components/ui/skeleton";
+} from "../../../../components/ui/select";
+import { Skeleton } from "../../../../components/ui/skeleton";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "../../../../../components/ui/tooltip";
-import { eventHandler } from "../../../../../lib/eventHandler";
-import { numberFormatter } from "../../../../../lib/utils";
-import { useCustomForm } from "../provider";
-import { FormattedDataRender } from "./Render";
+} from "../../../../components/ui/tooltip";
+import { eventHandler } from "../../../../lib/eventHandler";
+import { numberFormatter } from "../../../../lib/utils";
+import { useCustomForm } from "./provider";
+import { FormattedDataRender } from "@/client/components/FormattedDataRender";
 
 export type ReponsePanel = {
   isExpanded: boolean;
