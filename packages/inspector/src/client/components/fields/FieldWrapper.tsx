@@ -1,12 +1,8 @@
-import { Label } from "../../../../../../../components/ui/label";
-import { cn } from "../../../../../../../lib/utils";
-import {
-  useBlueprint,
-  useDuckForm,
-  useField,
-} from "../../../../../../../providers";
+import { cn } from "@/client/lib/utils";
+import { useBlueprint, useDuckForm, useField } from "@/client/providers";
 import { ErrorMessage } from "@hookform/error-message";
 import { type PropsWithChildren, useEffect, useId, useMemo } from "react";
+import { Label } from "../ui/label";
 
 export type FieldWrapperProps = {
   label?: string;

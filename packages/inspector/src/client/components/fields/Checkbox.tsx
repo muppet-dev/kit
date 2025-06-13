@@ -1,11 +1,7 @@
-import { Checkbox } from "../../../../../../../components/ui/checkbox";
-import {
-  useBlueprint,
-  useDuckForm,
-  useField,
-} from "../../../../../../../providers";
+import { useBlueprint, useDuckForm, useField } from "@/client/providers";
 import { useId, useMemo } from "react";
 import { Controller, useFormContext } from "react-hook-form";
+import { Checkbox } from "../ui/checkbox";
 import type { FieldType } from "./constants";
 
 export type CheckboxProps = {

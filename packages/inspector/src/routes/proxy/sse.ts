@@ -9,6 +9,7 @@ import {
   transportHeaderSchema,
   transportSchema,
 } from "./utils";
+import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 
 const router = new Hono<ProxyEnv>()
   .get(
@@ -20,9 +21,9 @@ const router = new Hono<ProxyEnv>()
         "New SSE connection. NOTE: The sse transport is deprecated and has been replaced by streamable-http"
       );
 
+      let serverTransport: Transport;
       try {
-        await c.get("backing")?.close();
-        c.set("backing", await createTransport(c));
+        serverTransport = await createTransport(c);
       } catch (error) {
         if (error instanceof SseError && error.code === 401) {
           console.error(
@@ -35,11 +36,12 @@ const router = new Hono<ProxyEnv>()
         throw error;
       }
 
-      console.log("Connected MCP client to backing server transport");
+      console.log("Connected MCP client to server transport");
 
       return streamSSE(c, async (stream) => {
         const webAppTransport = new SSEHonoTransport("/api/message");
-        c.get("transports").set(webAppTransport.sessionId, webAppTransport);
+        c.get("webAppTransports").set(webAppTransport.sessionId, webAppTransport);
+        c.get("serverTransports").set(webAppTransport.sessionId, serverTransport);
 
         console.log("Created web app transport");
 
@@ -48,7 +50,7 @@ const router = new Hono<ProxyEnv>()
 
         mcpProxy({
           transportToClient: webAppTransport,
-          transportToServer: c.get("backing")!,
+          transportToServer: serverTransport,
           ctx: c,
         });
 
@@ -64,7 +66,7 @@ const router = new Hono<ProxyEnv>()
       throw new Error("Session ID is required for POST message");
     }
 
-    const transport = c.get("transports").get(sessionId) as SSEHonoTransport;
+    const transport = c.get("webAppTransports").get(sessionId) as SSEHonoTransport;
     if (!transport) {
       return c.text("Session not found", 404);
     }

@@ -1,16 +1,12 @@
 import { usePreferences } from "@/client/providers/preferences";
-import { Settings } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Button } from "../../ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-} from "../../ui/dialog";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/tooltip";
+} from "../ui/dialog";
 import { ColorModeSetting } from "./ColorModeSetting";
 import { ThemeDialog } from "./ThemeDialog";
 import { ThemeSettings } from "./ThemeSettings";
@@ -25,38 +21,30 @@ export type DialogType =
       data?: Record<string, string>;
     };
 
-export function PreferencesDialog() {
+export type PreferencesDialog = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+};
+
+export function PreferencesDialog(props: PreferencesDialog) {
   const { colorTheme } = usePreferences();
   const [isThemeDialog, setThemeDialog] = useState<DialogType | undefined>();
-  const [isOpen, setOpen] = useState(false);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "/" && (event.metaKey || event.ctrlKey)) {
         event.preventDefault();
-        setOpen((prev) => !prev);
+        props.onOpenChange(!props.open);
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [props.open]);
 
   return (
     <>
-      <Dialog open={isOpen} onOpenChange={setOpen}>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <div>
-              <DialogTrigger asChild>
-                <Button variant="ghost" className="size-8">
-                  <Settings />
-                </Button>
-              </DialogTrigger>
-            </div>
-          </TooltipTrigger>
-          <TooltipContent>Preferences</TooltipContent>
-        </Tooltip>
+      <Dialog {...props}>
         <DialogContent className="gap-5">
           <DialogHeader className="gap-1">
             <DialogTitle>Preferences</DialogTitle>

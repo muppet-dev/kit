@@ -8,6 +8,7 @@ import { useConfig } from "../config";
 import { useNotification } from "../notifications";
 import { useRoots } from "../roots";
 import { useConnectionManager } from "./manager";
+import { useSampling } from "../sampling";
 
 type ConnectionContextType = ReturnType<typeof useConnectionManager>;
 
@@ -18,6 +19,7 @@ export const ConnectionProvider = ({ children }: PropsWithChildren) => {
   const { addNotification, addStdErrNotification } = useNotification();
 
   const roots = useRoots();
+  const { setPendingSampleRequests, nextRequestId } = useSampling();
 
   const values = useConnectionManager({
     ...connectionInfo!,
@@ -25,6 +27,12 @@ export const ConnectionProvider = ({ children }: PropsWithChildren) => {
     onStdErrNotification: addStdErrNotification,
     proxy: proxyAddress,
     getRoots: () => roots.current ?? [],
+    onPendingRequest: (request, resolve, reject) => {
+      setPendingSampleRequests((prev) => [
+        ...prev,
+        { id: nextRequestId.current++, request, resolve, reject },
+      ]);
+    },
   });
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>

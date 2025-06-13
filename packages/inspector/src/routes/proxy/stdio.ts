@@ -10,6 +10,7 @@ import {
   transportHeaderSchema,
   transportSchema,
 } from "./utils.js";
+import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 
 const router = new Hono<ProxyEnv>().get(
   "/",
@@ -17,10 +18,9 @@ const router = new Hono<ProxyEnv>().get(
   sValidator("header", transportHeaderSchema),
   async (c) => {
     console.log("New connection");
-
+    let serverTransport: Transport
     try {
-      await c.get("backing")?.close();
-      c.set("backing", await createTransport(c));
+      serverTransport = await createTransport(c);
     } catch (error) {
       if (error instanceof SseError && error.code === 401) {
         console.error(
@@ -37,14 +37,15 @@ const router = new Hono<ProxyEnv>().get(
 
     return streamSSE(c, async (stream) => {
       const webAppTransport = new SSEHonoTransport("/api/message");
-      c.get("transports").set(webAppTransport.sessionId, webAppTransport);
+      c.get("webAppTransports").set(webAppTransport.sessionId, webAppTransport);
+      c.get("serverTransports").set(webAppTransport.sessionId, serverTransport)
 
-      console.log("Created web app transport");
+      console.log("Created client/server transports");
 
       webAppTransport.connectWithStream(stream);
       webAppTransport.start();
 
-      (c.get("backing") as StdioClientTransport).stderr!.on("data", (chunk) => {
+      (serverTransport as StdioClientTransport).stderr!.on("data", (chunk) => {
         webAppTransport.send({
           jsonrpc: "2.0",
           method: "notifications/stderr",
@@ -56,7 +57,7 @@ const router = new Hono<ProxyEnv>().get(
 
       mcpProxy({
         transportToClient: webAppTransport,
-        transportToServer: c.get("backing")!,
+        transportToServer: serverTransport,
         ctx: c,
       });
 

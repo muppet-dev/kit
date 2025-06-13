@@ -1,26 +1,29 @@
 import type { PropsWithChildren } from "react";
 import {
-  TracingProvider,
-  NotificationProvider,
   ConnectionProvider,
+  NotificationProvider,
   PingServerProvider,
+  SamplingProvider,
   ShikiProvider,
+  TracingProvider,
 } from "../providers";
-import { SidebarProvider } from "./ui/sidebar";
 import { RootsProvider } from "../providers/roots";
+import { SidebarProvider } from "./ui/sidebar";
 
 export function AppProviders(props: PropsWithChildren) {
   return (
     <TracingProvider>
       <NotificationProvider>
         <RootsProvider>
-          <ConnectionProvider>
-            <PingServerProvider>
-              <ShikiProvider>
-                <SidebarProvider>{props.children}</SidebarProvider>
-              </ShikiProvider>
-            </PingServerProvider>
-          </ConnectionProvider>
+          <SamplingProvider>
+            <ConnectionProvider>
+              <PingServerProvider>
+                <ShikiProvider>
+                  <SidebarProvider>{props.children}</SidebarProvider>
+                </ShikiProvider>
+              </PingServerProvider>
+            </ConnectionProvider>
+          </SamplingProvider>
         </RootsProvider>
       </NotificationProvider>
     </TracingProvider>

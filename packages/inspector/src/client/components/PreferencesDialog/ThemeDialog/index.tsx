@@ -6,9 +6,9 @@ import { useEffect } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import type z from "zod";
-import { CodeEditor } from "../../../CodeEditor";
-import { FieldErrorMessage } from "../../../FieldErrorMessage";
-import { Button } from "../../../ui/button";
+import { CodeEditor } from "../../CodeEditor";
+import { FieldErrorMessage } from "../../FieldErrorMessage";
+import { Button } from "../../ui/button";
 import {
   Dialog,
   DialogClose,
@@ -16,10 +16,10 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "../../../ui/dialog";
-import { Input } from "../../../ui/input";
-import { Label } from "../../../ui/label";
-import { Spinner } from "../../../ui/spinner";
+} from "../../ui/dialog";
+import { Input } from "../../ui/input";
+import { Label } from "../../ui/label";
+import { Spinner } from "../../ui/spinner";
 import { GenerateButtonGroup } from "./GenerateButtonGroup";
 import { PencilLine, Plus } from "lucide-react";
 import { colorThemeValidation as schema } from "./validation";

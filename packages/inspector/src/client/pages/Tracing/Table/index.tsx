@@ -1,3 +1,7 @@
+import dayjs from "dayjs";
+import Fuse from "fuse.js";
+import { MoveDown, MoveUp } from "lucide-react";
+import { useMemo, useState } from "react";
 import { CopyButton } from "../../../components/CopyButton";
 import { Input } from "../../../components/ui/input";
 import {
@@ -9,12 +13,8 @@ import {
   TableRow,
 } from "../../../components/ui/table";
 import { eventHandler } from "../../../lib/eventHandler";
-import { cn, numberFormatter } from "../../../lib/utils";
-import dayjs from "dayjs";
-import Fuse from "fuse.js";
-import { MoveDown, MoveUp } from "lucide-react";
-import { useMemo, useState } from "react";
-import { SortingEnum, useLogs } from "../providers";
+import { cn, numberFormatter, SortingEnum } from "../../../lib/utils";
+import { useLogs } from "../providers";
 import { FilterMethod } from "./FilterMethod";
 import { FilterSession } from "./FilterSession";
 import { TableDrawer } from "./TableDrawer";

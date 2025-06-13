@@ -1,7 +1,7 @@
 import { eventHandler } from "@/client/lib/eventHandler";
 import { Theme, usePreferences } from "@/client/providers";
 import { Moon, Sun, Tv } from "lucide-react";
-import { Label } from "../../ui/label";
+import { Label } from "../ui/label";
 import { ItemCard } from "./ItemCard";
 
 const THEMES = {

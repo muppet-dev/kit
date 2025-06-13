@@ -1,4 +1,5 @@
 import app from "@muppet-kit/inspector";
+import pkg from "@muppet-kit/inspector/package.json" with { type: "json" };
 import { inspectorAction } from "@muppet-kit/shared/actions";
 import { Command, Option } from "commander";
 
@@ -9,7 +10,7 @@ const command = new Command("inspector")
   .addOption(new Option("-c, --config <config>", "Path to the config file"))
   .action((options) =>
     inspectorAction({
-      options,
+      options: { version: pkg.version, ...(options ?? {}) },
       // @ts-expect-error The build output is different
       app,
     }),

@@ -12,7 +12,7 @@ program
   .addOption(new Option("-c, --config <config>", "Path to the config file"))
   .action((options) =>
     inspectorAction({
-      options,
+      options: { version: pkg.version, ...(options ?? {}) },
       // @ts-expect-error The build output is different
       app,
     }),

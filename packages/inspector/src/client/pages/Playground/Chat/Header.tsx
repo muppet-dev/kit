@@ -13,7 +13,6 @@ import {
   ArrowLeft,
   ArrowRight,
   Ellipsis,
-  Info,
   Plus,
   RefreshCcw,
   ToggleLeft,
@@ -76,7 +75,6 @@ export function ModelHeader(props: { chatId: string }) {
         className="has-[>svg]:px-1.5 py-1.5 h-max"
         onClick={handleAddingChat}
         onKeyDown={handleAddingChat}
-        disabled
       >
         <Plus className="size-[18px] stroke-secondary-foreground/80" />
       </Button>
@@ -111,7 +109,7 @@ function ExperimentalBadge() {
       <DialogTrigger asChild>
         <div className="cursor-pointer flex items-center gap-1 rounded-full select-none px-3.5 pt-0.5 pb-1 text-sm text-background bg-warning font-semibold mr-2">
           <TriangleAlert className="size-3.5 mt-0.5 stroke-3" />
-          <p>Experimental</p>
+          <p>Alpha</p>
         </div>
       </DialogTrigger>
       <DialogOverlay />

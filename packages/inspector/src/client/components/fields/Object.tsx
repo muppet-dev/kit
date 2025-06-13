@@ -1,10 +1,6 @@
-import { DuckField } from "../../../../../../../components/DuckField";
-import {
-  useBlueprint,
-  useDuckForm,
-  useField,
-} from "../../../../../../../providers";
+import { useBlueprint, useDuckForm, useField } from "@/client/providers";
 import { useId, useMemo } from "react";
+import { DuckField } from "../DuckField";
 import type { FieldType } from "./constants";
 import type { FieldProps } from "./types";
 

@@ -57,6 +57,7 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.14.1",
+    "ansis": "^4.1.0",
     "c12": "^3.0.3",
     "hono": "^4.7.9",
     "open": "^10.1.2",

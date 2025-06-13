@@ -1,18 +1,37 @@
+import { eventHandler } from "@/client/lib/eventHandler";
+import { ConnectionStatus } from "@/client/providers/connection/manager";
+import {
+  type LoggingLevel,
+  LoggingLevelSchema,
+} from "@modelcontextprotocol/sdk/types.js";
 import {
   BookText,
-  Construction,
+  Bot,
+  Check,
+  ChevronRight,
   History,
   Logs,
+  ScrollText,
+  Settings,
   Settings2,
   Shield,
   SquareTerminal,
 } from "lucide-react";
+import { type BaseSyntheticEvent, useState } from "react";
 import { Link } from "react-router";
+import z from "zod";
 import { cn } from "../../lib/utils";
-import { useConfig } from "../../providers";
+import { useConfig, useConnection } from "../../providers";
 import { Logo } from "../Logo";
 import { LogoSmall } from "../LogoSmall";
+import { PreferencesDialog } from "../PreferencesDialog";
 import { Button } from "../ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 import {
   Sidebar,
   SidebarContent,
@@ -20,13 +39,13 @@ import {
   SidebarGroup,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuButton,
   SidebarRail,
   SidebarTrigger,
   useSidebar,
 } from "../ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { PingButton } from "./PingButton";
-import { PreferencesDialog } from "./PreferencesDialog";
 import { ServerInfo } from "./ServerInfo";
 import { SidebarItem } from "./SidebarItem";
 import { VersionBanner } from "./VersionBanner";
@@ -46,7 +65,7 @@ const SIDEBAR_ITEMS = {
     {
       name: "Playground",
       url: "/playground",
-      icon: Construction,
+      icon: Bot,
     },
     {
       name: "Tracing",
@@ -97,6 +116,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarGroup>
           <SidebarMenu>
             <PingButton />
+            <LogingLevel />
           </SidebarMenu>
         </SidebarGroup>
         <SidebarItem items={SIDEBAR_ITEMS.panels} />
@@ -107,12 +127,103 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarFooter className={cn(open && "flex-row items-center")}>
         <GithubLinkButton />
         <DocumentationLinkButton />
-        <PreferencesDialog />
+        <PreferencesDialogTrigger />
         {open && <div className="flex-1" />}
         <SidebarTrigger />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
+  );
+}
+
+function LogingLevel() {
+  const { serverCapabilities, connectionStatus, makeRequest } = useConnection();
+  const [logLevel, setLogLevel] = useState<LoggingLevel>("debug");
+
+  const { open } = useSidebar();
+
+  const loggingSupported =
+    serverCapabilities && "logging" in serverCapabilities;
+
+  const sendLogLevelRequest =
+    (level: LoggingLevel) => async (event: BaseSyntheticEvent) => {
+      if ("key" in event && event.key !== "Enter") return;
+
+      if (level !== logLevel)
+        await makeRequest(
+          {
+            method: "logging/setLevel" as const,
+            params: { level },
+          },
+          z.object({})
+        );
+      setLogLevel(level);
+    };
+
+  if (!loggingSupported || connectionStatus !== ConnectionStatus.CONNECTED)
+    return <></>;
+
+  return (
+    <div className="flex items-center gap-2">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <SidebarMenuButton
+            tooltip={`Log Level - ${logLevel}`}
+            className="group/log data-[active=true]:font-normal data-[state=open]:[&>div>svg]:visible data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+          >
+            <ScrollText />
+            Log Level
+            <div className="flex-1" />
+            <div className="flex items-center gap-1">
+              <ChevronRight className="size-4 group-hover/log:visible invisible transition-all ease-in-out text-muted-foreground" />
+              <p className="text-muted-foreground italic">{logLevel}</p>
+            </div>
+          </SidebarMenuButton>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent side="right" align="start">
+          {Object.values(LoggingLevelSchema.enum).map((level) => (
+            <DropdownMenuItem
+              key={level}
+              onClick={sendLogLevelRequest(level)}
+              onKeyDown={sendLogLevelRequest(level)}
+            >
+              {level}
+              {logLevel === level && <Check className="size-4" />}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  );
+}
+
+function PreferencesDialogTrigger() {
+  const [isOpenPreferenceDialog, setOpenPreferenceDialog] = useState(false);
+
+  const handleOpenPreferenceDialog = eventHandler(() =>
+    setOpenPreferenceDialog(true)
+  );
+
+  return (
+    <>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="ghost"
+            className="size-8"
+            onClick={handleOpenPreferenceDialog}
+            onKeyDown={handleOpenPreferenceDialog}
+          >
+            <Settings />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>Preferences</TooltipContent>
+      </Tooltip>
+      <PreferencesDialog
+        open={isOpenPreferenceDialog}
+        onOpenChange={setOpenPreferenceDialog}
+      />
+    </>
   );
 }
 

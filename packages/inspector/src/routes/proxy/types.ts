@@ -3,8 +3,8 @@ import type { Broadcast } from "./broadcast";
 
 export type ProxyEnv = {
   Variables: {
-    transports: Map<string, Transport>;
-    backing?: Transport;
+    webAppTransports: Map<string, Transport>;
+    serverTransports: Map<string, Transport>;
     broadcast: Broadcast;
   };
 };

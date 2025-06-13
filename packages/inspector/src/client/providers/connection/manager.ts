@@ -75,6 +75,9 @@ export function useConnectionManager(props: UseConnectionOptions) {
     useState<ServerCapabilities | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [mcpClient, setMcpClient] = useState<Client | null>(null);
+  const [clientTransport, setClientTransport] = useState<
+    StreamableHTTPClientTransport | SSEClientTransport | null
+  >(null);
   const [requestHistory, setRequestHistory] = useState<RequestHistory[]>([]);
   const [completionsSupported, setCompletionsSupported] = useState(true);
   const { setConnectionLink } = useConfig();
@@ -221,7 +224,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
     try {
       const proxyHealthUrl = new URL(`${props.proxy}/api/health`);
       const proxyHealthResponse = await fetch(proxyHealthUrl);
-      const proxyHealth = await proxyHealthResponse.json();
+      const proxyHealth = await proxyHealthResponse.json<{ status: string }>();
       if (proxyHealth?.status !== "ok") {
         throw new Error("MCP Proxy Server is not healthy");
       }
@@ -340,13 +343,6 @@ export function useConnectionManager(props: UseConnectionOptions) {
         headers,
       });
 
-      const clientTransport =
-        props.type === Transport.HTTP
-          ? new StreamableHTTPClientTransport(mcpProxyServerUrl as URL, {
-              sessionId: undefined,
-            })
-          : new SSEClientTransport(mcpProxyServerUrl as URL, transportOptions);
-
       if (props.onNotification) {
         for (const notificationSchema of [
           CancelledNotificationSchema,
@@ -378,7 +374,17 @@ export function useConnectionManager(props: UseConnectionOptions) {
       let capabilities: ServerCapabilities | undefined;
       const timestamp = performance.now();
       try {
+        const clientTransport =
+          props.type === Transport.HTTP
+            ? new StreamableHTTPClientTransport(mcpProxyServerUrl, {
+              sessionId: undefined,
+              ...transportOptions,
+            })
+            : new SSEClientTransport(mcpProxyServerUrl, transportOptions);
+
         await client.connect(clientTransport);
+
+        setClientTransport(clientTransport);
 
         capabilities = client.getServerCapabilities();
         const initializeRequest = {
@@ -433,6 +439,14 @@ export function useConnectionManager(props: UseConnectionOptions) {
   };
 
   const disconnect = async () => {
+    if (
+      props.type === Transport.HTTP &&
+      clientTransport &&
+      "terminateSession" in clientTransport
+    ) {
+      await clientTransport.terminateSession();
+    }
+
     await mcpClient?.close();
 
     if (props.type !== Transport.STDIO) {
@@ -441,6 +455,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
     }
 
     setMcpClient(null);
+    setClientTransport(null);
     setConnectionStatus(ConnectionStatus.DISCONNECTED);
     setCompletionsSupported(false);
     setServerCapabilities(null);

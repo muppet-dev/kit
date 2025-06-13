@@ -1,14 +1,10 @@
-import { DuckField } from "../../../../../../../components/DuckField";
-import { Button } from "../../../../../../../components/ui/button";
-import { eventHandler } from "../../../../../../../lib/eventHandler";
-import {
-  useBlueprint,
-  useDuckForm,
-  useField,
-} from "../../../../../../../providers";
+import { eventHandler } from "@/client/lib/eventHandler";
+import { useBlueprint, useDuckForm, useField } from "@/client/providers";
 import { ArrowDown, ArrowUp, Plus, Trash } from "lucide-react";
 import { useId, useMemo } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
+import { DuckField } from "../DuckField";
+import { Button } from "../ui/button";
 import type { FieldType } from "./constants";
 import type { FieldProps } from "./types";
 
