@@ -1,7 +1,7 @@
 {
   "name": "@muppet-kit/inspector",
   "description": "MCP inspector for debugging and inspecting MCP servers.",
-  "version": "0.1.16",
+  "version": "0.1.18",
   "license": "MIT",
   "types": "./dist/index.d.ts",
   "main": "./dist/index.js",
@@ -107,7 +107,7 @@
   },
   "peerDependencies": {
     "@hono/node-server": "^1.14.1",
-    "@muppet-kit/shared": "^0.1.10",
+    "@muppet-kit/shared": "^0.1.11",
     "commander": "^13.1.0",
     "dotenv": "^16.5.0",
     "spawn-rx": "^5.1.2"

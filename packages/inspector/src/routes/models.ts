@@ -110,8 +110,6 @@ router.post(
         })
       }
 
-      console.log(Object.keys(tools).length, toolsChanged);
-
       if (toolsChanged) {
         const [mcpTools, mcpPrompts] = await Promise.all([
           client.listTools().then((result) =>
