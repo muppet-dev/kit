@@ -26,7 +26,8 @@ import { MarkdownText } from "./MarkdownText";
 import { TooltipIconButton } from "./TooltipIconButton";
 
 export function Thread(props: { chatId: string } & ThreadWelcome) {
-  const { syncTextChange, getChat, onConfigChange } = useChats();
+  const { syncTextChange, submitAllSyncedChats, getChat, onConfigChange } =
+    useChats();
   const thread = useThreadRuntime();
   const composer = useThreadComposer();
 
@@ -52,6 +53,7 @@ export function Thread(props: { chatId: string } & ThreadWelcome) {
       style={{
         ["--thread-max-width" as string]: "42rem",
       }}
+      onSubmit={() => submitAllSyncedChats(props.chatId)}
     >
       <ThreadPrimitive.Viewport className="flex h-full flex-col items-center overflow-y-scroll scroll-smooth bg-inherit px-4 pt-8">
         <ThreadWelcome modelId={props.modelId} />
@@ -243,7 +245,7 @@ const BranchPicker: FC<BranchPickerPrimitive.Root.Props> = ({
       hideWhenSingleBranch
       className={cn(
         "text-muted-foreground inline-flex items-center text-xs",
-        className
+        className,
       )}
       {...rest}
     >
