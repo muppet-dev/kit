@@ -53,7 +53,7 @@ function useConfigManager(props: ConfigProvider) {
       fetch(`${proxyAddress}/version`).then((res) => {
         if (!res.ok) {
           throw new Error(
-            "Failed to fetch version data. Please check your network connection or try again later."
+            "Failed to fetch version data. Please check your network connection or try again later.",
           );
         }
 
@@ -68,12 +68,12 @@ function useConfigManager(props: ConfigProvider) {
         (res) => {
           if (!res.ok) {
             throw new Error(
-              "Failed to fetch version data. Please check your network connection or try again later."
+              "Failed to fetch version data. Please check your network connection or try again later.",
             );
           }
 
           return res.json() as Promise<Record<string, any>>;
-        }
+        },
       ),
   });
 
@@ -115,19 +115,19 @@ function useConfigManager(props: ConfigProvider) {
         (res) => {
           if (!res.ok) {
             throw new Error(
-              "Failed to generate a new tunneling URL. Please try again."
+              "Failed to generate a new tunneling URL. Please try again.",
             );
           }
 
           return res.json() as Promise<{ id: string; url: string }>;
-        }
+        },
       );
 
       const publicUrl = new URL(
         connectionLink.url.pathname +
           connectionLink.url.search +
           connectionLink.url.hash,
-        url
+        url,
       );
 
       const tunnel = { id, headers: connectionLink.headers, url: publicUrl };
@@ -172,7 +172,7 @@ function useConfigManager(props: ConfigProvider) {
   const deleteConfiguration = (name?: string) => {
     if (name) {
       setConfigurations(
-        (prev) => prev?.filter((item) => item.name !== name) ?? []
+        (prev) => prev?.filter((item) => item.name !== name) ?? [],
       );
     }
   };
@@ -200,14 +200,11 @@ function useConfigManager(props: ConfigProvider) {
   const configurations = useMemo(() => {
     const items = [...getDeafultConfigurations(), ...(localSavedConfigs ?? [])];
 
-    return items.sort((a, b) => {
-      const nameA = a.name ?? "";
-      const nameB = b.name ?? "";
+    if (configurationsSort === SortingEnum.DESCENDING) {
+      items.reverse();
+    }
 
-      return configurationsSort === SortingEnum.ASCENDING
-        ? nameA.localeCompare(nameB)
-        : nameB.localeCompare(nameA);
-    });
+    return items;
   }, [localSavedConfigs, configurationsSort, getDeafultConfigurations]);
 
   return {
