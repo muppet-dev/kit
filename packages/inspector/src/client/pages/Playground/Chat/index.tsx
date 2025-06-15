@@ -1,4 +1,4 @@
-import { useConfig } from "../../../providers";
+import { useConfig, useConnection } from "../../../providers";
 import { AssistantRuntimeProvider } from "@assistant-ui/react";
 import { useChatRuntime } from "@assistant-ui/react-ai-sdk";
 import { useChats } from "../providers";
@@ -11,29 +11,25 @@ export type Chat = {
 };
 
 export function Chat(props: Chat) {
-  const { connectionInfo, connectionLink, proxyAddress } = useConfig();
+  const { token } = useConnection();
+  const { connectionLink, connectionInfo, proxyAddress } = useConfig();
+
   const { getChat } = useChats();
 
   const chat = getChat(props.chatId);
 
   const apiEndpoint = useMemo(() => {
-    const headers = Object.entries(connectionLink?.headers ?? {}).reduce<{
-      headerName?: string;
-      bearerToken?: string;
-    }>((prev, [key, value]) => {
-      prev.headerName = key;
-      prev.bearerToken = value;
-      return prev;
-    }, {});
+    const authorization = token != null ? `&authorization=${token}` : "";
+    const url = `${connectionLink?.url?.toString()}${authorization}`;
 
     const params = paramSerializer({
       modelId: chat?.model,
-      ...connectionInfo,
-      ...headers,
+      type: connectionInfo?.type,
+      url,
     });
 
     return `${proxyAddress}/api/chat?${params}`;
-  }, [chat, proxyAddress, connectionInfo, connectionLink]);
+  }, [chat, proxyAddress, connectionLink, connectionInfo, token]);
 
   const runtime = useChatRuntime({
     api: apiEndpoint,

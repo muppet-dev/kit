@@ -3,15 +3,17 @@ import { customThemeSchema } from "@/validations";
 import { sValidator } from "@hono/standard-validator";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js";
-import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
-import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
-import { Transport as TransportEnum, transportSchema } from "@muppet-kit/shared";
+import {
+  Transport,
+} from "@muppet-kit/shared";
 import { generateObject, streamText, tool } from "ai";
 import { Hono } from "hono";
 import { createFactory } from "hono/factory";
 import { stream } from "hono/streaming";
 import z from "zod";
+import { jsonSchemaToZod } from "json-schema-to-zod";
+import { PromptListChangedNotificationSchema, ToolListChangedNotificationSchema } from "@modelcontextprotocol/sdk/types.js";
 
 const router = new Hono<EnvWithDefaultModel>();
 
@@ -53,11 +55,19 @@ const handlers = factory.createHandlers(
 );
 
 let client: Client;
+let tools = {};
+let toolsChanged = true;
 
 router.post(
   "/chat",
   ...handlers,
-  sValidator("query", transportSchema),
+  sValidator(
+    "query",
+    z.object({
+      type: z.nativeEnum(Transport),
+      url: z.string().url(),
+    }),
+  ),
   sValidator(
     "json",
     z.object({
@@ -65,10 +75,8 @@ router.post(
     }),
   ),
   async (c) => {
-    const queryPayload = c.req.valid("query");
+    const { url: mcpConnectionEndpoint, type: transportType } = c.req.valid("query");
     const { messages } = c.req.valid("json");
-
-    let tools = {};
 
     try {
       if (!client) {
@@ -87,214 +95,126 @@ router.post(
           },
         );
 
-        let transport: Transport; if (queryPayload.type === TransportEnum.STDIO) {
-          transport = new StdioClientTransport({
-            command: queryPayload.command,
-            args: queryPayload.args ? [queryPayload.args] : undefined,
-            env: queryPayload.env
-              ? queryPayload.env.reduce<Record<string, string>>((acc, { key, value }) => {
-                acc[key] = value;
-                return acc;
-              }
-                , {})
-              : undefined,
-          })
-        } else {
+        const TransportClass = transportType === Transport.SSE ? SSEClientTransport : StreamableHTTPClientTransport;
 
-          let headers: HeadersInit = {};
-          if (queryPayload.headerName && queryPayload.bearerToken) {
-            headers = { [queryPayload.headerName]: queryPayload.bearerToken };
-          } else if (queryPayload.bearerToken) {
-            headers = {
-              Authorization: queryPayload.bearerToken,
-            };
-          }
+        await client.connect(
+          new TransportClass(new URL(mcpConnectionEndpoint)),
+        );
 
-          if (queryPayload.type === TransportEnum.SSE) {
-            transport = new SSEClientTransport(new URL(queryPayload.url), {
-              eventSourceInit: {
-                fetch: (
-                  url: string | URL | globalThis.Request,
-                  init: RequestInit | undefined,
-                ) => fetch(url, { ...init, headers }),
-              },
-              requestInit: {
-                headers,
-              }
-            });
-          } else if (queryPayload.type === TransportEnum.HTTP) {
-            transport = new StreamableHTTPClientTransport(new URL(queryPayload.url), {
-              sessionId: undefined,
-              requestInit: {
-                headers,
-              }
-            })
-          } else {
-            throw new Error(
-              `Unsupported transport type: ${queryPayload.type}`,
-            );
-          }
-        }
+        client.setNotificationHandler(ToolListChangedNotificationSchema, async (notification) => {
+          toolsChanged = true;
+        })
 
-        await client.connect(transport);
+        client.setNotificationHandler(PromptListChangedNotificationSchema, async (notification) => {
+          toolsChanged = true;
+        })
       }
 
-      tools = {
-        list_tools: tool({
-          description: "List all available tools from an MCP server, it will return the name, description, and parameters of each tool.",
-          parameters: z.object({}),
-          execute: async () => {
-            try {
-              const result = await client.listTools();
-              return {
-                success: true,
-                tools: result.tools,
-                count: result.tools.length
-              };
-            } catch (error) {
-              return {
-                success: false,
-                error: error instanceof Error ? error.message : "Unknown error occurred",
-                tools: [],
-                count: 0
-              };
-            }
-          }
-        }),
-        call_tool: tool({
-          description: "Execute a specific tool on an MCP server. It will return the result of the tool execution.",
-          parameters: z.object({
-            name: z.string().describe("Name of the tool to execute"),
-            arguments: z.record(z.string(), z.any()).describe("Parameters to pass to the tool"),
+      console.log(Object.keys(tools).length, toolsChanged);
+
+      if (toolsChanged) {
+        const [mcpTools, mcpPrompts] = await Promise.all([
+          client.listTools().then((result) =>
+            result.tools.reduce<Record<string, any>>((prev, toolDef) => {
+              prev[toolDef.name] = tool({
+                description: toolDef.description,
+                parameters: new Function(
+                  "z",
+                  `return ${jsonSchemaToZod(toolDef.inputSchema)}`,
+                )(z),
+                execute: async (params) => {
+                  try {
+                    const result = await client.callTool({
+                      name: toolDef.name,
+                      arguments: params,
+                    });
+                    return {
+                      success: true,
+                      result: result.content,
+                      isError: result.isError || false,
+                    };
+                  } catch (error) {
+                    return {
+                      success: false,
+                      error:
+                        error instanceof Error
+                          ? error.message
+                          : "Unknown error occurred",
+                      result: null,
+                      isError: true,
+                    };
+                  }
+                },
+              });
+
+              return prev;
+            }, {}),
+          ).catch((error) => {
+            console.error("Error fetching tools:", error);
+            return {};
           }),
-          execute: async (params) => {
-            try {
-              console.log(params)
-              const result = await client.callTool(params);
-              return {
-                success: true,
-                result: result.content,
-                isError: result.isError || false
-              };
-            } catch (error) {
-              console.log(error);
-              return {
-                success: false,
-                error: error instanceof Error ? error.message : "Unknown error occurred",
-                result: null,
-                isError: true
-              };
-            }
-          }
-        }),
-        list_prompts: tool({
-          description: "List all available prompts from an MCP server",
-          parameters: z.object({}),
-          execute: async () => {
-            try {
-              const result = await client.listPrompts();
-              return {
-                success: true,
-                prompts: result.prompts,
-                count: result.prompts.length
-              };
-            } catch (error) {
-              return {
-                success: false,
-                error: error instanceof Error ? error.message : "Unknown error occurred",
-                prompts: [],
-                count: 0
-              };
-            }
-          }
-        }),
-        get_prompt: tool({
-          description: "Get a specific prompt from an MCP server",
-          parameters: z.object({
-            name: z.string().describe("Name of the prompt to retrieve"),
-            arguments: z.record(z.string(), z.any()).optional().describe("Arguments to pass to the prompt")
+          client.listPrompts().then((result) =>
+            result.prompts.reduce<Record<string, any>>((prev, promptDef) => {
+              const args = promptDef.arguments?.reduce<
+                Record<string, z.ZodString>
+              >((prev, arg) => {
+                prev[arg.name] = z.string();
+
+                if (arg.description) {
+                  prev[arg.name] = prev[arg.name].describe(arg.description);
+                }
+
+                if (arg.required) {
+                  prev[arg.name] = prev[arg.name].min(1);
+                } else {
+                  prev[arg.name] = prev[arg.name].optional();
+                }
+
+                return prev;
+              }, {});
+
+              prev[promptDef.name] = tool({
+                description: promptDef.description,
+                parameters: z.object(args ?? {}),
+                execute: async (params) => {
+                  try {
+                    const result = await client.getPrompt({
+                      name: promptDef.name,
+                      arguments: params,
+                    });
+                    return {
+                      success: true,
+                      description: result.description,
+                      messages: result.messages,
+                    };
+                  } catch (error) {
+                    return {
+                      success: false,
+                      error:
+                        error instanceof Error
+                          ? error.message
+                          : "Unknown error occurred",
+                      description: null,
+                      messages: [],
+                    };
+                  }
+                },
+              });
+
+              return prev;
+            }, {}),
+          ).catch((error) => {
+            console.error("Error fetching prompts:", error);
+            return {};
           }),
-          execute: async (params) => {
-            try {
-              const result = await client.getPrompt(params);
-              return {
-                success: true,
-                description: result.description,
-                messages: result.messages
-              };
-            } catch (error) {
-              return {
-                success: false,
-                error: error instanceof Error ? error.message : "Unknown error occurred",
-                description: null,
-                messages: []
-              };
-            }
-          }
-        }),
-        list_resources: tool({
-          description: "List all available resources from an MCP server",
-          parameters: z.object({}),
-          execute: async () => {
-            try {
-              const result = await client.listResources();
-              return {
-                success: true,
-                resources: result.resources,
-                count: result.resources.length
-              };
-            } catch (error) {
-              return {
-                success: false,
-                error: error instanceof Error ? error.message : "Unknown error occurred",
-                resources: [],
-                count: 0
-              };
-            }
-          }
-        }),
-        list_resource_templates: tool({
-          description: "List all available resource templates from the MCP server",
-          parameters: z.object({}),
-          execute: async () => {
-            try {
-              const result = await client.listResourceTemplates();
-              return {
-                success: true,
-                resources: result.resourceTemplates,
-                count: result.resourceTemplates.length
-              };
-            } catch (error) {
-              return {
-                success: false,
-                error: error instanceof Error ? error.message : "Unknown error occurred",
-                resources: [],
-                count: 0
-              };
-            }
-          }
-        }),
-        read_resource: tool({
-          description: "Read a specific resource from an MCP server",
-          parameters: z.object({
-            uri: z.string().describe("URI of the resource to read")
-          }),
-          execute: async (params) => {
-            try {
-              const result = await client.readResource(params);
-              return {
-                success: true,
-                contents: result.contents
-              };
-            } catch (error) {
-              return {
-                success: false,
-                error: error instanceof Error ? error.message : "Unknown error occurred",
-                contents: []
-              };
-            }
-          }
-        }),
+        ]);
+
+        tools = {
+          ...mcpTools,
+          ...mcpPrompts,
+        };
+
+        toolsChanged = false;
       }
 
     } catch (error) {
@@ -304,146 +224,7 @@ router.post(
     const result = streamText({
       model: c.get("modelToBeUsed"),
       tools,
-      messages: [
-        {
-          role: "system",
-          content: `# MCP Inspector AI Assistant
-
-You are an AI assistant integrated into the MCP Inspector application, a developer tool for testing and debugging Model Context Protocol (MCP) servers. Your primary role is to help developers explore, test, and analyze MCP servers through natural conversation.
-
-## Your Capabilities
-
-You have access to the following MCP server interaction tools:
-
-### Discovery Tools
-- **list_tools**: Discover all available tools on the connected MCP server
-- **list_prompts**: Find all available prompts on the server
-- **list_resources**: Explore available resources
-- **list_resource_templates**: View resource templates
-
-### Execution Tools
-- **call_tool**: Execute specific MCP tools with parameters
-- **get_prompt**: Retrieve and examine prompt details
-- **read_resource**: Access resource content
-
-## Behavioral Guidelines
-
-### 1. Proactive Discovery
-- When first interacting or when asked about server capabilities, automatically use "list_tools", "list_prompts", and "list_resources" to understand what's available
-- Present discoveries in an organized, developer-friendly format
-- Highlight interesting or notable capabilities
-
-### 2. Intelligent Tool Usage
-- **ALWAYS examine tool schemas** before calling any tool - use the schema information from "list_tools" results
-- **ALWAYS examine prompt arguments** before calling "get_prompt" - use the arguments info from "list_prompts" results
-- Match user requests to required schema parameters precisely
-- For missing required parameters: generate realistic sample values or ask the user for clarification
-- For optional parameters: include them only if relevant to the user's request
-- When calling tools, explain what parameters you're using and why
-- Handle errors gracefully and suggest troubleshooting steps
-
-### 3. Developer-Focused Communication
-- Use technical language appropriate for developers
-- Provide actionable insights and recommendations
-- Format responses for readability (code blocks, structured data)
-- Include relevant technical details like parameter types, schemas, and error codes
-
-### 4. Testing and Analysis Support
-- Generate realistic test data for tool parameters
-- Suggest comprehensive testing scenarios
-- Analyze tool responses and identify potential issues
-- Compare expected vs actual behavior
-
-### 5. Error Handling
-- Always check tool execution results for success/failure
-- Provide clear error explanations and potential fixes
-- Suggest alternative approaches when tools fail
-- Log relevant debugging information
-
-## Response Patterns
-
-### When asked to explore a server:
-1. Use discovery tools to map capabilities
-2. Organize findings by category (tools/prompts/resources)
-3. Highlight key functionality and interesting features
-4. Suggest next steps for testing
-
-### When asked to test functionality:
-1. **First, examine the tool schema** from previous "list_tools" results
-2. **Identify required vs optional parameters** from the schema
-3. **Map user request to schema parameters** - extract relevant values from user input
-4. **For missing required parameters**: 
-   - Generate realistic sample values based on parameter type and description
-   - Or ask user for clarification if the value significantly impacts the test
-5. **For optional parameters**: only include if relevant to user's specific request
-6. Execute tools with properly formatted arguments object
-7. Analyze results and provide insights
-
-### When encountering errors:
-1. Explain what went wrong in developer terms
-2. Check if it's a parameter, server, or connection issue
-3. Suggest specific debugging steps
-4. Offer alternative approaches
-
-## Critical Parameter Handling Rules
-
-### For MCP Tools (call_tool):
-1. **MANDATORY**: Always reference the tool's "inputSchema" from "list_tools" results before calling
-2. **Extract parameters from user input** that match schema requirements
-3. **Required parameters**: Must be provided - generate samples if user doesn't specify
-4. **Optional parameters**: Only include if relevant to user's request
-5. **Format arguments as proper JSON object** matching the schema exactly
-
-### For MCP Prompts (get_prompt):
-1. **MANDATORY**: Always check the prompt's "arguments" field from "list_prompts" results
-2. **Map user context to prompt arguments** when available
-3. **Handle missing arguments**: generate contextually appropriate values or ask user
-4. **Format arguments as proper object** matching the expected structure
-
-### Parameter Generation Guidelines:
-- **String parameters**: Generate realistic, contextually appropriate values
-- **File paths**: Use common, realistic path structures
-- **IDs/Names**: Create meaningful identifiers relevant to the tool's purpose
-- **Numbers**: Use sensible ranges based on parameter description
-- **Booleans**: Choose based on most common use case or user intent
-- **Objects/Arrays**: Structure according to schema requirements
-
-## Example Interactions
-
-**User**: "What can this MCP server do?"
-**Response**: Let me explore the server capabilities...
-*[Uses list_tools, list_prompts, list_resources]*
-*[Presents organized summary with technical details]*
-
-**User**: "Test the file_read tool"
-**Response**: Let me check the file_read tool schema first...
-*[Examines inputSchema from list_tools results]*
-I see it requires a 'path' parameter (string). Since you didn't specify a file, I'll test with a common example:
-*[Calls call_tool with name: "file_read", arguments: {"path": "/home/user/documents/example.txt"}]*
-*[Analyzes results and explains what happened]*
-
-**User**: "Get the code_review prompt for my Python file"
-**Response**: I'll retrieve the code_review prompt with your Python file context...
-*[Checks prompt arguments from list_prompts results]*
-*[Calls get_prompt with name: "code_review", arguments: {"language": "python", "file_type": "source"}]*
-*[Shows prompt details formatted for readability]*
-
-**User**: "This tool isn't working as expected"
-**Response**: Let me investigate...
-*[Checks tool definition, validates parameters, tests execution, provides debugging guidance]*
-
-## Technical Standards
-
-- Always validate tool parameters against schemas when available
-- Use proper JSON formatting for complex parameters
-- Provide both human-readable summaries and raw technical data
-- Include error codes, status messages, and diagnostic information
-- Suggest performance optimizations and best practices
-
-Remember: You're helping developers understand, test, and debug MCP servers. Be thorough, technical, and actionable in your assistance.`
-        },
-        ...messages
-      ],
+      messages,
     });
 
     c.header("Content-Type", "text/plain; charset=utf-8");
@@ -602,12 +383,12 @@ When additional context is provided, tailor the sample data generation by:
       prompt,
       schemaName: name,
       schemaDescription: description,
-      schema: convertJsonSchemaToZod(schema),
+      schema: new Function("z", `return ${jsonSchemaToZod(schema)}`)(z),
     });
 
     c.header("Content-Type", "text/plain; charset=utf-8");
 
-    return c.json(result.object);
+    return c.json(result);
   },
 );
 
@@ -862,26 +643,3 @@ When user context is provided, thoughtfully interpret their requirements while m
 );
 
 export default router;
-
-// This function converts json schema into a zod schema
-function convertJsonSchemaToZod(schema: Record<string, any>) {
-  const zodSchema: Record<string, any> = {};
-
-  for (const key in schema) {
-    const value = schema[key];
-
-    if (value.type === "string") {
-      zodSchema[key] = z.string();
-    } else if (value.type === "number") {
-      zodSchema[key] = z.number();
-    } else if (value.type === "boolean") {
-      zodSchema[key] = z.boolean();
-    } else if (value.type === "array") {
-      zodSchema[key] = z.array(convertJsonSchemaToZod(value.items));
-    } else if (value.type === "object") {
-      zodSchema[key] = convertJsonSchemaToZod(value.properties);
-    }
-  }
-
-  return z.object(zodSchema);
-}
