@@ -10,8 +10,10 @@ import {
 } from "react";
 import toast from "react-hot-toast";
 import type z from "zod";
+import { SortingEnum } from "../lib/utils";
 import type { configTransportSchema } from "../validations";
 import type { ConnectionInfo } from "./connection/manager";
+import { usePreferences } from "./preferences";
 
 export const CONFIG_STORAGE_KEY = "muppet-config";
 
@@ -43,6 +45,7 @@ function useConfigManager(props: ConfigProvider) {
   const [localSavedConfigs, setConfigurations] = useLocalStorage<
     ConnectionInfo[] | null
   >(CONFIG_STORAGE_KEY);
+  const { configurationsSort } = usePreferences();
 
   const { data: version } = useQuery({
     queryKey: ["version"],
@@ -50,7 +53,7 @@ function useConfigManager(props: ConfigProvider) {
       fetch(`${proxyAddress}/version`).then((res) => {
         if (!res.ok) {
           throw new Error(
-            "Failed to fetch version data. Please check your network connection or try again later."
+            "Failed to fetch version data. Please check your network connection or try again later.",
           );
         }
 
@@ -65,12 +68,12 @@ function useConfigManager(props: ConfigProvider) {
         (res) => {
           if (!res.ok) {
             throw new Error(
-              "Failed to fetch version data. Please check your network connection or try again later."
+              "Failed to fetch version data. Please check your network connection or try again later.",
             );
           }
 
           return res.json() as Promise<Record<string, any>>;
-        }
+        },
       ),
   });
 
@@ -112,19 +115,19 @@ function useConfigManager(props: ConfigProvider) {
         (res) => {
           if (!res.ok) {
             throw new Error(
-              "Failed to generate a new tunneling URL. Please try again."
+              "Failed to generate a new tunneling URL. Please try again.",
             );
           }
 
           return res.json() as Promise<{ id: string; url: string }>;
-        }
+        },
       );
 
       const publicUrl = new URL(
         connectionLink.url.pathname +
           connectionLink.url.search +
           connectionLink.url.hash,
-        url
+        url,
       );
 
       const tunnel = { id, headers: connectionLink.headers, url: publicUrl };
@@ -156,7 +159,7 @@ function useConfigManager(props: ConfigProvider) {
     return models.length > 0;
   }, [getAvailableModels]);
 
-  function getDeafultConfigurations() {
+  const getDeafultConfigurations = useCallback(() => {
     if (!config?.configurations) return [];
 
     if (Array.isArray(config.configurations)) {
@@ -164,12 +167,12 @@ function useConfigManager(props: ConfigProvider) {
     }
 
     return [config.configurations];
-  }
+  }, [config?.configurations]);
 
   const deleteConfiguration = (name?: string) => {
     if (name) {
       setConfigurations(
-        (prev) => prev?.filter((item) => item.name !== name) ?? []
+        (prev) => prev?.filter((item) => item.name !== name) ?? [],
       );
     }
   };
@@ -184,7 +187,7 @@ function useConfigManager(props: ConfigProvider) {
         if (index !== -1) {
           tmp[index] = configuration;
         } else {
-          tmp.push(configuration);
+          tmp.unshift(configuration);
         }
       }
 
@@ -193,6 +196,16 @@ function useConfigManager(props: ConfigProvider) {
   };
 
   const clearAllConfigurations = () => setConfigurations(null);
+
+  const configurations = useMemo(() => {
+    const items = [...getDeafultConfigurations(), ...(localSavedConfigs ?? [])];
+
+    if (configurationsSort === SortingEnum.DESCENDING) {
+      items.reverse();
+    }
+
+    return items;
+  }, [localSavedConfigs, configurationsSort, getDeafultConfigurations]);
 
   return {
     version,
@@ -209,10 +222,7 @@ function useConfigManager(props: ConfigProvider) {
       setConnectionInfo(info);
     },
     proxyAddress,
-    configurations: [
-      ...getDeafultConfigurations(),
-      ...(localSavedConfigs ?? []),
-    ],
+    configurations,
     localSavedConfigs,
     addConfigurations,
     deleteConfiguration,

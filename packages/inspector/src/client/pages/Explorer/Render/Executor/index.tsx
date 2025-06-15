@@ -29,7 +29,7 @@ import { FormPanel } from "./FormPanel";
 import { FormResetButton } from "./FormResetButton";
 import { GenerateButtonGroup } from "./GenerateButtonGroup";
 import { JSONPanel } from "./JSONPanel";
-import { ReponsePanel } from "./Reponse";
+import { ReponsePanel } from "./Response";
 import { SchemaPanel } from "./SchemaPanel";
 import { SendButton } from "./SendButton";
 import { RequestTab } from "./constant";
@@ -54,7 +54,7 @@ export function Executor() {
     setSelectedTab((prev) =>
       activeTool.name === Tool.STATIC_RESOURCES && prev === RequestTab.JSON
         ? RequestTab.FORM
-        : prev,
+        : prev
     );
   }, [activeTool]);
 
@@ -121,7 +121,7 @@ export function Executor() {
                 <div
                   className={cn(
                     "flex-1 flex overflow-y-auto",
-                    !isExpanded && "min-h-1/2 h-full",
+                    !isExpanded && "min-h-1/2 h-full"
                   )}
                 >
                   <FormPanel />
@@ -131,7 +131,7 @@ export function Executor() {
                 <div
                   className={cn(
                     "flex-1 flex flex-col gap-1.5 overflow-y-auto",
-                    !isExpanded && "min-h-1/2 h-full",
+                    !isExpanded && "min-h-1/2 h-full"
                   )}
                 >
                   <JSONPanel />
@@ -183,7 +183,7 @@ function TabsTriggerComponent({
       {...props}
       className={cn(
         "data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-2 xl:px-5 dark:data-[state=active]:bg-foreground dark:data-[state=active]:text-background",
-        className,
+        className
       )}
     >
       <p className="xl:flex hidden">{label}</p>

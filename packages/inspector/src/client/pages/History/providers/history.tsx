@@ -1,4 +1,4 @@
-import { useConnection, useNotification } from "../../../providers";
+import { SortingEnum } from "@/client/lib/utils";
 import {
   type PropsWithChildren,
   createContext,
@@ -6,6 +6,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import { useConnection, useNotification } from "../../../providers";
 
 type HistoryContextType = ReturnType<typeof useHistoryManager>;
 
@@ -23,6 +24,7 @@ const HISTORY_METHODS = [
   "resources/templates/list",
   "completion/complete",
   "notifications/roots/list_changed",
+  "logging/setLevel",
 ];
 
 export const HistoryProvider = (props: PropsWithChildren) => {
@@ -39,11 +41,6 @@ export enum HistoryTab {
   HISTORY = "history",
   NOTIFICATIONS = "notifications",
   ERRORS = "errors",
-}
-
-export enum SortingEnum {
-  ASCENDING = 1,
-  DESCENDING = -1,
 }
 
 function useHistoryManager() {

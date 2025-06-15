@@ -1,4 +1,4 @@
-import { useTracing } from "../../../providers";
+import { SortingEnum } from "@/client/lib/utils";
 import {
   type PropsWithChildren,
   createContext,
@@ -6,6 +6,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import { useTracing } from "../../../providers";
 
 type LogsContextType = ReturnType<typeof useLogsManager>;
 
@@ -18,11 +19,6 @@ export const LogsProvider = (props: PropsWithChildren) => {
     <LogsContext.Provider value={values}>{props.children}</LogsContext.Provider>
   );
 };
-
-export enum SortingEnum {
-  ASCENDING = 1,
-  DESCENDING = -1,
-}
 
 function useLogsManager() {
   const { traces, filters: filterData } = useTracing();

@@ -96,12 +96,20 @@ function useChatsManager() {
     });
   }
 
-  function syncTextChange(chatId: string, text: string) {
+  function syncTextChange(triggerChatId: string, text: string) {
     setSyncText(text);
 
     for (const chat of chats) {
-      if (chat.sync && chat.composer && chat.id !== chatId) {
+      if (chat.sync && chat.composer && chat.id !== triggerChatId) {
         chat.composer?.setText(text);
+      }
+    }
+  }
+
+  function submitAllSyncedChats(triggerChatId: string) {
+    for (const chat of chats) {
+      if (chat.sync && chat.composer && chat.id !== triggerChatId) {
+        chat.composer?.send();
       }
     }
   }
@@ -117,6 +125,7 @@ function useChatsManager() {
     // Sync
     syncText,
     syncTextChange,
+    submitAllSyncedChats,
   };
 }
 

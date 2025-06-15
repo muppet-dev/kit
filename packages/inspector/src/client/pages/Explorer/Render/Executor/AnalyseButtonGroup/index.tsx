@@ -33,9 +33,12 @@ function ActionButton() {
         onClick={handleAnalyse}
         onKeyDown={handleAnalyse}
       >
-        <Sparkles className="size-4" />
+        {isFetching ? (
+          <Spinner className="size-4 min-w-4 min-h-4" />
+        ) : (
+          <Sparkles className="size-4" />
+        )}
         {isFetching ? "Analysing" : "Analyse"}
-        {isFetching && <Spinner className="size-4 min-w-4 min-h-4" />}
       </Button>
       <Tooltip>
         <TooltipTrigger asChild>
@@ -46,8 +49,11 @@ function ActionButton() {
             onClick={handleAnalyse}
             onKeyDown={handleAnalyse}
           >
-            <Sparkles className="size-4" />
-            {isFetching && <Spinner className="size-4 min-w-4 min-h-4" />}
+            {isFetching ? (
+              <Spinner className="size-4 min-w-4 min-h-4" />
+            ) : (
+              <Sparkles className="size-4" />
+            )}
           </Button>
         </TooltipTrigger>
         <TooltipContent>Analyse</TooltipContent>

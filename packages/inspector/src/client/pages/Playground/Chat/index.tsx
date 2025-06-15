@@ -1,27 +1,38 @@
-import { useConfig } from "../../../providers";
-import type { ConnectionInfo } from "../../../providers/connection/manager";
+import { useConfig, useConnection } from "../../../providers";
 import { AssistantRuntimeProvider } from "@assistant-ui/react";
 import { useChatRuntime } from "@assistant-ui/react-ai-sdk";
 import { useChats } from "../providers";
 import { ModelHeader } from "./Header";
 import { Thread } from "./Thread";
+import { useMemo } from "react";
 
 export type Chat = {
   chatId: string;
 };
 
 export function Chat(props: Chat) {
-  const { connectionInfo, proxyAddress } = useConfig();
+  const { token } = useConnection();
+  const { connectionLink, connectionInfo, proxyAddress } = useConfig();
+
   const { getChat } = useChats();
 
   const chat = getChat(props.chatId);
 
+  const apiEndpoint = useMemo(() => {
+    const authorization = token != null ? `&authorization=${token}` : "";
+    const url = `${connectionLink?.url?.toString()}${authorization}`;
+
+    const params = paramSerializer({
+      modelId: chat?.model,
+      type: connectionInfo?.type,
+      url,
+    });
+
+    return `${proxyAddress}/api/chat?${params}`;
+  }, [chat, proxyAddress, connectionLink, connectionInfo, token]);
+
   const runtime = useChatRuntime({
-    api: `${proxyAddress}/api/chat${
-      chat?.model
-        ? `?modelId=${chat.model}&${connectionInfoSerializer(connectionInfo)}`
-        : ""
-    }`,
+    api: apiEndpoint,
   });
 
   if (!chat) {
@@ -38,17 +49,16 @@ export function Chat(props: Chat) {
   );
 }
 
-function connectionInfoSerializer(connectionInfo?: ConnectionInfo): string {
+function paramSerializer(items: Record<string, unknown>): string {
   const params = new URLSearchParams();
 
-  if (connectionInfo)
-    for (const [key, value] of Object.entries(connectionInfo)) {
-      if (key === "env") {
-        params.set(key, JSON.stringify(value));
-      } else {
-        params.set(key, String(value));
-      }
+  for (const [key, value] of Object.entries(items)) {
+    if (key === "env") {
+      params.set(key, JSON.stringify(value));
+    } else {
+      params.set(key, String(value));
     }
+  }
 
   return params.toString();
 }

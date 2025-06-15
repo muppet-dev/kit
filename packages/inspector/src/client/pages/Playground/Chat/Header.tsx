@@ -13,7 +13,6 @@ import {
   ArrowLeft,
   ArrowRight,
   Ellipsis,
-  Info,
   Plus,
   RefreshCcw,
   ToggleLeft,
@@ -54,7 +53,6 @@ export function ModelHeader(props: { chatId: string }) {
     <div className="p-2 flex items-center gap-1 border-b bg-background">
       <ModelSelect model={model} />
       <div className="flex-1" />
-      <ExperimentalBadge />
       {model.sync && <SyncedBadge />}
       <Button
         title="Sync chat messages with other models"
@@ -76,7 +74,6 @@ export function ModelHeader(props: { chatId: string }) {
         className="has-[>svg]:px-1.5 py-1.5 h-max"
         onClick={handleAddingChat}
         onKeyDown={handleAddingChat}
-        disabled
       >
         <Plus className="size-[18px] stroke-secondary-foreground/80" />
       </Button>
@@ -105,54 +102,6 @@ function ModelSelect(props: { model: ChatProps }) {
   );
 }
 
-function ExperimentalBadge() {
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <div className="cursor-pointer flex items-center gap-1 rounded-full select-none px-3.5 pt-0.5 pb-1 text-sm text-background bg-warning font-semibold mr-2">
-          <TriangleAlert className="size-3.5 mt-0.5 stroke-3" />
-          <p>Experimental</p>
-        </div>
-      </DialogTrigger>
-      <DialogOverlay />
-      <DialogContent>
-        <DialogHeader>
-          <div className="flex items-center gap-1.5">
-            <TriangleAlert className="size-5" />
-            <DialogTitle>Experimental</DialogTitle>
-          </div>
-          <DialogDescription className="hidden" />
-        </DialogHeader>
-        <p>
-          This interface uses Vercel's AI SDK with experimental Model Context
-          Protocol (MCP) tools support.
-        </p>
-        <div>
-          <p>Please be aware of the following limitations - </p>
-          <ul className="list-inside list-disc">
-            <li>Only basic tool functionality is supported at this time</li>
-            <li>Some advanced MCP features may not work as expected</li>
-          </ul>
-        </div>
-        <p>
-          For production applications, consider implementing fallback mechanisms
-          or monitoring for potential issues. <br />
-          Check the{" "}
-          <a
-            href="https://ai-sdk.dev/cookbook/node/mcp-tools"
-            target="_blank"
-            rel="noreferrer"
-            className="text-info hover:underline"
-          >
-            AI SDK documentation
-          </a>{" "}
-          for the latest updates.
-        </p>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
 function SyncedBadge() {
   return (
     <div className="rounded-full select-none px-3.5 pt-0.5 pb-1 text-sm text-muted-foreground bg-secondary font-semibold mr-2">
@@ -167,22 +116,19 @@ function OptionsMenu(props: { model: ChatProps }) {
 
   const index = chats.findIndex((chat) => chat.id === props.model.id);
 
-  const handleClearChat = (event: BaseSyntheticEvent) => {
-    if ("key" in event && event.key !== "Enter") return;
-    threadRuntime.import({ messages: [] });
-  };
-  const handleMoveRight = (event: BaseSyntheticEvent) => {
-    if ("key" in event && event.key !== "Enter") return;
-    moveRight(props.model.id);
-  };
-  const handleMoveLeft = (event: BaseSyntheticEvent) => {
-    if ("key" in event && event.key !== "Enter") return;
-    moveLeft(props.model.id);
-  };
-  const handleDeletingChat = (event: BaseSyntheticEvent) => {
-    if ("key" in event && event.key !== "Enter") return;
-    deleteChat(props.model.id);
-  };
+  const handleClearChat = eventHandler(
+    () => threadRuntime.import({ messages: [] }),
+    { preventDefault: true },
+  );
+  const handleMoveRight = eventHandler(() => moveRight(props.model.id), {
+    preventDefault: true,
+  });
+  const handleMoveLeft = eventHandler(() => moveLeft(props.model.id), {
+    preventDefault: true,
+  });
+  const handleDeletingChat = eventHandler(() => deleteChat(props.model.id), {
+    preventDefault: true,
+  });
 
   return (
     <DropdownMenu>

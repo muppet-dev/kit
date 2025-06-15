@@ -1,8 +1,8 @@
 import { usePreferences } from "@/client/providers";
-import { Label } from "../../../ui/label";
+import { Label } from "../../ui/label";
 import { ItemCard } from "../ItemCard";
 import { eventHandler } from "@/client/lib/eventHandler";
-import { Button } from "../../../ui/button";
+import { Button } from "../../ui/button";
 import { Pencil, Plus } from "lucide-react";
 import { DeleteThemeButton } from "./DeleteButton";
 

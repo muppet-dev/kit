@@ -13,6 +13,7 @@ export enum Tool {
   STATIC_RESOURCES = "static-resources",
   DYNAMIC_RESOURCES = "dynamic-resources",
   ROOTS = "roots",
+  SAMPLING = "sampling",
 }
 
 type ToolType = {
@@ -53,6 +54,11 @@ export const DEFAULT_TOOLS: ToolType[] = [
     name: Tool.DYNAMIC_RESOURCES,
     label: "Dynamic Resources",
     enabled: false,
+  },
+  {
+    name: Tool.SAMPLING,
+    label: "Sampling",
+    enabled: true,
   },
   {
     name: Tool.ROOTS,

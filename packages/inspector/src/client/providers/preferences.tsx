@@ -7,6 +7,7 @@ import {
   type PropsWithChildren,
 } from "react";
 import type { ToastPosition } from "react-hot-toast";
+import { SortingEnum } from "../lib/utils";
 
 export enum Theme {
   DARK = "dark",
@@ -97,23 +98,30 @@ function usePreferencesManager() {
     toast: ToastPosition;
     theme: Theme;
     color_theme: string;
+    saved_config_sort: SortingEnum;
   }>("muppet-preferences", {
     toast: "bottom-right",
     theme: Theme.SYSTEM,
     color_theme: "default",
+    saved_config_sort: SortingEnum.DESCENDING,
   });
   const [colorTheme, setColorTheme] = useLocalStorage<Record<string, string>>(
     "muppet-color-theme",
     {
       default: DEFAULT_THEME,
-    }
+    },
   );
 
   const [resolvedTheme, setResolvedTheme] = useState<Theme.LIGHT | Theme.DARK>(
-    Theme.LIGHT
+    Theme.LIGHT,
   );
 
-  const { theme, toast, color_theme } = preferences;
+  const {
+    theme,
+    toast,
+    color_theme,
+    saved_config_sort = SortingEnum.DESCENDING,
+  } = preferences;
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-color-scheme: dark)");
@@ -184,6 +192,16 @@ function usePreferencesManager() {
     }));
   };
 
+  const toggleConfigurationsSort = () => {
+    setPreferences((prev) => ({
+      ...prev,
+      saved_config_sort:
+        prev.saved_config_sort === SortingEnum.ASCENDING
+          ? SortingEnum.DESCENDING
+          : SortingEnum.ASCENDING,
+    }));
+  };
+
   return {
     toastPosition: toast,
     setToast,
@@ -194,6 +212,8 @@ function usePreferencesManager() {
     setColorTheme,
     setCurrentColorTheme,
     currentColorTheme: color_theme,
+    configurationsSort: saved_config_sort,
+    toggleConfigurationsSort,
   };
 }
 
