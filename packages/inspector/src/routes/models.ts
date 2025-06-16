@@ -381,12 +381,13 @@ When additional context is provided, tailor the sample data generation by:
       prompt,
       schemaName: name,
       schemaDescription: description,
-      schema: new Function("z", `return ${jsonSchemaToZod(schema)}`)(z),
+      schema: new Function("z", `return ${jsonSchemaToZod({ type: "object", properties: schema })}`)(z),
     });
 
     c.header("Content-Type", "text/plain; charset=utf-8");
 
-    return c.json(result);
+    // @ts-expect-error
+    return c.json(result.object);
   },
 );
 

@@ -30,14 +30,16 @@ export function FormattedDataRender(props: FormattedDataRender) {
       return <>Something went wrong!</>;
     }
 
-    return toolsResult.data.content.map((item) => {
+    return toolsResult.data.content.map((item, index) => {
       switch (item.type) {
         case "image":
         case "text":
         case "audio":
-          return <RenderContent {...item} />;
+          return <RenderContent key={`${item.type}-${index}`} {...item} />;
         case "resource":
-          return <RenderResource {...item.resource} />;
+          return (
+            <RenderResource key={`${item.type}-${index}`} {...item.resource} />
+          );
       }
     });
   }
@@ -51,9 +53,19 @@ export function FormattedDataRender(props: FormattedDataRender) {
           case "image":
           case "text":
           case "audio":
-            return <RenderContent {...message.content} />;
+            return (
+              <RenderContent
+                key={`${message.content.type}-${index}`}
+                {...message.content}
+              />
+            );
           case "resource":
-            return <RenderResource {...message.content.resource} />;
+            return (
+              <RenderResource
+                key={`${message.content.type}-${index}`}
+                {...message.content.resource}
+              />
+            );
         }
       };
 
@@ -70,7 +82,7 @@ export function FormattedDataRender(props: FormattedDataRender) {
               "px-1.5 text-sm font-medium rounded-md w-max border",
               message.role === "user"
                 ? "text-info bg-info/20 border-info/20"
-                : "text-warning bg-warnitext-warning/20 border-warnitext-warning/20"
+                : "text-warning bg-warnitext-warning/20 border-warnitext-warning/20",
             )}
           >
             {message.role}
