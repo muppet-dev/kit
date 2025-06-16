@@ -412,7 +412,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
         throw error;
       }
       setServerCapabilities(capabilities ?? null);
-      setCompletionsSupported(true); // Reset completions support on new connection
+      setCompletionsSupported("completions" in (capabilities ?? {}));
 
       const onPendingRequest = props.onPendingRequest;
       if (onPendingRequest) {

@@ -104,7 +104,7 @@ export function TracingTable() {
                       key={`row.${index + 1}`}
                       className={cn(
                         "cursor-pointer divide-x",
-                        selected === trace.id && "bg-muted/50"
+                        selected === trace.id && "bg-muted/50",
                       )}
                       onClick={handleSelectData(trace.id)}
                       onKeyDown={handleSelectData(trace.id)}
@@ -116,7 +116,7 @@ export function TracingTable() {
                           .{time[2]}
                         </span>
                       </TableCell>
-                      {latency && (
+                      {latency != null && typeof latency === "number" ? (
                         <>
                           <TableCell>
                             <div
@@ -124,7 +124,7 @@ export function TracingTable() {
                                 "border px-1.5 w-max rounded",
                                 isError
                                   ? "text-destructive bg-destructive/10"
-                                  : "text-success bg-success/10"
+                                  : "text-success bg-success/10",
                               )}
                             >
                               {isError ? "Error" : "Success"}
@@ -134,11 +134,13 @@ export function TracingTable() {
                             {latency > 1000
                               ? `${numberFormatter(
                                   Number((latency / 1000).toFixed(2)),
-                                  "decimal"
+                                  "decimal",
                                 )} s`
                               : `${numberFormatter(latency, "decimal")} ms`}
                           </TableCell>
                         </>
+                      ) : (
+                        <></>
                       )}
                       <TableCell>{trace.request.method}</TableCell>
                     </TableRow>
