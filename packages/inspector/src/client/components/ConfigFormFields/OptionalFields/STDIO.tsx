@@ -13,6 +13,7 @@ import {
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
+import { FieldErrorMessage } from "../../FieldErrorMessage";
 
 export function STDIOFields() {
   const { register } = useFormContext<z.infer<typeof configTransportSchema>>();
@@ -31,6 +32,7 @@ export function STDIOFields() {
           {...register("command")}
         />
       </div>
+      <FieldErrorMessage name="command" />
       <div className="grid grid-cols-4 w-full items-center gap-2">
         <Label htmlFor="arguments">Arguments</Label>
         <Input
@@ -39,6 +41,7 @@ export function STDIOFields() {
           {...register("args")}
         />
       </div>
+      <FieldErrorMessage name="args" />
       <Accordion type="single" collapsible className="flex flex-col">
         <AccordionItem
           value="1"
@@ -124,6 +127,7 @@ function EnvField() {
           ))}
         </div>
       )}
+      <FieldErrorMessage name="env" />
       <div className="flex items-center gap-2">
         <Button
           colorScheme="secondary"

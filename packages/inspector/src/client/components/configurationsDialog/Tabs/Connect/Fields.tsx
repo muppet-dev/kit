@@ -4,6 +4,7 @@ import type z from "zod";
 import { ConfigFormFields } from "../../../ConfigFormFields";
 import { Input } from "../../../ui/input";
 import { Label } from "../../../ui/label";
+import { FieldErrorMessage } from "../../../FieldErrorMessage";
 
 export function FormFields() {
   const { register } = useFormContext<z.output<typeof schema>>();
@@ -19,6 +20,7 @@ export function FormFields() {
           className="col-span-3"
         />
       </div>
+      <FieldErrorMessage name="name" />
       <ConfigFormFields />
     </div>
   );
