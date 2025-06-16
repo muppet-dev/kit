@@ -9,18 +9,17 @@ router.get("/config", (c) => {
 
   return c.json({
     tunneling: !!config.tunneling,
+    enableTelemetry: config.enableTelemetry,
     models: config.models
       ? {
-          default: _generateModelKey(config.models.default),
-          available: Object.keys(config.models.available),
-        }
+        default: _generateModelKey(config.models.default),
+        available: Object.keys(config.models.available),
+      }
       : false,
     configurations: config.configurations,
   });
 });
 
-router.get("/health", (c) => {
-  return c.json({ status: "ok" });
-});
+router.get("/health", (c) => c.json({ status: "ok" }));
 
 export default router;

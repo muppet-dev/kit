@@ -1,7 +1,7 @@
 {
   "name": "@muppet-kit/shared",
   "description": "Shared utilities and types for Muppet Kit.",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "license": "MIT",
   "types": "./dist/index.d.ts",
   "main": "./dist/index.js",

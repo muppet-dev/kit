@@ -91,6 +91,7 @@
     "lucide-react": "^0.488.0",
     "muppet": "^0.2.2",
     "nanoid": "^5.1.5",
+    "posthog-js": "^1.252.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-error-boundary": "^6.0.0",

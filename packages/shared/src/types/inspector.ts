@@ -27,6 +27,13 @@ export type InspectorConfig = {
    */
   auto_open?: boolean;
   /**
+   * Enables telemetry to collect usage data and improve the inspector.
+   * This data is anonymous and helps us understand how the inspector is used.
+   * If you don't want to send telemetry data, you can disable it by setting this to false.
+   * @default true
+   */
+  enableTelemetry?: boolean;
+  /**
    * The default configuration for connecting to the MCP.
    */
   configurations?: TransportConfig | Array<TransportConfig>;
@@ -41,12 +48,12 @@ export type InspectorConfig = {
   models?: Array<
     | LanguageModel
     | {
-        model: LanguageModel;
-        /**
-         * This will mark the model to be used for generating sample data, scoring, and other tasks. If not specified, the first model will be used.
-         */
-        default?: boolean;
-      }
+      model: LanguageModel;
+      /**
+       * This will mark the model to be used for generating sample data, scoring, and other tasks. If not specified, the first model will be used.
+       */
+      default?: boolean;
+    }
   >;
 };
 
