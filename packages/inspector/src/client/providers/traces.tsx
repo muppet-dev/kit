@@ -59,7 +59,7 @@ function useTracingManager() {
 
           const { at, session, from, message } = JSON.parse(eventData);
 
-          if (from === "client")
+          if ("method" in message)
             setFilters((prev) => {
               prev.methods.add(message.method);
               prev.sessions.add(session);
@@ -74,7 +74,10 @@ function useTracingManager() {
 
             if (from === "server") {
               const index = tmp.findIndex(
-                (log) => log.mid === message.id && log.session === session
+                (log) =>
+                  log.mid != null &&
+                  log.mid === message.id &&
+                  log.session === session,
               );
 
               if (index !== -1) {
@@ -95,7 +98,7 @@ function useTracingManager() {
                     start: at,
                   },
                   mid: message.id,
-                  response: message,
+                  request: message,
                 });
               }
             } else {
