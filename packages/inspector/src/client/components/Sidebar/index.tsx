@@ -9,11 +9,13 @@ import {
   Bot,
   Check,
   ChevronRight,
+  ExternalLink,
   History,
   Logs,
   ScrollText,
   Settings,
   Settings2,
+  Shapes,
   Shield,
   SquareTerminal,
 } from "lucide-react";
@@ -140,8 +142,6 @@ function LogingLevel() {
   const { serverCapabilities, connectionStatus, makeRequest } = useConnection();
   const [logLevel, setLogLevel] = useState<LoggingLevel>("debug");
 
-  const { open } = useSidebar();
-
   const loggingSupported =
     serverCapabilities && "logging" in serverCapabilities;
 
@@ -155,7 +155,7 @@ function LogingLevel() {
             method: "logging/setLevel" as const,
             params: { level },
           },
-          z.object({})
+          z.object({}),
         );
       setLogLevel(level);
     };
@@ -201,7 +201,7 @@ function PreferencesDialogTrigger() {
   const [isOpenPreferenceDialog, setOpenPreferenceDialog] = useState(false);
 
   const handleOpenPreferenceDialog = eventHandler(() =>
-    setOpenPreferenceDialog(true)
+    setOpenPreferenceDialog(true),
   );
 
   return (
@@ -273,11 +273,32 @@ function DocumentationLinkButton() {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <a href="https://www.muppet.dev/docs" target="_blank" rel="noreferrer">
-          <Button variant="ghost" className="size-8">
-            <BookText />
-          </Button>
-        </a>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="size-8">
+              <BookText />
+            </Button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent align="start">
+            <a
+              href="https://www.muppet.dev/docs"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <DropdownMenuItem>
+                <ExternalLink />
+                Documentation
+              </DropdownMenuItem>
+            </a>
+            <a href="/docs" target="_blank" rel="noreferrer">
+              <DropdownMenuItem>
+                <Shapes />
+                OpenAPI Docs
+              </DropdownMenuItem>
+            </a>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </TooltipTrigger>
       <TooltipContent side={state === "collapsed" ? "right" : "top"}>
         Documentation

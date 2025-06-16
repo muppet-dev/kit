@@ -1,19 +1,21 @@
 import type { EnvWithDefaultModel } from "@/types/index.js";
 import { customThemeSchema } from "@/validations";
-import { sValidator } from "@hono/standard-validator";
+import { resolver, validator as zValidator } from "hono-openapi/zod";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
-import {
-  Transport,
-} from "@muppet-kit/shared";
+import { Transport } from "@muppet-kit/shared";
 import { generateObject, streamText, tool } from "ai";
 import { Hono } from "hono";
 import { createFactory } from "hono/factory";
 import { stream } from "hono/streaming";
 import z from "zod";
 import { jsonSchemaToZod } from "json-schema-to-zod";
-import { PromptListChangedNotificationSchema, ToolListChangedNotificationSchema } from "@modelcontextprotocol/sdk/types.js";
+import {
+  PromptListChangedNotificationSchema,
+  ToolListChangedNotificationSchema,
+} from "@modelcontextprotocol/sdk/types.js";
+import { describeRoute } from "hono-openapi";
 
 const router = new Hono<EnvWithDefaultModel>();
 
@@ -33,7 +35,7 @@ const handlers = factory.createHandlers(
 
     await next();
   },
-  sValidator(
+  zValidator(
     "query",
     z.object({
       modelId: z.string().min(1).optional(),
@@ -61,21 +63,25 @@ let toolsChanged = true;
 router.post(
   "/chat",
   ...handlers,
-  sValidator(
+  describeRoute({
+    description: "Chat with your AI model which is connected to an MCP server",
+  }),
+  zValidator(
     "query",
     z.object({
       type: z.nativeEnum(Transport),
       url: z.string().url(),
     }),
   ),
-  sValidator(
+  zValidator(
     "json",
     z.object({
       messages: z.array(z.any()),
     }),
   ),
   async (c) => {
-    const { url: mcpConnectionEndpoint, type: transportType } = c.req.valid("query");
+    const { url: mcpConnectionEndpoint, type: transportType } =
+      c.req.valid("query");
     const { messages } = c.req.valid("json");
 
     try {
@@ -95,116 +101,131 @@ router.post(
           },
         );
 
-        const TransportClass = transportType === Transport.SSE ? SSEClientTransport : StreamableHTTPClientTransport;
+        const TransportClass =
+          transportType === Transport.SSE
+            ? SSEClientTransport
+            : StreamableHTTPClientTransport;
 
         await client.connect(
           new TransportClass(new URL(mcpConnectionEndpoint)),
         );
 
-        client.setNotificationHandler(ToolListChangedNotificationSchema, async (notification) => {
-          toolsChanged = true;
-        })
+        client.setNotificationHandler(
+          ToolListChangedNotificationSchema,
+          async (notification) => {
+            toolsChanged = true;
+          },
+        );
 
-        client.setNotificationHandler(PromptListChangedNotificationSchema, async (notification) => {
-          toolsChanged = true;
-        })
+        client.setNotificationHandler(
+          PromptListChangedNotificationSchema,
+          async (notification) => {
+            toolsChanged = true;
+          },
+        );
       }
 
       if (toolsChanged) {
         const [mcpTools, mcpPrompts] = await Promise.all([
-          client.listTools().then((result) =>
-            result.tools.reduce<Record<string, any>>((prev, toolDef) => {
-              prev[toolDef.name] = tool({
-                description: toolDef.description,
-                parameters: new Function(
-                  "z",
-                  `return ${jsonSchemaToZod(toolDef.inputSchema)}`,
-                )(z),
-                execute: async (params) => {
-                  try {
-                    const result = await client.callTool({
-                      name: toolDef.name,
-                      arguments: params,
-                    });
-                    return {
-                      success: true,
-                      result: result.content,
-                      isError: result.isError || false,
-                    };
-                  } catch (error) {
-                    return {
-                      success: false,
-                      error:
-                        error instanceof Error
-                          ? error.message
-                          : "Unknown error occurred",
-                      result: null,
-                      isError: true,
-                    };
-                  }
-                },
-              });
-
-              return prev;
-            }, {}),
-          ).catch((error) => {
-            console.error("Error fetching tools:", error);
-            return {};
-          }),
-          client.listPrompts().then((result) =>
-            result.prompts.reduce<Record<string, any>>((prev, promptDef) => {
-              const args = promptDef.arguments?.reduce<
-                Record<string, z.ZodString>
-              >((prev, arg) => {
-                prev[arg.name] = z.string();
-
-                if (arg.description) {
-                  prev[arg.name] = prev[arg.name].describe(arg.description);
-                }
-
-                if (arg.required) {
-                  prev[arg.name] = prev[arg.name].min(1);
-                } else {
-                  prev[arg.name] = prev[arg.name].optional();
-                }
+          client
+            .listTools()
+            .then((result) =>
+              result.tools.reduce<Record<string, any>>((prev, toolDef) => {
+                prev[toolDef.name] = tool({
+                  description: toolDef.description,
+                  parameters: new Function(
+                    "z",
+                    `return ${jsonSchemaToZod(toolDef.inputSchema)}`,
+                  )(z),
+                  execute: async (params) => {
+                    try {
+                      const result = await client.callTool({
+                        name: toolDef.name,
+                        arguments: params,
+                      });
+                      return {
+                        success: true,
+                        result: result.content,
+                        isError: result.isError || false,
+                      };
+                    } catch (error) {
+                      return {
+                        success: false,
+                        error:
+                          error instanceof Error
+                            ? error.message
+                            : "Unknown error occurred",
+                        result: null,
+                        isError: true,
+                      };
+                    }
+                  },
+                });
 
                 return prev;
-              }, {});
+              }, {}),
+            )
+            .catch((error) => {
+              console.error("Error fetching tools:", error);
+              return {};
+            }),
+          client
+            .listPrompts()
+            .then((result) =>
+              result.prompts.reduce<Record<string, any>>((prev, promptDef) => {
+                const args = promptDef.arguments?.reduce<
+                  Record<string, z.ZodString>
+                >((prev, arg) => {
+                  prev[arg.name] = z.string();
 
-              prev[promptDef.name] = tool({
-                description: promptDef.description,
-                parameters: z.object(args ?? {}),
-                execute: async (params) => {
-                  try {
-                    const result = await client.getPrompt({
-                      name: promptDef.name,
-                      arguments: params,
-                    });
-                    return {
-                      success: true,
-                      description: result.description,
-                      messages: result.messages,
-                    };
-                  } catch (error) {
-                    return {
-                      success: false,
-                      error:
-                        error instanceof Error
-                          ? error.message
-                          : "Unknown error occurred",
-                      description: null,
-                      messages: [],
-                    };
+                  if (arg.description) {
+                    prev[arg.name] = prev[arg.name].describe(arg.description);
                   }
-                },
-              });
 
-              return prev;
-            }, {}),
-          ).catch((error) => {
-            console.error("Error fetching prompts:", error);
-            return {};
-          }),
+                  if (arg.required) {
+                    prev[arg.name] = prev[arg.name].min(1);
+                  } else {
+                    prev[arg.name] = prev[arg.name].optional();
+                  }
+
+                  return prev;
+                }, {});
+
+                prev[promptDef.name] = tool({
+                  description: promptDef.description,
+                  parameters: z.object(args ?? {}),
+                  execute: async (params) => {
+                    try {
+                      const result = await client.getPrompt({
+                        name: promptDef.name,
+                        arguments: params,
+                      });
+                      return {
+                        success: true,
+                        description: result.description,
+                        messages: result.messages,
+                      };
+                    } catch (error) {
+                      return {
+                        success: false,
+                        error:
+                          error instanceof Error
+                            ? error.message
+                            : "Unknown error occurred",
+                        description: null,
+                        messages: [],
+                      };
+                    }
+                  },
+                });
+
+                return prev;
+              }, {}),
+            )
+            .catch((error) => {
+              console.error("Error fetching prompts:", error);
+              return {};
+            }),
         ]);
 
         tools = {
@@ -214,9 +235,8 @@ router.post(
 
         toolsChanged = false;
       }
-
     } catch (error) {
-      console.log("Unable to create MCP client transport", error);
+      c.get("logger").warn(error, "Unable to create MCP client transport");
     }
 
     const result = streamText({
@@ -234,7 +254,10 @@ router.post(
 router.post(
   "/generate",
   ...handlers,
-  sValidator(
+  describeRoute({
+    description: "Generate sample data for a tool based on its schema",
+  }),
+  zValidator(
     "json",
     z.object({
       name: z.string(),
@@ -381,7 +404,10 @@ When additional context is provided, tailor the sample data generation by:
       prompt,
       schemaName: name,
       schemaDescription: description,
-      schema: new Function("z", `return ${jsonSchemaToZod({ type: "object", properties: schema })}`)(z),
+      schema: new Function(
+        "z",
+        `return ${jsonSchemaToZod({ type: "object", properties: schema })}`,
+      )(z),
     });
 
     c.header("Content-Type", "text/plain; charset=utf-8");
@@ -394,7 +420,10 @@ When additional context is provided, tailor the sample data generation by:
 router.post(
   "/analyse",
   ...handlers,
-  sValidator(
+  describeRoute({
+    description: "Analyze and score MCP tools and prompts",
+  }),
+  zValidator(
     "json",
     z.object({
       name: z.string(),
@@ -540,7 +569,21 @@ When additional context is provided, incorporate it into your analysis by:
 router.post(
   "/theme",
   ...handlers,
-  sValidator(
+  describeRoute({
+    description:
+      "Generate a complete color theme for the MCP Inspector application",
+    responses: {
+      200: {
+        description: "Theme generated successfully",
+        content: {
+          "application/json": {
+            schema: resolver(customThemeSchema),
+          },
+        },
+      },
+    },
+  }),
+  zValidator(
     "json",
     z.object({
       context: z.string().optional(),

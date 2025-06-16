@@ -6,10 +6,11 @@ import {
   remoteTransportSchema,
   stdioTransportSchema,
 } from "@muppet-kit/shared";
-import type { Context, Env } from "hono";
+import type { Context } from "hono";
 import { parse as shellParseArgs } from "shell-quote";
 import { findActualExecutable } from "spawn-rx";
 import z from "zod";
+import type { ProxyEnv } from "./types";
 
 const SSE_HEADERS_PASSTHROUGH = ["authorization"] as const;
 const STREAMABLE_HTTP_HEADERS_PASSTHROUGH = [
@@ -49,7 +50,7 @@ export const transportHeaderSchema = z.object({
 });
 
 export async function createTransport<
-  E extends Env,
+  E extends ProxyEnv,
   P extends string,
   I extends {
     in: {
@@ -63,6 +64,7 @@ export async function createTransport<
   },
 >(c: Context<E, P, I>) {
   const query = c.req.valid("query");
+  const logger = c.get("logger");
 
   if (query.type === MuppetTransport.STDIO) {
     const queryEnv = query.env ?? {};
@@ -79,7 +81,7 @@ export async function createTransport<
       query.args as string[],
     );
 
-    console.log(`Stdio transport: command=${cmd}, args=${args}`);
+    logger.info(`Stdio transport: command=${cmd}, args=${args}`);
 
     const transport = new StdioClientTransport({
       command: cmd,
@@ -90,7 +92,7 @@ export async function createTransport<
 
     await transport.start();
 
-    console.log("Spawned stdio transport");
+    logger.info("Spawned stdio transport");
     return transport;
   }
 
@@ -117,7 +119,7 @@ export async function createTransport<
       headers.authorization = query.authorization;
     }
 
-    console.log(
+    logger.info(
       `SSE transport: url=${query.url}, headers=${Object.keys(headers)}`,
     );
 
@@ -132,7 +134,7 @@ export async function createTransport<
 
     await transport.start();
 
-    console.log("Connected to SSE transport");
+    logger.info("Connected to SSE transport");
     return transport;
   }
 
@@ -159,7 +161,7 @@ export async function createTransport<
       headers.authorization = query.authorization;
     }
 
-    console.log(
+    logger.info(
       `HTTP Streaming transport: url=${query.url}, headers=${Object.keys(headers)}`,
     );
 
@@ -171,7 +173,7 @@ export async function createTransport<
 
     await transport.start();
 
-    console.log("Connected to Streamable HTTP transport");
+    logger.info("Connected to Streamable HTTP transport");
     return transport;
   }
 
