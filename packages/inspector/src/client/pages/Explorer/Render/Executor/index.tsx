@@ -47,10 +47,8 @@ export function Executor() {
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    methods.reset();
-  }, [selectedItem]);
+    methods.reset({ __reset: true });
 
-  useEffect(() => {
     setSelectedTab((prev) =>
       activeTool.name === Tool.STATIC_RESOURCES && prev === RequestTab.JSON
         ? RequestTab.FORM
