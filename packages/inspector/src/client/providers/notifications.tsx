@@ -1,4 +1,3 @@
-import type { ServerNotification } from "@modelcontextprotocol/sdk/types.js";
 import { nanoid } from "nanoid";
 import {
   type PropsWithChildren,
@@ -7,7 +6,6 @@ import {
   useContext,
   useState,
 } from "react";
-import type { StdErrNotification } from "../types";
 
 type NotificationContextType = ReturnType<typeof useNotificationManager>;
 
@@ -25,19 +23,19 @@ export const NotificationProvider = (props: PropsWithChildren) => {
 
 function useNotificationManager() {
   const [notifications, setNotifications] = useState<
-    (ServerNotification & { id: string; timestamp: { start: number } })[]
+    { id: string; timestamp: { start: number }; request: string }[]
   >([]);
   const [stdErrNotifications, setStdErrNotifications] = useState<
-    (StdErrNotification & { id: string; timestamp: { start: number } })[]
+    { id: string; timestamp: { start: number }; request: string }[]
   >([]);
 
   const addNotification = useCallback((notification: unknown) => {
     setNotifications((prev) => [
       ...prev,
       {
-        ...(notification as ServerNotification),
         id: nanoid(),
         timestamp: { start: Date.now() },
+        request: JSON.stringify(notification),
       },
     ]);
   }, []);
@@ -46,9 +44,9 @@ function useNotificationManager() {
     setStdErrNotifications((prev) => [
       ...prev,
       {
-        ...(notification as StdErrNotification),
         id: nanoid(),
         timestamp: { start: Date.now() },
+        request: JSON.stringify(notification),
       },
     ]);
   }, []);
