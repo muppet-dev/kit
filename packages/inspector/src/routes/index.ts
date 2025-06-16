@@ -105,6 +105,8 @@ router.get(
   Scalar({
     theme: "saturn",
     url: "/openapi.json",
+    pageTitle: "Muppet Inspector API Documentation",
+    favicon: "/muppet.svg",
   }),
 );
 
