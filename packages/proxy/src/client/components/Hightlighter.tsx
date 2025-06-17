@@ -1,8 +1,8 @@
+import { cn } from "@/client/lib/utils";
 import { useEffect, useState } from "react";
 import { Theme, usePreferences, useShiki } from "../providers";
 import { CopyButton } from "./CopyButton";
 import { Skeleton } from "./ui/skeleton";
-import { cn } from "@/client/lib/utils";
 
 export type CodeHighlighter = {
   content: string;

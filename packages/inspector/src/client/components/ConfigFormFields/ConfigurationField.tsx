@@ -1,7 +1,8 @@
-import type { configTransportSchema } from "../../validations";
 import { Info } from "lucide-react";
 import { Controller, useFormContext } from "react-hook-form";
 import type z from "zod";
+import type { configTransportSchema } from "../../validations";
+import { FieldErrorMessage } from "../FieldErrorMessage";
 import {
   Accordion,
   AccordionContent,
@@ -12,7 +13,6 @@ import { Checkbox } from "../ui/checkbox";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import { FieldErrorMessage } from "../FieldErrorMessage";
 
 export function ConfigurationField() {
   const { register, control } =

@@ -1,4 +1,3 @@
-import { useConfig } from "../../../providers";
 import { nanoid } from "nanoid";
 import {
   type PropsWithChildren,
@@ -6,6 +5,7 @@ import {
   useContext,
   useState,
 } from "react";
+import { useConfig } from "../../../providers";
 import type { ChatProps } from "../type";
 
 type ChatsContextType = ReturnType<typeof useChatsManager>;

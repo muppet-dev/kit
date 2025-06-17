@@ -21,7 +21,7 @@ const BundledThemes = {
 };
 
 const ShikiContext = createContext<ReturnType<typeof useHighlighter> | null>(
-  null
+  null,
 );
 
 export function ShikiProvider({ children }: PropsWithChildren) {

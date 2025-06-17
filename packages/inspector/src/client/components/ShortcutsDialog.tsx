@@ -2,10 +2,10 @@ import { cn } from "@/client/lib/utils";
 import Fuse, { type RangeTuple } from "fuse.js";
 import {
   Fragment,
+  type PropsWithChildren,
   useEffect,
   useMemo,
   useState,
-  type PropsWithChildren,
 } from "react";
 import { highlightMatches } from "./highlightMatches";
 import { Button } from "./ui/button";
@@ -101,7 +101,7 @@ export function ShortcutsDialog() {
 
         return prev;
       },
-      []
+      [],
     );
   }
 
@@ -146,7 +146,7 @@ export function ShortcutsDialog() {
                   keys,
                   matches,
                 },
-                index
+                index,
               ) => (
                 <Fragment key={`${index}-${keys}`}>
                   <p className="text-sm font-medium">
@@ -167,7 +167,7 @@ export function ShortcutsDialog() {
                     </KeyComponent>
                   </div>
                 </Fragment>
-              )
+              ),
             )}
           </div>
         )}
@@ -185,7 +185,7 @@ function KeyComponent({ children, className }: KeyComponent) {
     <kbd
       className={cn(
         "text-foreground rounded bg-secondary border w-max px-1 py-0.5 text-xs leading-none shadow-none",
-        className
+        className,
       )}
     >
       {children}

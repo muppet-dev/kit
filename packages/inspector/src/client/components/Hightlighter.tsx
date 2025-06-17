@@ -40,7 +40,7 @@ export function CodeHighlighter({ content, className }: CodeHighlighter) {
       <div
         className={cn(
           "border relative size-full overflow-auto rounded-md",
-          className
+          className,
         )}
       >
         <div

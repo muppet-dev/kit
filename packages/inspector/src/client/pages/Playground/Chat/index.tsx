@@ -1,10 +1,10 @@
-import { useConfig, useConnection } from "../../../providers";
 import { AssistantRuntimeProvider } from "@assistant-ui/react";
 import { useChatRuntime } from "@assistant-ui/react-ai-sdk";
+import { useMemo } from "react";
+import { useConfig, useConnection } from "../../../providers";
 import { useChats } from "../providers";
 import { ModelHeader } from "./Header";
 import { Thread } from "./Thread";
-import { useMemo } from "react";
 
 export type Chat = {
   chatId: string;

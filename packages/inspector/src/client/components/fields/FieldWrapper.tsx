@@ -21,7 +21,7 @@ export function FieldWrapper({ children }: FieldWrapper) {
   const autoId = useId();
   const customId = useMemo(
     () => generateId?.(schema, props),
-    [generateId, schema, props]
+    [generateId, schema, props],
   );
 
   const { required, label, onChange, type, description } = props;
@@ -39,7 +39,7 @@ export function FieldWrapper({ children }: FieldWrapper) {
           "flex",
           type === "boolean"
             ? "flex-row-reverse w-max gap-2 items-center"
-            : "flex-col"
+            : "flex-col",
         )}
       >
         {label && (

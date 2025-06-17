@@ -37,7 +37,7 @@ export function TableContent(props: TableContent) {
             key={`row.${index + 1}`}
             className={cn(
               "cursor-pointer divide-x",
-              props.selected === server.id && "bg-muted/50"
+              props.selected === server.id && "bg-muted/50",
             )}
             onClick={handleSelectItem(server.id)}
             onKeyDown={handleSelectItem(server.id)}
@@ -53,8 +53,8 @@ export function TableContent(props: TableContent) {
                     server.status === "online"
                       ? "text-success bg-success/10"
                       : server.status === "offline"
-                      ? "text-destructive bg-destructive/10"
-                      : "text-secondary-foreground bg-secondarytext-secondary-foreground/10"
+                        ? "text-destructive bg-destructive/10"
+                        : "text-secondary-foreground bg-secondarytext-secondary-foreground/10",
                   )}
                 >
                   {server.status}

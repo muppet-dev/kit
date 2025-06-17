@@ -1,9 +1,9 @@
-import { validator as zValidator, resolver } from "hono-openapi/zod";
 import { _generateModelKey } from "@muppet-kit/shared";
 import { Hono } from "hono";
-import z from "zod";
-import { HTTPException } from "hono/http-exception";
 import { describeRoute } from "hono-openapi";
+import { resolver, validator as zValidator } from "hono-openapi/zod";
+import { HTTPException } from "hono/http-exception";
+import z from "zod";
 
 const router = new Hono();
 

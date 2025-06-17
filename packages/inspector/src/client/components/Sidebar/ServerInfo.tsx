@@ -113,11 +113,12 @@ function ConnectStatus() {
             connectionStatus === ConnectionStatus.CONNECTED
               ? "bg-success"
               : connectionStatus === ConnectionStatus.ERROR ||
-                connectionStatus === ConnectionStatus.ERROR_CONNECTING_TO_PROXY
-              ? "bg-destructive"
-              : connectionStatus === ConnectionStatus.CONNECTING
-              ? "bg-warning"
-              : "bg-secondary-foreground/60"
+                  connectionStatus ===
+                    ConnectionStatus.ERROR_CONNECTING_TO_PROXY
+                ? "bg-destructive"
+                : connectionStatus === ConnectionStatus.CONNECTING
+                  ? "bg-warning"
+                  : "bg-secondary-foreground/60",
           )}
         />
       </TooltipWrapper>

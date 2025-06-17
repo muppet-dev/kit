@@ -1,3 +1,7 @@
+import _ from "lodash";
+import type { BaseSyntheticEvent } from "react";
+import { useFormContext, useWatch } from "react-hook-form";
+import type z from "zod";
 import { Button } from "../../components/ui/button";
 import { Spinner } from "../../components/ui/spinner";
 import { eventHandler } from "../../lib/eventHandler";
@@ -8,10 +12,6 @@ import {
   SUBMIT_BUTTON_KEY,
   type configTransportSchema,
 } from "../../validations";
-import _ from "lodash";
-import type { BaseSyntheticEvent } from "react";
-import { useFormContext, useWatch } from "react-hook-form";
-import type z from "zod";
 
 export function FormFooter() {
   const { connectionInfo } = useConfig();

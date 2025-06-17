@@ -1,4 +1,8 @@
+import { useFormContext, useWatch } from "react-hook-form";
+import type z from "zod";
+import type { configTransportSchema } from "../../../validations";
 import { CopyButton } from "../../CopyButton";
+import { FieldErrorMessage } from "../../FieldErrorMessage";
 import {
   Accordion,
   AccordionContent,
@@ -7,10 +11,6 @@ import {
 } from "../../ui/accordion";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
-import type { configTransportSchema } from "../../../validations";
-import { useFormContext, useWatch } from "react-hook-form";
-import type z from "zod";
-import { FieldErrorMessage } from "../../FieldErrorMessage";
 
 export function SSEFields() {
   const { register } = useFormContext<z.infer<typeof configTransportSchema>>();

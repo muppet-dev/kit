@@ -49,7 +49,7 @@ function CopyServersFileButton() {
             });
 
           return entries;
-        }) ?? []
+        }) ?? [],
       ),
     };
   }, [data]);

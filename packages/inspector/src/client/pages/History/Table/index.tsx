@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "../../../components/ui/table";
 import { eventHandler } from "../../../lib/eventHandler";
-import { cn, numberFormatter, SortingEnum } from "../../../lib/utils";
+import { SortingEnum, cn, numberFormatter } from "../../../lib/utils";
 import { HistoryTab, useHistory } from "../providers";
 import { FilterMethod } from "./FilterMethod";
 import { TableDrawer } from "./TableDrawer";

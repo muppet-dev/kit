@@ -1,7 +1,7 @@
-import type { configTransportSchema } from "../../../validations";
 import { Transport } from "@muppet-kit/shared";
 import { useFormContext, useWatch } from "react-hook-form";
 import type z from "zod";
+import type { configTransportSchema } from "../../../validations";
 import { SSEFields } from "./SSE";
 import { STDIOFields } from "./STDIO";
 

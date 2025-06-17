@@ -9,8 +9,8 @@ import {
   DialogTrigger,
 } from "@/client/components/ui/dialog";
 import { Plus } from "lucide-react";
-import { ServerForm } from "./Form";
 import { useState } from "react";
+import { ServerForm } from "./Form";
 
 export function AddServerDialog() {
   const [isOpen, setIsOpen] = useState(false);

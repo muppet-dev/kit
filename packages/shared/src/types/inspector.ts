@@ -1,7 +1,7 @@
 import type { LanguageModel } from "ai";
+import type { Logger } from "pino";
 import type z from "zod";
 import type { transportSchema } from "../validations";
-import type { Logger } from "pino";
 
 type TransportConfig = { name: string } & z.infer<typeof transportSchema>;
 

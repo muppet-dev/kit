@@ -1,9 +1,9 @@
-import { eventHandler } from "../../../lib/eventHandler";
-import { useConnection } from "../../../providers";
-import { ConnectionStatus } from "../../../providers/connection/manager";
 import { EmptyResultSchema } from "@modelcontextprotocol/sdk/types.js";
 import { Bell } from "lucide-react";
 import { useState } from "react";
+import { eventHandler } from "../../../lib/eventHandler";
+import { useConnection } from "../../../providers";
+import { ConnectionStatus } from "../../../providers/connection/manager";
 import { SidebarMenuButton, SidebarMenuItem } from "../../ui/sidebar";
 import { Spinner } from "../../ui/spinner";
 import { OptionsMenu } from "./OptionsMenu";
@@ -19,7 +19,7 @@ export function PingButton() {
       {
         method: "ping",
       },
-      EmptyResultSchema
+      EmptyResultSchema,
     );
     setIsLoading(false);
   });

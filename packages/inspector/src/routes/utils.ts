@@ -1,8 +1,8 @@
 import type { EnvWithConfig } from "@/types";
 import { _generateModelKey, transportSchema } from "@muppet-kit/shared";
 import { Hono } from "hono";
-import { resolver } from "hono-openapi/zod";
 import { describeRoute } from "hono-openapi";
+import { resolver } from "hono-openapi/zod";
 import z from "zod";
 
 const router = new Hono<EnvWithConfig>();

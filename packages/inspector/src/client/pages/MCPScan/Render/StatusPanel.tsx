@@ -1,12 +1,12 @@
-import { Skeleton } from "../../../components/ui/skeleton";
-import { eventHandler } from "../../../lib/eventHandler";
-import { cn, numberFormatter } from "../../../lib/utils";
 import { Clock, type LucideProps, TriangleAlert } from "lucide-react";
 import type {
   ForwardRefExoticComponent,
   ReactNode,
   RefAttributes,
 } from "react";
+import { Skeleton } from "../../../components/ui/skeleton";
+import { eventHandler } from "../../../lib/eventHandler";
+import { cn, numberFormatter } from "../../../lib/utils";
 import { useMCPScan } from "../providers";
 
 export function StatusPanel(props: {
@@ -31,7 +31,7 @@ export function StatusPanel(props: {
             (mutation.data?.duration ?? 0) > 1000
               ? `${numberFormatter(
                   Number(((mutation.data?.duration ?? 0) / 1000).toFixed(2)),
-                  "decimal"
+                  "decimal",
                 )} s`
               : `${numberFormatter(mutation.data?.duration ?? 0, "decimal")} ms`
           }
@@ -97,7 +97,7 @@ function SummaryItem(props: {
   const mutation = useMCPScan();
 
   const stat = mutation.data?.tools.filter(
-    (item) => item.type === props.name
+    (item) => item.type === props.name,
   ).length;
 
   const handleChangeFilter = (filter: "tool" | "prompt" | "resource") =>
@@ -111,7 +111,7 @@ function SummaryItem(props: {
         "w-full h-[111px] rounded-md select-none flex flex-col gap-0.5 lg:gap-1 items-center justify-center bg-background cursor-pointer border transition-all ease-in-out",
         props.filter === props.name
           ? "border-accent-foreground"
-          : "border-transparent"
+          : "border-transparent",
       )}
       onClick={handleChangeFilter(props.name)}
       onKeyDown={handleChangeFilter(props.name)}

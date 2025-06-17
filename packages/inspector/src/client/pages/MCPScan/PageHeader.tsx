@@ -1,9 +1,9 @@
+import { Shield } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "../../components/ui/tooltip";
-import { Shield } from "lucide-react";
 import { ScanButton } from "./ScanButton";
 
 export function PageHeader() {

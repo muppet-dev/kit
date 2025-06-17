@@ -8,14 +8,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/client/components/ui/dialog";
-import { Settings, SparklesIcon } from "lucide-react";
-import { useState } from "react";
-import { GenerateForm } from "./Form";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/client/components/ui/tooltip";
+import { Settings, SparklesIcon } from "lucide-react";
+import { useState } from "react";
+import { GenerateForm } from "./Form";
 
 export function GenerateDialog() {
   const [isOpen, setOpen] = useState(false);

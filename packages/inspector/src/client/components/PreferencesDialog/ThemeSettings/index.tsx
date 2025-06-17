@@ -1,9 +1,9 @@
+import { eventHandler } from "@/client/lib/eventHandler";
 import { usePreferences } from "@/client/providers";
+import { Pencil, Plus } from "lucide-react";
+import { Button } from "../../ui/button";
 import { Label } from "../../ui/label";
 import { ItemCard } from "../ItemCard";
-import { eventHandler } from "@/client/lib/eventHandler";
-import { Button } from "../../ui/button";
-import { Pencil, Plus } from "lucide-react";
 import { DeleteThemeButton } from "./DeleteButton";
 
 export type ThemeSettings = {
@@ -22,7 +22,7 @@ export function ThemeSettings(props: ThemeSettings) {
     eventHandler(() => props.onEditDialogOpen?.(name));
 
   const handleOpenAddThemeDialog = eventHandler(() =>
-    props.onAddDialogOpen?.()
+    props.onAddDialogOpen?.(),
   );
 
   return (

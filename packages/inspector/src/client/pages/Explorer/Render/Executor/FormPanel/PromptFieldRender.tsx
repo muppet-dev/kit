@@ -32,7 +32,7 @@ export function PromptFieldRender({
           name: selectedPromptName,
         },
         argName,
-        value
+        value,
       );
     }
   };

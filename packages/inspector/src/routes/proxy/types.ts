@@ -1,6 +1,6 @@
+import type { EnvWithConfig } from "@/types";
 import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 import type { Broadcast } from "./broadcast";
-import type { EnvWithConfig } from "@/types";
 
 export type ProxyEnv = {
   Variables: EnvWithConfig["Variables"] & {

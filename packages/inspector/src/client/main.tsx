@@ -4,11 +4,11 @@ import toast, { Toaster } from "react-hot-toast";
 import { BrowserRouter } from "react-router";
 import App from "./App";
 import "./index.css";
-import { ConfigProvider } from "./providers";
-import { PreferencesProvider, usePreferences } from "./providers/preferences";
 import { ErrorBoundary } from "react-error-boundary";
 import { ErrorBoundaryRender } from "./components/ErrorBoundaryRender";
 import { ShortcutsDialog } from "./components/ShortcutsDialog";
+import { ConfigProvider } from "./providers";
+import { PreferencesProvider, usePreferences } from "./providers/preferences";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,7 +39,7 @@ createRoot(document.getElementById("root")!).render(
         </ConfigProvider>
       </BrowserRouter>
     </PreferencesProvider>
-  </QueryClientProvider>
+  </QueryClientProvider>,
 );
 
 function Render() {

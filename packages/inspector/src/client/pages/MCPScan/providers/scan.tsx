@@ -1,13 +1,13 @@
-import { useConfig, useConnection } from "../../../providers";
 import {
   ListPromptsResultSchema,
-  ListResourcesResultSchema,
   ListResourceTemplatesResultSchema,
+  ListResourcesResultSchema,
   ListToolsResultSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 import { useMutation } from "@tanstack/react-query";
 import { type PropsWithChildren, createContext, useContext } from "react";
 import toast from "react-hot-toast";
+import { useConfig, useConnection } from "../../../providers";
 
 type MCPScanContextType = ReturnType<typeof useMCPScanManager>;
 
@@ -52,11 +52,11 @@ function useMCPScanManager() {
                       type: "tool",
                       name: tool.name,
                       description: tool.description,
-                    } satisfies MCPScanPayload)
-                )
+                    }) satisfies MCPScanPayload,
+                ),
               );
-            }
-          )
+            },
+          ),
         );
       }
 
@@ -71,11 +71,11 @@ function useMCPScanManager() {
                       type: "prompt",
                       name: prompt.name,
                       description: prompt.description,
-                    } satisfies MCPScanPayload)
-                )
+                    }) satisfies MCPScanPayload,
+                ),
               );
-            }
-          )
+            },
+          ),
         );
       }
 
@@ -83,7 +83,7 @@ function useMCPScanManager() {
         promises.push(
           makeRequest(
             { method: "resources/list" },
-            ListResourcesResultSchema
+            ListResourcesResultSchema,
           ).then(({ resources }) => {
             entries.push(
               ...resources.map(
@@ -92,15 +92,15 @@ function useMCPScanManager() {
                     type: "resource",
                     name: resource.name,
                     description: resource.description,
-                  } satisfies MCPScanPayload)
-              )
+                  }) satisfies MCPScanPayload,
+              ),
             );
           }),
           makeRequest(
             {
               method: "resources/templates/list",
             },
-            ListResourceTemplatesResultSchema
+            ListResourceTemplatesResultSchema,
           ).then(({ resourceTemplates }) =>
             entries.push(
               ...resourceTemplates.map(
@@ -109,10 +109,10 @@ function useMCPScanManager() {
                     type: "resource",
                     name: resource.name,
                     description: resource.description,
-                  } satisfies MCPScanPayload)
-              )
-            )
-          )
+                  }) satisfies MCPScanPayload,
+              ),
+            ),
+          ),
         );
       }
 
@@ -130,7 +130,7 @@ function useMCPScanManager() {
         throw new Error(
           `Verification API error: ${
             response.status
-          } - ${await response.text()}`
+          } - ${await response.text()}`,
         );
       }
 
@@ -145,7 +145,7 @@ function useMCPScanManager() {
           errors: tool.errors.map(
             (error) =>
               // Captialize the first letter of the error message
-              error.charAt(0).toUpperCase() + error.slice(1)
+              error.charAt(0).toUpperCase() + error.slice(1),
           ),
         })),
       };

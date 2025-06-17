@@ -1,8 +1,8 @@
-import { usePreferences } from "@/client/providers";
-import { Label } from "../ui/label";
-import toast, { type ToastPosition } from "react-hot-toast";
-import { ItemCard } from "./ItemCard";
 import { eventHandler } from "@/client/lib/eventHandler";
+import { usePreferences } from "@/client/providers";
+import toast, { type ToastPosition } from "react-hot-toast";
+import { Label } from "../ui/label";
+import { ItemCard } from "./ItemCard";
 
 const TOAST_POSITIONS = [
   "top-left",

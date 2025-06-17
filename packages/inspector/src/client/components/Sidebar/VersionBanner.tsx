@@ -2,10 +2,10 @@ import { eventHandler } from "@/client/lib/eventHandler";
 import { useConfig } from "@/client/providers";
 import { X } from "lucide-react";
 import { useState } from "react";
+import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { SidebarGroup, SidebarMenu } from "../ui/sidebar";
-import { Badge } from "../ui/badge";
 
 export function VersionBanner() {
   const { version, npmVersion } = useConfig();

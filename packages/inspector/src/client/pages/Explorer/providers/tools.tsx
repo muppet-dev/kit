@@ -1,4 +1,3 @@
-import { useConnection } from "../../../providers";
 import {
   type PropsWithChildren,
   createContext,
@@ -6,6 +5,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { useConnection } from "../../../providers";
 
 export enum Tool {
   TOOLS = "tools",

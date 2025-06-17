@@ -1,10 +1,10 @@
 import { useLocalStorage } from "@uidotdev/usehooks";
 import {
+  type PropsWithChildren,
   createContext,
   useContext,
   useEffect,
   useState,
-  type PropsWithChildren,
 } from "react";
 import type { ToastPosition } from "react-hot-toast";
 
@@ -37,7 +37,7 @@ function usePreferencesManager() {
     theme: Theme.SYSTEM,
   });
   const [resolvedTheme, setResolvedTheme] = useState<Theme.LIGHT | Theme.DARK>(
-    Theme.LIGHT
+    Theme.LIGHT,
   );
 
   const { theme, toast } = preferences;

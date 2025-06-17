@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import type z from "zod";
 import { eventHandler } from "../../../lib/eventHandler";
 import type { configTransportSchema } from "../../../validations";
+import { FieldErrorMessage } from "../../FieldErrorMessage";
 import {
   Accordion,
   AccordionContent,
@@ -13,7 +14,6 @@ import {
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
-import { FieldErrorMessage } from "../../FieldErrorMessage";
 
 export function STDIOFields() {
   const { register } = useFormContext<z.infer<typeof configTransportSchema>>();

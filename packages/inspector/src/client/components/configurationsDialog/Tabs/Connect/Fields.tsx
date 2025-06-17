@@ -1,10 +1,10 @@
-import type { configTransportSchema as schema } from "../../../../validations";
 import { useFormContext } from "react-hook-form";
 import type z from "zod";
+import type { configTransportSchema as schema } from "../../../../validations";
 import { ConfigFormFields } from "../../../ConfigFormFields";
+import { FieldErrorMessage } from "../../../FieldErrorMessage";
 import { Input } from "../../../ui/input";
 import { Label } from "../../../ui/label";
-import { FieldErrorMessage } from "../../../FieldErrorMessage";
 
 export function FormFields() {
   const { register } = useFormContext<z.output<typeof schema>>();

@@ -9,7 +9,7 @@ export function useServersData() {
       fetch("/api/servers").then((res) => {
         if (!res.ok) {
           throw new Error(
-            "Failed to fetch servers data. Please check your network connection or try again later."
+            "Failed to fetch servers data. Please check your network connection or try again later.",
           );
         }
 

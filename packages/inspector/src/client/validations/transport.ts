@@ -11,14 +11,14 @@ export enum DocumentSubmitType {
   SAVE_AND_CONNECT = "save and connect",
 }
 
-const extraPropValidation = ({
+const extraPropValidation = {
   name: z.string().optional(),
   request_timeout: z.number().optional(),
   progress: z.boolean().optional(),
   total_timeout: z.number().optional(),
   proxy: z.string().optional(),
   [SUBMIT_BUTTON_KEY]: z.nativeEnum(DocumentSubmitType).optional(),
-});
+};
 
 export const configTransportSchema = z.union([
   stdioTransportSchema.extend(extraPropValidation),

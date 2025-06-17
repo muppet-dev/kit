@@ -1,7 +1,7 @@
+import { config } from "dotenv";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import routes from "./routes";
-import { config } from "dotenv";
 
 if (import.meta.env.DEV) {
   config();

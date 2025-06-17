@@ -1,7 +1,9 @@
-import { validator as zValidator } from "hono-openapi/zod";
 import { SseError } from "@modelcontextprotocol/sdk/client/sse.js";
 import type { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 import { Hono } from "hono";
+import { describeRoute } from "hono-openapi";
+import { validator as zValidator } from "hono-openapi/zod";
 import { SSEHonoTransport, streamSSE } from "muppet/streaming";
 import mcpProxy from "./mcpProxy.js";
 import type { ProxyEnv } from "./types.js";
@@ -10,8 +12,6 @@ import {
   transportHeaderSchema,
   transportSchema,
 } from "./utils.js";
-import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
-import { describeRoute } from "hono-openapi";
 
 const router = new Hono<ProxyEnv>().get(
   "/",

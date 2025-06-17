@@ -61,7 +61,7 @@ export function AnalysePanel() {
               className={cn(
                 "text-lg font-semibold",
                 // @ts-expect-error: it does not give undefined value
-                scoreTextColor[scoreRemark]
+                scoreTextColor[scoreRemark],
               )}
             >
               {scoreRemark}
@@ -74,7 +74,7 @@ export function AnalysePanel() {
               <p
                 className={cn(
                   "text-xs text-center select-none opacity-0 group-hover:opacity-100 transition-all ease-in-out duration-150",
-                  scoreTextColor[value]
+                  scoreTextColor[value],
                 )}
               >
                 {value}
@@ -84,7 +84,7 @@ export function AnalysePanel() {
                   scoreBgColor[value],
                   scoreRemark === value
                     ? "h-4"
-                    : "h-2 group-hover:h-4 transition-all ease-in-out"
+                    : "h-2 group-hover:h-4 transition-all ease-in-out",
                 )}
               />
             </div>
@@ -133,8 +133,8 @@ function ScoreItem(props: AnalyseDataType["recommendations"][0]) {
             props.severity === AnalyseSeverity.LOW
               ? "text-info bg-info/10"
               : props.severity === AnalyseSeverity.MEDIUM
-              ? "text-warning bg-warning/10"
-              : "text-destructive bg-destructive/10"
+                ? "text-warning bg-warning/10"
+                : "text-destructive bg-destructive/10",
           )}
         >
           {props.severity}

@@ -1,6 +1,6 @@
-import { useConfig } from "../../providers";
 import { Sparkles } from "lucide-react";
 import { useEffect } from "react";
+import { useConfig } from "../../providers";
 import { Chat } from "./Chat";
 import { ChatsProvider, useChats } from "./providers";
 

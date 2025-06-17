@@ -52,8 +52,8 @@ function ServerStatus(props: { status?: string }) {
             props.status === "online"
               ? "bg-success"
               : props.status === "offline"
-              ? "bg-secondary-foreground/60"
-              : "bg-destructive"
+                ? "bg-secondary-foreground/60"
+                : "bg-destructive",
           )}
         />
       </TooltipTrigger>
@@ -69,7 +69,7 @@ type PreviousServerButton = {
 
 function PreviousServerButton(props: PreviousServerButton) {
   const handleGoToPreviousServer = eventHandler(() =>
-    props.goToPreviousServer()
+    props.goToPreviousServer(),
   );
 
   return (

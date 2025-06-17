@@ -16,9 +16,9 @@ import {
 } from "../../../components/ui/table";
 import { SortingEnum, useLogs } from "../providers";
 import { FilterMethod } from "./FilterMethod";
+import { FilterServer } from "./FilterServer";
 import { FilterSession } from "./FilterSession";
 import { TableDrawer } from "./TableDrawer";
-import { FilterServer } from "./FilterServer";
 
 export function TracingTable() {
   const { logs, selected, setSelected, timestampSort, toggleTimestampSort } =
@@ -109,7 +109,7 @@ export function TracingTable() {
                       key={`row.${index + 1}`}
                       className={cn(
                         "cursor-pointer divide-x",
-                        selected === trace.id && "bg-muted/50"
+                        selected === trace.id && "bg-muted/50",
                       )}
                       onClick={handleSelectData(trace.id)}
                       onKeyDown={handleSelectData(trace.id)}
@@ -147,7 +147,7 @@ export function TracingTable() {
                             "border px-1.5 w-max",
                             isError
                               ? "text-destructive bg-destructive/10"
-                              : "text-success bg-success/10"
+                              : "text-success bg-success/10",
                           )}
                         >
                           {isError ? "Error" : "Success"}
@@ -158,7 +158,7 @@ export function TracingTable() {
                           ? latency > 1000
                             ? `${numberFormatter(
                                 Number((latency / 1000).toFixed(2)),
-                                "decimal"
+                                "decimal",
                               )} s`
                             : `${numberFormatter(latency, "decimal")} ms`
                           : "-"}

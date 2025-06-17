@@ -1,4 +1,3 @@
-import { Dices } from "lucide-react";
 import { Button } from "@/client/components/ui/button";
 import { Spinner } from "@/client/components/ui/spinner";
 import {
@@ -8,6 +7,7 @@ import {
 } from "@/client/components/ui/tooltip";
 import { eventHandler } from "@/client/lib/eventHandler";
 import { useConfig } from "@/client/providers";
+import { Dices } from "lucide-react";
 import { GenerateDialog } from "./GenerateDialog";
 import { GenerateProvider, useGenerate } from "./provider";
 

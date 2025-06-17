@@ -1,6 +1,6 @@
-import { Theme, usePreferences } from "@/client/providers";
 import { eventHandler } from "@/client/lib/eventHandler";
 import { cn } from "@/client/lib/utils";
+import { Theme, usePreferences } from "@/client/providers";
 import { type LucideIcon, Moon, Settings, Sun, Tv } from "lucide-react";
 import type { BaseSyntheticEvent } from "react";
 import toast, { type ToastPosition } from "react-hot-toast";
@@ -115,7 +115,7 @@ function ItemCard({ isSelected, name, onClick, icon: Icon }: ItemCard) {
     <div
       className={cn(
         "px-4 py-[8px] border text-muted-foreground leading-none cursor-pointer hover:bg-accent/60 hover:border-primary/30 transition-all ease-in-out capitalize flex items-center gap-2 w-full justify-center",
-        isSelected && "bg-accent/60 border-primary/30 text-foreground"
+        isSelected && "bg-accent/60 border-primary/30 text-foreground",
       )}
       onClick={onClick}
       onKeyDown={onClick}

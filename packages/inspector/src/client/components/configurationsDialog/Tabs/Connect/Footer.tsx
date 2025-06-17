@@ -12,15 +12,15 @@ export function FormFooter() {
   const handleResetForm = eventHandler(() =>
     reset({
       type: Transport.STDIO,
-    })
+    }),
   );
 
   const handleSaveAndConnect = eventHandler(() =>
-    setValue(SUBMIT_BUTTON_KEY, DocumentSubmitType.SAVE_AND_CONNECT)
+    setValue(SUBMIT_BUTTON_KEY, DocumentSubmitType.SAVE_AND_CONNECT),
   );
 
   const handleConnect = eventHandler(() =>
-    setValue(SUBMIT_BUTTON_KEY, DocumentSubmitType.CONNECT)
+    setValue(SUBMIT_BUTTON_KEY, DocumentSubmitType.CONNECT),
   );
 
   useEffect(() => {
@@ -32,14 +32,14 @@ export function FormFooter() {
       ) {
         event.preventDefault();
         const saveAndConnectButton = document.getElementById(
-          DocumentSubmitType.SAVE_AND_CONNECT
+          DocumentSubmitType.SAVE_AND_CONNECT,
         ) as HTMLButtonElement | null;
 
         if (saveAndConnectButton) saveAndConnectButton.click();
       } else if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
         event.preventDefault();
         const connectButton = document.getElementById(
-          DocumentSubmitType.CONNECT
+          DocumentSubmitType.CONNECT,
         ) as HTMLButtonElement | null;
 
         if (connectButton) connectButton.click();

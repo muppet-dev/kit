@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useLocalStorage } from "@uidotdev/usehooks";
+import { PostHogProvider } from "posthog-js/react";
 import {
   type PropsWithChildren,
   createContext,
@@ -14,7 +15,6 @@ import { SortingEnum } from "../lib/utils";
 import type { configTransportSchema } from "../validations";
 import type { ConnectionInfo } from "./connection/manager";
 import { usePreferences } from "./preferences";
-import { PostHogProvider } from "posthog-js/react";
 
 export const CONFIG_STORAGE_KEY = "muppet-config";
 

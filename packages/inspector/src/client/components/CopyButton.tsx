@@ -1,10 +1,10 @@
+import { useCopyToClipboard } from "@uidotdev/usehooks";
+import { Check, Copy } from "lucide-react";
+import { useEffect, useState } from "react";
 import { eventHandler } from "../lib/eventHandler";
 import { cn } from "../lib/utils";
-import { Check, Copy } from "lucide-react";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
-import { useCopyToClipboard } from "@uidotdev/usehooks";
-import { useEffect, useState } from "react";
 
 export type CopyButton = {
   data?: string;
@@ -61,7 +61,7 @@ export function CopyButton({
     <Tooltip>
       <TooltipTrigger asChild>{button}</TooltipTrigger>
       <TooltipContent hidden={!data} side={tooltipSide}>
-        {isCopied ? "Copied" : tooltipContent ?? "Copy Code"}
+        {isCopied ? "Copied" : (tooltipContent ?? "Copy Code")}
       </TooltipContent>
     </Tooltip>
   );

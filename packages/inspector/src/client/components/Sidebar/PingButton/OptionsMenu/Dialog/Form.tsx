@@ -1,12 +1,12 @@
-import { Button } from "../../../../ui/button";
-import { DialogClose, DialogFooter } from "../../../../ui/dialog";
-import { Input } from "../../../../ui/input";
-import { Label } from "../../../../ui/label";
-import { usePingServer } from "../../../../../providers";
 import { Radio } from "lucide-react";
 import type { BaseSyntheticEvent } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import { usePingServer } from "../../../../../providers";
+import { Button } from "../../../../ui/button";
+import { DialogClose, DialogFooter } from "../../../../ui/dialog";
+import { Input } from "../../../../ui/input";
+import { Label } from "../../../../ui/label";
 
 const schema = z.object({
   interval: z.number().min(5),

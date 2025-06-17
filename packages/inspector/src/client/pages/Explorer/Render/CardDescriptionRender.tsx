@@ -16,14 +16,14 @@ export function CardDescriptionRender({
   const [isViewMore, setIsViewMore] = useState(false);
 
   const handleViewMoreOrLess = eventHandler(() =>
-    setIsViewMore((prev) => !prev)
+    setIsViewMore((prev) => !prev),
   );
 
   return (
     <CardDescription
       className={cn(
         "leading-tight tracking-tight inline-flex",
-        isViewMore && "flex-col"
+        isViewMore && "flex-col",
       )}
     >
       <span
@@ -38,7 +38,7 @@ export function CardDescriptionRender({
         <span
           className={cn(
             "whitespace-nowrap text-foreground cursor-pointer",
-            !isViewMore && "self-end"
+            !isViewMore && "self-end",
           )}
           onClick={handleViewMoreOrLess}
           onKeyDown={handleViewMoreOrLess}

@@ -31,7 +31,7 @@ function useCustomFormManager() {
     mutationFn: async (values: FieldValues) => {
       const startTime = performance.now();
 
-      delete values.__reset;
+      values.__reset = undefined;
 
       const result = await callItem(selectedItem!, values);
       return {

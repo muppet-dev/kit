@@ -1,10 +1,10 @@
-import { serve, type ServerType } from "@hono/node-server";
+import * as readline from "node:readline";
+import { type ServerType, serve } from "@hono/node-server";
+import { bgHex, blue, bold, cyan, dim, underline, yellow } from "ansis";
 import { loadConfig } from "c12";
 import type { Hono } from "hono";
-import type { SanitizedInspectorConfig } from "../types";
 import openBrowser from "open";
-import * as readline from "node:readline";
-import { blue, bold, cyan, dim, underline, bgHex, yellow } from "ansis";
+import type { SanitizedInspectorConfig } from "../types";
 
 type InspectorActionOptions = {
   options: Record<string, string>;

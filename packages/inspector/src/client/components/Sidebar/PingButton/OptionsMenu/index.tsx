@@ -1,3 +1,7 @@
+import { ConnectionStatus } from "@/client/providers/connection/manager";
+import { Ellipsis, X } from "lucide-react";
+import { type BaseSyntheticEvent, useState } from "react";
+import { useConnection, usePingServer } from "../../../../providers";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,11 +10,7 @@ import {
 } from "../../../ui/dropdown-menu";
 import { SidebarMenuAction } from "../../../ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../../ui/tooltip";
-import { useConnection, usePingServer } from "../../../../providers";
-import { Ellipsis, X } from "lucide-react";
-import { type BaseSyntheticEvent, useState } from "react";
 import { CustomTimeIntervalDialog } from "./Dialog";
-import { ConnectionStatus } from "@/client/providers/connection/manager";
 
 export function OptionsMenu() {
   const [isCustomTimeDialogOpen, setCustomTimeDialogOpen] = useState(false);

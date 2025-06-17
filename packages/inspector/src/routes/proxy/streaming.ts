@@ -1,8 +1,11 @@
-import { validator as zValidator } from "hono-openapi/zod";
 import { SseError } from "@modelcontextprotocol/sdk/client/sse.js";
+import type { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
+import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 import { toFetchResponse, toReqRes } from "fetch-to-node";
 import { Hono } from "hono";
+import { describeRoute } from "hono-openapi";
+import { validator as zValidator } from "hono-openapi/zod";
 import { nanoid } from "nanoid";
 import z from "zod";
 import mcpProxy from "./mcpProxy";
@@ -12,9 +15,6 @@ import {
   transportHeaderSchema,
   transportSchema,
 } from "./utils";
-import type { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
-import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
-import { describeRoute } from "hono-openapi";
 
 const router = new Hono<ProxyEnv>()
   .use(async (c, next) => {

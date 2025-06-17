@@ -1,21 +1,21 @@
 import type { EnvWithDefaultModel } from "@/types/index.js";
 import { customThemeSchema } from "@/validations";
-import { resolver, validator as zValidator } from "hono-openapi/zod";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
-import { Transport } from "@muppet-kit/shared";
-import { generateObject, streamText, tool } from "ai";
-import { Hono } from "hono";
-import { createFactory } from "hono/factory";
-import { stream } from "hono/streaming";
-import z from "zod";
-import { jsonSchemaToZod } from "json-schema-to-zod";
 import {
   PromptListChangedNotificationSchema,
   ToolListChangedNotificationSchema,
 } from "@modelcontextprotocol/sdk/types.js";
+import { Transport } from "@muppet-kit/shared";
+import { generateObject, streamText, tool } from "ai";
+import { Hono } from "hono";
 import { describeRoute } from "hono-openapi";
+import { resolver, validator as zValidator } from "hono-openapi/zod";
+import { createFactory } from "hono/factory";
+import { stream } from "hono/streaming";
+import { jsonSchemaToZod } from "json-schema-to-zod";
+import z from "zod";
 
 const router = new Hono<EnvWithDefaultModel>();
 

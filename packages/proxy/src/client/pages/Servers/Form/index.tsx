@@ -67,8 +67,8 @@ export function ServerForm(props: ServerForm) {
           _values.env.length > 0
             ? JSON.stringify(
                 Object.fromEntries(
-                  _values.env.map((item) => [item.key, item.value])
-                )
+                  _values.env.map((item) => [item.key, item.value]),
+                ),
               )
             : undefined;
       }
@@ -83,7 +83,7 @@ export function ServerForm(props: ServerForm) {
         }).then((res) => {
           if (!res.ok) {
             throw new Error(
-              "Failed to save configuration. Please check your network connection or try again later."
+              "Failed to save configuration. Please check your network connection or try again later.",
             );
           }
           props.onSubmit?.();
@@ -98,7 +98,7 @@ export function ServerForm(props: ServerForm) {
         }).then((res) => {
           if (!res.ok) {
             throw new Error(
-              "Failed to save configuration. Please check your network connection or try again later."
+              "Failed to save configuration. Please check your network connection or try again later.",
             );
           }
         });
@@ -111,7 +111,7 @@ export function ServerForm(props: ServerForm) {
       toast.success(
         props.type === "add"
           ? "Server added successfully!"
-          : "Configuration saved successfully!"
+          : "Configuration saved successfully!",
       );
     },
     onError: (error) => {
@@ -134,7 +134,7 @@ export function ServerForm(props: ServerForm) {
       <form
         onSubmit={handleSubmit(
           (values) => mutation.mutateAsync(values),
-          console.error
+          console.error,
         )}
         className="size-full overflow-y-auto"
       >

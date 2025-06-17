@@ -1,9 +1,9 @@
+import type { BaseEnv } from "@/types";
 import { Hono } from "hono";
-import statsRouter from "./stats";
-import serversRouter from "./servers";
 import pkg from "../../package.json";
 import clientRouter from "./client";
-import type { BaseEnv } from "@/types";
+import serversRouter from "./servers";
+import statsRouter from "./stats";
 
 const servers: BaseEnv["Variables"]["servers"] = [];
 

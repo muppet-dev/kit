@@ -36,7 +36,7 @@ function ActionButton() {
   const mutation = useGenerate();
 
   const handleGenerate = eventHandler(() =>
-    mutation.mutateAsync(selectedItem!)
+    mutation.mutateAsync(selectedItem!),
   );
   const prevSelectedItemRef = useRef<typeof selectedItem | null>(null);
 

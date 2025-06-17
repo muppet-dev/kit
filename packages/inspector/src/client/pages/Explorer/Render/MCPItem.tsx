@@ -38,7 +38,7 @@ export function MCPItem(props: MCPItem) {
         props.name === selectedItem?.name
           ? "bg-background"
           : "bg-transparent hover:bg-background transition-all ease-in-out",
-        "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max"
+        "relative gap-0 py-2 shadow-none border-0 first-of-type:border-t border-b rounded-none select-none cursor-pointer h-max",
       )}
       onClick={handleSelectItem(props.name)}
       onKeyDown={handleSelectItem(props.name)}
