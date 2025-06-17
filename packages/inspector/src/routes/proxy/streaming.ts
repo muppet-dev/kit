@@ -1,8 +1,7 @@
 import { SseError } from "@modelcontextprotocol/sdk/client/sse.js";
 import type { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
-import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
+import { StreamableHTTPTransport } from "@hono/mcp";
 import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
-import { toFetchResponse, toReqRes } from "fetch-to-node";
 import { Hono } from "hono";
 import { describeRoute } from "hono-openapi";
 import { validator as zValidator } from "hono-openapi/zod";
@@ -40,15 +39,12 @@ const router = new Hono<ProxyEnv>()
 
       const transport = c
         .get("webAppTransports")
-        .get(sessionId) as StreamableHTTPServerTransport;
+        .get(sessionId) as StreamableHTTPTransport;
       if (!transport) {
         return c.text("Session not found", 404);
       }
 
-      const { req, res } = toReqRes(c.req.raw);
-      await transport.handleRequest(req, res);
-
-      return toFetchResponse(res);
+      return transport.handleRequest(c);
     },
   )
   .post(
@@ -83,7 +79,7 @@ const router = new Hono<ProxyEnv>()
 
         logger.info("Connected MCP client to backing server transport");
 
-        const webAppTransport = new StreamableHTTPServerTransport({
+        const webAppTransport = new StreamableHTTPTransport({
           sessionIdGenerator: nanoid,
           onsessioninitialized: (sessionId) => {
             c.get("webAppTransports").set(sessionId, webAppTransport);
@@ -100,10 +96,7 @@ const router = new Hono<ProxyEnv>()
           ctx: c,
         });
 
-        const { req, res } = toReqRes(c.req.raw);
-        await webAppTransport.handleRequest(req, res, await c.req.json());
-
-        return toFetchResponse(res);
+        return webAppTransport.handleRequest(c);
       }
 
       const transport = c
@@ -113,10 +106,7 @@ const router = new Hono<ProxyEnv>()
       if (!transport) {
         c.text(`Transport not found for sessionId ${sessionId}`, 404);
       } else {
-        const { req, res } = toReqRes(c.req.raw);
-        await transport.handleRequest(req, res);
-
-        return toFetchResponse(res);
+        return transport.handleRequest(c);
       }
     },
   )

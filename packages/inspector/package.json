@@ -57,6 +57,7 @@
     "@assistant-ui/react": "^0.10.23",
     "@assistant-ui/react-ai-sdk": "^0.10.13",
     "@assistant-ui/react-markdown": "^0.10.3",
+    "@hono/mcp": "^0.1.0",
     "@hono/zod-validator": "^0.7.0",
     "@hookform/error-message": "^2.0.1",
     "@hookform/resolvers": "^5.0.1",
@@ -83,7 +84,6 @@
     "cmdk": "^1.1.1",
     "dateformat": "^5.0.3",
     "fetch-event-stream": "^0.1.5",
-    "fetch-to-node": "^2.1.0",
     "fuse.js": "^7.1.0",
     "hono": "^4.7.9",
     "hono-openapi": "^0.4.8",
@@ -93,7 +93,6 @@
     "muppet": "^0.2.2",
     "nanoid": "^5.1.5",
     "pino": "^9.7.0",
-    "pino-pretty": "^13.0.0",
     "posthog-js": "^1.252.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
@@ -116,6 +115,7 @@
     "@muppet-kit/shared": "^0.1.12",
     "commander": "^13.1.0",
     "dotenv": "^16.5.0",
+    "pino-pretty": "^13.0.0",
     "spawn-rx": "^5.1.2"
   },
   "devDependencies": {

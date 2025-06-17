@@ -46,6 +46,7 @@
     }
   },
   "dependencies": {
+    "@hono/mcp": "^0.1.0",
     "@hono/standard-validator": "^0.1.2",
     "@hookform/error-message": "^2.0.1",
     "@hookform/resolvers": "^5.0.1",

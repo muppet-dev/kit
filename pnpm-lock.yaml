@@ -57,6 +57,9 @@ importers:
       '@assistant-ui/react-markdown':
         specifier: ^0.10.3
         version: 0.10.3(@assistant-ui/react@0.10.23(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(use-sync-external-store@1.5.0(react@19.1.0)))(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@hono/mcp':
+        specifier: ^0.1.0
+        version: 0.1.0(@modelcontextprotocol/sdk@1.11.2)(hono@4.7.9)
       '@hono/node-server':
         specifier: ^1.14.1
         version: 1.14.1(hono@4.7.9)
@@ -147,9 +150,6 @@ importers:
       fetch-event-stream:
         specifier: ^0.1.5
         version: 0.1.5
-      fetch-to-node:
-        specifier: ^2.1.0
-        version: 2.1.0
       fuse.js:
         specifier: ^7.1.0
         version: 7.1.0
@@ -286,6 +286,9 @@ importers:
 
   packages/proxy:
     dependencies:
+      '@hono/mcp':
+        specifier: ^0.1.0
+        version: 0.1.0(@modelcontextprotocol/sdk@1.11.2)(hono@4.7.9)
       '@hono/node-server':
         specifier: ^1.14.1
         version: 1.14.1(hono@4.7.9)
@@ -930,6 +933,12 @@ packages:
 
   '@floating-ui/utils@0.2.9':
     resolution: {integrity: sha512-MDWhGtE+eHw5JW7lq4qhc5yRLS11ERl1c7Z6Xd0a58DozHES6EnNNwUWbMiG4J9Cgj053Bhk8zvlhFYKVhULwg==}
+
+  '@hono/mcp@0.1.0':
+    resolution: {integrity: sha512-IELNnKF5tjbUm+wthfToZrNxZIjs1RWLiwCx8N+m8xfJcL6hfcpj/21Gsw8HL88lbnCh191mbFwYvXnx856QZg==}
+    peerDependencies:
+      '@modelcontextprotocol/sdk': ^1.12.0
+      hono: '*'
 
   '@hono/node-server@1.14.1':
     resolution: {integrity: sha512-vmbuM+HPinjWzPe7FFPWMMQMsbKE9gDPhaH0FFdqbGpkT5lp++tcWDTxwBl5EgS5y6JVgIaCdjeHRfQ4XRBRjQ==}
@@ -2550,9 +2559,6 @@ packages:
 
   fetch-event-stream@0.1.5:
     resolution: {integrity: sha512-V1PWovkspxQfssq/NnxoEyQo1DV+MRK/laPuPblIZmSjMN8P5u46OhlFQznSr9p/t0Sp8Uc6SbM3yCMfr0KU8g==}
-
-  fetch-to-node@2.1.0:
-    resolution: {integrity: sha512-Wq05j6LE1GrWpT2t1YbCkyFY6xKRJq3hx/oRJdWEJpZlik3g25MmdJS6RFm49iiMJw6zpZuBOrgihOgy2jGyAA==}
 
   fflate@0.4.8:
     resolution: {integrity: sha512-FJqqoDBR00Mdj9ppamLa/Y7vxm+PRmNWA67N846RvsoYVMKB4q3y/de5PA7gUmRMYK/8CMz2GDZQmCRN1wBcWA==}
@@ -4335,6 +4341,11 @@ snapshots:
 
   '@floating-ui/utils@0.2.9': {}
 
+  '@hono/mcp@0.1.0(@modelcontextprotocol/sdk@1.11.2)(hono@4.7.9)':
+    dependencies:
+      '@modelcontextprotocol/sdk': 1.11.2
+      hono: 4.7.9
+
   '@hono/node-server@1.14.1(hono@4.7.9)':
     dependencies:
       hono: 4.7.9
@@ -5864,8 +5875,6 @@ snapshots:
       picomatch: 4.0.2
 
   fetch-event-stream@0.1.5: {}
-
-  fetch-to-node@2.1.0: {}
 
   fflate@0.4.8: {}
 
