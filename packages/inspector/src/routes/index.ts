@@ -29,12 +29,13 @@ const router = new Hono<EnvWithConfig>().use(async (c, next) => {
 
   c.set(
     "logger",
-    pino({
-      level: import.meta.env.DEV ? "debug" : undefined,
-      transport: {
-        target: "pino-pretty",
-      },
-    }),
+    c.get("config").logger ||
+      pino({
+        level: import.meta.env.DEV ? "debug" : undefined,
+        transport: {
+          target: "pino-pretty",
+        },
+      }),
   );
 
   await next();

@@ -1,6 +1,7 @@
 import type { LanguageModel } from "ai";
 import type z from "zod";
 import type { transportSchema } from "../validations";
+import type { Logger } from "pino";
 
 type TransportConfig = { name: string } & z.infer<typeof transportSchema>;
 
@@ -39,6 +40,11 @@ export type InspectorConfig = {
    * @default true
    */
   enableOpenAPI?: boolean;
+  /**
+   * The logger to use for the inspector.
+   * If not specified, a default logger will be used.
+   */
+  logger?: Logger;
   /**
    * The default configuration for connecting to the MCP.
    */
