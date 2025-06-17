@@ -39,7 +39,7 @@ export function ConfigurationField() {
               valueAsNumber: true,
             })}
           />
-          <FieldErrorMessage name="request" />
+          <FieldErrorMessage name="request_timeout" />
           <div className="flex items-center gap-2 py-1">
             <Controller
               name="progress"
