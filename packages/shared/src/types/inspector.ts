@@ -34,6 +34,12 @@ export type InspectorConfig = {
    */
   enableTelemetry?: boolean;
   /**
+   * Enables the OpenAPI documentation for the inspector.
+   * This will generate an OpenAPI specification for the inspector API.
+   * @default true
+   */
+  enableOpenAPI?: boolean;
+  /**
    * The default configuration for connecting to the MCP.
    */
   configurations?: TransportConfig | Array<TransportConfig>;
@@ -48,12 +54,12 @@ export type InspectorConfig = {
   models?: Array<
     | LanguageModel
     | {
-      model: LanguageModel;
-      /**
-       * This will mark the model to be used for generating sample data, scoring, and other tasks. If not specified, the first model will be used.
-       */
-      default?: boolean;
-    }
+        model: LanguageModel;
+        /**
+         * This will mark the model to be used for generating sample data, scoring, and other tasks. If not specified, the first model will be used.
+         */
+        default?: boolean;
+      }
   >;
 };
 

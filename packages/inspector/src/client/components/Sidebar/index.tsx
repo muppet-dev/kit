@@ -291,7 +291,7 @@ function DocumentationLinkButton() {
                 Documentation
               </DropdownMenuItem>
             </a>
-            <a href="/docs" target="_blank" rel="noreferrer">
+            <a href="/openapi.json" target="_blank" rel="noreferrer">
               <DropdownMenuItem>
                 <Shapes />
                 OpenAPI Docs

@@ -76,8 +76,8 @@ importers:
         specifier: ^4.7.0
         version: 4.7.0(monaco-editor@0.52.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@muppet-kit/shared':
-        specifier: ^0.1.10
-        version: 0.1.10
+        specifier: ^0.1.11
+        version: 0.1.11
       '@radix-ui/react-accordion':
         specifier: ^1.2.4
         version: 1.2.10(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -111,9 +111,6 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: ^1.2.0
         version: 1.2.6(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@scalar/hono-api-reference':
-        specifier: ^0.9.4
-        version: 0.9.4(hono@4.7.9)
       '@shikijs/langs':
         specifier: ^3.2.2
         version: 3.4.0
@@ -1115,6 +1112,9 @@ packages:
   '@muppet-kit/shared@0.1.10':
     resolution: {integrity: sha512-64m+Movw+tzm02gTh5EBD5EPa8CeqNwxmZMWmJftEbWtvxPq73xeLhS5nmXiGvL1veZkyeFF+q0kfBtIHFfN9g==}
 
+  '@muppet-kit/shared@0.1.11':
+    resolution: {integrity: sha512-yvMf0SWFwjSE4XLbVjusc13o7Ni/N/buS3ugnGXwEsTepm0SqCV/+IzWVM9ShgOIz9XPMV4wZGFBhAMUN46YTQ==}
+
   '@ngrok/ngrok-android-arm64@1.5.1':
     resolution: {integrity: sha512-2Tokwi5GVWNLw3JEoM0Ieb/ypALniZu6fciUTgpuByutbKxOjvahD4fYOKwW3KMdV9bCb3XGGtWJCZXfRPPq1g==}
     engines: {node: '>= 10'}
@@ -1895,24 +1895,6 @@ packages:
     resolution: {integrity: sha512-bwspbWB04XJpeElvsp+DCylKfF4trJDa2Y9Go8O6A7YLX2LIKGcNK/CYImJN6ZP4DcuOHB4Utl3iCbnR62DudA==}
     cpu: [x64]
     os: [win32]
-
-  '@scalar/core@0.3.3':
-    resolution: {integrity: sha512-OedH8YQriBsE7JnCN2ly4p3u7iobjzAoDkxD/o1hiF55m6WRicvtklEdByHlceu9UnJ/znikZ50ymo98uG3aqA==}
-    engines: {node: '>=20'}
-
-  '@scalar/hono-api-reference@0.9.4':
-    resolution: {integrity: sha512-pAUWS8MRGcS5VjMjAVd6DrhST63NpVXGel2BbYsKPQAaONwwA3hU30fAFxSs3PUGA8M7q+e76F6w4ALBtHxLRA==}
-    engines: {node: '>=20'}
-    peerDependencies:
-      hono: ^4.0.0
-
-  '@scalar/openapi-types@0.3.3':
-    resolution: {integrity: sha512-mr3OvbCyvuzSDgv9gR9D3pJAsl82BRNBp1P8ldgRgKF4Wiswfa7nQeKibpX0kHSGXLgiyvxWJULUFwgdWMXNNA==}
-    engines: {node: '>=20'}
-
-  '@scalar/types@0.2.3':
-    resolution: {integrity: sha512-K1/Vp5xaQ8TEGDYwHg88OBuQWJRWrE3ToZ0Z2LJwskcY1Eg+uDiRQXKF4QPngZzu5rrWgRErAq4yte4Y7omqgA==}
-    engines: {node: '>=20'}
 
   '@shikijs/core@3.4.0':
     resolution: {integrity: sha512-0YOzTSRDn/IAfQWtK791gs1u8v87HNGToU6IwcA3K7nPoVOrS2Dh6X6A6YfXgPTSkTwR5y6myk0MnI0htjnwrA==}
@@ -3881,9 +3863,6 @@ packages:
   zod@3.22.3:
     resolution: {integrity: sha512-EjIevzuJRiRPbVH4mGc8nApb/lVLKVpmUhAaR5R5doKGfAnGJ6Gr3CViAVjP+4FWSxCsybeWQdcgCtbX+7oZug==}
 
-  zod@3.24.1:
-    resolution: {integrity: sha512-muH7gBL9sI1nciMZV67X5fTKKBLtwpZ5VBp1vsOQzj1MhrBZ4wlVCm3gedKZWLp0Oyel8sIGfeiz54Su+OVT+A==}
-
   zod@3.24.4:
     resolution: {integrity: sha512-OdqJE9UDRPwWsrHjLN2F8bPxvwJBK22EHLWtanu0LSYr5YqzsaaW3RMgmjwr8Rypg5k+meEJdSPXJZXE/yqOMg==}
 
@@ -4504,6 +4483,17 @@ snapshots:
       hono: 4.7.9
       open: 10.1.2
       zod: 3.24.4
+    transitivePeerDependencies:
+      - magicast
+
+  '@muppet-kit/shared@0.1.11':
+    dependencies:
+      '@hono/node-server': 1.14.1(hono@4.7.9)
+      ansis: 4.1.0
+      c12: 3.0.3
+      hono: 4.7.9
+      open: 10.1.2
+      zod: 3.25.57
     transitivePeerDependencies:
       - magicast
 
@@ -5227,25 +5217,6 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.40.2':
     optional: true
-
-  '@scalar/core@0.3.3':
-    dependencies:
-      '@scalar/types': 0.2.3
-
-  '@scalar/hono-api-reference@0.9.4(hono@4.7.9)':
-    dependencies:
-      '@scalar/core': 0.3.3
-      hono: 4.7.9
-
-  '@scalar/openapi-types@0.3.3':
-    dependencies:
-      zod: 3.24.1
-
-  '@scalar/types@0.2.3':
-    dependencies:
-      '@scalar/openapi-types': 0.3.3
-      nanoid: 5.1.5
-      zod: 3.24.1
 
   '@shikijs/core@3.4.0':
     dependencies:
@@ -7403,8 +7374,6 @@ snapshots:
       zod: 3.25.57
 
   zod@3.22.3: {}
-
-  zod@3.24.1: {}
 
   zod@3.24.4: {}
 

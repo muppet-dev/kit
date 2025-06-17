@@ -9,7 +9,6 @@ import utilsRouter from "./utils";
 import pkg from "../../package.json";
 import pino from "pino";
 import { describeRoute, generateSpecs } from "hono-openapi";
-import { Scalar } from "@scalar/hono-api-reference";
 
 const apiRouter = new Hono();
 
@@ -68,8 +67,14 @@ router.get(
 // OpenAPI documentation
 let specs: Awaited<ReturnType<typeof generateSpecs>> | undefined;
 router.get("/openapi.json", async (c) => {
+  const inspectorConfig = c.get("config");
+
+  if (!inspectorConfig.enableOpenAPI) {
+    return c.text("OpenAPI documentation is disabled", 404);
+  }
+
   if (!specs) {
-    const { host, port } = c.get("config");
+    const { host, port } = inspectorConfig;
     specs = await generateSpecs(
       router,
       {
@@ -98,17 +103,6 @@ router.get("/openapi.json", async (c) => {
 
   return c.json(specs);
 });
-
-// Scalar Docs
-router.get(
-  "/docs",
-  Scalar({
-    theme: "saturn",
-    url: "/openapi.json",
-    pageTitle: "Muppet Inspector API Documentation",
-    favicon: "/muppet.svg",
-  }),
-);
 
 if (import.meta.env.DEV) {
   router.route("/", clientRouter);
