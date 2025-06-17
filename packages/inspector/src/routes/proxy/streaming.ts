@@ -15,7 +15,6 @@ import {
 import type { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 import { describeRoute } from "hono-openapi";
-import { Transport as TransportEnum } from "@muppet-kit/shared";
 
 const router = new Hono<ProxyEnv>()
   .use(async (c, next) => {

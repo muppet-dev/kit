@@ -12,7 +12,6 @@ import {
 } from "./utils.js";
 import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 import { describeRoute } from "hono-openapi";
-import { Transport as TransportEnum } from "@muppet-kit/shared";
 
 const router = new Hono<ProxyEnv>().get(
   "/",

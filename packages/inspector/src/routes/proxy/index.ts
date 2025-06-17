@@ -6,7 +6,6 @@ import sseRouter from "./sse";
 import stdioRouter from "./stdio";
 import streamingRouter from "./streaming";
 import type { ProxyEnv } from "./types";
-import { describeRoute } from "hono-openapi";
 
 // Web app transports by web app session ID
 const webAppTransports: Map<string, Transport> = new Map();
