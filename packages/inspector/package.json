@@ -1,13 +1,15 @@
 {
   "name": "@muppet-kit/inspector",
   "description": "MCP inspector for debugging and inspecting MCP servers.",
-  "version": "0.1.19",
+  "version": "0.1.21",
   "license": "MIT",
   "types": "./dist/index.d.ts",
   "main": "./dist/index.js",
   "type": "module",
   "bin": "./dist/cli.js",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "keywords": [
     "mcp",
     "inspector",
@@ -79,7 +81,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
-    "dayjs": "^1.11.13",
+    "dateformat": "^5.0.3",
     "fetch-event-stream": "^0.1.5",
     "fetch-to-node": "^2.1.0",
     "fuse.js": "^7.1.0",
@@ -98,6 +100,7 @@
     "react-error-boundary": "^6.0.0",
     "react-hook-form": "^7.55.0",
     "react-hot-toast": "^2.5.2",
+    "react-hotkeys-hook": "^5.1.0",
     "react-markdown": "^10.1.0",
     "react-router": "^7.5.1",
     "remark-gfm": "^4.0.1",
@@ -110,7 +113,7 @@
   },
   "peerDependencies": {
     "@hono/node-server": "^1.14.1",
-    "@muppet-kit/shared": "^0.1.11",
+    "@muppet-kit/shared": "^0.1.12",
     "commander": "^13.1.0",
     "dotenv": "^16.5.0",
     "spawn-rx": "^5.1.2"
@@ -120,6 +123,7 @@
     "@cloudflare/workers-types": "^4.20250519.0",
     "@hono/vite-dev-server": "^0.19.0",
     "@tailwindcss/vite": "^4.1.4",
+    "@types/dateformat": "^5.0.3",
     "@types/json-schema": "^7.0.15",
     "@types/lodash": "^4.17.16",
     "@types/node": "^20.11.17",

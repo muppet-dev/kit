@@ -76,8 +76,8 @@ importers:
         specifier: ^4.7.0
         version: 4.7.0(monaco-editor@0.52.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@muppet-kit/shared':
-        specifier: ^0.1.11
-        version: 0.1.11
+        specifier: ^0.1.12
+        version: 0.1.12
       '@radix-ui/react-accordion':
         specifier: ^1.2.4
         version: 1.2.10(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -138,9 +138,9 @@ importers:
       commander:
         specifier: ^13.1.0
         version: 13.1.0
-      dayjs:
-        specifier: ^1.11.13
-        version: 1.11.13
+      dateformat:
+        specifier: ^5.0.3
+        version: 5.0.3
       dotenv:
         specifier: ^16.5.0
         version: 16.5.0
@@ -198,6 +198,9 @@ importers:
       react-hot-toast:
         specifier: ^2.5.2
         version: 2.5.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      react-hotkeys-hook:
+        specifier: ^5.1.0
+        version: 5.1.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react-markdown:
         specifier: ^10.1.0
         version: 10.1.0(@types/react@19.1.4)(react@19.1.0)
@@ -241,6 +244,9 @@ importers:
       '@tailwindcss/vite':
         specifier: ^4.1.4
         version: 4.1.6(vite@6.3.5(@types/node@20.17.46)(jiti@2.4.2)(lightningcss@1.29.2)(yaml@2.7.1))
+      '@types/dateformat':
+        specifier: ^5.0.3
+        version: 5.0.3
       '@types/json-schema':
         specifier: ^7.0.15
         version: 7.0.15
@@ -355,9 +361,9 @@ importers:
       commander:
         specifier: ^13.1.0
         version: 13.1.0
-      dayjs:
-        specifier: ^1.11.13
-        version: 1.11.13
+      dateformat:
+        specifier: ^5.0.3
+        version: 5.0.3
       dotenv:
         specifier: ^16.5.0
         version: 16.5.0
@@ -410,6 +416,9 @@ importers:
       '@tailwindcss/vite':
         specifier: ^4.1.4
         version: 4.1.6(vite@6.3.5(@types/node@20.17.46)(jiti@2.4.2)(lightningcss@1.29.2)(yaml@2.7.1))
+      '@types/dateformat':
+        specifier: ^5.0.3
+        version: 5.0.3
       '@types/node':
         specifier: ^20.11.17
         version: 20.17.46
@@ -1115,8 +1124,8 @@ packages:
   '@muppet-kit/shared@0.1.10':
     resolution: {integrity: sha512-64m+Movw+tzm02gTh5EBD5EPa8CeqNwxmZMWmJftEbWtvxPq73xeLhS5nmXiGvL1veZkyeFF+q0kfBtIHFfN9g==}
 
-  '@muppet-kit/shared@0.1.11':
-    resolution: {integrity: sha512-yvMf0SWFwjSE4XLbVjusc13o7Ni/N/buS3ugnGXwEsTepm0SqCV/+IzWVM9ShgOIz9XPMV4wZGFBhAMUN46YTQ==}
+  '@muppet-kit/shared@0.1.12':
+    resolution: {integrity: sha512-wz6IYZLCu9+lOJzjZ5qZ0kpgm97Px9fe7xnPCceKKXUAuYhtltR/VF9c7f2TxpKA9PRh5+uM8byGfUHIAcfDbQ==}
 
   '@ngrok/ngrok-android-arm64@1.5.1':
     resolution: {integrity: sha512-2Tokwi5GVWNLw3JEoM0Ieb/ypALniZu6fciUTgpuByutbKxOjvahD4fYOKwW3KMdV9bCb3XGGtWJCZXfRPPq1g==}
@@ -2058,6 +2067,9 @@ packages:
   '@types/babel__traverse@7.20.7':
     resolution: {integrity: sha512-dkO5fhS7+/oos4ciWxyEyjWe48zmG6wbCheo/G2ZnHx4fs3EU6YC6UM8rk56gAjNJ9P3MTH2jo5jb92/K6wbng==}
 
+  '@types/dateformat@5.0.3':
+    resolution: {integrity: sha512-hvskLa9ObgUwJe0rtfkyBbU+VIK8Ia3BACsxRsp4CPnyPBAOyIHbqImfBGFfaVVxn82wGx5SD8Twll6jMc/BaQ==}
+
   '@types/debug@4.1.12':
     resolution: {integrity: sha512-vIChWdVG3LG1SMxEvI/AK+FWJthlrqlTu7fbrlywTkkaONwk/UAGaULXRlf8vkzFBLVm0zkMdCquhL5aOjhXPQ==}
 
@@ -2358,8 +2370,9 @@ packages:
   dateformat@4.6.3:
     resolution: {integrity: sha512-2P0p0pFGzHS5EMnhdxQi7aJN+iMheud0UhG4dlE1DLAlvL8JHjJJTX/CSm4JXwV0Ka5nGk3zC5mcb5bUQUxxMA==}
 
-  dayjs@1.11.13:
-    resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
+  dateformat@5.0.3:
+    resolution: {integrity: sha512-Kvr6HmPXUMerlLcLF+Pwq3K7apHpYmGDVqrxcDasBg86UcKeTSNWbEzU8bwdXnxnR44FtMhJAxI4Bov6Y/KUfA==}
+    engines: {node: '>=12.20'}
 
   debug@4.4.0:
     resolution: {integrity: sha512-6WTZ/IxCY/T6BALoZHaE4ctp9xm+Z5kY/pzYaCHRFeyVhojxlrm+46y68HA6hr0TcwEssoxNiDEUJQjfPZ/RYA==}
@@ -3334,6 +3347,12 @@ packages:
     peerDependencies:
       react: '>=16'
       react-dom: '>=16'
+
+  react-hotkeys-hook@5.1.0:
+    resolution: {integrity: sha512-GCNGXjBzV9buOS3REoQFmSmE4WTvBhYQ0YrAeeMZI83bhXg3dRWsLHXDutcVDdEjwJqJCxk5iewWYX5LtFUd7g==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
 
   react-markdown@10.1.0:
     resolution: {integrity: sha512-qKxVopLT/TyA6BX3Ue5NwabOsAzm0Q7kAPwq6L+wWDwisYs7R8vZ0nRXqq6rkueboxpkjvLGU9fWifiX/ZZFxQ==}
@@ -4489,7 +4508,7 @@ snapshots:
     transitivePeerDependencies:
       - magicast
 
-  '@muppet-kit/shared@0.1.11':
+  '@muppet-kit/shared@0.1.12':
     dependencies:
       '@hono/node-server': 1.14.1(hono@4.7.9)
       ansis: 4.1.0
@@ -5370,6 +5389,8 @@ snapshots:
     dependencies:
       '@babel/types': 7.27.1
 
+  '@types/dateformat@5.0.3': {}
+
   '@types/debug@4.1.12':
     dependencies:
       '@types/ms': 2.1.0
@@ -5660,7 +5681,7 @@ snapshots:
 
   dateformat@4.6.3: {}
 
-  dayjs@1.11.13: {}
+  dateformat@5.0.3: {}
 
   debug@4.4.0:
     dependencies:
@@ -6782,6 +6803,11 @@ snapshots:
     dependencies:
       csstype: 3.1.3
       goober: 2.1.16(csstype@3.1.3)
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+
+  react-hotkeys-hook@5.1.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+    dependencies:
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
 

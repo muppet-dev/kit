@@ -1,29 +1,28 @@
 import { SendHorizonal } from "lucide-react";
-import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { Button } from "../../../../components/ui/button";
 import { Spinner } from "../../../../components/ui/spinner";
+import { useHotkeys } from "react-hotkeys-hook";
 
 export function SendButton() {
   const {
     formState: { isSubmitting },
   } = useFormContext();
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
-        event.preventDefault();
-        const form = document.getElementById(
-          "request-form",
-        ) as HTMLFormElement | null;
+  useHotkeys(
+    "mod+enter",
+    () => {
+      const form = document.getElementById(
+        "request-form",
+      ) as HTMLFormElement | null;
 
-        if (form) form.requestSubmit();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+      if (form) form.requestSubmit();
+    },
+    {
+      preventDefault: true,
+      description: "Send Request",
+    },
+  );
 
   return (
     <>
@@ -33,7 +32,7 @@ export function SendButton() {
         disabled={isSubmitting}
         className="px-3 py-1.5 xl:flex hidden"
       >
-        {isSubmitting ? "Sending" : "Send"}
+        Send
         {isSubmitting ? (
           <Spinner className="size-4 min-w-4 min-h-4" />
         ) : (

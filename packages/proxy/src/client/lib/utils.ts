@@ -1,5 +1,10 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import dateformat from "dateformat";
+
+export const latencyTimeFormat = (latency: number) => {
+  return dateformat(latency, "mmm dd|hh:MM:ss|l").split("|");
+};
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

@@ -11,32 +11,31 @@ import { Badge } from "../../../ui/badge";
 import { Button } from "../../../ui/button";
 import { Spinner } from "../../../ui/spinner";
 import { ConfigurationsMenu } from "./ConfigurationsMenu";
+import { useHotkeys } from "react-hotkeys-hook";
+
+function formatConfiguration(config: ConnectionInfo): ConnectionInfo {
+  if (config.type === Transport.STDIO)
+    return {
+      ...config,
+      env: config.env
+        ? typeof config.env === "string"
+          ? Object.entries(JSON.parse(config.env)).map(([key, value]) => ({
+              key,
+              value: String(value),
+            }))
+          : config.env
+        : undefined,
+    };
+
+  return config;
+}
 
 export function Configurations() {
   const [selected, setSelected] = useState<ConnectionInfo>();
   const { deleteConfiguration, configurations } = useConfig();
 
   const handleSelectItem = (value: ConnectionInfo) =>
-    eventHandler(() => {
-      const formattedData =
-        value?.type === Transport.STDIO
-          ? {
-              ...value,
-              env: value.env
-                ? typeof value.env === "string"
-                  ? Object.entries(JSON.parse(value.env)).map(
-                      ([key, value]) => ({
-                        key,
-                        value: String(value),
-                      }),
-                    )
-                  : value.env
-                : undefined,
-            }
-          : value;
-
-      setSelected(formattedData);
-    });
+    eventHandler(() => setSelected(formatConfiguration(value)));
 
   const mutation = useConfigForm();
 
@@ -47,6 +46,39 @@ export function Configurations() {
         [SUBMIT_BUTTON_KEY]: DocumentSubmitType.CONNECT,
       });
   });
+
+  useHotkeys("mod+enter", () => handleConnect(), {
+    description: "Connect to the server",
+  });
+
+  useHotkeys(
+    [
+      "ctrl+1",
+      "ctrl+2",
+      "ctrl+3",
+      "ctrl+4",
+      "ctrl+5",
+      "ctrl+6",
+      "ctrl+7",
+      "ctrl+8",
+      "ctrl+9",
+    ],
+    (_, event) => {
+      const index = event.keys?.[0];
+
+      if (!index || Number.isNaN(Number(index))) return;
+
+      const idx = Number(index);
+      const config = configurations?.[idx - 1];
+
+      if (config) {
+        mutation.mutateAsync({
+          ...formatConfiguration(config),
+          [SUBMIT_BUTTON_KEY]: DocumentSubmitType.CONNECT,
+        });
+      }
+    },
+  );
 
   const handleDeleteItem = (name?: string) =>
     eventHandler(() => {

@@ -1,6 +1,5 @@
 import { eventHandler } from "@/client/lib/eventHandler";
-import { cn, numberFormatter } from "@/client/lib/utils";
-import dayjs from "dayjs";
+import { cn, latencyTimeFormat, numberFormatter } from "@/client/lib/utils";
 import Fuse from "fuse.js";
 import { MoveDown, MoveUp } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -95,9 +94,7 @@ export function TracingTable() {
                 parsedTraces.map((trace, index) => {
                   const isError = Boolean(trace.response?.error);
 
-                  const time = dayjs(trace.timestamp.start)
-                    .format("MMM DD|hh:mm:ss|SSS")
-                    .split("|");
+                  const time = latencyTimeFormat(trace.timestamp.start);
 
                   const latency =
                     "latency" in trace.timestamp

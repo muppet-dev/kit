@@ -13,7 +13,7 @@ export function ConfigTabs() {
           Connect
         </TabsTrigger>
         <TabsTrigger
-          value="configurations"
+          value="quick-connect"
           className="data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-2 xl:px-5 dark:data-[state=active]:bg-foreground dark:data-[state=active]:text-background"
         >
           Quick Connect
@@ -22,7 +22,7 @@ export function ConfigTabs() {
       <TabsContent value="connect" className="flex">
         <Connect />
       </TabsContent>
-      <TabsContent value="configurations">
+      <TabsContent value="quick-connect">
         <Configurations />
       </TabsContent>
     </Tabs>

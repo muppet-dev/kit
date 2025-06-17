@@ -11,6 +11,7 @@ import { ColorModeSetting } from "./ColorModeSetting";
 import { ThemeDialog } from "./ThemeDialog";
 import { ThemeSettings } from "./ThemeSettings";
 import { ToastSetting } from "./ToastSetting";
+import { useHotkeys } from "react-hotkeys-hook";
 
 export type DialogType =
   | {
@@ -30,21 +31,9 @@ export function PreferencesDialog(props: PreferencesDialog) {
   const { colorTheme } = usePreferences();
   const [isThemeDialog, setThemeDialog] = useState<DialogType | undefined>();
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (
-        event.key === "?" &&
-        event.shiftKey &&
-        (event.metaKey || event.ctrlKey)
-      ) {
-        event.preventDefault();
-        props.onOpenChange(!props.open);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [props.open]);
+  useHotkeys("shift+p", () => props.onOpenChange(!props.open), {
+    description: "Open Preferences Dialog",
+  });
 
   return (
     <>

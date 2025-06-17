@@ -70,9 +70,7 @@ export default function OAuthCallback({ onConnect }: OAuthCallbackProps) {
       onConnect(serverUrl);
     };
 
-    handleCallback().finally(() => {
-      navigate("/");
-    });
+    handleCallback().finally(() => navigate("/"));
   }, [onConnect]);
 
   return (

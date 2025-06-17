@@ -7,8 +7,17 @@
   "main": "./dist/index.js",
   "type": "module",
   "bin": "./dist/cli.js",
-  "files": ["dist"],
-  "keywords": ["mcp", "proxy", "muppet", "kit", "tools", "server"],
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "mcp",
+    "proxy",
+    "muppet",
+    "kit",
+    "tools",
+    "server"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vite build --mode client && vite build && node build.mjs",
@@ -59,7 +68,7 @@
     "@uidotdev/usehooks": "^2.4.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "dayjs": "^1.11.13",
+    "dateformat": "^5.0.3",
     "fetch-event-stream": "^0.1.5",
     "fuse.js": "^7.1.0",
     "hono": "^4.7.9",
@@ -84,6 +93,7 @@
     "@cloudflare/workers-types": "^4.20250519.0",
     "@hono/vite-dev-server": "^0.19.0",
     "@tailwindcss/vite": "^4.1.4",
+    "@types/dateformat": "^5.0.3",
     "@types/node": "^20.11.17",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",

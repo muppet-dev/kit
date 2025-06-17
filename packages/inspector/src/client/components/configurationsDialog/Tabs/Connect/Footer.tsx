@@ -1,10 +1,10 @@
 import { Transport } from "@muppet-kit/shared";
-import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { eventHandler } from "../../../../lib/eventHandler";
 import { DocumentSubmitType, SUBMIT_BUTTON_KEY } from "../../../../validations";
 import { Button } from "../../../ui/button";
 import { DialogFooter } from "../../../ui/dialog";
+import { useHotkeys } from "react-hotkeys-hook";
 
 export function FormFooter() {
   const { reset, setValue } = useFormContext();
@@ -23,32 +23,12 @@ export function FormFooter() {
     setValue(SUBMIT_BUTTON_KEY, DocumentSubmitType.CONNECT),
   );
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (
-        event.key === "Enter" &&
-        event.shiftKey &&
-        (event.metaKey || event.ctrlKey)
-      ) {
-        event.preventDefault();
-        const saveAndConnectButton = document.getElementById(
-          DocumentSubmitType.SAVE_AND_CONNECT,
-        ) as HTMLButtonElement | null;
-
-        if (saveAndConnectButton) saveAndConnectButton.click();
-      } else if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
-        event.preventDefault();
-        const connectButton = document.getElementById(
-          DocumentSubmitType.CONNECT,
-        ) as HTMLButtonElement | null;
-
-        if (connectButton) connectButton.click();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  useHotkeys("mod+enter", () => handleConnect(), {
+    description: "Connect to the server",
+  });
+  useHotkeys("mod+shift+enter", () => handleSaveAndConnect(), {
+    description: "Save and connect to the server",
+  });
 
   return (
     <DialogFooter className="sm:justify-start">

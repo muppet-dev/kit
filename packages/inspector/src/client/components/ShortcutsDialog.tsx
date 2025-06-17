@@ -1,12 +1,6 @@
 import { cn } from "@/client/lib/utils";
 import Fuse, { type RangeTuple } from "fuse.js";
-import {
-  Fragment,
-  type PropsWithChildren,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { Fragment, type PropsWithChildren, useMemo, useState } from "react";
 import { highlightMatches } from "./highlightMatches";
 import { Button } from "./ui/button";
 import {
@@ -17,93 +11,34 @@ import {
   DialogTitle,
 } from "./ui/dialog";
 import { Input } from "./ui/input";
-
-const capitalize = (s?: string) => (s && s[0].toUpperCase() + s.slice(1)) || "";
-
-type Hotkey = {
-  description: string;
-  mod?: boolean;
-  shift?: boolean;
-  alt?: boolean;
-  keys: string[];
-};
-
-const keyboardShortcuts: Hotkey[] = [
-  {
-    description: "Quick Connect Configurations",
-    mod: true,
-    keys: ["Enter"],
-  },
-  {
-    description: "Save and Connect Configurations",
-    mod: true,
-    shift: true,
-    keys: ["Enter"],
-  },
-  {
-    description: "Theme Dialog Open",
-    mod: true,
-    shift: true,
-    keys: ["?"],
-  },
-  {
-    description: "Submit Explorer Form",
-    mod: true,
-    keys: ["Enter"],
-  },
-];
+import { useHotkeys, useHotkeysContext } from "react-hotkeys-hook";
+import { X } from "lucide-react";
 
 export function ShortcutsDialog() {
-  const [isMac, toggleOs] = useState(false);
   const [search, setSearch] = useState("");
   const [isOpenDialog, setOpenDialog] = useState(false);
 
-  useEffect(() => {
-    if (navigator) toggleOs(navigator.userAgent.toLowerCase().includes("mac"));
-  }, []);
+  useHotkeys("mod+h", () => setOpenDialog((prev) => !prev), {
+    preventDefault: true,
+    description: "Open Keyboard Shortcuts Dialog",
+  });
+  const { hotkeys } = useHotkeysContext();
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const isMod = isMac ? e.metaKey : e.ctrlKey;
-      if (isMod && e.key === "/") {
-        e.preventDefault();
-        setOpenDialog((prev) => !prev);
-      }
-    };
+  const searchResults = useMemo<
+    ((typeof hotkeys)[number] & { matches?: RangeTuple[] })[]
+  >(() => {
+    if (!search?.trim() || hotkeys.length === 0) return [...hotkeys];
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isMac]);
-
-  const fuse = useMemo(() => {
-    return new Fuse(keyboardShortcuts, {
+    const fuse = new Fuse(hotkeys, {
       keys: ["description"],
       includeMatches: true,
     });
-  }, []);
 
-  let searchResults: (Hotkey & { matches?: RangeTuple[] })[] = [
-    ...keyboardShortcuts,
-  ];
-  let isEmpty = false;
-
-  if (search) {
-    const results = fuse.search(search);
-
-    if (results.length === 0) isEmpty = true;
-
-    searchResults = results.reduce<typeof searchResults>(
-      (prev, { item, matches }) => {
-        prev.push({
-          ...item,
-          matches: matches?.flatMap((match) => match.indices),
-        });
-
-        return prev;
-      },
-      [],
-    );
-  }
+    return fuse.search(search).map(({ item, matches }) => ({
+      ...item,
+      matches: matches?.flatMap((match) => match.indices),
+    }));
+  }, [hotkeys, search]);
 
   return (
     <Dialog open={isOpenDialog} onOpenChange={setOpenDialog}>
@@ -115,26 +50,21 @@ export function ShortcutsDialog() {
           <DialogTitle>Keyboard Shortcuts</DialogTitle>
           <div className="flex flex-row-reverse justify-end gap-2">
             <DialogClose asChild>
-              <Button size="sm">Close Esc</Button>
+              <Button variant="ghost">
+                <X />
+              </Button>
             </DialogClose>
             <Input
               type="search"
               className="w-[200px]"
-              placeholder="Enter Name..."
+              placeholder="Search shortcuts..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               autoComplete="off"
             />
           </div>
         </DialogHeader>
-        {isEmpty ? (
-          <div className="flex-1 flex items-center flex-col justify-center text-center">
-            <h3 className="font-medium">Shortcut Not Found</h3>
-            <p className="text-muted-foreground text-sm">
-              Please check your spelling and try again.
-            </p>
-          </div>
-        ) : (
+        {searchResults.length > 0 ? (
           <div className="grid grid-cols-2 items-center gap-1.5">
             {searchResults.map(
               (
@@ -155,20 +85,23 @@ export function ShortcutsDialog() {
                       : description}
                   </p>
                   <div className="select-none space-x-1">
-                    {isMod && (
-                      <KeyComponent>{isMac ? "⌘" : "Ctrl"}</KeyComponent>
-                    )}
-                    {isAlt && (
-                      <KeyComponent>{isMac ? "⌥" : "Alt"}</KeyComponent>
-                    )}
+                    {isMod && <KeyComponent>Ctrl</KeyComponent>}
+                    {isAlt && <KeyComponent>Alt</KeyComponent>}
                     {isShift && <KeyComponent>⇧</KeyComponent>}
                     <KeyComponent className="capitalize">
-                      {capitalize(keys?.join(""))}
+                      {keys?.join("")}
                     </KeyComponent>
                   </div>
                 </Fragment>
               ),
             )}
+          </div>
+        ) : (
+          <div className="flex-1 flex items-center flex-col justify-center text-center">
+            <h3 className="font-medium">No shortcuts found</h3>
+            <p className="text-muted-foreground text-sm">
+              Try searching for a specific shortcut or check your configuration.
+            </p>
           </div>
         )}
       </DialogContent>

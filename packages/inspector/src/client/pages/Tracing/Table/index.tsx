@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import Fuse from "fuse.js";
 import { MoveDown, MoveUp } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -13,7 +12,12 @@ import {
   TableRow,
 } from "../../../components/ui/table";
 import { eventHandler } from "../../../lib/eventHandler";
-import { SortingEnum, cn, numberFormatter } from "../../../lib/utils";
+import {
+  SortingEnum,
+  cn,
+  latencyTimeFormat,
+  numberFormatter,
+} from "../../../lib/utils";
 import { useLogs } from "../providers";
 import { FilterMethod } from "./FilterMethod";
 import { FilterSession } from "./FilterSession";
@@ -88,9 +92,7 @@ export function TracingTable() {
                 parsedTraces.map((trace, index) => {
                   const isError = Boolean(trace.response?.error);
 
-                  const time = dayjs(trace.timestamp.start)
-                    .format("MMM DD|hh:mm:ss|SSS")
-                    .split("|");
+                  const time = latencyTimeFormat(trace.timestamp.start);
 
                   const latency =
                     "latency" in trace.timestamp

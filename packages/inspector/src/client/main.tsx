@@ -9,6 +9,7 @@ import { ErrorBoundaryRender } from "./components/ErrorBoundaryRender";
 import { ShortcutsDialog } from "./components/ShortcutsDialog";
 import { ConfigProvider } from "./providers";
 import { PreferencesProvider, usePreferences } from "./providers/preferences";
+import { HotkeysProvider } from "react-hotkeys-hook";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -47,9 +48,11 @@ function Render() {
 
   return (
     <ErrorBoundary FallbackComponent={ErrorBoundaryRender}>
-      <App />
-      <Toaster position={toastPosition} />
-      <ShortcutsDialog />
+      <HotkeysProvider>
+        <App />
+        <Toaster position={toastPosition} />
+        <ShortcutsDialog />
+      </HotkeysProvider>
     </ErrorBoundary>
   );
 }
