@@ -12,7 +12,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export const numberFormatter = (
   value: number | bigint,
-  type: keyof Intl.NumberFormatOptionsStyleRegistry
+  type: keyof Intl.NumberFormatOptionsStyleRegistry,
 ) =>
   new Intl.NumberFormat("en-US", {
     style: type,

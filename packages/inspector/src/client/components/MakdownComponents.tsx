@@ -11,7 +11,7 @@ export const defaultMakdownComponents = memoizeMarkdownComponents({
     <h1
       className={cn(
         "mb-8 scroll-m-20 text-4xl font-extrabold tracking-tight last:mb-0",
-        className
+        className,
       )}
       {...props}
     />
@@ -20,7 +20,7 @@ export const defaultMakdownComponents = memoizeMarkdownComponents({
     <h2
       className={cn(
         "mb-4 mt-8 scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0 last:mb-0",
-        className
+        className,
       )}
       {...props}
     />
@@ -29,7 +29,7 @@ export const defaultMakdownComponents = memoizeMarkdownComponents({
     <h3
       className={cn(
         "mb-4 mt-6 scroll-m-20 text-2xl font-semibold tracking-tight first:mt-0 last:mb-0",
-        className
+        className,
       )}
       {...props}
     />
@@ -38,7 +38,7 @@ export const defaultMakdownComponents = memoizeMarkdownComponents({
     <h4
       className={cn(
         "mb-4 mt-6 scroll-m-20 text-xl font-semibold tracking-tight first:mt-0 last:mb-0",
-        className
+        className,
       )}
       {...props}
     />
@@ -47,7 +47,7 @@ export const defaultMakdownComponents = memoizeMarkdownComponents({
     <h5
       className={cn(
         "my-4 text-lg font-semibold first:mt-0 last:mb-0",
-        className
+        className,
       )}
       {...props}
     />
@@ -68,7 +68,7 @@ export const defaultMakdownComponents = memoizeMarkdownComponents({
     <a
       className={cn(
         "text-primary font-medium underline underline-offset-4",
-        className
+        className,
       )}
       {...props}
     />
@@ -98,7 +98,7 @@ export const defaultMakdownComponents = memoizeMarkdownComponents({
     <table
       className={cn(
         "my-5 w-full border-separate border-spacing-0 overflow-y-auto",
-        className
+        className,
       )}
       {...props}
     />
@@ -107,7 +107,7 @@ export const defaultMakdownComponents = memoizeMarkdownComponents({
     <th
       className={cn(
         "bg-muted px-4 py-2 text-left font-bold first:rounded-tl-lg last:rounded-tr-lg [&[align=center]]:text-center [&[align=right]]:text-right",
-        className
+        className,
       )}
       {...props}
     />
@@ -116,7 +116,7 @@ export const defaultMakdownComponents = memoizeMarkdownComponents({
     <td
       className={cn(
         "border-b border-l px-4 py-2 text-left last:border-r [&[align=center]]:text-center [&[align=right]]:text-right",
-        className
+        className,
       )}
       {...props}
     />
@@ -125,7 +125,7 @@ export const defaultMakdownComponents = memoizeMarkdownComponents({
     <tr
       className={cn(
         "m-0 border-b p-0 first:border-t [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg",
-        className
+        className,
       )}
       {...props}
     />
@@ -151,7 +151,7 @@ export const defaultMakdownComponents = memoizeMarkdownComponents({
         className={cn(
           !isCodeBlock &&
             "bg-muted rounded-md border px-1.5 text-sm font-medium shadow dark:shadow-none",
-          className
+          className,
         )}
         {...props}
       >

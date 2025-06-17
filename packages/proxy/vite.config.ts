@@ -1,9 +1,9 @@
-import devServer from "@hono/vite-dev-server";
-import tailwindcss from "@tailwindcss/vite";
-import react from "@vitejs/plugin-react";
 import { readdirSync } from "node:fs";
 import { builtinModules } from "node:module";
 import path, { extname, resolve } from "node:path";
+import devServer from "@hono/vite-dev-server";
+import tailwindcss from "@tailwindcss/vite";
+import react from "@vitejs/plugin-react";
 import {
   type Plugin,
   type ResolvedConfig,

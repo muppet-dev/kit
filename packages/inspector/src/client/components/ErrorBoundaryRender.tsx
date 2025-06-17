@@ -1,8 +1,8 @@
-import type { FallbackProps } from "react-error-boundary";
-import { Button } from "./ui/button";
 import { X } from "lucide-react";
 import { useState } from "react";
+import type { FallbackProps } from "react-error-boundary";
 import { eventHandler } from "../lib/eventHandler";
+import { Button } from "./ui/button";
 
 export function ErrorBoundaryRender({ error }: FallbackProps) {
   const [showBanner, setShowBanner] = useState(true);

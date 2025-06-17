@@ -1,8 +1,8 @@
-import { useMemo, useState } from "react";
-import { useMCPScan } from "../providers";
-import { Skeleton } from "../../../components/ui/skeleton";
 import { ShieldAlert, ShieldCheck } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Skeleton } from "../../../components/ui/skeleton";
 import { ScanButton } from "../ScanButton";
+import { useMCPScan } from "../providers";
 import { StatusPanel } from "./StatusPanel";
 import { VulnerabilityItem } from "./VulnerabilityItem";
 

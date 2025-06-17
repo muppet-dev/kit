@@ -1,3 +1,4 @@
+import { ListX } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "../../components/ui/tabs";
 import {
@@ -7,7 +8,6 @@ import {
 } from "../../components/ui/tooltip";
 import { eventHandler } from "../../lib/eventHandler";
 import { useConnection, useNotification } from "../../providers";
-import { ListX } from "lucide-react";
 import { DownloadButton } from "./DownloadButton";
 import { TracingTable } from "./Table";
 import { HistoryProvider, HistoryTab, useHistory } from "./providers";

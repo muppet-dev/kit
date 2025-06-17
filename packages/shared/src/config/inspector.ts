@@ -8,6 +8,8 @@ export function defineInspectorConfig(
     host = process.env.HOST ?? "localhost",
     port = Number(process.env.PORT ?? 3553),
     auto_open = true,
+    enableTelemetry = true,
+    enableOpenAPI = true,
     models,
     ..._config
   } = config;
@@ -37,6 +39,8 @@ export function defineInspectorConfig(
     host,
     port,
     auto_open,
+    enableTelemetry,
+    enableOpenAPI,
     models: models
       ? {
           default: defaultModel!,

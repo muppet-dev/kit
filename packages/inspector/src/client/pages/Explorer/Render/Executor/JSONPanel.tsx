@@ -1,5 +1,5 @@
-import { CodeEditor } from "../../../../components/CodeEditor";
 import { useFormContext, useWatch } from "react-hook-form";
+import { CodeEditor } from "../../../../components/CodeEditor";
 
 export function JSONPanel() {
   const { control, reset } = useFormContext();

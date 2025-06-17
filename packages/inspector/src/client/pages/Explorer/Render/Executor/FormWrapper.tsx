@@ -1,6 +1,6 @@
-import { cn } from "../../../../lib/utils";
 import type { PropsWithChildren } from "react";
 import { useFormContext } from "react-hook-form";
+import { cn } from "../../../../lib/utils";
 import { useCustomForm } from "./provider";
 
 export function FormWrapper(props: PropsWithChildren<{ className?: string }>) {
@@ -13,7 +13,7 @@ export function FormWrapper(props: PropsWithChildren<{ className?: string }>) {
       id="request-form"
       onSubmit={handleSubmit(
         (values) => mutation.mutateAsync(values),
-        console.error
+        console.error,
       )}
       className={cn("h-full w-full", props.className)}
     >

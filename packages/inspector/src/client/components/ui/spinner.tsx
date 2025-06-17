@@ -9,7 +9,7 @@ function Spinner({
     <svg
       className={cn(
         "animate-spin size-[24px] min-w-[24px] min-h-[24px]",
-        className
+        className,
       )}
       viewBox="0 0 16 16"
       xmlns="http://www.w3.org/2000/svg"

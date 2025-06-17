@@ -1,17 +1,17 @@
 import { CopyButton } from "@/client/components/CopyButton";
+import { Button } from "@/client/components/ui/button";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@/client/components/ui/tabs";
+import { Logs } from "lucide-react";
 import { useMemo } from "react";
+import { Link } from "react-router";
 import { ServerForm } from "../../../Form";
 import { InspectorDialog } from "./InspectorDialog";
 import { ServerCapabilitiesTable } from "./ServerCapabilitiesTable";
-import { Link } from "react-router";
-import { Button } from "@/client/components/ui/button";
-import { Logs } from "lucide-react";
 
 export type DrawerTabs = {
   data?: Record<string, any>;

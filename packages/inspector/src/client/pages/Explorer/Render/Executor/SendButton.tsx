@@ -1,8 +1,8 @@
+import { SendHorizonal } from "lucide-react";
 import { useEffect } from "react";
+import { useFormContext } from "react-hook-form";
 import { Button } from "../../../../components/ui/button";
 import { Spinner } from "../../../../components/ui/spinner";
-import { SendHorizonal } from "lucide-react";
-import { useFormContext } from "react-hook-form";
 
 export function SendButton() {
   const {
@@ -14,7 +14,7 @@ export function SendButton() {
       if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
         event.preventDefault();
         const form = document.getElementById(
-          "request-form"
+          "request-form",
         ) as HTMLFormElement | null;
 
         if (form) form.requestSubmit();

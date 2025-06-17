@@ -1,3 +1,5 @@
+import { Pencil } from "lucide-react";
+import { useState } from "react";
 import { Button } from "../../../../../components/ui/button";
 import {
   Dialog,
@@ -12,8 +14,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "../../../../../components/ui/tooltip";
-import { Pencil } from "lucide-react";
-import { useState } from "react";
 import { UpdateRequestForm } from "./Form";
 
 export type UpdateRequestDialog = Pick<UpdateRequestForm, "request">;

@@ -1,3 +1,4 @@
+import { RefreshCcw } from "lucide-react";
 import { Button } from "../../../components/ui/button";
 import {
   TabsList,
@@ -10,7 +11,6 @@ import {
   TooltipTrigger,
 } from "../../../components/ui/tooltip";
 import { eventHandler } from "../../../lib/eventHandler";
-import { RefreshCcw } from "lucide-react";
 import { Tool, useMCPItem, useTool } from "../providers";
 
 export function ToolsTabs() {

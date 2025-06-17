@@ -1,19 +1,19 @@
-import { Spinner } from "../../components/ui/spinner";
-import {
-  InspectorOAuthClientProvider,
-  SESSION_KEYS,
-} from "../../providers/connection/auth";
 import {
   type AuthResult,
   auth,
 } from "@modelcontextprotocol/sdk/client/auth.js";
 import { useEffect, useRef } from "react";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router";
+import { Spinner } from "../../components/ui/spinner";
+import {
+  InspectorOAuthClientProvider,
+  SESSION_KEYS,
+} from "../../providers/connection/auth";
 import {
   generateOAuthErrorDescription,
   parseOAuthCallbackParams,
 } from "./utils";
-import { useNavigate } from "react-router";
 
 type OAuthCallbackProps = {
   onConnect: (serverUrl: string) => void;
@@ -61,7 +61,7 @@ export default function OAuthCallback({ onConnect }: OAuthCallbackProps) {
 
       if (result !== "AUTHORIZED") {
         return notifyError(
-          `Expected to be authorized after providing auth code, got: ${result}`
+          `Expected to be authorized after providing auth code, got: ${result}`,
         );
       }
 

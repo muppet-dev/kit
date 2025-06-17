@@ -32,7 +32,11 @@ export function PreferencesDialog(props: PreferencesDialog) {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "/" && (event.metaKey || event.ctrlKey)) {
+      if (
+        event.key === "?" &&
+        event.shiftKey &&
+        (event.metaKey || event.ctrlKey)
+      ) {
         event.preventDefault();
         props.onOpenChange(!props.open);
       }

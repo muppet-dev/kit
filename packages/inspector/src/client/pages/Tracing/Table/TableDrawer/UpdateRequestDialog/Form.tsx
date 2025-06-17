@@ -1,7 +1,3 @@
-import { CodeEditor } from "../../../../../components/CodeEditor";
-import { Button } from "../../../../../components/ui/button";
-import { eventHandler } from "../../../../../lib/eventHandler";
-import { useConnection } from "../../../../../providers";
 import {
   type ClientRequest,
   EmptyResultSchema,
@@ -11,6 +7,10 @@ import { useMutation } from "@tanstack/react-query";
 import { SendHorizontal } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { CodeEditor } from "../../../../../components/CodeEditor";
+import { Button } from "../../../../../components/ui/button";
+import { eventHandler } from "../../../../../lib/eventHandler";
+import { useConnection } from "../../../../../providers";
 
 export type UpdateRequestForm = {
   request: Request;
@@ -19,7 +19,7 @@ export type UpdateRequestForm = {
 
 export function UpdateRequestForm({ request, closeDialog }: UpdateRequestForm) {
   const [value, setValue] = useState<string>(
-    JSON.stringify(request.params, null, 2)
+    JSON.stringify(request.params, null, 2),
   );
   const { makeRequest } = useConnection();
 

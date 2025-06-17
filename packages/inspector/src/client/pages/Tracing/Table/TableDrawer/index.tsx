@@ -54,7 +54,7 @@ export function TableDrawer({ traces }: TableDrawer) {
       }
 
       return prev;
-    })
+    }),
   );
   const handleGoToNextRequest = eventHandler(() =>
     setSelected((prev) => {
@@ -65,7 +65,7 @@ export function TableDrawer({ traces }: TableDrawer) {
       }
 
       return prev;
-    })
+    }),
   );
   const handleSendRequest = eventHandler(async () => {
     if (
@@ -91,7 +91,7 @@ export function TableDrawer({ traces }: TableDrawer) {
         method: selectedHistory.request?.method as any,
         params: selectedHistory.request?.params,
       },
-      EmptyResultSchema.passthrough()
+      EmptyResultSchema.passthrough(),
     );
 
     setResendDirectory((prev) => {
@@ -106,7 +106,7 @@ export function TableDrawer({ traces }: TableDrawer) {
   const handleCloseDrawer = eventHandler(() => setSelected(null));
 
   const handleOpenResponseDialog = eventHandler(() =>
-    setOpenResponseDialog(true)
+    setOpenResponseDialog(true),
   );
 
   const selectedIndex = traces.findIndex((item) => item.id === selected);
@@ -132,7 +132,7 @@ export function TableDrawer({ traces }: TableDrawer) {
                     "rounded-full size-[7px] min-w-[7px] min-h-[7px]",
                     selectedHistory.response?.error
                       ? "bg-destructive"
-                      : "bg-success"
+                      : "bg-success",
                   )}
                 />
               </TooltipTrigger>
@@ -190,7 +190,7 @@ export function TableDrawer({ traces }: TableDrawer) {
             </Tooltip>
           </div>
           {Object.values(selectedHistory.request ?? {}).map(
-            (res) => res != null
+            (res) => res != null,
           ).length > 0 && (
             <TracingDetails
               label="Request"
@@ -222,7 +222,7 @@ export function TableDrawer({ traces }: TableDrawer) {
                     </Tooltip>
                     {selectedHistory.request &&
                       UPDATABLE_METHODS.includes(
-                        selectedHistory.request.method
+                        selectedHistory.request.method,
                       ) && (
                         <UpdateRequestDialog
                           request={selectedHistory.request}
@@ -233,7 +233,7 @@ export function TableDrawer({ traces }: TableDrawer) {
             </TracingDetails>
           )}
           {Object.values(selectedHistory.response ?? {}).map(
-            (res) => res != null
+            (res) => res != null,
           ).length > 0 && (
             <TracingDetails
               label="Response"

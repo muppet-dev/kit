@@ -2,6 +2,7 @@ import { generateName } from "@/client/lib/utils";
 import { DEFAULT_THEME, usePreferences } from "@/client/providers";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { PencilLine, Plus } from "lucide-react";
 import { useEffect } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -21,7 +22,6 @@ import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
 import { Spinner } from "../../ui/spinner";
 import { GenerateButtonGroup } from "./GenerateButtonGroup";
-import { PencilLine, Plus } from "lucide-react";
 import { colorThemeValidation as schema } from "./validation";
 
 export type ThemeDialog = {
@@ -80,7 +80,7 @@ export function ThemeDialog({
         setCurrentColorTheme(name);
       } else {
         throw new Error(
-          "Cannot add a theme with the same name as the current color theme"
+          "Cannot add a theme with the same name as the current color theme",
         );
       }
     },
@@ -141,7 +141,7 @@ export function ThemeDialog({
             className="flex flex-col gap-4"
             onSubmit={handleSubmit(
               (data) => mutations.mutateAsync(data),
-              console.error
+              console.error,
             )}
           >
             <div className="space-y-1">
@@ -181,8 +181,8 @@ export function ThemeDialog({
                     ? "Saving"
                     : "Save"
                   : formSubmitting
-                  ? "Adding"
-                  : "Add"}
+                    ? "Adding"
+                    : "Add"}
               </Button>
             </div>
           </form>

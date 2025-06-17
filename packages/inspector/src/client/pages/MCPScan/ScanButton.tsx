@@ -1,10 +1,10 @@
-import type { ComponentProps } from "react";
-import { useMCPScan } from "./providers";
-import { eventHandler } from "../../lib/eventHandler";
-import { Button } from "../../components/ui/button";
-import { cn } from "../../lib/utils";
-import { Spinner } from "../../components/ui/spinner";
 import { Play, RotateCcw } from "lucide-react";
+import type { ComponentProps } from "react";
+import { Button } from "../../components/ui/button";
+import { Spinner } from "../../components/ui/spinner";
+import { eventHandler } from "../../lib/eventHandler";
+import { cn } from "../../lib/utils";
+import { useMCPScan } from "./providers";
 
 export function ScanButton({ className, ...props }: ComponentProps<"button">) {
   const mutation = useMCPScan();
@@ -30,8 +30,8 @@ export function ScanButton({ className, ...props }: ComponentProps<"button">) {
         {mutation.isPending
           ? "Scanning"
           : mutation.isSuccess
-          ? "Rescan"
-          : "Start"}
+            ? "Rescan"
+            : "Start"}
       </span>
     </Button>
   );

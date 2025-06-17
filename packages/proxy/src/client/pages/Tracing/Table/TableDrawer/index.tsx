@@ -44,7 +44,7 @@ export function TableDrawer({ traces }: TableDrawer) {
       }
 
       return prev;
-    })
+    }),
   );
   const handleGoToNextRequest = eventHandler(() =>
     setSelected((prev) => {
@@ -55,7 +55,7 @@ export function TableDrawer({ traces }: TableDrawer) {
       }
 
       return prev;
-    })
+    }),
   );
   const handleSendRequest = eventHandler(async () => {
     if (
@@ -108,7 +108,7 @@ export function TableDrawer({ traces }: TableDrawer) {
             "text-sm font-medium",
             selectedHistory.response?.error
               ? "text-destructive"
-              : "text-success"
+              : "text-success",
           )}
         >
           {selectedHistory.response?.error ? "Error" : "Success"}

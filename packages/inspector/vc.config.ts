@@ -1,8 +1,8 @@
+import { builtinModules } from "node:module";
+import path from "node:path";
 // Vite Cloudflare config
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
-import { builtinModules } from "node:module";
-import path from "node:path";
 import {
   type Plugin,
   type ResolvedConfig,

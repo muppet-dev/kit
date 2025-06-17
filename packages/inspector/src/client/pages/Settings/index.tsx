@@ -25,7 +25,7 @@ export default function SettingsPage() {
         if (value != null && !excludeKeys.includes(key)) {
           params.set(
             key,
-            typeof value === "object" ? JSON.stringify(value) : String(value)
+            typeof value === "object" ? JSON.stringify(value) : String(value),
           );
         }
       }

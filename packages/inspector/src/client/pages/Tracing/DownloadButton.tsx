@@ -1,3 +1,4 @@
+import { Download } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import {
   Tooltip,
@@ -6,7 +7,6 @@ import {
 } from "../../components/ui/tooltip";
 import { eventHandler } from "../../lib/eventHandler";
 import { downloadJSON } from "../../lib/utils";
-import { Download } from "lucide-react";
 import { useLogs } from "./providers";
 
 export function DownloadButton() {
@@ -20,8 +20,8 @@ export function DownloadButton() {
         request,
         response,
       })),
-      `${new Date().toISOString()}.json`
-    )
+      `${new Date().toISOString()}.json`,
+    ),
   );
   return (
     <Tooltip>

@@ -26,7 +26,7 @@ const schema = z.object({
   roots: z.array(
     z.object({
       uri: z.string(),
-    })
+    }),
   ),
 });
 
@@ -72,7 +72,7 @@ export function RootsRender() {
         <form
           onSubmit={handleSubmit(
             (values) => mutation.mutateAsync(values),
-            console.error
+            console.error,
           )}
           className="flex-1 pb-4 size-full flex flex-col gap-5 max-w-6xl mx-auto overflow-y-auto"
         >

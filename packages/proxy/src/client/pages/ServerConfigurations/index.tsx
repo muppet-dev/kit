@@ -1,8 +1,8 @@
-import { useServerData } from "@/client/queries/useServerData";
-import { ConfigurationsForm } from "./Form";
-import { useParams } from "react-router";
-import { cn } from "@/client/lib/utils";
 import { Skeleton } from "@/client/components/ui/skeleton";
+import { cn } from "@/client/lib/utils";
+import { useServerData } from "@/client/queries/useServerData";
+import { useParams } from "react-router";
+import { ConfigurationsForm } from "./Form";
 
 export default function ServerConfigurationsPage() {
   const { serverId } = useParams();
@@ -41,7 +41,7 @@ function StatusBadge(props: { status?: "online" | "offline" }) {
         "p-1 pr-1.5 flex items-center gap-1 rounded-full border h-max",
         props.status === "online"
           ? "bg-success/10 border-success/50 text-success [&>div]:bg-success"
-          : "bg-destructive/10 border-destructive/50 text-destructive [&>div]:bg-destructive"
+          : "bg-destructive/10 border-destructive/50 text-destructive [&>div]:bg-destructive",
       )}
     >
       <div className="size-2.5 rounded-full" />

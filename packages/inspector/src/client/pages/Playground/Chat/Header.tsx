@@ -1,13 +1,3 @@
-import { ModelField } from "../../../components/ModelField";
-import { Button } from "../../../components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../../../components/ui/dropdown-menu";
-import { eventHandler } from "../../../lib/eventHandler";
 import { useThreadRuntime } from "@assistant-ui/react";
 import {
   ArrowLeft,
@@ -21,8 +11,8 @@ import {
   TriangleAlert,
 } from "lucide-react";
 import { type BaseSyntheticEvent, useState } from "react";
-import { useChats } from "../providers";
-import type { ChatProps } from "../type";
+import { ModelField } from "../../../components/ModelField";
+import { Button } from "../../../components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -32,6 +22,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../../../components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../../../components/ui/dropdown-menu";
+import { eventHandler } from "../../../lib/eventHandler";
+import { useChats } from "../providers";
+import type { ChatProps } from "../type";
 
 export function ModelHeader(props: { chatId: string }) {
   const { getChat, addChat, onConfigChange } = useChats();

@@ -1,7 +1,9 @@
-import { sValidator } from "@hono/standard-validator";
 import { SseError } from "@modelcontextprotocol/sdk/client/sse.js";
 import type { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 import { Hono } from "hono";
+import { describeRoute } from "hono-openapi";
+import { validator as zValidator } from "hono-openapi/zod";
 import { SSEHonoTransport, streamSSE } from "muppet/streaming";
 import mcpProxy from "./mcpProxy.js";
 import type { ProxyEnv } from "./types.js";
@@ -10,15 +12,18 @@ import {
   transportHeaderSchema,
   transportSchema,
 } from "./utils.js";
-import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 
 const router = new Hono<ProxyEnv>().get(
   "/",
-  sValidator("query", transportSchema),
-  sValidator("header", transportHeaderSchema),
+  describeRoute({
+    description: "Establishes a new STDIO connection with the MCP server",
+  }),
+  zValidator("query", transportSchema),
+  zValidator("header", transportHeaderSchema),
   async (c) => {
-    console.log("New connection");
-    let serverTransport: Transport
+    const logger = c.get("logger");
+    logger.info("New connection");
+    let serverTransport: Transport;
     try {
       serverTransport = await createTransport(c);
     } catch (error) {
@@ -33,14 +38,14 @@ const router = new Hono<ProxyEnv>().get(
       throw error;
     }
 
-    console.log("Connected MCP client to backing server transport");
+    logger.info("Connected MCP client to backing server transport");
 
     return streamSSE(c, async (stream) => {
       const webAppTransport = new SSEHonoTransport("/api/message");
       c.get("webAppTransports").set(webAppTransport.sessionId, webAppTransport);
-      c.get("serverTransports").set(webAppTransport.sessionId, serverTransport)
+      c.get("serverTransports").set(webAppTransport.sessionId, serverTransport);
 
-      console.log("Created client/server transports");
+      logger.info("Created client/server transports");
 
       webAppTransport.connectWithStream(stream);
       webAppTransport.start();
@@ -61,7 +66,7 @@ const router = new Hono<ProxyEnv>().get(
         ctx: c,
       });
 
-      console.log("Set up MCP proxy");
+      logger.info("Set up MCP proxy");
     });
   },
 );

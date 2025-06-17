@@ -22,7 +22,7 @@ function useConfigManager() {
       fetch("/version").then((res) => {
         if (!res.ok) {
           throw new Error(
-            "Failed to fetch version data. Please check your network connection or try again later."
+            "Failed to fetch version data. Please check your network connection or try again later.",
           );
         }
 

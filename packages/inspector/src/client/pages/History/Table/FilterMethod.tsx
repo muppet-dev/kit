@@ -1,3 +1,4 @@
+import { Check, Filter } from "lucide-react";
 import { Button } from "../../../components/ui/button";
 import {
   DropdownMenu,
@@ -7,7 +8,6 @@ import {
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu";
 import { eventHandler } from "../../../lib/eventHandler";
-import { Check, Filter } from "lucide-react";
 import { useHistory } from "../providers";
 
 export function FilterMethod() {

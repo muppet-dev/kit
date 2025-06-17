@@ -20,8 +20,8 @@ export function DownloadButton() {
         request,
         response,
       })),
-      `${new Date().toISOString()}.json`
-    )
+      `${new Date().toISOString()}.json`,
+    ),
   );
   return (
     <Tooltip>

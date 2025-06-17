@@ -1,13 +1,13 @@
-import { useSampling } from "@/client/providers";
-import { Hash, Info } from "lucide-react";
-import { ToolsTabs } from "../Tabs";
-import { SamplingRequest } from "./SamplingRequest";
+import { Button } from "@/client/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/client/components/ui/tooltip";
-import { Button } from "@/client/components/ui/button";
+import { useSampling } from "@/client/providers";
+import { Hash, Info } from "lucide-react";
+import { ToolsTabs } from "../Tabs";
+import { SamplingRequest } from "./SamplingRequest";
 
 export function SamplingRender() {
   const { pendingSampleRequests } = useSampling();

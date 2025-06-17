@@ -5,7 +5,7 @@ import type {
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 type CompletionState = {
-  completions: Record<string, string[]>;
+  completions: Record<string, string[] | undefined>;
   loading: Record<string, boolean>;
 };
 

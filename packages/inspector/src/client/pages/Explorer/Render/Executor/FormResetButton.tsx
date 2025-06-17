@@ -1,7 +1,7 @@
-import { Button } from "../../../../components/ui/button";
-import { eventHandler } from "../../../../lib/eventHandler";
 import { ListRestart } from "lucide-react";
 import { useFormContext } from "react-hook-form";
+import { Button } from "../../../../components/ui/button";
+import { eventHandler } from "../../../../lib/eventHandler";
 
 export function FormResetButton() {
   const { reset } = useFormContext();
@@ -9,7 +9,7 @@ export function FormResetButton() {
   const handleResetForm = eventHandler(() =>
     reset({
       __reset: true,
-    })
+    }),
   );
 
   return (

@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import { NotFound } from "./components/NotFound";
 import { SidebarProvider } from "./components/ui/sidebar";
 import HomePage from "./pages/Home";
+import ServerConfigurationsPage from "./pages/ServerConfigurations";
 import ServersPage from "./pages/Servers";
 import TracingPage from "./pages/Tracing";
 import {
@@ -14,7 +15,6 @@ import {
 } from "./providers";
 import { ConfigProvider } from "./providers/config";
 import { ShikiProvider } from "./providers/shiki";
-import ServerConfigurationsPage from "./pages/ServerConfigurations";
 
 const queryClient = new QueryClient({
   defaultOptions: {

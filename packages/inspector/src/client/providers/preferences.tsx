@@ -1,10 +1,10 @@
 import { useLocalStorage } from "@uidotdev/usehooks";
 import {
+  type PropsWithChildren,
   createContext,
   useContext,
   useEffect,
   useState,
-  type PropsWithChildren,
 } from "react";
 import type { ToastPosition } from "react-hot-toast";
 import { SortingEnum } from "../lib/utils";

@@ -1,6 +1,8 @@
-import { sValidator } from "@hono/standard-validator";
 import { SseError } from "@modelcontextprotocol/sdk/client/sse.js";
+import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 import { Hono } from "hono";
+import { describeRoute } from "hono-openapi";
+import { validator as zValidator } from "hono-openapi/zod";
 import { SSEHonoTransport, streamSSE } from "muppet/streaming";
 import mcpProxy from "./mcpProxy";
 import type { ProxyEnv } from "./types";
@@ -9,16 +11,19 @@ import {
   transportHeaderSchema,
   transportSchema,
 } from "./utils";
-import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 
 const router = new Hono<ProxyEnv>()
   .get(
     "/sse",
-    sValidator("query", transportSchema),
-    sValidator("header", transportHeaderSchema),
+    describeRoute({
+      description: "Establishes a new SSE connection with the MCP server",
+    }),
+    zValidator("query", transportSchema),
+    zValidator("header", transportHeaderSchema),
     async (c) => {
-      console.log(
-        "New SSE connection. NOTE: The sse transport is deprecated and has been replaced by streamable-http"
+      const logger = c.get("logger");
+      logger.info(
+        "New SSE connection. NOTE: The sse transport is deprecated and has been replaced by streamable-http",
       );
 
       let serverTransport: Transport;
@@ -28,7 +33,7 @@ const router = new Hono<ProxyEnv>()
         if (error instanceof SseError && error.code === 401) {
           console.error(
             "Received 401 Unauthorized from MCP server:",
-            error.message
+            error.message,
           );
           return c.json(error, 401);
         }
@@ -36,14 +41,20 @@ const router = new Hono<ProxyEnv>()
         throw error;
       }
 
-      console.log("Connected MCP client to server transport");
+      logger.info("Connected MCP client to server transport");
 
       return streamSSE(c, async (stream) => {
         const webAppTransport = new SSEHonoTransport("/api/message");
-        c.get("webAppTransports").set(webAppTransport.sessionId, webAppTransport);
-        c.get("serverTransports").set(webAppTransport.sessionId, serverTransport);
+        c.get("webAppTransports").set(
+          webAppTransport.sessionId,
+          webAppTransport,
+        );
+        c.get("serverTransports").set(
+          webAppTransport.sessionId,
+          serverTransport,
+        );
 
-        console.log("Created web app transport");
+        logger.info("Created web app transport");
 
         webAppTransport.connectWithStream(stream);
         webAppTransport.start();
@@ -54,24 +65,32 @@ const router = new Hono<ProxyEnv>()
           ctx: c,
         });
 
-        console.log("Set up MCP proxy");
+        logger.info("Set up MCP proxy");
       });
-    }
+    },
   )
-  .post("/message", async (c) => {
-    const sessionId = c.req.query("sessionId");
-    console.log(`Received message for sessionId ${sessionId}`);
+  .post(
+    "/message",
+    describeRoute({
+      description: "Handles POST messages for an existing SSE session",
+    }),
+    async (c) => {
+      const sessionId = c.req.query("sessionId");
+      c.get("logger").info(`Received message for sessionId ${sessionId}`);
 
-    if (!sessionId) {
-      throw new Error("Session ID is required for POST message");
-    }
+      if (!sessionId) {
+        throw new Error("Session ID is required for POST message");
+      }
 
-    const transport = c.get("webAppTransports").get(sessionId) as SSEHonoTransport;
-    if (!transport) {
-      return c.text("Session not found", 404);
-    }
-    await transport.handlePostMessage(c);
-    return c.text("ok");
-  });
+      const transport = c
+        .get("webAppTransports")
+        .get(sessionId) as SSEHonoTransport;
+      if (!transport) {
+        return c.text("Session not found", 404);
+      }
+      await transport.handlePostMessage(c);
+      return c.text("ok");
+    },
+  );
 
 export default router;

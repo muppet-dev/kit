@@ -1,3 +1,6 @@
+import { Check, ChevronsUpDown } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { cn } from "../../lib/utils";
 import { Button } from "./button";
 import {
   Command,
@@ -7,9 +10,6 @@ import {
   CommandItem,
 } from "./command";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
-import { cn } from "../../lib/utils";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
 
 type ComboboxProps = {
   value: string;
@@ -39,14 +39,14 @@ export function Combobox({
       onChange(option);
       setOpen(false);
     },
-    [onChange]
+    [onChange],
   );
 
   const handleInputChange = useCallback(
     (value: string) => {
       onInputChange(value);
     },
-    [onInputChange]
+    [onInputChange],
   );
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -88,7 +88,7 @@ export function Combobox({
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    value === option ? "opacity-100" : "opacity-0"
+                    value === option ? "opacity-100" : "opacity-0",
                   )}
                 />
                 {option}

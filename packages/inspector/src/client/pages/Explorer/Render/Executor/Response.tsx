@@ -1,3 +1,4 @@
+import { FormattedDataRender } from "@/client/components/FormattedDataRender";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
@@ -19,7 +20,6 @@ import {
 import { eventHandler } from "../../../../lib/eventHandler";
 import { numberFormatter } from "../../../../lib/utils";
 import { useCustomForm } from "./provider";
-import { FormattedDataRender } from "@/client/components/FormattedDataRender";
 
 export type ReponsePanel = {
   isExpanded: boolean;
@@ -91,7 +91,7 @@ function ResponseTime() {
       {(data?.duration ?? 0) > 1000
         ? `${numberFormatter(
             Number(((data?.duration ?? 0) / 1000).toFixed(2)),
-            "decimal"
+            "decimal",
           )} s`
         : `${numberFormatter(data?.duration ?? 0, "decimal")} ms`}
     </span>
@@ -111,7 +111,7 @@ function ExpandPanelButton(props: ExpandPanelButton) {
   const ExpandButtonIcon = props.isPanelExpand ? ChevronDown : ChevronUp;
 
   const handlePanelExpandCollapse = eventHandler(() =>
-    props.onPanelExpandChange(!props.isPanelExpand)
+    props.onPanelExpandChange(!props.isPanelExpand),
   );
 
   return (

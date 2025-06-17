@@ -47,14 +47,12 @@ export function Executor() {
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    methods.reset();
-  }, [selectedItem]);
+    methods.reset({ __reset: true });
 
-  useEffect(() => {
     setSelectedTab((prev) =>
       activeTool.name === Tool.STATIC_RESOURCES && prev === RequestTab.JSON
         ? RequestTab.FORM
-        : prev
+        : prev,
     );
   }, [activeTool]);
 
@@ -121,7 +119,7 @@ export function Executor() {
                 <div
                   className={cn(
                     "flex-1 flex overflow-y-auto",
-                    !isExpanded && "min-h-1/2 h-full"
+                    !isExpanded && "min-h-1/2 h-full",
                   )}
                 >
                   <FormPanel />
@@ -131,7 +129,7 @@ export function Executor() {
                 <div
                   className={cn(
                     "flex-1 flex flex-col gap-1.5 overflow-y-auto",
-                    !isExpanded && "min-h-1/2 h-full"
+                    !isExpanded && "min-h-1/2 h-full",
                   )}
                 >
                   <JSONPanel />
@@ -183,7 +181,7 @@ function TabsTriggerComponent({
       {...props}
       className={cn(
         "data-[state=inactive]:text-muted-foreground data-[state=inactive]:hover:text-primary cursor-pointer py-2 px-2 xl:px-5 dark:data-[state=active]:bg-foreground dark:data-[state=active]:text-background",
-        className
+        className,
       )}
     >
       <p className="xl:flex hidden">{label}</p>

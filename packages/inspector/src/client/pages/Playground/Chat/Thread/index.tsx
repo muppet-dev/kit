@@ -1,6 +1,3 @@
-import { PROVIDER_ICONS } from "../../../../components/icons";
-import { Button } from "../../../../components/ui/button";
-import { cn } from "../../../../lib/utils";
 import {
   ActionBarPrimitive,
   BranchPickerPrimitive,
@@ -21,6 +18,9 @@ import {
   SendHorizontal,
 } from "lucide-react";
 import { type FC, useEffect } from "react";
+import { PROVIDER_ICONS } from "../../../../components/icons";
+import { Button } from "../../../../components/ui/button";
+import { cn } from "../../../../lib/utils";
 import { useChats } from "../../providers";
 import { MarkdownText } from "./MarkdownText";
 import { TooltipIconButton } from "./TooltipIconButton";

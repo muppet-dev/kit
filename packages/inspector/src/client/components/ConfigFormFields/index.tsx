@@ -1,7 +1,8 @@
-import type { configTransportSchema as schema } from "../../validations";
 import { Transport } from "@muppet-kit/shared";
 import { Controller, useFormContext } from "react-hook-form";
 import type z from "zod";
+import type { configTransportSchema as schema } from "../../validations";
+import { FieldErrorMessage } from "../FieldErrorMessage";
 import { Label } from "../ui/label";
 import {
   Select,
@@ -36,6 +37,7 @@ export function ConfigFormFields() {
             </Select>
           )}
         />
+        <FieldErrorMessage name="type" />
       </div>
       <OptionalFields />
       <ConfigurationField />

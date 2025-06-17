@@ -1,5 +1,3 @@
-import { type Notification, StdErrNotificationSchema } from "../../types";
-import type { configTransportSchema } from "../../validations";
 import { auth } from "@modelcontextprotocol/sdk/client/auth.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import {
@@ -34,6 +32,8 @@ import { nanoid } from "nanoid";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import type z from "zod";
+import { type Notification, StdErrNotificationSchema } from "../../types";
+import type { configTransportSchema } from "../../validations";
 import { useConfig } from "../config";
 import { InspectorOAuthClientProvider } from "./auth";
 
@@ -377,9 +377,9 @@ export function useConnectionManager(props: UseConnectionOptions) {
         const clientTransport =
           props.type === Transport.HTTP
             ? new StreamableHTTPClientTransport(mcpProxyServerUrl, {
-              sessionId: undefined,
-              ...transportOptions,
-            })
+                sessionId: undefined,
+                ...transportOptions,
+              })
             : new SSEClientTransport(mcpProxyServerUrl, transportOptions);
 
         await client.connect(clientTransport);
@@ -412,7 +412,7 @@ export function useConnectionManager(props: UseConnectionOptions) {
         throw error;
       }
       setServerCapabilities(capabilities ?? null);
-      setCompletionsSupported(true); // Reset completions support on new connection
+      setCompletionsSupported("completions" in (capabilities ?? {}));
 
       const onPendingRequest = props.onPendingRequest;
       if (onPendingRequest) {

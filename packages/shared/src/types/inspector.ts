@@ -1,4 +1,5 @@
 import type { LanguageModel } from "ai";
+import type { Logger } from "pino";
 import type z from "zod";
 import type { transportSchema } from "../validations";
 
@@ -26,6 +27,24 @@ export type InspectorConfig = {
    * @default true
    */
   auto_open?: boolean;
+  /**
+   * Enables telemetry to collect usage data and improve the inspector.
+   * This data is anonymous and helps us understand how the inspector is used.
+   * If you don't want to send telemetry data, you can disable it by setting this to false.
+   * @default true
+   */
+  enableTelemetry?: boolean;
+  /**
+   * Enables the OpenAPI documentation for the inspector.
+   * This will generate an OpenAPI specification for the inspector API.
+   * @default true
+   */
+  enableOpenAPI?: boolean;
+  /**
+   * The logger to use for the inspector.
+   * If not specified, a default logger will be used.
+   */
+  logger?: Logger;
   /**
    * The default configuration for connecting to the MCP.
    */

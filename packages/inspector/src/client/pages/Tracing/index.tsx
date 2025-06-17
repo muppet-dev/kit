@@ -21,9 +21,9 @@ import {
 import { eventHandler } from "../../lib/eventHandler";
 import { useConfig, useConnection, useTracing } from "../../providers";
 import { DownloadButton } from "./DownloadButton";
-import { LogsProvider } from "./providers";
 import { ServerOptionMenu } from "./ServerOptionMenu";
 import { TracingTable } from "./Table";
+import { LogsProvider } from "./providers";
 
 export default function TracingPage() {
   return (

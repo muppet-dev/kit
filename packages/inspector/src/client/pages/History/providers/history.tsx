@@ -63,15 +63,15 @@ function useHistoryManager() {
 
   const [methodFilters, setMethodFilters] = useState<string[] | null>(null);
   const [timestampSort, setTimestampSort] = useState<SortingEnum>(
-    SortingEnum.ASCENDING
+    SortingEnum.ASCENDING,
   );
 
   const rawTraces = useMemo(() => {
     return tab.value === HistoryTab.HISTORY
       ? requestHistory
       : tab.value === HistoryTab.NOTIFICATIONS
-      ? notifications
-      : stdErrNotifications;
+        ? notifications
+        : stdErrNotifications;
   }, [tab, requestHistory, notifications, stdErrNotifications]);
 
   const traces = useMemo(() => {
@@ -79,9 +79,7 @@ function useHistoryManager() {
 
     let results = rawTraces.filter(
       (item) =>
-        _methodFilters?.includes(
-          "request" in item ? JSON.parse(item.request).method : item.method
-        ) ?? true
+        _methodFilters?.includes(JSON.parse(item.request).method) ?? true,
     );
 
     results = results.sort((a, b) => {
@@ -93,25 +91,17 @@ function useHistoryManager() {
         : bTimestamp - aTimestamp;
     });
 
-    return results.map((item) => {
-      if ("request" in item) {
-        return {
-          id: item.id,
-          timestamp: item.timestamp,
-          sRequest: item.request,
-          sResponse: item.response,
-          request: JSON.parse(item.request),
-          response: item.response ? JSON.parse(item.response) : undefined,
-        };
-      }
-
-      return {
-        id: item.id,
-        timestamp: item.timestamp,
-        sRequest: JSON.stringify(item.params),
-        request: item.params,
-      };
-    });
+    return results.map((item) => ({
+      id: item.id,
+      timestamp: item.timestamp,
+      sRequest: item.request,
+      sResponse: "response" in item ? item.response : undefined,
+      request: JSON.parse(item.request),
+      response:
+        "response" in item && typeof item.response === "string"
+          ? JSON.parse(item.response)
+          : undefined,
+    }));
   }, [rawTraces, tab, methodFilters, timestampSort]);
 
   function changeMethodFilters(method?: string | string[]) {

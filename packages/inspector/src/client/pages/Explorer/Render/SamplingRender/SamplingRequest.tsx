@@ -1,12 +1,12 @@
 import { DuckField } from "@/client/components/DuckField";
-import { FieldWrapper, quackFields } from "@/client/components/fields";
 import { CodeHighlighter } from "@/client/components/Hightlighter";
+import { FieldWrapper, quackFields } from "@/client/components/fields";
 import { Button } from "@/client/components/ui/button";
 import {
   Blueprint,
   DuckForm,
-  useSampling,
   type PendingRequest,
+  useSampling,
 } from "@/client/providers";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreateMessageResultSchema } from "@modelcontextprotocol/sdk/types.js";
@@ -166,7 +166,7 @@ export function SamplingRequest({ request }: SamplingRequestProps) {
             toast.success("Message result submitted successfully");
           } catch (error: any) {
             toast.error(
-              `There was an error validating the message result: ${error.message}`
+              `There was an error validating the message result: ${error.message}`,
             );
 
             console.error(error);

@@ -28,7 +28,7 @@ function useLogsManager() {
     sessions: string[] | null;
   }>({ methods: null, sessions: null });
   const [timestampSort, setTimestampSort] = useState<SortingEnum>(
-    SortingEnum.ASCENDING
+    SortingEnum.ASCENDING,
   );
 
   const logs = useMemo(() => {
@@ -56,7 +56,7 @@ function useLogsManager() {
 
   const toggleFilterValue = (
     key: keyof typeof filters,
-    value?: string | string[] | null
+    value?: string | string[] | null,
   ) => {
     setFilters((prev) => {
       if (!value) return { ...prev, [key]: null };
@@ -79,7 +79,7 @@ function useLogsManager() {
     setTimestampSort((prev) =>
       prev === SortingEnum.ASCENDING
         ? SortingEnum.DESCENDING
-        : SortingEnum.ASCENDING
+        : SortingEnum.ASCENDING,
     );
   }
 

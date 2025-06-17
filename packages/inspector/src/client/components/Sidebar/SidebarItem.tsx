@@ -1,3 +1,7 @@
+import type { LucideIcon } from "lucide-react";
+import type { PropsWithChildren } from "react";
+import { NavLink } from "react-router";
+import { cn } from "../../lib/utils";
 import {
   SidebarGroup,
   SidebarMenu,
@@ -5,10 +9,6 @@ import {
   sidebarMenuButtonVariants,
   useSidebar,
 } from "../ui/sidebar";
-import { cn } from "../../lib/utils";
-import type { LucideIcon } from "lucide-react";
-import type { PropsWithChildren } from "react";
-import { NavLink } from "react-router";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 export type SidebarItem = {
@@ -46,7 +46,7 @@ export function SidebarItem({ items }: SidebarItem) {
                   cn(
                     sidebarMenuButtonVariants(),
                     isActive &&
-                      "bg-primary hover:bg-primary text-primary-foreground hover:text-primary-foreground"
+                      "bg-primary hover:bg-primary text-primary-foreground hover:text-primary-foreground",
                   )
                 }
               >

@@ -1,3 +1,6 @@
+import { DialogDescription } from "@radix-ui/react-dialog";
+import { Settings, SparklesIcon } from "lucide-react";
+import { useState } from "react";
 import { Button } from "../../../../../../components/ui/button";
 import {
   Dialog,
@@ -7,9 +10,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../../../../../../components/ui/dialog";
-import { DialogDescription } from "@radix-ui/react-dialog";
-import { Settings, SparklesIcon } from "lucide-react";
-import { useState } from "react";
 import { GenerateForm } from "./Form";
 
 export function GenerateDialog() {

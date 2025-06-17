@@ -13,7 +13,7 @@ import {
   TableRow,
 } from "../../../components/ui/table";
 import { eventHandler } from "../../../lib/eventHandler";
-import { cn, numberFormatter, SortingEnum } from "../../../lib/utils";
+import { SortingEnum, cn, numberFormatter } from "../../../lib/utils";
 import { useLogs } from "../providers";
 import { FilterMethod } from "./FilterMethod";
 import { FilterSession } from "./FilterSession";
@@ -102,7 +102,7 @@ export function TracingTable() {
                       key={`row.${index + 1}`}
                       className={cn(
                         "cursor-pointer divide-x",
-                        selected === trace.id && "bg-muted/50"
+                        selected === trace.id && "bg-muted/50",
                       )}
                       onClick={handleSelectData(trace.id)}
                       onKeyDown={handleSelectData(trace.id)}
@@ -131,7 +131,7 @@ export function TracingTable() {
                             "border px-1.5 w-max rounded",
                             isError
                               ? "text-destructive bg-destructive/10"
-                              : "text-success bg-success/10"
+                              : "text-success bg-success/10",
                           )}
                         >
                           {isError ? "Error" : "Success"}
@@ -142,7 +142,7 @@ export function TracingTable() {
                           ? latency > 1000
                             ? `${numberFormatter(
                                 Number((latency / 1000).toFixed(2)),
-                                "decimal"
+                                "decimal",
                               )} s`
                             : `${numberFormatter(latency, "decimal")} ms`
                           : "-"}

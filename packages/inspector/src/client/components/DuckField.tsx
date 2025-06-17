@@ -1,8 +1,8 @@
-import { FieldProvider, useBlueprint, useDuckForm } from "../providers";
 import { Fragment } from "react/jsx-runtime";
+import { FieldProvider, useBlueprint, useDuckForm } from "../providers";
 
 export type DuckField<
-  T extends Record<string, unknown> = Record<string, unknown>
+  T extends Record<string, unknown> = Record<string, unknown>,
 > = {
   type: string;
 } & T;

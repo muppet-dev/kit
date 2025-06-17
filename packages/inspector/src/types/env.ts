@@ -1,8 +1,10 @@
 import type { SanitizedInspectorConfig } from "@muppet-kit/shared";
 import type { LanguageModel } from "ai";
+import type { Logger } from "pino";
 
 export type EnvWithConfig = {
   Variables: {
+    logger: Logger;
     config: SanitizedInspectorConfig;
   };
 };

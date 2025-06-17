@@ -30,6 +30,9 @@ function useCustomFormManager() {
   return useMutation({
     mutationFn: async (values: FieldValues) => {
       const startTime = performance.now();
+
+      values.__reset = undefined;
+
       const result = await callItem(selectedItem!, values);
       return {
         duration: performance.now() - startTime,

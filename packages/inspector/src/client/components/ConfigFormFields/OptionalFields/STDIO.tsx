@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import type z from "zod";
 import { eventHandler } from "../../../lib/eventHandler";
 import type { configTransportSchema } from "../../../validations";
+import { FieldErrorMessage } from "../../FieldErrorMessage";
 import {
   Accordion,
   AccordionContent,
@@ -31,6 +32,7 @@ export function STDIOFields() {
           {...register("command")}
         />
       </div>
+      <FieldErrorMessage name="command" />
       <div className="grid grid-cols-4 w-full items-center gap-2">
         <Label htmlFor="arguments">Arguments</Label>
         <Input
@@ -39,6 +41,7 @@ export function STDIOFields() {
           {...register("args")}
         />
       </div>
+      <FieldErrorMessage name="args" />
       <Accordion type="single" collapsible className="flex flex-col">
         <AccordionItem
           value="1"
@@ -124,6 +127,7 @@ function EnvField() {
           ))}
         </div>
       )}
+      <FieldErrorMessage name="env" />
       <div className="flex items-center gap-2">
         <Button
           colorScheme="secondary"

@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useLocalStorage } from "@uidotdev/usehooks";
+import { PostHogProvider } from "posthog-js/react";
 import {
   type PropsWithChildren,
   createContext,
@@ -31,9 +32,24 @@ export const ConfigProvider = ({
 }: PropsWithChildren<ConfigProvider>) => {
   const values = useConfigManager(props);
 
-  return (
+  const childrenWithProvider = (
     <ConfigContext.Provider value={values}>{children}</ConfigContext.Provider>
   );
+
+  if (values.isTelemetryEnabled) {
+    return (
+      <PostHogProvider
+        apiKey="phc_otNSIzTSlGNf7Ab9yv33q2tYvGu5EGgnLiF9Y0kwnoo"
+        options={{
+          api_host: "https://us.i.posthog.com",
+        }}
+      >
+        {childrenWithProvider}
+      </PostHogProvider>
+    );
+  }
+
+  return childrenWithProvider;
 };
 
 function useConfigManager(props: ConfigProvider) {
@@ -87,6 +103,7 @@ function useConfigManager(props: ConfigProvider) {
 
         return res.json() as Promise<{
           tunneling: boolean;
+          enableTelemetry: boolean;
           models:
             | {
                 default: string;
@@ -143,6 +160,11 @@ function useConfigManager(props: ConfigProvider) {
   const isTunnelingEnabled = useMemo(() => {
     return !!config?.tunneling;
   }, [config?.tunneling]);
+
+  const isTelemetryEnabled = useMemo(() => {
+    if (import.meta.env.DEV) return false;
+    return !!config?.enableTelemetry;
+  }, [config?.enableTelemetry]);
 
   const getAvailableModels = useCallback(() => {
     return config?.models ? config.models.available : [];
@@ -213,6 +235,7 @@ function useConfigManager(props: ConfigProvider) {
     connectionLink,
     setConnectionLink,
     isTunnelingEnabled,
+    isTelemetryEnabled,
     createLink,
     isModelsEnabled,
     getAvailableModels,

@@ -1,4 +1,4 @@
-import { clsx, type ClassValue } from "clsx";
+import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export const numberFormatter = (
   value: number | bigint,
-  type: keyof Intl.NumberFormatOptionsStyleRegistry
+  type: keyof Intl.NumberFormatOptionsStyleRegistry,
 ) =>
   new Intl.NumberFormat("en-US", {
     style: type,

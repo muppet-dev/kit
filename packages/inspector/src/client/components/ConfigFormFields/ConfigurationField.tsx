@@ -1,7 +1,8 @@
-import type { configTransportSchema } from "../../validations";
 import { Info } from "lucide-react";
 import { Controller, useFormContext } from "react-hook-form";
 import type z from "zod";
+import type { configTransportSchema } from "../../validations";
+import { FieldErrorMessage } from "../FieldErrorMessage";
 import {
   Accordion,
   AccordionContent,
@@ -38,6 +39,7 @@ export function ConfigurationField() {
               valueAsNumber: true,
             })}
           />
+          <FieldErrorMessage name="request_timeout" />
           <div className="flex items-center gap-2 py-1">
             <Controller
               name="progress"
@@ -60,6 +62,7 @@ export function ConfigurationField() {
               </TooltipContent>
             </Tooltip>
           </div>
+          <FieldErrorMessage name="progress" />
           <Label htmlFor="total_timeout">Maximum Total Timeout</Label>
           <p className="text-xs text-muted-foreground">
             Maximum total timeout for requests sent to the MCP server (ms) (Use
@@ -72,12 +75,14 @@ export function ConfigurationField() {
               valueAsNumber: true,
             })}
           />
+          <FieldErrorMessage name="total_timeout" />
           <Label htmlFor="proxy">Inspector Proxy Address</Label>
           <p className="text-xs text-muted-foreground">
             Set this if you are running the MCP Inspector Proxy on a non-default
             address. Example: http://10.1.1.22:5577
           </p>
           <Input id="proxy" {...register("proxy")} />
+          <FieldErrorMessage name="proxy" />
         </AccordionContent>
       </AccordionItem>
     </Accordion>

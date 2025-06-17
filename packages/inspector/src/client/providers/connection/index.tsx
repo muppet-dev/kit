@@ -7,8 +7,8 @@ import {
 import { useConfig } from "../config";
 import { useNotification } from "../notifications";
 import { useRoots } from "../roots";
-import { useConnectionManager } from "./manager";
 import { useSampling } from "../sampling";
+import { useConnectionManager } from "./manager";
 
 type ConnectionContextType = ReturnType<typeof useConnectionManager>;
 

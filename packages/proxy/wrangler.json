@@ -2,9 +2,7 @@
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "muppet-inspector",
   "compatibility_date": "2025-05-19",
-  "compatibility_flags": [
-    "nodejs_compat"
-  ],
+  "compatibility_flags": ["nodejs_compat"],
   "main": "./src/index.ts",
   "observability": {
     "enabled": true

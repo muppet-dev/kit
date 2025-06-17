@@ -1,4 +1,3 @@
-import { useConfig, useConnection } from "../../../providers";
 import {
   CallToolResultSchema,
   GetPromptResultSchema,
@@ -18,6 +17,7 @@ import {
   useState,
 } from "react";
 import type { FieldValues } from "react-hook-form";
+import { useConfig, useConnection } from "../../../providers";
 import type {
   DynamicResourceItemType,
   MCPItemType,
@@ -72,7 +72,7 @@ function useMCPItemManager() {
         case Tool.TOOLS:
           handler = makeRequest(
             { method: "tools/list" },
-            ListToolsResultSchema
+            ListToolsResultSchema,
           ).then(({ tools }) =>
             tools.map(
               (tool) =>
@@ -82,8 +82,8 @@ function useMCPItemManager() {
                   description: tool.description,
                   schema: tool.inputSchema.properties as ToolItemType["schema"],
                   inputSchema: tool.inputSchema,
-                } satisfies ToolItemType)
-            )
+                }) satisfies ToolItemType,
+            ),
           );
           break;
         case Tool.PROMPTS:
@@ -91,7 +91,7 @@ function useMCPItemManager() {
             {
               method: "prompts/list",
             },
-            ListPromptsResultSchema
+            ListPromptsResultSchema,
           ).then(({ prompts }) =>
             prompts.map(
               (prompt) =>
@@ -100,8 +100,8 @@ function useMCPItemManager() {
                   name: prompt.name,
                   description: prompt.description,
                   schema: prompt.arguments,
-                } satisfies PromptItemType)
-            )
+                }) satisfies PromptItemType,
+            ),
           );
           break;
         case Tool.STATIC_RESOURCES:
@@ -109,15 +109,15 @@ function useMCPItemManager() {
             {
               method: "resources/list",
             },
-            ListResourcesResultSchema
+            ListResourcesResultSchema,
           ).then(({ resources }) =>
             resources.map(
               (resource) =>
                 ({
                   ...resource,
                   type: Tool.STATIC_RESOURCES,
-                } satisfies StaticResourceItemType)
-            )
+                }) satisfies StaticResourceItemType,
+            ),
           );
           break;
         case Tool.DYNAMIC_RESOURCES:
@@ -125,15 +125,15 @@ function useMCPItemManager() {
             {
               method: "resources/templates/list",
             },
-            ListResourceTemplatesResultSchema
+            ListResourceTemplatesResultSchema,
           ).then(({ resourceTemplates }) =>
             resourceTemplates.map(
               (resource) =>
                 ({
                   ...resource,
                   type: Tool.DYNAMIC_RESOURCES,
-                } satisfies DynamicResourceItemType)
-            )
+                }) satisfies DynamicResourceItemType,
+            ),
           );
           break;
       }
@@ -148,7 +148,7 @@ function useMCPItemManager() {
 
   const selectedItem = useMemo(
     () => items?.find((item) => item.name === selectedItemName),
-    [items, selectedItemName]
+    [items, selectedItemName],
   );
 
   async function callItem(item: MCPItemType, values: FieldValues) {
@@ -164,7 +164,7 @@ function useMCPItemManager() {
               arguments: values,
             },
           },
-          CallToolResultSchema
+          CallToolResultSchema,
         );
         break;
       case Tool.PROMPTS:
@@ -176,7 +176,7 @@ function useMCPItemManager() {
               arguments: values,
             },
           },
-          GetPromptResultSchema
+          GetPromptResultSchema,
         );
         break;
       case Tool.STATIC_RESOURCES:
@@ -187,7 +187,7 @@ function useMCPItemManager() {
               uri: item.uri,
             },
           },
-          ReadResourceResultSchema
+          ReadResourceResultSchema,
         );
         break;
       case Tool.DYNAMIC_RESOURCES:
@@ -198,7 +198,7 @@ function useMCPItemManager() {
               uri: fillTemplate(item.uriTemplate, values),
             },
           },
-          ReadResourceResultSchema
+          ReadResourceResultSchema,
         );
         break;
     }
@@ -231,7 +231,7 @@ export const useMCPItem = () => {
 
 const fillTemplate = (
   template: string,
-  values: Record<string, string>
+  values: Record<string, string>,
 ): string => {
   return template.replace(/{([^}]+)}/g, (_, key) => values[key] || `{${key}}`);
 };
