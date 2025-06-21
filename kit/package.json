@@ -7,10 +7,21 @@
   "main": "./dist/index.js",
   "type": "module",
   "bin": "./dist/cli.js",
-  "files": ["dist"],
-  "keywords": ["mcp", "kit", "tools", "server", "inspector", "proxy", "tunnel"],
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "mcp",
+    "kit",
+    "tools",
+    "server",
+    "inspector",
+    "proxy",
+    "tunnel"
+  ],
   "scripts": {
-    "build": "pkgroll --minify"
+    "build": "node ./scripts/build.js",
+    "bundle": "pkgroll --minify"
   },
   "homepage": "https://github.com/muppet-dev/kit",
   "publishConfig": {
