@@ -15,6 +15,7 @@ import { SortingEnum } from "../lib/utils";
 import type { configTransportSchema } from "../validations";
 import type { ConnectionInfo } from "./connection/manager";
 import { usePreferences } from "./preferences";
+import type { getRuntimeKey } from "hono/adapter";
 
 export const CONFIG_STORAGE_KEY = "muppet-config";
 
@@ -51,6 +52,12 @@ export const ConfigProvider = ({
 
   return childrenWithProvider;
 };
+
+const SupportedRuntimesForTracing: ReturnType<typeof getRuntimeKey>[] = [
+  "node",
+  "bun",
+  "workerd",
+];
 
 function useConfigManager(props: ConfigProvider) {
   const [connectionInfo, setConnectionInfo] = useState(props.connection);
@@ -113,6 +120,7 @@ function useConfigManager(props: ConfigProvider) {
           configurations:
             | z.infer<typeof configTransportSchema>
             | z.infer<typeof configTransportSchema>[];
+          runtime: ReturnType<typeof getRuntimeKey>;
         }>;
       }),
   });
@@ -229,7 +237,13 @@ function useConfigManager(props: ConfigProvider) {
     return items;
   }, [localSavedConfigs, configurationsSort, getDeafultConfigurations]);
 
+  const isTracingEnabled = useMemo(() => {
+    if (!config?.runtime) return false;
+    return SupportedRuntimesForTracing.includes(config.runtime);
+  }, [config?.runtime]);
+
   return {
+    config,
     version,
     npmVersion,
     connectionLink,
@@ -250,6 +264,7 @@ function useConfigManager(props: ConfigProvider) {
     addConfigurations,
     deleteConfiguration,
     clearAllConfigurations,
+    isTracingEnabled,
   };
 }
 

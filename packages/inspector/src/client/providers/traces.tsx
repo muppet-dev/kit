@@ -40,12 +40,15 @@ function useTracingManager() {
     sessions: new Set<string>(),
     methods: new Set<string>(),
   });
-  const { proxyAddress } = useConfig();
+
+  const { proxyAddress, isTracingEnabled } = useConfig();
 
   useEffect(() => {
     const abort = new AbortController();
 
     const handler = async () => {
+      if (!isTracingEnabled) return;
+
       const res = await fetch(`${proxyAddress}/api/subscribe`, {
         signal: abort.signal,
       });
@@ -124,7 +127,7 @@ function useTracingManager() {
     // return () => {
     //   abort.abort();
     // };
-  }, [proxyAddress]);
+  }, [proxyAddress, isTracingEnabled]);
 
   function clearTraces() {
     setTraces([]);
