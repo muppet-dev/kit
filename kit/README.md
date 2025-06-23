@@ -6,9 +6,9 @@ It is a collection of tools for testing and debugging MCPs.
 
 It is a devtool for testing and debugging MCPs servers.
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/muppet-dev/kit/tree/main/packages/inspector)
-
 ![Inspector](https://raw.githubusercontent.com/muppet-dev/kit/main/public/inspector.png)
+
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/muppet-dev/kit/tree/main/packages/inspector)
 
 ### Usage
 
