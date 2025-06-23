@@ -23,24 +23,12 @@ export type FormattedDataRender = {
 export function FormattedDataRender(props: FormattedDataRender) {
   if (!props.result) return;
 
-  const toolsResult = CallToolResultSchema.safeParse(props.result);
+  const resourceResult = ReadResourceResultSchema.safeParse(props.result);
 
-  if (toolsResult.success) {
-    if (toolsResult.data.isError) {
-      return <>Something went wrong!</>;
-    }
-
-    return toolsResult.data.content.map((item, index) => {
-      switch (item.type) {
-        case "image":
-        case "text":
-        case "audio":
-          return <RenderContent key={`${item.type}-${index}`} {...item} />;
-        case "resource":
-          return (
-            <RenderResource key={`${item.type}-${index}`} {...item.resource} />
-          );
-      }
+  if (resourceResult.success) {
+    return resourceResult.data.contents.map((content) => {
+      console.log(content);
+      return <RenderResource key={content.uri} {...content} />;
     });
   }
 
@@ -95,11 +83,24 @@ export function FormattedDataRender(props: FormattedDataRender) {
     });
   }
 
-  const resourceResult = ReadResourceResultSchema.safeParse(props.result);
+  const toolsResult = CallToolResultSchema.safeParse(props.result);
 
-  if (resourceResult.success) {
-    return resourceResult.data.contents.map((content) => {
-      return <RenderResource key={content.uri} {...content} />;
+  if (toolsResult.success) {
+    if (toolsResult.data.isError) {
+      return <>Something went wrong!</>;
+    }
+
+    return toolsResult.data.content.map((item, index) => {
+      switch (item.type) {
+        case "image":
+        case "text":
+        case "audio":
+          return <RenderContent key={`${item.type}-${index}`} {...item} />;
+        case "resource":
+          return (
+            <RenderResource key={`${item.type}-${index}`} {...item.resource} />
+          );
+      }
     });
   }
 }
