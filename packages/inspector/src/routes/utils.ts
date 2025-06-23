@@ -43,7 +43,7 @@ router.get(
 
     return c.json({
       tunneling: !!config.tunneling,
-      enableTelemetry: config.enableTelemetry,
+      enableTelemetry: config.enableTelemetry ?? true,
       models: config.models
         ? {
             default: _generateModelKey(config.models.default),
