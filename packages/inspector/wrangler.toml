@@ -1,0 +1,24 @@
+# The name of your Worker.
+name = "muppet-inspector"
+
+# The entry-point for your Worker.
+main = "dist-server/index.js"
+
+# The compatibility date for the Workers runtime.
+compatibility_date = "2024-09-23"
+
+# Enable Node.js compatibility APIs.
+compatibility_flags = ["nodejs_compat"]
+
+# Serve static assets from the `dist` directory.
+assets = { directory = "dist" }
+
+# Define the Durable Object binding.
+[[durable_objects.bindings]]
+name = "Inspector"
+class_name = "MuppetInspector"
+
+# Required for using Durable Objects on the free plan.
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["MuppetInspector"]

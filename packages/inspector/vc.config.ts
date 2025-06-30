@@ -18,7 +18,11 @@ export default defineConfig(({ mode }) => {
         alias: {
           "@": path.resolve(__dirname, "./src"),
           "@/client": path.resolve(__dirname, "./src/client"),
+          "@muppet-kit/shared": path.resolve(__dirname, "../shared/src"),
         },
+      },
+      build: {
+        cssMinify: false,
       },
     };
 
