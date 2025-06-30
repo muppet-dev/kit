@@ -26,6 +26,8 @@ import { TracingTable } from "./Table";
 import { LogsProvider } from "./providers";
 
 export default function TracingPage() {
+  const { config, isTracingEnabled } = useConfig();
+
   return (
     <LogsProvider>
       <div className="p-4 size-full flex flex-col gap-2">
@@ -35,9 +37,21 @@ export default function TracingPage() {
           <div className="flex-1" />
           <PageHeader />
         </div>
-        <div className="size-full flex-1 flex flex-col gap-4 overflow-y-auto">
-          <TracingTable />
-        </div>
+        {isTracingEnabled ? (
+          <div className="size-full flex-1 flex flex-col gap-4 overflow-y-auto">
+            <TracingTable />
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center size-full text-center">
+            <p className="text-muted-foreground">
+              Tracing is not enabled for the current runtime ({config?.runtime}
+              ).
+              <br />
+              Please check your configuration or refer to the documentation for
+              more details.
+            </p>
+          </div>
+        )}
       </div>
     </LogsProvider>
   );
@@ -45,6 +59,9 @@ export default function TracingPage() {
 
 function PageHeader() {
   const { clearTraces } = useTracing();
+  const { isTracingEnabled } = useConfig();
+
+  if (!isTracingEnabled) return <></>;
 
   const onClear = eventHandler(() => clearTraces());
 

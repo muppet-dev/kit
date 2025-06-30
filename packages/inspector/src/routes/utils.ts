@@ -4,6 +4,7 @@ import { Hono } from "hono";
 import { describeRoute } from "hono-openapi";
 import { resolver } from "hono-openapi/zod";
 import z from "zod";
+import { getRuntimeKey } from "hono/adapter";
 
 const router = new Hono<EnvWithConfig>();
 
@@ -42,7 +43,7 @@ router.get(
 
     return c.json({
       tunneling: !!config.tunneling,
-      enableTelemetry: config.enableTelemetry,
+      enableTelemetry: config.enableTelemetry ?? true,
       models: config.models
         ? {
             default: _generateModelKey(config.models.default),
@@ -50,6 +51,7 @@ router.get(
           }
         : undefined,
       configurations: config.configurations,
+      runtime: getRuntimeKey(),
     });
   },
 );

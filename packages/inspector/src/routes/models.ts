@@ -84,6 +84,8 @@ router.post(
       c.req.valid("query");
     const { messages } = c.req.valid("json");
 
+    // TODO: add logic to create new client if the payload is different
+
     try {
       if (!client) {
         client = new Client(
