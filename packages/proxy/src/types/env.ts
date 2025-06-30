@@ -1,12 +1,10 @@
-import type { transportSchema } from "@muppet-kit/shared";
+import type { configTransportSchema } from "@/validations";
 import type { z } from "zod";
 
 export type BaseEnv = {
   Variables: {
-    servers: (z.infer<typeof transportSchema> & {
-      id: number;
-      name: string;
-      status: string;
+    servers: (z.infer<typeof configTransportSchema> & {
+      slug: string;
     })[];
   };
 };
