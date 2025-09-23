@@ -50,6 +50,10 @@ const router = new Hono<ProxyEnv>().get(
       webAppTransport.connectWithStream(stream);
       webAppTransport.start();
 
+      // This is to compensate for the lack of the following in SSEHonoTransport:
+      // https://github.com/julibuilds/muppet/blob/ceec9bdadfc7db258513615e5b56c87dd2aadf18/packages/core/src/streaming.ts#L58-L62
+      stream.onAbort(() => webAppTransport.onclose?.());
+
       (serverTransport as StdioClientTransport).stderr!.on("data", (chunk) => {
         webAppTransport.send({
           jsonrpc: "2.0",
